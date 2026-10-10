@@ -1,0 +1,288 @@
+/* ==========================================================================
+   TUTORFLOW - ADMIN DASHBOARD (FASE 3 & FASE 4 WCAG ACCESSIBILITY)
+   ========================================================================== */
+
+/* ACCESIBILIDAD UNIVERSAL: FOCO VISIBLE PARA TECLADO (WCAG 2.1 AA) */
+*:focus-visible {
+  outline: 2px solid #2563eb !important;
+  outline-offset: 2px !important;
+}
+
+/* ENCABEZADO Y ACCIONES DE EXPORTACIÓN */
+.dashboard-header {
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff;
+
+  .dashboard-toolbar {
+    --background: #ffffff;
+    --border-width: 0;
+    --padding-start: 12px;
+    --padding-end: 20px;
+    --min-height: 64px;
+
+    .menu-btn {
+      color: #0f172a;
+      --color: #0f172a;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+
+      .dashboard-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #0f172a;
+        letter-spacing: -0.02em;
+        padding: 0;
+
+        @media (min-width: 640px) {
+          font-size: 1.25rem;
+        }
+      }
+
+      .header-period {
+        display: none;
+        font-size: 0.8125rem;
+        color: #64748b;
+        font-weight: 500;
+
+        @media (min-width: 768px) {
+          display: inline;
+        }
+      }
+    }
+
+    .export-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .export-btn {
+        --border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.8125rem;
+        height: 36px;
+        margin: 0;
+
+        .btn-text {
+          margin-left: 4px;
+        }
+
+        &.export-pdf-btn {
+          --box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
+      }
+    }
+  }
+}
+
+/* CONTENEDOR PRINCIPAL */
+.dashboard-content {
+  --background: #f8fafc;
+}
+
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 16px 48px 16px;
+
+  @media (min-width: 768px) {
+    padding: 28px 24px 64px 24px;
+  }
+}
+
+/* BARRA DE BIENVENIDA Y FILTROS */
+.control-panel-section {
+  margin-bottom: 24px;
+
+  .banner-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @media (min-width: 992px) {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .banner-title-box {
+      .page-main-heading {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #0f172a;
+        letter-spacing: -0.025em;
+
+        @media (min-width: 768px) {
+          font-size: 1.75rem;
+        }
+      }
+
+      .page-sub-heading {
+        margin: 6px 0 0 0;
+        font-size: 0.875rem;
+        color: #475569;
+        max-width: 650px;
+      }
+    }
+
+    .filter-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      .filter-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #475569;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .time-segment {
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        padding: 3px;
+        max-width: 380px;
+
+        ion-segment-button {
+          --indicator-color: #2563eb;
+          --indicator-box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+          --color: #334155;
+          --color-checked: #ffffff;
+          font-weight: 600;
+          font-size: 0.75rem;
+          min-height: 32px;
+          border-radius: 8px;
+        }
+      }
+    }
+  }
+}
+
+/* ESTADO DE CARGA */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+
+  ion-spinner {
+    width: 44px;
+    height: 44px;
+  }
+
+  .loading-text {
+    margin-top: 16px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #475569;
+  }
+}
+
+/* SECCIÓN STATS */
+.stats-section {
+  margin-bottom: 24px;
+
+  .stats-row {
+    margin: -8px;
+
+    ion-col {
+      padding: 8px;
+    }
+  }
+}
+
+/* SECCIÓN GRÁFICOS CHART.JS */
+.charts-section {
+  margin-bottom: 28px;
+
+  .charts-row {
+    margin: -8px;
+
+    .chart-col {
+      padding: 8px;
+    }
+  }
+
+  .chart-card {
+    margin: 0;
+    height: 100%;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    display: flex;
+    flex-direction: column;
+
+    .chart-card-header {
+      padding: 18px 20px 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid #f1f5f9;
+
+      .chart-header-left {
+        .chart-title {
+          font-size: 1rem;
+          font-weight: 700;
+          color: #0f172a;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .chart-icon {
+            font-size: 1.15rem;
+            color: #2563eb;
+          }
+        }
+
+        .chart-subtitle {
+          margin: 4px 0 0 0;
+          font-size: 0.8125rem;
+          color: #475569;
+        }
+      }
+
+      .chart-badge {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 6px;
+      }
+    }
+
+    .chart-card-content {
+      padding: 16px 20px 20px 20px;
+      flex: 1;
+
+      .canvas-wrapper {
+        position: relative;
+        height: 280px;
+        width: 100%;
+
+        @media (min-width: 992px) {
+          height: 300px;
+        }
+
+        canvas {
+          width: 100% !important;
+          height: 100% !important;
+        }
+      }
+    }
+  }
+}
+
+/* SECCIÓN TABLA */
+.table-section {
+  margin-top: 8px;
+}
