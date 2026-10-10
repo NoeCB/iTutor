@@ -1,0 +1,42 @@
+<ion-card 
+  class="stat-card" 
+  role="region" 
+  [attr.aria-label]="title + ': ' + value + ', variación: ' + formattedGrowth"
+>
+  <ion-card-content class="stat-content">
+    <!-- Fila superior: Título e Icono contenedor -->
+    <div class="stat-header">
+      <span class="stat-title">{{ title }}</span>
+      <div 
+        class="icon-wrapper" 
+        [ngClass]="'icon-' + iconVariant" 
+        aria-hidden="true"
+      >
+        <ion-icon [name]="icon"></ion-icon>
+      </div>
+    </div>
+
+    <!-- Valor numérico destacado -->
+    <div class="stat-value" [attr.aria-label]="'Valor: ' + value">
+      {{ value }}
+    </div>
+
+    <!-- Fila inferior: Badge de crecimiento y periodo -->
+    <div class="stat-footer">
+      <span 
+        class="trend-badge" 
+        [class.positive]="isPositive" 
+        [class.negative]="!isPositive"
+        [attr.aria-label]="isPositive ? 'Crecimiento de ' + formattedGrowth : 'Descenso de ' + formattedGrowth"
+      >
+        <ion-icon 
+          [name]="isPositive ? 'arrow-up-outline' : 'arrow-down-outline'"
+          aria-hidden="true"
+        ></ion-icon>
+        <span class="trend-text">{{ formattedGrowth }}</span>
+      </span>
+
+      <span class="period-text">{{ period }}</span>
+    </div>
+  </ion-card-content>
+</ion-card>

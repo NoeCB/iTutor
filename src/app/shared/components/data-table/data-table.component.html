@@ -1,0 +1,147 @@
+<ion-card class="table-card" role="region" [attr.aria-label]="title || 'Tabla de datos'">
+  <!-- Cabecera opcional de la tabla -->
+  @if (title || subtitle) {
+    <div class="table-header">
+      <div class="header-titles">
+        @if (title) {
+          <h2 class="table-title">{{ title }}</h2>
+        }
+        @if (subtitle) {
+          <p class="table-subtitle">{{ subtitle }}</p>
+        }
+      </div>
+
+      <div class="table-meta">
+        <span class="count-pill">
+          {{ rows.length }} {{ rows.length === 1 ? 'registro' : 'registros' }}
+        </span>
+      </div>
+    </div>
+  }
+
+  <!-- Contenedor con scroll horizontal responsivo -->
+  <div class="table-container">
+    <table 
+      class="saas-table" 
+      role="table" 
+      [attr.aria-label]="title || 'Tabla de datos'"
+    >
+      <thead>
+        <tr role="row">
+          @for (col of columns; track col.key) {
+            <th 
+              scope="col" 
+              role="columnheader"
+              [class]="'text-' + (col.align || 'left')"
+            >
+              {{ col.label }}
+            </th>
+          }
+          @if (showActions) {
+            <th scope="col" role="columnheader" class="text-right actions-column">
+              Acciones
+            </th>
+          }
+        </tr>
+      </thead>
+
+      <tbody>
+        @if (rows.length === 0) {
+          <tr class="empty-row" role="row">
+            <td 
+              [attr.colspan]="columns.length + (showActions ? 1 : 0)" 
+              class="empty-cell"
+              role="cell"
+            >
+              <div class="empty-state">
+                <div class="empty-icon-circle" aria-hidden="true">
+                  <ion-icon name="file-tray-outline"></ion-icon>
+                </div>
+                <h3 class="empty-title">Sin resultados</h3>
+                <p class="empty-description">{{ emptyMessage }}</p>
+              </div>
+            </td>
+          </tr>
+        } @else {
+          @for (row of rows; track trackByIndex($index)) {
+            <tr role="row" class="data-row">
+              @for (col of columns; track col.key) {
+                <td 
+                  role="cell" 
+                  [class]="'text-' + (col.align || 'left')"
+                  [attr.data-label]="col.label"
+                >
+                  <!-- Formato de Badge -->
+                  @if (col.type === 'badge') {
+                    <ion-badge 
+                      [color]="getBadgeColor(col, row[col.key])" 
+                      class="custom-badge"
+                    >
+                      {{ row[col.key] }}
+                    </ion-badge>
+                  } 
+                  <!-- Formato de Moneda -->
+                  @else if (col.type === 'currency') {
+                    <span class="currency-value font-mono">
+                      {{ row[col.key] | currency:'EUR':'symbol':'1.2-2' }}
+                    </span>
+                  } 
+                  <!-- Formato de Fecha -->
+                  @else if (col.type === 'date') {
+                    <span class="date-value">
+                      {{ row[col.key] | date:'dd/MM/yyyy HH:mm' }}
+                    </span>
+                  } 
+                  <!-- Formato Texto / Default -->
+                  @else {
+                    <span class="cell-text">{{ row[col.key] }}</span>
+                  }
+                </td>
+              }
+
+              <!-- Columna de Acciones -->
+              @if (showActions) {
+                <td role="cell" class="text-right actions-cell">
+                  <div class="actions-group">
+                    <ion-button 
+                      fill="clear" 
+                      size="small" 
+                      color="medium" 
+                      class="action-btn"
+                      (click)="handleView(row)"
+                      [attr.aria-label]="'Ver detalles de ' + (row.name || row.title || row.id || 'elemento')"
+                    >
+                      <ion-icon slot="icon-only" name="eye-outline" aria-hidden="true"></ion-icon>
+                    </ion-button>
+
+                    <ion-button 
+                      fill="clear" 
+                      size="small" 
+                      color="primary" 
+                      class="action-btn"
+                      (click)="handleEdit(row)"
+                      [attr.aria-label]="'Editar ' + (row.name || row.title || row.id || 'elemento')"
+                    >
+                      <ion-icon slot="icon-only" name="create-outline" aria-hidden="true"></ion-icon>
+                    </ion-button>
+
+                    <ion-button 
+                      fill="clear" 
+                      size="small" 
+                      color="danger" 
+                      class="action-btn"
+                      (click)="handleDelete(row)"
+                      [attr.aria-label]="'Eliminar ' + (row.name || row.title || row.id || 'elemento')"
+                    >
+                      <ion-icon slot="icon-only" name="trash-outline" aria-hidden="true"></ion-icon>
+                    </ion-button>
+                  </div>
+                </td>
+              }
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</ion-card>

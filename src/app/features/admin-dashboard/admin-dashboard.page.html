@@ -1,0 +1,254 @@
+<!-- ENCABEZADO ACCESIBLE (WCAG Landmark: banner) -->
+<ion-header class="ion-no-border dashboard-header" role="banner">
+  <ion-toolbar class="dashboard-toolbar">
+    <!-- Menú Hamburguesa para Móvil -->
+    <ion-buttons slot="start">
+      <ion-menu-button 
+        autoHide="false" 
+        aria-label="Abrir menú principal de navegación"
+        class="menu-btn"
+        tabindex="0"
+      ></ion-menu-button>
+    </ion-buttons>
+
+    <div class="header-content">
+      <ion-title class="dashboard-title">
+        Panel de Administración
+      </ion-title>
+      <span class="header-period" aria-label="Periodo académico en curso">
+        Semestre Académico 2026/2027
+      </span>
+    </div>
+
+    <!-- ACCIONES RÁPIDAS DE EXPORTACIÓN (Header Action Group) -->
+    <ion-buttons slot="end" class="export-actions" role="group" aria-label="Opciones de exportación de datos">
+      <ion-button 
+        fill="outline" 
+        color="medium" 
+        size="small" 
+        class="export-btn"
+        (click)="exportToCsv()"
+        [disabled]="isLoading"
+        aria-label="Descargar datos en formato CSV limpio para Excel"
+        tabindex="0"
+      >
+        <ion-icon slot="start" name="download-outline" aria-hidden="true"></ion-icon>
+        <span class="btn-text">CSV</span>
+      </ion-button>
+
+      <ion-button 
+        fill="solid" 
+        color="primary" 
+        size="small" 
+        class="export-btn export-pdf-btn"
+        (click)="exportToPdf()"
+        [disabled]="isLoading"
+        aria-label="Generar y descargar informe corporativo en formato PDF"
+        tabindex="0"
+      >
+        <ion-icon slot="start" name="document-text-outline" aria-hidden="true"></ion-icon>
+        <span class="btn-text">Exportar PDF</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<!-- CONTENIDO PRINCIPAL (WCAG Landmark: main) -->
+<ion-content class="dashboard-content" [fullscreen]="true" role="main">
+  <div class="dashboard-container">
+
+    <!-- BARRA SUPERIOR DE BIENVENIDA Y FILTRADO EN TIEMPO REAL -->
+    <section class="control-panel-section" role="region" aria-label="Controles del panel y filtros de tiempo">
+      <div class="banner-content">
+        <div class="banner-title-box">
+          <h1 class="page-main-heading">Métricas de la Academia</h1>
+          <p class="page-sub-heading">
+            Tutorías especializadas de Física y Matemáticas • Sincronización dual SQL y NoSQL
+          </p>
+        </div>
+
+        <!-- FILTRO DINÁMICO EN TIEMPO REAL (Segmentación por Mes) -->
+        <div class="filter-wrapper" role="region" aria-label="Filtro temporal de datos">
+          <label id="period-filter-label" class="filter-label">
+            <ion-icon name="filter-outline" aria-hidden="true"></ion-icon>
+            Filtrar Periodo:
+          </label>
+          <ion-segment 
+            [value]="selectedPeriod" 
+            (ionChange)="onFilterChange($event.detail.value)"
+            class="time-segment"
+            aria-labelledby="period-filter-label"
+          >
+            <ion-segment-button value="todos" aria-label="Mostrar todos los meses">
+              <ion-label>Todos</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="septiembre" aria-label="Filtrar mes de septiembre">
+              <ion-label>Sep</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="octubre" aria-label="Filtrar mes de octubre">
+              <ion-label>Oct</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="noviembre" aria-label="Filtrar mes de noviembre">
+              <ion-label>Nov</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="diciembre" aria-label="Filtrar mes de diciembre">
+              <ion-label>Dic</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
+      </div>
+    </section>
+
+    <!-- ESTADO DE CARGA ASÍNCRONO (WCAG Live Region para Screen Readers) -->
+    @if (isLoading) {
+      <div 
+        class="loading-container" 
+        role="status" 
+        aria-live="polite"
+        aria-label="Cargando métricas y orquestando datos de bases de datos relacional y documental"
+      >
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+        <p class="loading-text">Sincronizando fuentes de datos concurrentes (SQL + MongoDB)...</p>
+      </div>
+    } @else {
+
+      <!-- SECCIÓN 1: KPI STAT CARDS (Grid Mobile-First: 1 col móvil, 2 tablet, 4 desktop) -->
+      <section class="stats-section" role="region" aria-label="Indicadores clave de rendimiento">
+        <ion-grid class="ion-no-padding">
+          <ion-row class="stats-row">
+            <ion-col size="12" size-sm="6" size-xl="3">
+              <app-stat-card
+                title="Ingresos del Periodo"
+                [value]="kpis.ingresosTotales"
+                icon="cash-outline"
+                [growthPercentage]="kpis.ingresosCrecimiento"
+                period="vs. periodo previo"
+                iconVariant="primary"
+              ></app-stat-card>
+            </ion-col>
+
+            <ion-col size="12" size-sm="6" size-xl="3">
+              <app-stat-card
+                title="Alumnos con Sesiones"
+                [value]="kpis.estudiantesActivos"
+                icon="people-outline"
+                [growthPercentage]="kpis.estudiantesCrecimiento"
+                period="estudiantes únicos"
+                iconVariant="secondary"
+              ></app-stat-card>
+            </ion-col>
+
+            <ion-col size="12" size-sm="6" size-xl="3">
+              <app-stat-card
+                title="Horas Académicas"
+                [value]="kpis.horasImpartidas"
+                icon="time-outline"
+                [growthPercentage]="kpis.horasCrecimiento"
+                period="en el aula virtual"
+                iconVariant="tertiary"
+              ></app-stat-card>
+            </ion-col>
+
+            <ion-col size="12" size-sm="6" size-xl="3">
+              <app-stat-card
+                title="Tasa de Asistencia"
+                [value]="kpis.tasaAsistencia"
+                icon="school-outline"
+                [growthPercentage]="kpis.asistenciaCrecimiento"
+                period="efectividad sesiones"
+                iconVariant="warning"
+              ></app-stat-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </section>
+
+      <!-- SECCIÓN 2: GRÁFICOS CHART.JS (Grid Mobile-First: 1 col móvil, 2 col desktop) -->
+      <section class="charts-section" role="region" aria-label="Visualización gráfica de datos analíticos">
+        <ion-grid class="ion-no-padding">
+          <ion-row class="charts-row">
+
+            <!-- GRÁFICO 1: Ingresos por Asignatura -->
+            <ion-col size="12" size-lg="6" class="chart-col">
+              <ion-card class="chart-card">
+                <ion-card-header class="chart-card-header">
+                  <div class="chart-header-left">
+                    <ion-card-title class="chart-title">
+                      <ion-icon name="bar-chart-outline" aria-hidden="true" class="chart-icon"></ion-icon>
+                      Ingresos por Asignatura
+                    </ion-card-title>
+                    <ion-card-subtitle class="chart-subtitle">
+                      Facturación en euros agrupada por materia en {{ selectedPeriod }}
+                    </ion-card-subtitle>
+                  </div>
+                  <ion-badge color="primary" class="chart-badge">Física & Mates</ion-badge>
+                </ion-card-header>
+
+                <ion-card-content class="chart-card-content">
+                  <div class="canvas-wrapper">
+                    <canvas 
+                      #revenueChartCanvas
+                      role="img" 
+                      [attr.aria-label]="'Gráfico de barras que representa los ingresos desglosados por materia para el periodo ' + selectedPeriod"
+                      tabindex="0"
+                    >
+                      Tu navegador no soporta el elemento Canvas para renderizar el gráfico interactivo de ingresos.
+                    </canvas>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+
+            <!-- GRÁFICO 2: Clases Impartidas por Rama -->
+            <ion-col size="12" size-lg="6" class="chart-col">
+              <ion-card class="chart-card">
+                <ion-card-header class="chart-card-header">
+                  <div class="chart-header-left">
+                    <ion-card-title class="chart-title">
+                      <ion-icon name="pie-chart-outline" aria-hidden="true" class="chart-icon"></ion-icon>
+                      Clases Impartidas (Física vs Matemáticas)
+                    </ion-card-title>
+                    <ion-card-subtitle class="chart-subtitle">
+                      Evolución comparativa del volumen de tutorías completadas
+                    </ion-card-subtitle>
+                  </div>
+                  <ion-badge color="tertiary" class="chart-badge">Histórico</ion-badge>
+                </ion-card-header>
+
+                <ion-card-content class="chart-card-content">
+                  <div class="canvas-wrapper">
+                    <canvas 
+                      #classesChartCanvas
+                      role="img" 
+                      [attr.aria-label]="'Gráfico de líneas comparativo de clases impartidas entre Física y Matemáticas en el periodo ' + selectedPeriod"
+                      tabindex="0"
+                    >
+                      Tu navegador no soporta el elemento Canvas para renderizar el gráfico comparativo de clases.
+                    </canvas>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+
+          </ion-row>
+        </ion-grid>
+      </section>
+
+      <!-- SECCIÓN 3: TABLA DE DATOS DETALLADA (Dumb Component Integrado) -->
+      <section class="table-section" role="region" aria-label="Tabla de sesiones de tutoría sincronizadas">
+        <app-data-table
+          [title]="'Registro de Tutorías • Periodo: ' + (selectedPeriod | uppercase)"
+          subtitle="Datos en tiempo real de MongoDB combinados con el catálogo de tarifas SQL"
+          [columns]="tableColumns"
+          [rows]="filteredSessions"
+          [showActions]="true"
+          (onEdit)="handleEdit($event)"
+          (onDelete)="handleDelete($event)"
+          (onView)="handleView($event)"
+        ></app-data-table>
+      </section>
+
+    }
+
+  </div>
+</ion-content>

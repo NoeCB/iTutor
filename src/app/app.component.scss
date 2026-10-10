@@ -1,0 +1,275 @@
+/* ==========================================================================
+   TUTORFLOW - SIDE MENU GLOBAL SAAS STYLES
+   ========================================================================== */
+
+ion-split-pane {
+  --side-max-width: 280px;
+  --side-min-width: 260px;
+}
+
+ion-menu {
+  --background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+}
+
+/* ENCABEZADO Y BRANDING */
+.menu-header {
+  padding: 16px 16px 0 16px;
+  background: #ffffff;
+
+  .header-toolbar {
+    --background: transparent;
+    --padding-start: 0;
+    --padding-end: 0;
+    --min-height: auto;
+  }
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0 16px 0;
+  border-bottom: 1px solid #f1f5f9;
+
+  .brand-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2563eb 0%, #4338ca 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+
+    .brand-name-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .brand-name {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #0f172a;
+        letter-spacing: -0.025em;
+      }
+
+      .brand-badge {
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        background: #e0e7ff;
+        color: #4338ca;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #64748b;
+    }
+  }
+}
+
+/* TARJETA DE PERFIL DE USUARIO */
+.profile-card {
+  margin: 16px 0 8px 0;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .avatar-wrapper {
+    position: relative;
+
+    .user-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .status-indicator {
+      position: absolute;
+      bottom: 1px;
+      right: 1px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+
+      &.online {
+        background-color: #10b981;
+      }
+    }
+  }
+
+  .user-info {
+    flex: 1;
+    min-width: 0;
+
+    .user-name {
+      margin: 0;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #0f172a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-email {
+      margin: 1px 0 4px 0;
+      font-size: 0.725rem;
+      color: #64748b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-role-badge ion-badge {
+      font-size: 0.675rem;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+  }
+}
+
+/* CONTENIDO Y ENLACES DEL MENÚ */
+.menu-content {
+  --background: #ffffff;
+  padding: 0 12px;
+
+  .menu-section-label {
+    padding: 16px 12px 8px 12px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.075em;
+    color: #94a3b8;
+  }
+}
+
+.menu-nav-list {
+  background: transparent;
+  padding: 0;
+
+  .nav-item {
+    --background: transparent;
+    --background-hover: #f1f5f9;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --inner-padding-end: 8px;
+    --min-height: 44px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+    color: #475569;
+    font-weight: 500;
+    transition: all 0.15s ease-in-out;
+
+    .icon-slot {
+      margin-right: 12px;
+      font-size: 1.25rem;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .nav-counter {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #475569;
+      border-radius: 12px;
+      padding: 2px 8px;
+    }
+
+    /* Estado Activo */
+    &.active-item {
+      --background: #eff6ff;
+      --color: #2563eb;
+      font-weight: 600;
+
+      .icon-slot {
+        color: #2563eb;
+      }
+
+      .nav-label {
+        font-weight: 600;
+        color: #1e40af;
+      }
+    }
+  }
+}
+
+/* PIE DEL MENÚ */
+.menu-footer {
+  padding: 12px 16px 16px 16px;
+  background: #ffffff;
+  border-top: 1px solid #f1f5f9;
+
+  .logout-item {
+    --background: transparent;
+    --background-hover: #fef2f2;
+    --padding-start: 12px;
+    --min-height: 42px;
+    border-radius: 10px;
+    color: #64748b;
+    margin-bottom: 12px;
+
+    &:hover {
+      color: #dc2626;
+
+      .logout-icon {
+        color: #dc2626;
+      }
+
+      .logout-label {
+        color: #dc2626;
+      }
+    }
+
+    .logout-icon {
+      font-size: 1.25rem;
+      margin-right: 12px;
+      color: #94a3b8;
+    }
+
+    .logout-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+  }
+
+  .version-tag {
+    text-align: center;
+    font-size: 0.6875rem;
+    color: #94a3b8;
+    font-weight: 500;
+  }
+}
