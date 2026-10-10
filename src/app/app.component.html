@@ -1,3 +1,129 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-split-pane contentId="main-content" [disabled]="isLoginPage()">
+    
+    <!-- SIDE MENU GLOBAL (Responsive: Mobile Drawer & Desktop Sidebar) -->
+    <ion-menu 
+      contentId="main-content" 
+      menuId="main-menu" 
+      type="overlay"
+      [disabled]="isLoginPage()"
+      aria-label="Menú principal de navegación"
+    >
+      <!-- HEADER DEL MENÚ: LOGO "TutorFlow" -->
+      <ion-header class="ion-no-border menu-header">
+        <ion-toolbar class="header-toolbar">
+          <div class="brand-container">
+            <div class="brand-logo" aria-hidden="true">
+              <ion-icon name="calculator-outline"></ion-icon>
+            </div>
+            <div class="brand-text">
+              <div class="brand-name-row">
+                <span class="brand-name">TutorFlow</span>
+                <span class="brand-badge">SaaS</span>
+              </div>
+              <span class="brand-subtitle">Matemáticas & Física</span>
+            </div>
+          </div>
+        </ion-toolbar>
+
+        <!-- TARJETA DE PERFIL DEL USUARIO CONECTADO -->
+        @if (currentUser$ | async; as user) {
+          <div class="profile-card">
+            <div class="avatar-wrapper">
+              <div class="user-avatar" [attr.aria-label]="'Avatar de ' + user.email">
+                {{ getUserInitials(user.email) }}
+              </div>
+              <span class="status-indicator online" title="En línea" aria-label="Usuario en línea"></span>
+            </div>
+
+            <div class="user-info">
+              <h3 class="user-name">{{ getUserDisplayName(user.email) }}</h3>
+              <p class="user-email">{{ user.email }}</p>
+              <div class="user-role-badge">
+                <ion-badge [color]="user.role === 'Admin' ? 'primary' : 'tertiary'">
+                  {{ user.role === 'Admin' ? 'Administrador' : 'Profesor Tutor' }}
+                </ion-badge>
+              </div>
+            </div>
+          </div>
+        } @else {
+          <div class="profile-card">
+            <div class="avatar-wrapper">
+              <div class="user-avatar">TF</div>
+              <span class="status-indicator online"></span>
+            </div>
+            <div class="user-info">
+              <h3 class="user-name">Dra. Elena Ramos</h3>
+              <p class="user-email">admin&#64;nebrija.es</p>
+              <div class="user-role-badge">
+                <ion-badge color="primary">Administrador</ion-badge>
+              </div>
+            </div>
+          </div>
+        }
+      </ion-header>
+
+      <!-- CONTENIDO DEL MENÚ: ENLACES CON ROUTER DE ANGULAR -->
+      <ion-content class="menu-content">
+        <div class="menu-section-label">
+          <span>NAVEGACIÓN PRINCIPAL</span>
+        </div>
+
+        <ion-list class="menu-nav-list" lines="none">
+          @for (page of appPages; track page.url) {
+            <ion-menu-toggle autoHide="false">
+              <ion-item 
+                [routerLink]="page.url" 
+                routerLinkActive="active-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="nav-item"
+                detail="false"
+                [attr.aria-label]="'Ir a ' + page.title"
+              >
+                <div class="icon-slot" slot="start" aria-hidden="true">
+                  <ion-icon [name]="page.icon"></ion-icon>
+                </div>
+                <ion-label class="nav-label">
+                  {{ page.title }}
+                </ion-label>
+                @if (page.badge) {
+                  <ion-badge 
+                    slot="end" 
+                    color="light" 
+                    class="nav-counter"
+                  >
+                    {{ page.badge }}
+                  </ion-badge>
+                }
+              </ion-item>
+            </ion-menu-toggle>
+          }
+        </ion-list>
+      </ion-content>
+
+      <!-- PIE DEL MENÚ: CERRAR SESIÓN -->
+      <ion-footer class="ion-no-border menu-footer">
+        <ion-item 
+          button 
+          (click)="logout()" 
+          lines="none" 
+          class="logout-item"
+          aria-label="Cerrar sesión"
+        >
+          <div class="icon-slot logout-icon" slot="start" aria-hidden="true">
+            <ion-icon name="log-out-outline"></ion-icon>
+          </div>
+          <ion-label class="logout-label">Cerrar Sesión</ion-label>
+        </ion-item>
+
+        <div class="version-tag">
+          <span>TutorFlow v2.4 • Academia PWA</span>
+        </div>
+      </ion-footer>
+    </ion-menu>
+
+    <!-- OUTLET PRINCIPAL PARA CARGA DE VISTAS LAZY LOADING -->
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+
+  </ion-split-pane>
 </ion-app>
