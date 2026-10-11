@@ -1,0 +1,32 @@
+name: iTUTOR CI/CD Pipeline (RA 6 & RA 7)
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-test-and-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Linter & Unit Tests (Quality Gate)
+        run: npm test -- --run
+
+      - name: Build Production PWA Bundle
+        run: npm run build
+
+      - name: Generate Automated Technical Documentation (Compodoc - RA 6)
+        run: npx --yes @compodoc/compodoc -p tsconfig.app.json -d documentation

@@ -1,49 +1,104 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Acceso Plataforma Tutorías</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding">
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+<ion-content [fullscreen]="true" class="login-content">
+  <div class="login-wrapper">
     
-    <ion-item>
-      <ion-label position="floating">Correo Electrónico</ion-label>
-      <ion-input type="email" formControlName="email"></ion-input>
-    </ion-item>
-    
-    <!-- Mensajes de validación reactiva y asíncrona -->
-    <div class="error-messages" *ngIf="loginForm.get('email')?.touched">
-      <ion-text color="danger" *ngIf="loginForm.get('email')?.hasError('required')">
-        <p>El correo es obligatorio.</p>
-      </ion-text>
-      <ion-text color="danger" *ngIf="loginForm.get('email')?.hasError('email')">
-        <p>Formato de correo inválido.</p>
-      </ion-text>
-      <ion-text color="warning" *ngIf="loginForm.get('email')?.pending">
-        <p>Comprobando disponibilidad del correo...</p>
-      </ion-text>
-      <ion-text color="danger" *ngIf="loginForm.get('email')?.hasError('emailExists')">
-        <p>Este correo ya está registrado en el sistema.</p>
-      </ion-text>
-    </div>
+    <!-- Tarjeta blanca central con estética SaaS profesional -->
+    <ion-card class="login-card">
+      
+      <!-- Cabecera de Branding: Logotipo iTUTOR -->
+      <ion-card-header class="brand-header">
+        <div class="logo-badge" aria-hidden="true">
+          <ion-icon name="school-outline"></ion-icon>
+        </div>
+        <h1 class="brand-logo" aria-label="iTUTOR">
+          <span class="brand-prefix">i</span>TUTOR
+        </h1>
+        <p class="brand-subtitle">Plataforma Inteligente de Gestión de Tutorías</p>
+      </ion-card-header>
 
-    <ion-item>
-      <ion-label position="floating">Contraseña</ion-label>
-      <ion-input type="password" formControlName="password"></ion-input>
-    </ion-item>
+      <!-- Cuerpo del Formulario Reactivo -->
+      <ion-card-content class="card-body">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+          
+          <!-- Campo 1: Correo Electrónico -->
+          <div class="form-group">
+            <label class="field-label" for="email-input">Correo Electrónico</label>
+            <ion-item lines="none" class="custom-input-item" [class.item-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+              <ion-icon name="mail-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-input
+                id="email-input"
+                type="email"
+                placeholder="usuario@itutor.es"
+                formControlName="email"
+                autocomplete="email"
+              ></ion-input>
+              <ion-spinner *ngIf="loginForm.get('email')?.pending" name="crescent" slot="end" class="async-spinner"></ion-spinner>
+            </ion-item>
 
-    <ion-item>
-      <ion-label>Rol de acceso</ion-label>
-      <ion-select formControlName="role">
-        <ion-select-option value="Admin">Coordinador (Admin)</ion-select-option>
-        <ion-select-option value="Standard">Profesor (Estándar)</ion-select-option>
-      </ion-select>
-    </ion-item>
+            <!-- Mensajes de validación reactiva y asíncrona -->
+            <div class="validation-feedback" *ngIf="loginForm.get('email')?.touched || loginForm.get('email')?.pending">
+              <ion-text color="danger" *ngIf="loginForm.get('email')?.hasError('required')">
+                <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> El correo electrónico es obligatorio.</p>
+              </ion-text>
+              <ion-text color="danger" *ngIf="loginForm.get('email')?.hasError('email')">
+                <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> Introduce un formato de correo válido.</p>
+              </ion-text>
+              <ion-text color="warning" *ngIf="loginForm.get('email')?.pending">
+                <p class="feedback-msg pending-msg">Verificando cuenta en el servidor...</p>
+              </ion-text>
+              <ion-text color="danger" *ngIf="loginForm.get('email')?.hasError('emailNotRegistered')">
+                <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> Este correo no pertenece a ningún usuario registrado en iTUTOR.</p>
+              </ion-text>
+            </div>
+          </div>
 
-    <ion-button expand="block" type="submit" [disabled]="!loginForm.valid" class="ion-margin-top">
-      Acceder
-    </ion-button>
-    
-  </form>
+          <!-- Campo 2: Contraseña -->
+          <div class="form-group">
+            <label class="field-label" for="password-input">Contraseña</label>
+            <ion-item lines="none" class="custom-input-item" [class.item-invalid]="(loginForm.get('password')?.invalid && loginForm.get('password')?.touched) || authError">
+              <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-input
+                id="password-input"
+                type="password"
+                placeholder="Introduce tu contraseña"
+                formControlName="password"
+                autocomplete="current-password"
+              ></ion-input>
+            </ion-item>
+
+            <div class="validation-feedback" *ngIf="(loginForm.get('password')?.touched && loginForm.get('password')?.invalid) || authError">
+              <ion-text color="danger" *ngIf="loginForm.get('password')?.hasError('required')">
+                <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> La contraseña es obligatoria.</p>
+              </ion-text>
+              <ion-text color="danger" *ngIf="loginForm.get('password')?.hasError('minlength')">
+                <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> La contraseña debe tener al menos 5 caracteres.</p>
+              </ion-text>
+              <ion-text color="danger" *ngIf="authError">
+                <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> {{ authError }}</p>
+              </ion-text>
+            </div>
+          </div>
+
+          <!-- Botón de Acción Principal -->
+          <ion-button
+            expand="block"
+            type="submit"
+            [disabled]="!loginForm.valid || loginForm.pending"
+            class="submit-btn"
+          >
+            <span>Acceder a iTUTOR</span>
+            <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+          </ion-button>
+
+        </form>
+
+        <!-- Pie informativo de seguridad -->
+        <div class="security-footer">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+          <span>Conexión cifrada TLS • Autenticación JWT + Bcrypt</span>
+        </div>
+      </ion-card-content>
+
+    </ion-card>
+
+  </div>
 </ion-content>

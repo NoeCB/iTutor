@@ -4,7 +4,7 @@ import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'admin-dashboard',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
   {
@@ -21,6 +21,30 @@ export const routes: Routes = [
     path: 'mis-clases',
     loadComponent: () => import('./features/mis-clases/mis-clases.page').then(m => m.MisClasesPage),
     canActivate: [authGuard],
-    data: { role: 'Standard' }
+    data: { role: 'Standard', section: 'tutorias' }
+  },
+  {
+    path: 'mis-apuntes',
+    loadComponent: () => import('./features/mis-clases/mis-clases.page').then(m => m.MisClasesPage),
+    canActivate: [authGuard],
+    data: { role: 'Standard', section: 'apuntes' }
+  },
+  {
+    path: 'mensajes-profesores',
+    loadComponent: () => import('./features/mis-clases/mis-clases.page').then(m => m.MisClasesPage),
+    canActivate: [authGuard],
+    data: { role: 'Standard', section: 'mensajes' }
+  },
+  {
+    path: 'mis-pagos',
+    loadComponent: () => import('./features/mis-clases/mis-clases.page').then(m => m.MisClasesPage),
+    canActivate: [authGuard],
+    data: { role: 'Standard', section: 'pagos' }
+  },
+  {
+    path: 'ajustes',
+    loadComponent: () => import('./features/mis-clases/mis-clases.page').then(m => m.MisClasesPage),
+    canActivate: [authGuard],
+    data: { section: 'ajustes' }
   }
 ];

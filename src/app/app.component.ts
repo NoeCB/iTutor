@@ -32,16 +32,17 @@ import {
   chevronForwardOutline, 
   bookOutline, 
   personCircleOutline,
-  checkmarkCircle
+  checkmarkCircle,
+  documentTextOutline,
+  chatbubblesOutline
 } from 'ionicons/icons';
-import { AuthService } from './core/services/auth.service';
+import { AuthService, User } from './core/services/auth.service';
 
 interface MenuItem {
   title: string;
   url: string;
   icon: string;
   badge?: string;
-  role?: 'Admin' | 'Standard';
 }
 
 @Component({
@@ -76,14 +77,23 @@ export class AppComponent {
   /** Flujo reactivo del usuario en sesión */
   currentUser$ = this.authService.currentUser$;
 
-  /** Enlaces de navegación con Lazy Loading */
-  appPages: MenuItem[] = [
-    { title: 'Dashboard General', url: '/admin-dashboard', icon: 'grid-outline', role: 'Admin' },
-    { title: 'Mis Tutorías', url: '/mis-clases', icon: 'calendar-outline' },
-    { title: 'Estudiantes', url: '/alumnos', icon: 'people-outline', badge: '68', role: 'Admin' },
-    { title: 'Profesores Tutores', url: '/profesores', icon: 'school-outline', badge: '14', role: 'Admin' },
-    { title: 'Facturación & Pagos', url: '/facturacion', icon: 'wallet-outline', role: 'Admin' },
+  /** Menú para el rol Administrador (Noelia Cantador) */
+  adminPages: MenuItem[] = [
+    { title: 'Dashboard General', url: '/admin-dashboard', icon: 'grid-outline' },
+    { title: 'Calendario Tutorías', url: '/mis-clases', icon: 'calendar-outline' },
+    { title: 'Apuntes & Recursos', url: '/mis-apuntes', icon: 'document-text-outline', badge: '6' },
+    { title: 'Mensajes Profesores', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: '3' },
+    { title: 'Facturación & Pagos', url: '/mis-pagos', icon: 'wallet-outline' },
     { title: 'Ajustes del Sistema', url: '/ajustes', icon: 'settings-outline' }
+  ];
+
+  /** Menú específico para Alumno (Paula García) */
+  studentPages: MenuItem[] = [
+    { title: 'Mis Tutorías', url: '/mis-clases', icon: 'calendar-outline' },
+    { title: 'Mis Apuntes', url: '/mis-apuntes', icon: 'document-text-outline', badge: '6' },
+    { title: 'Mensajes con Profesores', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: '2' },
+    { title: 'Facturación & Pagos', url: '/mis-pagos', icon: 'wallet-outline' },
+    { title: 'Ajustes de Cuenta', url: '/ajustes', icon: 'settings-outline' }
   ];
 
   constructor() {
@@ -101,8 +111,18 @@ export class AppComponent {
       chevronForwardOutline,
       bookOutline,
       personCircleOutline,
-      checkmarkCircle
+      checkmarkCircle,
+      documentTextOutline,
+      chatbubblesOutline
     });
+  }
+
+  /** Devuelve los enlaces del menú según el rol del usuario conectado */
+  getMenuPages(user?: User | null): MenuItem[] {
+    if (user?.role === 'Standard') {
+      return this.studentPages;
+    }
+    return this.adminPages;
   }
 
   /** Determina si nos encontramos en la pantalla de login para colapsar el menú */
@@ -113,16 +133,18 @@ export class AppComponent {
 
   /** Obtiene las iniciales del usuario para el avatar */
   getUserInitials(email?: string | null): string {
-    if (!email) return 'TF';
+    if (!email) return 'NC';
+    if (email.toLowerCase().includes('noelia')) return 'NC';
+    if (email.toLowerCase().includes('paula')) return 'PG';
     const namePart = email.split('@')[0];
     return namePart.substring(0, 2).toUpperCase();
   }
 
   /** Nombre formateado para el perfil */
   getUserDisplayName(email?: string | null): string {
-    if (!email) return 'Dra. Elena Ramos';
-    if (email.includes('admin')) return 'Dra. Elena Ramos (Dirección)';
-    if (email.includes('profesor')) return 'Prof. Carlos Méndez';
+    if (!email) return 'Noelia Cantador';
+    if (email.toLowerCase().includes('noelia')) return 'Noelia Cantador';
+    if (email.toLowerCase().includes('paula')) return 'Paula García';
     return email.split('@')[0];
   }
 

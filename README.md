@@ -1,40 +1,84 @@
-# iTutor (TutorFlow) — Plataforma de Gestión Académica
+# iTUTOR — Sistema de Gestión Multiplataforma de Tutorías (PWA / Híbrida)
 
-Aplicación híbrida multiplataforma desarrollada con **Ionic + Angular (Standalone Components)** y **Capacitor** para la gestión académica, control de sesiones de tutoría y análisis financiero de alumnos y profesores.
+**Módulo Profesional:** Desarrollo de Interfaces (Código: 0488)  
+**Ciclo Formativo:** Grado Superior en Desarrollo de Aplicaciones Multiplataforma (DAM)  
+**Stack Tecnológico:** Ionic 8/9 + Angular Standalone + RxJS + Chart.js + jsPDF  
 
-## Características Principales
+---
 
-- **Autenticación y Control de Acceso por Roles**: Servicio reactivo con `BehaviorSubject`, persistencia de sesión y protección de rutas mediante `CanActivateFn` (`authGuard`) diferenciando perfiles `Admin` y `Standard`.
-- **Formulario Reactivo con Validación Asíncrona**: Validación en tiempo real de credenciales y comprobación asíncrona de disponibilidad de correo electrónico simulando latencia de red.
-- **Orquestación Concurrente de Datos (`forkJoin`)**: Integración simultánea de fuentes relacionales (catálogo SQL de alumnos y tarifas) y documentales (sesiones NoSQL en MongoDB).
-- **Dashboard Analítico en Tiempo Real**: Visualización de KPIs e indicadores con `ChangeDetectionStrategy.OnPush` y gráficas dinámicas mediante **Chart.js**.
-- **Exportación de Informes Profesionales**: Generación de archivos CSV (codificación UTF-8 con BOM para Excel) e informes ejecutivos en PDF mediante **jsPDF** y **jspdf-autotable**.
-- **Despliegue Multiplataforma**: Preparado como PWA/Web y empaquetado nativo para **Android** con Capacitor.
+## 1. Credenciales de Acceso para Evaluación
 
-## Estructura del Flujo de Trabajo (Gitflow)
+La aplicación cuenta con control de acceso basado en roles (`Admin` y `Standard`), validación reactiva/asíncrona de correo en tiempo real, protección de rutas mediante `CanActivateFn` ([`authGuard`](./src/app/core/guards/auth.guard.ts)) e inyección de tokens JWT mediante [`authInterceptor`](./src/app/core/interceptors/auth.interceptor.ts).
 
-El repositorio sigue un flujo de trabajo estructurado en ramas:
+| Rol en el Sistema | Correo Electrónico | Contraseña | Ruta de Destino |
+| :--- | :--- | :--- | :--- |
+| **Administrador (Admin)** | `noeliacantador@itutor.es` | `noelia` | `/admin-dashboard` |
+| **Usuario Estándar (Alumna)** | `paulagarcia@itutor.es` | `paula` | `/mis-clases` |
 
-- `main`: Rama principal con el código estable listo para producción.
-- `develop`: Rama de integración donde convergen las distintas funcionalidades.
-- `feature/autenticacion-y-guards`: Gestión de sesión, `authGuard` y pantalla de login reactivo.
-- `feature/componentes-compartidos`: Componentes reutilizables (`stat-card` y `data-table`).
-- `feature/dashboard-y-datos`: Servicio de datos concurrente (`forkJoin`) y panel de administración con gráficas y exportación.
-- `feature/navegacion-y-estilos`: Menú lateral adaptativo (`IonSplitPane`), enrutado lazy-loading y tema visual.
-- `feature/despliegue-android`: Integración de la plataforma nativa Android con Capacitor y documentación.
+---
 
-## Instalación y Ejecución
+## 2. Cumplimiento de las Fases del Proyecto y Rúbrica (RA 1 a RA 7)
+
+### Fase 1: Estructuración y Renderizado Declarativo (RA 1 y RA 2)
+* **Paso 1.1 — Sistema de Enrutamiento y Navegación:**
+  * Menú lateral responsivo (`<ion-split-pane>` + `<ion-menu>`) en [`app.component.html`](./src/app/app.component.html) que adapta dinámicamente sus enlaces según el rol del usuario conectado.
+  * Carga diferida (*Lazy Loading* con `loadComponent`) configurada en [`app.routes.ts`](./src/app/app.routes.ts).
+  * Protección de rutas con [`authGuard`](./src/app/core/guards/auth.guard.ts) e interceptor funcional HTTP [`authInterceptor`](./src/app/core/interceptors/auth.interceptor.ts) registrado en [`main.ts`](./src/main.ts).
+* **Paso 1.2 — Formularios y Validaciones Asíncronas:**
+  * Pantalla de acceso profesional centrada en tarjeta (`<ion-card>`) con logotipo **iTUTOR** ([`login.page.html`](./src/app/features/login/login.page.html)).
+  * `ReactiveFormsModule` + validador asíncrono personalizado (`emailExistsValidator`) contra [`AuthService`](./src/app/core/services/auth.service.ts) y renderizado optimizado con `ChangeDetectionStrategy.OnPush`.
+
+### Fase 2: Componentización Visual y Lógica de Negocio (RA 3)
+* **Paso 2.1 y 2.2 — Componentes Personalizados Agnósticos (`@Input` / `@Output`):**
+  1. **[`StatCardComponent`](./src/app/shared/components/stat-card/stat-card.component.ts) (`<app-stat-card>`):** Widget estadístico reutilizable para KPIs con cálculo de variación porcentual.
+  2. **[`DataTableComponent`](./src/app/shared/components/data-table/data-table.component.ts) (`<app-data-table>`):** Tabla de datos avanzada e instanciable con **buscador en tiempo real integrado** (`[(ngModel)]="searchTerm"`), formateo de divisas/estados y emisión de eventos (`@Output() onEdit`, `onDelete`, `onView`) hacia el componente padre.
+  * Gestión del ciclo de vida (`ngOnInit`, `ngAfterViewInit`, `ngOnDestroy`) destruyendo las instancias de `Chart.js` al desmontar la vista para evitar fugas de memoria (*memory leaks*).
+
+### Fase 3: Consumo de Datos y Generación de Informes (RA 5)
+* **Paso 3.1 — Concurrencia y Asincronía (SQL + NoSQL):**
+  * [`DataService`](./src/app/core/services/data.service.ts) orquesta de manera concurrente mediante `forkJoin` de RxJS dos fuentes de datos: catálogo relacional (**SQL**) y sesiones documentales en tiempo real (**NoSQL / MongoDB**).
+* **Paso 3.2 — Dashboard Interactivo:**
+  * Cuadro de mando para el rol Administrador ([`AdminDashboardPage`](./src/app/features/admin-dashboard/admin-dashboard.page.ts)) con segmentación temporal en vivo y gráficos interactivos con **Chart.js** (*Ingresos por Asignatura* y *Clases Impartidas*).
+  * Portal interactivo para el rol Alumno ([`MisClasesPage`](./src/app/features/mis-clases/mis-clases.page.ts)) con **Calendario de Tutorías** (al pulsar en el **10 de octubre** despliega el recuadro de la tutoría de **Ecuaciones Diferenciales** con la **Dra. Elena Ramos**), **Mis Apuntes**, **Mensajes con Profesores** y **Dashboard de Facturación & Pagos**.
+* **Paso 3.3 — Exportación de Datos (PDF y CSV):**
+  * Generación y descarga de informes tabulados en **CSV** (con BOM UTF-8 compatible con Excel) y **PDF corporativo** mediante `jsPDF` y `jspdf-autotable`.
+
+### Fase 4: Usabilidad, Accesibilidad y Control de Calidad (RA 4)
+* **Paso 4.1 y 4.2 — Diseño Adaptativo (Mobile-First) y WCAG 2.1 AA:**
+  * Uso de `ion-grid`, CSS Grid y Flexbox adaptativos para móvil, tablet y escritorio.
+  * Landmarks semánticos WAI-ARIA (`role="banner"`, `role="main"`, `role="region"`, `aria-live="polite"`, `aria-label`), alto contraste cromático y navegación por teclado con `:focus-visible`.
+
+---
+
+## 3. Manual de Usuario Final
+
+1. **Inicio de Sesión (`/login`):**
+   * Introduce tu correo y contraseña en la tarjeta central de **iTUTOR**.
+   * El sistema verifica asíncronamente si el correo existe en la base de datos antes de habilitar el acceso.
+2. **Vista de Administrador (`noeliacantador@itutor.es` / `noelia`):**
+   * Visualiza los 4 KPIs financieros y académicos en la parte superior.
+   * Filtra en tiempo real por mes (*Todos, Sep, Oct, Nov, Dic*) para actualizar los gráficos de **Chart.js** y la tabla inferior.
+   * Utiliza el buscador integrado de la tabla para localizar alumnos o asignaturas y pulsa los botones superiores **CSV** o **Exportar PDF** para descargar los informes.
+3. **Vista de Alumna (`paulagarcia@itutor.es` / `paula`):**
+   * **Mis Tutorías:** Explora el calendario de Octubre 2026 y haz clic en cualquier día con clase (ej. **10 de octubre**) para abrir el recuadro de detalle de **Ecuaciones Diferenciales** con la **Dra. Elena Ramos**.
+   * **Mis Apuntes:** Filtra tus temas por asignatura y descarga los apuntes en PDF.
+   * **Mensajes con Profesores:** Chatea en directo con tus profesores tutores.
+   * **Facturación & Pagos:** Consulta el dashboard de todo lo que has pagado y descarga tus recibos en PDF.
+
+---
+
+## 4. Comandos de Ejecución, Documentación (Compodoc) y Despliegue
 
 ```bash
-# Instalar dependencias
+# 1. Instalar dependencias
 npm install
 
-# Ejecutar servidor de desarrollo
+# 2. Ejecutar servidor de desarrollo
 npm start
 
-# Compilar artefacto de producción web
-npm run build -- --configuration production
+# 3. Compilar para producción (genera carpeta www/ lista para Vercel / Netlify / Firebase)
+npm run build
 
-# Sincronizar con la plataforma Android
-npx cap sync android
+# 4. Generar documentación técnica automatizada con Compodoc
+npx @compodoc/compodoc -p tsconfig.app.json -d documentation
 ```
