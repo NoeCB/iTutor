@@ -22,11 +22,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Linter & Unit Tests (Quality Gate)
-        run: npm test -- --run
+      - name: Run Unit Tests (Quality Gate - bloquea el despliegue si fallan)
+        # `ng test --no-watch` es la invocación correcta para el builder
+        # @angular/build:unit-test. La variante `npm test -- --run` falla con
+        # "Unknown argument: run" porque ese flag pertenece a la CLI de Vitest,
+        # no al builder de Angular.
+        run: npm run test:ci
 
       - name: Build Production PWA Bundle
         run: npm run build
 
       - name: Generate Automated Technical Documentation (Compodoc - RA 6)
-        run: npx --yes @compodoc/compodoc -p tsconfig.app.json -d documentation
+        # Se usa tsconfig.doc.json (no tsconfig.app.json): este último solo
+        # declara src/main.ts en "files", por lo que Compodoc no descubriría
+        # los componentes standalone cargados de forma diferida y generaría
+        # una documentación vacía.
+        run: npm run docs
+
+      - name: Publish Technical Documentation as Build Artifact (RA 6)
+        uses: actions/upload-artifact@v4
+        with:
+          name: itutor-technical-documentation
+          path: documentation/
+          if-no-files-found: error

@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { 
   IonContent, 
   IonHeader, 
@@ -46,16 +47,23 @@ import {
   schoolOutline, 
   barChartOutline, 
   pieChartOutline,
-  sparklesOutline 
+  sparklesOutline,
+  walletOutline,
+  checkmarkCircleOutline,
+  alertCircleOutline,
+  eyeOutline,
+  cardOutline
 } from 'ionicons/icons';
 import Chart from 'chart.js/auto';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { Subscription } from 'rxjs';
 
 import { 
   DataService, 
   MongoClassSession, 
-  SqlStudentRate 
+  SqlStudentRate,
+  TeacherRecord 
 } from '../../core/services/data.service';
 import { StatCardComponent } from '../../shared/components/stat-card/stat-card.component';
 import { DataTableComponent, TableColumn } from '../../shared/components/data-table/data-table.component';
@@ -74,7 +82,7 @@ import { DataTableComponent, TableColumn } from '../../shared/components/data-ta
     IonTitle, 
     IonToolbar, 
     IonButtons, 
-    IonMenuButton,
+    IonMenuButton, 
     IonGrid, 
     IonRow, 
     IonCol,
@@ -97,6 +105,8 @@ import { DataTableComponent, TableColumn } from '../../shared/components/data-ta
 })
 export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   private dataService = inject(DataService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
   @ViewChild('revenueChartCanvas') revenueChartCanvas!: ElementRef<HTMLCanvasElement>;
@@ -105,16 +115,19 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   // Instancias de gráficos Chart.js
   private revenueChart: Chart | null = null;
   private classesChart: Chart | null = null;
+  private querySub?: Subscription;
 
   // Estado del Dashboard
   isLoading = true;
+  activeTab: 'metricas' | 'profesores' | 'alumnos' = 'metricas';
   selectedPeriod: 'todos' | 'septiembre' | 'octubre' | 'noviembre' | 'diciembre' = 'todos';
 
   // Datos brutos recuperados concurrentemente mediante forkJoin
   rawSqlStudents: SqlStudentRate[] = [];
+  rawTeachers: TeacherRecord[] = [];
   rawNoSqlSessions: MongoClassSession[] = [];
 
-  // Datos filtrados reactivamente
+  // Datos filtrados reactivamente para métricas
   filteredSessions: MongoClassSession[] = [];
 
   // KPIs dinámicos calculados
@@ -129,7 +142,23 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     asistenciaCrecimiento: 2.4
   };
 
-  /** Columnas de la tabla agnóstica */
+  // KPIs específicos de profesores
+  teacherKpis = {
+    totalProfesores: 10,
+    totalGanado: '0 €',
+    totalHoras: '0 h',
+    valoracionMedia: '4.8 ⭐'
+  };
+
+  // KPIs específicos de alumnos
+  studentKpis = {
+    totalAlumnos: 10,
+    saldoPendienteTotal: '0 €',
+    horasTotalesAlumnos: '0 h',
+    tarifaMedia: '0 €/h'
+  };
+
+  /** Columnas de la tabla de sesiones */
   tableColumns: TableColumn[] = [
     { key: 'estudianteNombre', label: 'Estudiante' },
     { key: 'materia', label: 'Asignatura (Rama)' },
@@ -150,6 +179,60 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     }
   ];
 
+  /** Columnas de la tabla de profesores */
+  teacherTableColumns: TableColumn[] = [
+    { key: 'nombre', label: 'Profesor / Docente' },
+    { key: 'especialidad', label: 'Especialidad Docente' },
+    { key: 'departamento', label: 'Departamento' },
+    { key: 'alumnosCount', label: 'Alumnos', align: 'center' },
+    { key: 'horasImpartidas', label: 'Horas Dadas', align: 'center' },
+    { key: 'tarifaHora', label: 'Tarifa/Hora', type: 'currency', align: 'right' },
+    { key: 'totalGanado', label: 'Total Ganado', type: 'currency', align: 'right' },
+    { key: 'telefono', label: 'Contacto' },
+    { 
+      key: 'estado', 
+      label: 'Estado', 
+      type: 'badge', 
+      align: 'center',
+      badgeColorMap: {
+        'Activo': 'success',
+        'Disponible': 'primary'
+      }
+    }
+  ];
+
+  /** Columnas de la tabla de alumnos */
+  studentTableColumns: TableColumn[] = [
+    { key: 'matricula', label: 'Matrícula' },
+    { key: 'nombre', label: 'Estudiante' },
+    { key: 'asignaturaPrincipal', label: 'Asignatura Principal' },
+    { 
+      key: 'plan', 
+      label: 'Plan', 
+      type: 'badge', 
+      align: 'center',
+      badgeColorMap: {
+        'Premium': 'secondary',
+        'Intensivo': 'primary',
+        'Básico': 'medium'
+      }
+    },
+    { key: 'profesorAsignado', label: 'Profesor Tutor' },
+    { key: 'horasTotales', label: 'Horas', align: 'center' },
+    { key: 'tarifaHora', label: 'Tarifa/h', type: 'currency', align: 'right' },
+    { key: 'saldoPendiente', label: 'Saldo Pend.', type: 'currency', align: 'right' },
+    { 
+      key: 'estado', 
+      label: 'Estado', 
+      type: 'badge', 
+      align: 'center',
+      badgeColorMap: {
+        'Al día': 'success',
+        'Pendiente': 'warning'
+      }
+    }
+  ];
+
   constructor() {
     addIcons({
       downloadOutline,
@@ -162,23 +245,40 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       schoolOutline,
       barChartOutline,
       pieChartOutline,
-      sparklesOutline
+      sparklesOutline,
+      walletOutline,
+      checkmarkCircleOutline,
+      alertCircleOutline,
+      eyeOutline,
+      cardOutline
     });
   }
 
   ngOnInit(): void {
     this.fetchConcurrentData();
+
+    // Sincronizar pestaña si entra desde el menú lateral con parámetro
+    this.querySub = this.route.queryParams.subscribe(params => {
+      if (params['vista'] && (params['vista'] === 'metricas' || params['vista'] === 'profesores' || params['vista'] === 'alumnos')) {
+        this.activeTab = params['vista'];
+        this.cdr.markForCheck();
+        if (this.activeTab === 'metricas') {
+          setTimeout(() => this.initOrUpdateCharts(), 100);
+        }
+      }
+    });
   }
 
   ngAfterViewInit(): void {
-    // Si los datos ya cargaron antes de la vista, inicializamos gráficos
-    if (!this.isLoading) {
+    if (!this.isLoading && this.activeTab === 'metricas') {
       this.initCharts();
     }
   }
 
   ngOnDestroy(): void {
-    // Prevención de fugas de memoria destruyendo instancias de Chart.js
+    if (this.querySub) {
+      this.querySub.unsubscribe();
+    }
     if (this.revenueChart) {
       this.revenueChart.destroy();
       this.revenueChart = null;
@@ -190,7 +290,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Consumo concurrente mediante DataService (forkJoin de SQL y NoSQL)
+   * Consumo concurrente mediante DataService (forkJoin de Alumnos SQL, Profesores SQL y Sesiones NoSQL)
    */
   fetchConcurrentData(): void {
     this.isLoading = true;
@@ -199,15 +299,20 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     this.dataService.getCombinedDashboardData().subscribe({
       next: (data) => {
         this.rawSqlStudents = data.catalogoSql;
+        this.rawTeachers = data.profesoresSql;
         this.rawNoSqlSessions = data.sesionesNoSql;
+        
         this.applyPeriodFilter();
+        this.calculateTeachersAndStudentsKpis();
+
         this.isLoading = false;
         this.cdr.markForCheck();
 
-        // Renderizado inicial o actualización de gráficos
-        setTimeout(() => {
-          this.initOrUpdateCharts();
-        }, 50);
+        if (this.activeTab === 'metricas') {
+          setTimeout(() => {
+            this.initOrUpdateCharts();
+          }, 50);
+        }
       },
       error: (err) => {
         console.error('Error al consumir datos concurrentes del Dashboard:', err);
@@ -217,9 +322,51 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  /**
-   * Manejador del filtro dinámico en tiempo real (Segmentación por Periodo/Mes)
-   */
+  /** Cambio entre Pestaña Métricas / Profesores / Alumnos */
+  onTabChange(tab: any): void {
+    this.activeTab = tab;
+    this.cdr.markForCheck();
+
+    if (this.activeTab === 'metricas') {
+      setTimeout(() => {
+        this.initOrUpdateCharts();
+      }, 50);
+    }
+  }
+
+  /** Calcula métricas de los 10 profesores y 10 alumnos */
+  private calculateTeachersAndStudentsKpis(): void {
+    // Profesores
+    const totalGanado = this.rawTeachers.reduce((sum, t) => sum + t.totalGanado, 0);
+    const totalHoras = this.rawTeachers.reduce((sum, t) => sum + t.horasImpartidas, 0);
+    const avgRating = (this.rawTeachers.reduce((sum, t) => sum + t.calificacion, 0) / (this.rawTeachers.length || 1)).toFixed(1);
+
+    this.teacherKpis = {
+      totalProfesores: this.rawTeachers.length,
+      totalGanado: `${totalGanado.toLocaleString('es-ES')} €`,
+      totalHoras: `${totalHoras} h`,
+      valoracionMedia: `${avgRating} ⭐`
+    };
+
+    // Alumnos
+    const saldoPend = this.rawSqlStudents.reduce((sum, s) => sum + s.saldoPendiente, 0);
+    const horasAlumnos = this.rawSqlStudents.reduce((sum, s) => sum + s.horasTotales, 0);
+    const tarifaMedia = Math.round(this.rawSqlStudents.reduce((sum, s) => sum + s.tarifaHora, 0) / (this.rawSqlStudents.length || 1));
+
+    this.studentKpis = {
+      totalAlumnos: this.rawSqlStudents.length,
+      saldoPendienteTotal: `${saldoPend.toLocaleString('es-ES')} €`,
+      horasTotalesAlumnos: `${horasAlumnos} h`,
+      tarifaMedia: `${tarifaMedia} €/h`
+    };
+  }
+
+  /** Navega directamente al portal del profesor seleccionado */
+  viewTeacherPortal(teacher: any): void {
+    this.router.navigate(['/portal-profesor']);
+  }
+
+  /** Manejador del filtro de mes */
   onFilterChange(period: any): void {
     this.selectedPeriod = period;
     this.applyPeriodFilter();
@@ -227,9 +374,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  /**
-   * Filtrado en memoria y recálculo dinámico de estadísticas KPI
-   */
+  /** Filtrado en memoria y recálculo dinámico de estadísticas KPI */
   private applyPeriodFilter(): void {
     if (this.selectedPeriod === 'todos') {
       this.filteredSessions = [...this.rawNoSqlSessions];
@@ -239,7 +384,6 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       );
     }
 
-    // Cálculo de KPIs
     const totalIngresos = this.filteredSessions
       .filter(s => s.estado !== 'Cancelada')
       .reduce((sum, s) => sum + s.importe, 0);
@@ -269,9 +413,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     };
   }
 
-  /**
-   * Inicialización o actualización condicional de los gráficos de Chart.js
-   */
+  /** Inicialización o actualización condicional de los gráficos de Chart.js */
   private initOrUpdateCharts(): void {
     if (!this.revenueChartCanvas || !this.classesChartCanvas) return;
 
@@ -282,9 +424,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   * Creación de las instancias de Chart.js con estilo SaaS y alto contraste visual
-   */
+  /** Creación de las instancias de Chart.js */
   private initCharts(): void {
     if (!this.revenueChartCanvas || !this.classesChartCanvas) return;
 
@@ -298,12 +438,12 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
           label: 'Ingresos (€)',
           data: revenueData.values,
           backgroundColor: [
-            'rgba(37, 99, 235, 0.85)',   // Cobalto
-            'rgba(99, 102, 241, 0.85)',  // Índigo
-            'rgba(14, 165, 233, 0.85)',  // Azul cielo
-            'rgba(16, 185, 129, 0.85)',  // Esmeralda
-            'rgba(245, 158, 11, 0.85)',  // Ámbar
-            'rgba(168, 85, 247, 0.85)'   // Violeta
+            'rgba(37, 99, 235, 0.85)',
+            'rgba(99, 102, 241, 0.85)',
+            'rgba(14, 165, 233, 0.85)',
+            'rgba(16, 185, 129, 0.85)',
+            'rgba(245, 158, 11, 0.85)',
+            'rgba(168, 85, 247, 0.85)'
           ],
           borderColor: [
             '#1d4ed8',
@@ -324,10 +464,6 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
           legend: { display: false },
           tooltip: {
             backgroundColor: '#0f172a',
-            titleFont: { size: 13, weight: 'bold' },
-            bodyFont: { size: 12 },
-            padding: 10,
-            cornerRadius: 8,
             callbacks: {
               label: (context) => ` ${context.parsed.y} € facturados`
             }
@@ -337,383 +473,277 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
           y: {
             beginAtZero: true,
             grid: { color: 'rgba(226, 232, 240, 0.7)' },
-            ticks: {
-              callback: (value) => `${value} €`,
-              font: { size: 11, weight: 'normal' },
-              color: '#64748b'
-            }
+            ticks: { callback: (value) => `${value} €`, color: '#64748b' }
           },
-          x: {
-            grid: { display: false },
-            ticks: {
-              font: { size: 11, weight: 500 },
-              color: '#475569'
-            }
-          }
+          x: { grid: { display: false }, ticks: { color: '#475569' } }
         }
       }
     });
 
-    // 2. Gráfico: "Clases Impartidas: Física vs Matemáticas" (Line / Area Chart)
-    const classesData = this.computeClassesByBranch();
+    // 2. Gráfico: "Clases Impartidas por Rama" (Doughnut)
+    const branchData = this.computeClassesByBranch();
     this.classesChart = new Chart(this.classesChartCanvas.nativeElement, {
-      type: 'line',
+      type: 'doughnut',
       data: {
-        labels: classesData.labels,
-        datasets: [
-          {
-            label: 'Física',
-            data: classesData.fisica,
-            borderColor: '#2563eb',
-            backgroundColor: 'rgba(37, 99, 235, 0.15)',
-            fill: true,
-            tension: 0.35,
-            borderWidth: 2.5,
-            pointBackgroundColor: '#2563eb',
-            pointRadius: 4
-          },
-          {
-            label: 'Matemáticas',
-            data: classesData.matematicas,
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.15)',
-            fill: true,
-            tension: 0.35,
-            borderWidth: 2.5,
-            pointBackgroundColor: '#10b981',
-            pointRadius: 4
-          }
-        ]
+        labels: branchData.labels,
+        datasets: [{
+          data: branchData.values,
+          backgroundColor: ['#2563eb', '#6366f1', '#10b981'],
+          borderWidth: 2,
+          borderColor: '#ffffff'
+        }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        interaction: {
-          mode: 'index',
-          intersect: false
-        },
         plugins: {
           legend: {
-            position: 'top',
-            labels: {
-              boxWidth: 12,
-              font: { size: 12, weight: 600 },
-              color: '#334155'
-            }
-          },
-          tooltip: {
-            backgroundColor: '#0f172a',
-            padding: 10,
-            cornerRadius: 8
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            grid: { color: 'rgba(226, 232, 240, 0.7)' },
-            ticks: {
-              stepSize: 1,
-              font: { size: 11 },
-              color: '#64748b'
-            }
-          },
-          x: {
-            grid: { display: false },
-            ticks: {
-              font: { size: 11, weight: 500 },
-              color: '#475569'
-            }
+            position: 'bottom',
+            labels: { boxWidth: 12, padding: 16, color: '#334155' }
           }
         }
       }
     });
   }
 
-  /**
-   * Actualiza los datos de los gráficos sin recargar la página
-   */
+  /** Actualización reactiva de datos en gráficos existentes */
   private updateChartsData(): void {
-    if (!this.revenueChart || !this.classesChart) return;
+    if (this.revenueChart) {
+      const revenueData = this.computeRevenueBySubject();
+      this.revenueChart.data.labels = revenueData.labels;
+      this.revenueChart.data.datasets[0].data = revenueData.values;
+      this.revenueChart.update('active');
+    }
 
-    // Actualización de Gráfico 1 (Ingresos)
-    const rev = this.computeRevenueBySubject();
-    this.revenueChart.data.labels = rev.labels;
-    this.revenueChart.data.datasets[0].data = rev.values;
-    this.revenueChart.update('active');
-
-    // Actualización de Gráfico 2 (Clases por Rama)
-    const cls = this.computeClassesByBranch();
-    this.classesChart.data.labels = cls.labels;
-    this.classesChart.data.datasets[0].data = cls.fisica;
-    this.classesChart.data.datasets[1].data = cls.matematicas;
-    this.classesChart.update('active');
+    if (this.classesChart) {
+      const branchData = this.computeClassesByBranch();
+      this.classesChart.data.labels = branchData.labels;
+      this.classesChart.data.datasets[0].data = branchData.values;
+      this.classesChart.update('active');
+    }
   }
 
-  /**
-   * Agrupa ingresos por materia según la selección actual
-   */
   private computeRevenueBySubject(): { labels: string[]; values: number[] } {
-    const revenueMap = new Map<string, number>();
-
+    const revenueMap: { [key: string]: number } = {};
     this.filteredSessions
       .filter(s => s.estado !== 'Cancelada')
       .forEach(s => {
-        const current = revenueMap.get(s.materia) || 0;
-        revenueMap.set(s.materia, current + s.importe);
+        revenueMap[s.materia] = (revenueMap[s.materia] || 0) + s.importe;
       });
 
     return {
-      labels: Array.from(revenueMap.keys()),
-      values: Array.from(revenueMap.values())
+      labels: Object.keys(revenueMap),
+      values: Object.values(revenueMap)
     };
   }
 
-  /**
-   * Distribución de sesiones entre Física y Matemáticas
-   */
-  private computeClassesByBranch(): { labels: string[]; fisica: number[]; matematicas: number[] } {
-    const meses = this.selectedPeriod === 'todos' 
-      ? ['septiembre', 'octubre', 'noviembre', 'diciembre']
-      : [this.selectedPeriod];
-
-    const labels = meses.map(m => m.charAt(0).toUpperCase() + m.slice(1));
-    const fisicaCounts: number[] = [];
-    const matematicasCounts: number[] = [];
-
-    meses.forEach(mes => {
-      const sesMes = this.rawNoSqlSessions.filter(s => s.mes === mes && s.estado !== 'Cancelada');
-      fisicaCounts.push(sesMes.filter(s => s.rama === 'Física').length);
-      matematicasCounts.push(sesMes.filter(s => s.rama === 'Matemáticas').length);
+  private computeClassesByBranch(): { labels: string[]; values: number[] } {
+    const branchMap: { [key: string]: number } = {};
+    this.filteredSessions.forEach(s => {
+      branchMap[s.rama] = (branchMap[s.rama] || 0) + 1;
     });
 
     return {
-      labels,
-      fisica: fisicaCounts,
-      matematicas: matematicasCounts
+      labels: Object.keys(branchMap),
+      values: Object.values(branchMap)
     };
   }
 
-  /* ==========================================================================
-     EXPORTACIÓN ROBUSTA (CSV LIMPIO Y PDF CORPORATIVO)
-     ========================================================================== */
-
-  /**
-   * Exporta las sesiones filtradas a un archivo CSV limpio con BOM UTF-8 (compatible con Excel)
-   */
+  /** Exportación a CSV adaptada a la pestaña activa */
   exportToCsv(): void {
-    if (this.filteredSessions.length === 0) {
-      alert('No hay datos disponibles en el periodo seleccionado para exportar.');
-      return;
+    let csvContent = '';
+    let fileName = '';
+
+    if (this.activeTab === 'profesores') {
+      csvContent = 'Nombre,Especialidad,Departamento,Alumnos,Horas,TarifaHora,TotalGanado,Telefono,Estado\n';
+      this.rawTeachers.forEach(t => {
+        csvContent += `"${t.nombre}","${t.especialidad}","${t.departamento}",${t.alumnosCount},${t.horasImpartidas},${t.tarifaHora},${t.totalGanado},"${t.telefono}","${t.estado}"\n`;
+      });
+      fileName = `iTUTOR_Listado_Profesores_${new Date().toISOString().slice(0, 10)}.csv`;
+    } else if (this.activeTab === 'alumnos') {
+      csvContent = 'Matricula,Nombre,Email,AsignaturaPrincipal,Plan,ProfesorAsignado,TarifaHora,SaldoPendiente,HorasTotales,Telefono,Estado\n';
+      this.rawSqlStudents.forEach(s => {
+        csvContent += `"${s.matricula}","${s.nombre}","${s.email}","${s.asignaturaPrincipal}","${s.plan}","${s.profesorAsignado}",${s.tarifaHora},${s.saldoPendiente},${s.horasTotales},"${s.telefono}","${s.estado}"\n`;
+      });
+      fileName = `iTUTOR_Listado_Alumnos_${new Date().toISOString().slice(0, 10)}.csv`;
+    } else {
+      csvContent = 'Estudiante,Materia,Rama,Tutor,Fecha,DuracionMin,Importe,Estado,Asistencia\n';
+      this.filteredSessions.forEach(s => {
+        csvContent += `"${s.estudianteNombre}","${s.materia}","${s.rama}","${s.tutor}","${s.fecha}",${s.duracionMin},${s.importe},"${s.estado}",${s.asistencia}\n`;
+      });
+      fileName = `iTUTOR_Sesiones_${this.selectedPeriod}_${new Date().toISOString().slice(0, 10)}.csv`;
     }
 
-    const headers = [
-      'ID Sesión',
-      'Estudiante',
-      'Asignatura',
-      'Rama',
-      'Profesor Tutor',
-      'Fecha',
-      'Duración (min)',
-      'Tarifa (€)',
-      'Estado',
-      'Asistencia'
-    ];
-
-    const rows = this.filteredSessions.map(s => [
-      `"${s._id}"`,
-      `"${s.estudianteNombre}"`,
-      `"${s.materia}"`,
-      `"${s.rama}"`,
-      `"${s.tutor}"`,
-      `"${s.fecha}"`,
-      s.duracionMin,
-      s.importe,
-      `"${s.estado}"`,
-      s.asistencia ? '"Presente"' : '"Ausente"'
-    ]);
-
-    // Ensamblado con punto y coma para compatibilidad internacional y Excel europeo
-    const csvContent = [
-      headers.join(';'),
-      ...rows.map(r => r.join(';'))
-    ].join('\r\n');
-
-    // Añadimos BOM UTF-8 (\uFEFF) para garantizar visualización de tildes y caracteres especiales
-    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    const timestamp = new Date().toISOString().slice(0, 10);
-    link.href = url;
-    link.download = `TutorFlow_Reporte_${this.selectedPeriod}_${timestamp}.csv`;
-    link.style.visibility = 'hidden';
+    link.setAttribute('href', url);
+    link.setAttribute('download', fileName);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   }
 
-  /**
-   * Genera un informe PDF con diseño institucional y tabla tipográfica mediante jsPDF y jspdf-autotable
-   */
+  /** Exportación a PDF adaptada a la pestaña activa */
   exportToPdf(): void {
-    if (this.filteredSessions.length === 0) {
-      alert('No hay datos para generar el PDF.');
-      return;
-    }
-
     const doc = new jsPDF({
       orientation: 'landscape',
       unit: 'mm',
       format: 'a4'
     });
 
-    const primaryColor: [number, number, number] = [37, 99, 235]; // Azul Cobalto #2563eb
-    const darkColor: [number, number, number] = [15, 23, 42];      // Slate 900 #0f172a
-    const grayColor: [number, number, number] = [100, 116, 139];  // Slate 500 #64748b
+    const primaryColor: [number, number, number] = [37, 99, 235];
+    const darkColor: [number, number, number] = [15, 23, 42];
+    const grayColor: [number, number, number] = [100, 116, 139];
 
-    // 1. BANNER INSTITUCIONAL DE CABECERA
+    // Encabezado
     doc.setFillColor(...primaryColor);
     doc.rect(0, 0, 297, 24, 'F');
-
-    // Logotipo y Marca
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(18);
-    doc.text('TutorFlow', 14, 15);
-
+    doc.text('iTUTOR', 14, 15);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
-    doc.text('Academia de Ciencias: Matemáticas & Física • Informe Oficial de Auditoría', 56, 14);
+    doc.text('Plataforma Inteligente de Gestión Académica • Informe Oficial', 50, 14);
 
-    // 2. METADATOS DEL REPORTE
-    doc.setTextColor(...darkColor);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(13);
-    doc.text(`Informe de Gestión Académica y Financiera`, 14, 34);
+    if (this.activeTab === 'profesores') {
+      doc.setTextColor(...darkColor);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(14);
+      doc.text('Censo Oficial de Profesores y Honorarios Docentes', 14, 34);
 
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
-    doc.setTextColor(...grayColor);
-    const fechaExpedicion = new Date().toLocaleDateString('es-ES', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    doc.text(`Fecha de expedición: ${fechaExpedicion}`, 14, 40);
-    doc.text(`Periodo analizado: ${this.selectedPeriod.toUpperCase()} | Total registros: ${this.filteredSessions.length}`, 14, 45);
-
-    // Resumen Ejecutivo en Bloques
-    doc.setFillColor(248, 250, 252);
-    doc.roundedRect(190, 28, 93, 20, 2, 2, 'F');
-    doc.setFontSize(8);
-    doc.setTextColor(...grayColor);
-    doc.text('INGRESOS DEL PERIODO', 194, 34);
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(...primaryColor);
-    doc.text(this.kpis.ingresosTotales, 194, 42);
-
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(...grayColor);
-    doc.text('HORAS IMPARTIDAS', 248, 34);
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(...darkColor);
-    doc.text(this.kpis.horasImpartidas, 248, 42);
-
-    // 3. TABLA DE DATOS FORMATADA CON AUTO-TABLE
-    const tableData = this.filteredSessions.map(s => [
-      s.estudianteNombre,
-      s.materia,
-      s.rama,
-      s.tutor,
-      s.fecha,
-      `${s.duracionMin} min`,
-      `${s.importe} €`,
-      s.estado,
-      s.asistencia ? 'Sí' : 'No'
-    ]);
-
-    autoTable(doc, {
-      startY: 52,
-      head: [[
-        'Estudiante',
-        'Asignatura',
-        'Rama',
-        'Profesor Tutor',
-        'Fecha y Hora',
-        'Duración',
-        'Importe',
-        'Estado',
-        'Asistió'
-      ]],
-      body: tableData,
-      theme: 'grid',
-      headStyles: {
-        fillColor: primaryColor,
-        textColor: [255, 255, 255],
-        fontSize: 8.5,
-        fontStyle: 'bold',
-        halign: 'left'
-      },
-      styles: {
-        fontSize: 8,
-        cellPadding: 2.5,
-        textColor: [30, 41, 59],
-        lineColor: [226, 232, 240],
-        lineWidth: 0.2
-      },
-      alternateRowStyles: {
-        fillColor: [248, 250, 252]
-      },
-      columnStyles: {
-        0: { fontStyle: 'bold', cellWidth: 42 },
-        1: { cellWidth: 38 },
-        2: { cellWidth: 24 },
-        3: { cellWidth: 36 },
-        4: { cellWidth: 32 },
-        5: { halign: 'center', cellWidth: 18 },
-        6: { halign: 'right', fontStyle: 'bold', cellWidth: 20 },
-        7: { halign: 'center', cellWidth: 24 },
-        8: { halign: 'center', cellWidth: 16 }
-      },
-      margin: { left: 14, right: 14 }
-    });
-
-    // 4. PIE DE PÁGINA INSTITUCIONAL
-    const totalPages = doc.getNumberOfPages();
-    for (let i = 1; i <= totalPages; i++) {
-      doc.setPage(i);
-      doc.setFontSize(7.5);
       doc.setFont('helvetica', 'normal');
-      doc.setTextColor(148, 163, 184);
-      doc.text(
-        `TutorFlow PWA • Documento confidencial generado automáticamente • Página ${i} de ${totalPages}`,
-        14,
-        202
-      );
-    }
+      doc.setFontSize(9);
+      doc.setTextColor(...grayColor);
+      doc.text(`Total docentes en plantilla: ${this.rawTeachers.length} | Honorarios globales: ${this.teacherKpis.totalGanado}`, 14, 40);
 
-    // Descarga del PDF
-    const timestamp = new Date().toISOString().slice(0, 10);
-    doc.save(`TutorFlow_Informe_${this.selectedPeriod}_${timestamp}.pdf`);
+      const tableData = this.rawTeachers.map(t => [
+        t.nombre,
+        t.especialidad,
+        t.departamento,
+        t.alumnosAsignados.join(', '),
+        `${t.horasImpartidas} h`,
+        `${t.tarifaHora} €/h`,
+        `${t.totalGanado} €`,
+        `${t.calificacion} ⭐`,
+        t.telefono,
+        t.estado
+      ]);
+
+      autoTable(doc, {
+        startY: 46,
+        head: [['Profesor', 'Especialidad', 'Rama', 'Alumnos Asignados', 'Horas', 'Tarifa', 'Total Ganado', 'Valoración', 'Contacto', 'Estado']],
+        body: tableData,
+        theme: 'grid',
+        headStyles: { fillColor: primaryColor, textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 8 },
+        styles: { fontSize: 7.5, cellPadding: 2.5, textColor: [30, 41, 59] },
+        columnStyles: {
+          0: { fontStyle: 'bold', cellWidth: 34 },
+          1: { cellWidth: 38 },
+          6: { fontStyle: 'bold', halign: 'right', cellWidth: 22 }
+        }
+      });
+
+      doc.save(`iTUTOR_Listado_Profesores_${new Date().toISOString().slice(0, 10)}.pdf`);
+    } else if (this.activeTab === 'alumnos') {
+      doc.setTextColor(...darkColor);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(14);
+      doc.text('Censo Oficial de Alumnos Matriculados y Tarifas SQL', 14, 34);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(...grayColor);
+      doc.text(`Total alumnos activos: ${this.rawSqlStudents.length} | Saldo pendiente global: ${this.studentKpis.saldoPendienteTotal}`, 14, 40);
+
+      const tableData = this.rawSqlStudents.map(s => [
+        s.matricula,
+        s.nombre,
+        s.email,
+        s.asignaturaPrincipal,
+        s.plan,
+        s.profesorAsignado,
+        `${s.horasTotales} h`,
+        `${s.tarifaHora} €/h`,
+        `${s.saldoPendiente} €`,
+        s.estado
+      ]);
+
+      autoTable(doc, {
+        startY: 46,
+        head: [['Matrícula', 'Estudiante', 'Email', 'Asignatura Principal', 'Plan', 'Profesor Tutor', 'Horas', 'Tarifa', 'Saldo Pendiente', 'Estado']],
+        body: tableData,
+        theme: 'grid',
+        headStyles: { fillColor: primaryColor, textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 8 },
+        styles: { fontSize: 7.5, cellPadding: 2.5, textColor: [30, 41, 59] },
+        columnStyles: {
+          0: { fontStyle: 'bold', cellWidth: 26 },
+          1: { fontStyle: 'bold', cellWidth: 34 },
+          8: { fontStyle: 'bold', halign: 'right', cellWidth: 22 }
+        }
+      });
+
+      doc.save(`iTUTOR_Listado_Alumnos_${new Date().toISOString().slice(0, 10)}.pdf`);
+    } else {
+      doc.setTextColor(...darkColor);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(13);
+      doc.text('Informe de Gestión Académica y Financiera (Sesiones)', 14, 34);
+
+      const tableData = this.filteredSessions.map(s => [
+        s.estudianteNombre,
+        s.materia,
+        s.rama,
+        s.tutor,
+        s.fecha,
+        `${s.duracionMin} min`,
+        `${s.importe} €`,
+        s.estado,
+        s.asistencia ? 'Sí' : 'No'
+      ]);
+
+      autoTable(doc, {
+        startY: 44,
+        head: [['Estudiante', 'Asignatura', 'Rama', 'Profesor Tutor', 'Fecha y Hora', 'Duración', 'Importe', 'Estado', 'Asistió']],
+        body: tableData,
+        theme: 'grid',
+        headStyles: { fillColor: primaryColor, textColor: [255, 255, 255], fontSize: 8.5, fontStyle: 'bold' },
+        styles: { fontSize: 8, cellPadding: 2.5, textColor: [30, 41, 59] },
+        columnStyles: {
+          0: { fontStyle: 'bold', cellWidth: 42 },
+          6: { halign: 'right', fontStyle: 'bold', cellWidth: 20 }
+        }
+      });
+
+      doc.save(`iTUTOR_Informe_Sesiones_${this.selectedPeriod}_${new Date().toISOString().slice(0, 10)}.pdf`);
+    }
   }
 
-  // Manejadores de eventos de la tabla agnóstica
   handleEdit(item: any): void {
-    console.log('Editar tutoría:', item);
+    console.log('Editar registro:', item);
   }
 
   handleDelete(item: any): void {
-    console.log('Eliminar tutoría:', item);
-    this.rawNoSqlSessions = this.rawNoSqlSessions.filter(s => s._id !== item._id);
-    this.applyPeriodFilter();
-    this.updateChartsData();
+    console.log('Eliminar registro:', item);
+    if (this.activeTab === 'profesores') {
+      this.rawTeachers = this.rawTeachers.filter(t => t.id !== item.id);
+      this.calculateTeachersAndStudentsKpis();
+    } else if (this.activeTab === 'alumnos') {
+      this.rawSqlStudents = this.rawSqlStudents.filter(s => s.id !== item.id);
+      this.calculateTeachersAndStudentsKpis();
+    } else {
+      this.rawNoSqlSessions = this.rawNoSqlSessions.filter(s => s._id !== item._id);
+      this.applyPeriodFilter();
+      this.updateChartsData();
+    }
   }
 
   handleView(item: any): void {
-    console.log('Ver detalle de tutoría:', item);
+    console.log('Ver detalle:', item);
+    if (this.activeTab === 'profesores') {
+      this.viewTeacherPortal(item);
+    }
   }
 }

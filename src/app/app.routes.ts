@@ -14,6 +14,12 @@ export const routes: Routes = [
     data: { role: 'Admin' }
   },
   {
+    path: 'portal-profesor',
+    loadComponent: () => import('./features/profesor-dashboard/profesor-dashboard.page').then(m => m.ProfesorDashboardPage),
+    canActivate: [authGuard],
+    data: { role: ['Teacher', 'Admin'] }
+  },
+  {
     path: 'login',
     loadComponent: () => import('./features/login/login.page').then(m => m.LoginPage)
   },
@@ -21,7 +27,7 @@ export const routes: Routes = [
     path: 'mis-clases',
     loadComponent: () => import('./features/mis-clases/mis-clases.page').then(m => m.MisClasesPage),
     canActivate: [authGuard],
-    data: { role: 'Standard', section: 'tutorias' }
+    data: { role: ['Standard', 'Teacher', 'Admin'], section: 'tutorias' }
   },
   {
     path: 'mis-apuntes',
@@ -33,13 +39,13 @@ export const routes: Routes = [
     path: 'mensajes-profesores',
     loadComponent: () => import('./features/mis-clases/mis-clases.page').then(m => m.MisClasesPage),
     canActivate: [authGuard],
-    data: { role: 'Standard', section: 'mensajes' }
+    data: { role: ['Standard', 'Teacher', 'Admin'], section: 'mensajes' }
   },
   {
     path: 'mis-pagos',
     loadComponent: () => import('./features/mis-clases/mis-clases.page').then(m => m.MisClasesPage),
     canActivate: [authGuard],
-    data: { role: 'Standard', section: 'pagos' }
+    data: { role: ['Standard', 'Admin'], section: 'pagos' }
   },
   {
     path: 'ajustes',

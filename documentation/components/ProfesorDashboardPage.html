@@ -1,0 +1,2481 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>iTUTOR - Documentación Técnica</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">iTUTOR - Documentación Técnica</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search">
+    <input type="text" placeholder="Escribe para buscar">
+    <button type="button"
+        class="search-input-clear"
+        aria-label="Clear search"
+        data-search-input-clear>&times;</button>
+</div>
+            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Componentes</li>
+  <li class="breadcrumb-item"
+  >
+  ProfesorDashboardPage</li>
+</ol>
+
+<div class="io-file io-file-path" data-compodoc="entity-file-path">
+    <span class="icon ion-ios-document" aria-hidden="true"></span>
+    <code>src/app/features/profesor-dashboard/profesor-dashboard.page.ts</code>
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#api" class="nav-link"
+                role="tab" id="api-tab" data-bs-toggle="tab" data-link="api">API</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+
+
+    <p class="comment">
+        <h3>Implementa</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.dev/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Meta datos</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+            <tr>
+                <td class="col-md-3">changeDetection</td>
+                <td class="col-md-9"><code>ChangeDetectionStrategy.OnPush</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">providers</td>
+                <td class="col-md-9">
+                                <code><a href="https://angular.dev/api/common/CurrencyPipe" target="_blank" >CurrencyPipe</a></code>
+                                <code><a href="https://angular.dev/api/common/DatePipe" target="_blank" >DatePipe</a></code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-profesor-dashboard</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                        <div>        <code><a href="https://angular.dev/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+</div>
+                        <div>        <code><a href="https://angular.dev/api/forms/FormsModule" target="_blank" >FormsModule</a></code>
+</div>
+                        <div>    <code>IonContent</code>
+</div>
+                        <div>    <code>IonHeader</code>
+</div>
+                        <div>    <code>IonTitle</code>
+</div>
+                        <div>    <code>IonToolbar</code>
+</div>
+                        <div>    <code>IonButtons</code>
+</div>
+                        <div>    <code>IonMenuButton</code>
+</div>
+                        <div>    <code>IonGrid</code>
+</div>
+                        <div>    <code>IonRow</code>
+</div>
+                        <div>    <code>IonCol</code>
+</div>
+                        <div>    <code>IonButton</code>
+</div>
+                        <div>    <code>IonIcon</code>
+</div>
+                        <div>    <code>IonSpinner</code>
+</div>
+                        <div>        <code><a href="../components/StatCardComponent.html" target="_self" >StatCardComponent</a></code>
+</div>
+                        <div>        <code><a href="../components/DataTableComponent.html" target="_self" >DataTableComponent</a></code>
+</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./profesor-dashboard.page.scss</code></td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./profesor-dashboard.page.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+        <section data-compodoc="block-relationships">
+            <h3>Relationships</h3>
+
+            <div class="row pt-3">
+                <div class="col-sm-6">
+                    <h4>Used by</h4>
+                        <p class="comment"><i>No hay resultados que coincidan.</i></p>
+                </div>
+
+                <div class="col-sm-6">
+                    <h4>Depends on</h4>
+                        <ul class="list-unstyled relationships-list">
+                                <li>
+                                            <code><a href="https://angular.dev/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="https://angular.dev/api/forms/FormsModule" target="_blank" >FormsModule</a></code>
+                                </li>
+                                <li>
+                                        <code>IonContent</code>
+                                </li>
+                                <li>
+                                        <code>IonHeader</code>
+                                </li>
+                                <li>
+                                        <code>IonTitle</code>
+                                </li>
+                                <li>
+                                        <code>IonToolbar</code>
+                                </li>
+                                <li>
+                                        <code>IonButtons</code>
+                                </li>
+                                <li>
+                                        <code>IonMenuButton</code>
+                                </li>
+                                <li>
+                                        <code>IonGrid</code>
+                                </li>
+                                <li>
+                                        <code>IonRow</code>
+                                </li>
+                                <li>
+                                        <code>IonCol</code>
+                                </li>
+                                <li>
+                                        <code>IonButton</code>
+                                </li>
+                                <li>
+                                        <code>IonIcon</code>
+                                </li>
+                                <li>
+                                        <code>IonSpinner</code>
+                                </li>
+                                <li>
+                                            <code><a href="../components/StatCardComponent.html" target="_self" >StatCardComponent</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="../components/DataTableComponent.html" target="_self" >DataTableComponent</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="https://angular.dev/api/common/CurrencyPipe" target="_blank" >CurrencyPipe</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="https://angular.dev/api/common/DatePipe" target="_blank" >DatePipe</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="https://angular.dev/api/core/OnInit" target="_blank" >OnInit</a></code>
+                                </li>
+                        </ul>
+                </div>
+            </div>
+        </section>
+</div>
+
+    <div class="tab-pane fade " id="api">    <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Propiedades</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#activeStudentsCount" >activeStudentsCount</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#allTeachers" >allTeachers</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#assignedStudents" >assignedStudents</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#authService" >authService</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#cdr" >cdr</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#currentTeacher" >currentTeacher</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#dataService" >dataService</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#isLoading" >isLoading</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#selectedTeacherId" >selectedTeacherId</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#sessionColumns" >sessionColumns</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#teacherSessions" >teacherSessions</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#totalHoursTaught" >totalHoursTaught</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#totalMoneyEarned" >totalMoneyEarned</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#exportEarningsPdf" >exportEarningsPdf</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#getTeacherInitials" >getTeacherInitials</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#loadData" >loadData</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#onTeacherSelected" >onTeacherSelected</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#selectTeacher" >selectTeacher</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+
+
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor()</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="126" class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:126</a></div>
+                            </td>
+                        </tr>
+
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="exportEarningsPdf"></a>
+                    <span class="name">
+                        <span ><b>exportEarningsPdf</b></span>
+                        <a href="#exportEarningsPdf"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>exportEarningsPdf()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="226"
+                                    class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:226</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Genera e imprime en PDF el informe oficial de honorarios ganados</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTeacherInitials"></a>
+                    <span class="name">
+                        <span ><b>getTeacherInitials</b></span>
+                        <a href="#getTeacherInitials"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTeacherInitials(nombre?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="215"
+                                    class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:215</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Calcula las iniciales del profesor</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>nombre</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Si
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadData"></a>
+                    <span class="name">
+                        <span ><b>loadData</b></span>
+                        <a href="#loadData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadData()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="153"
+                                    class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:153</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="149"
+                                    class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:149</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onTeacherSelected"></a>
+                    <span class="name">
+                        <span ><b>onTeacherSelected</b></span>
+                        <a href="#onTeacherSelected"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onTeacherSelected(teacherId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="181"
+                                    class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:181</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Cambia el profesor seleccionado en el selector</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>teacherId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectTeacher"></a>
+                    <span class="name">
+                        <span ><b>selectTeacher</b></span>
+                        <a href="#selectTeacher"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>selectTeacher(teacherId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="186"
+                                    class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:186</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>teacherId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Propiedades
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="activeStudentsCount"></a>
+                    <span class="name">
+                        <span ><b>activeStudentsCount</b></span>
+                        <a href="#activeStudentsCount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="105" class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:105</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="allTeachers"></a>
+                    <span class="name">
+                        <span ><b>allTeachers</b></span>
+                        <a href="#allTeachers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/TeacherRecord.html" target="_self" >TeacherRecord[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="90" class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:90</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Catálogo completo de profesores disponibles para conmutar</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="assignedStudents"></a>
+                    <span class="name">
+                        <span ><b>assignedStudents</b></span>
+                        <a href="#assignedStudents"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/SqlStudentRate.html" target="_self" >SqlStudentRate[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="97" class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:97</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Alumnos que tiene asignados este profesor</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authService"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>authService</b></span>
+                        <a href="#authService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>inject(AuthService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="84" class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:84</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cdr"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>cdr</b></span>
+                        <a href="#cdr"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>inject(ChangeDetectorRef)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="85" class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:85</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentTeacher"></a>
+                    <span class="name">
+                        <span ><b>currentTeacher</b></span>
+                        <a href="#currentTeacher"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/TeacherRecord.html" target="_self" >TeacherRecord | null</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="94" class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:94</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dataService"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>dataService</b></span>
+                        <a href="#dataService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>inject(DataService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="83" class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:83</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isLoading"></a>
+                    <span class="name">
+                        <span ><b>isLoading</b></span>
+                        <a href="#isLoading"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>true</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="87" class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:87</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectedTeacherId"></a>
+                    <span class="name">
+                        <span ><b>selectedTeacherId</b></span>
+                        <a href="#selectedTeacherId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>201</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="93" class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:93</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Profesor actualmente visualizado</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sessionColumns"></a>
+                    <span class="name">
+                        <span ><b>sessionColumns</b></span>
+                        <a href="#sessionColumns"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/TableColumn.html" target="_self" >TableColumn[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[
+    { key: &#x27;estudianteNombre&#x27;, label: &#x27;Alumno&#x27; },
+    { key: &#x27;materia&#x27;, label: &#x27;Asignatura Impartida&#x27; },
+    { key: &#x27;fecha&#x27;, label: &#x27;Fecha y Hora&#x27; },
+    { key: &#x27;duracionMin&#x27;, label: &#x27;Duración (min)&#x27;, align: &#x27;center&#x27; },
+    { key: &#x27;importe&#x27;, label: &#x27;Honorarios Ganados&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; },
+    { 
+      key: &#x27;estado&#x27;, 
+      label: &#x27;Estado de Pago&#x27;, 
+      type: &#x27;badge&#x27;, 
+      align: &#x27;center&#x27;,
+      badgeColorMap: {
+        &#x27;Confirmada&#x27;: &#x27;success&#x27;,
+        &#x27;En Curso&#x27;: &#x27;primary&#x27;,
+        &#x27;Pendiente&#x27;: &#x27;warning&#x27;,
+        &#x27;Cancelada&#x27;: &#x27;danger&#x27;
+      }
+    }
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="108" class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:108</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Columnas de la tabla agnóstica de sesiones del profesor</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="teacherSessions"></a>
+                    <span class="name">
+                        <span ><b>teacherSessions</b></span>
+                        <a href="#teacherSessions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/MongoClassSession.html" target="_self" >MongoClassSession[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="100" class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:100</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Sesiones impartidas por este profesor</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="totalHoursTaught"></a>
+                    <span class="name">
+                        <span ><b>totalHoursTaught</b></span>
+                        <a href="#totalHoursTaught"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="104" class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:104</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="totalMoneyEarned"></a>
+                    <span class="name">
+                        <span ><b>totalMoneyEarned</b></span>
+                        <a href="#totalMoneyEarned"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="103" class="link-to-prism">src/app/features/profesor-dashboard/profesor-dashboard.page.ts:103</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Resumen de métricas del profesor</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { 
+  Component, 
+  OnInit, 
+  ChangeDetectionStrategy, 
+  ChangeDetectorRef, 
+  inject 
+} from &#x27;@angular/core&#x27;;
+import { CommonModule, CurrencyPipe, DatePipe } from &#x27;@angular/common&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+import { 
+  IonContent, 
+  IonHeader, 
+  IonTitle, 
+  IonToolbar, 
+  IonButtons, 
+  IonMenuButton, 
+  IonGrid, 
+  IonRow, 
+  IonCol,
+  IonButton,
+  IonIcon,
+  IonSpinner
+} from &#x27;@ionic/angular&#x27;;
+import { addIcons } from &#x27;ionicons&#x27;;
+import { 
+  cashOutline, 
+  peopleOutline, 
+  timeOutline, 
+  schoolOutline, 
+  walletOutline,
+  downloadOutline,
+  documentTextOutline,
+  star,
+  callOutline,
+  mailOutline,
+  checkmarkCircle,
+  sparklesOutline,
+  personCircleOutline,
+  cardOutline,
+  checkmarkDoneOutline,
+  chatbubblesOutline
+} from &#x27;ionicons/icons&#x27;;
+import jsPDF from &#x27;jspdf&#x27;;
+import autoTable from &#x27;jspdf-autotable&#x27;;
+
+import { 
+  DataService, 
+  TeacherRecord, 
+  SqlStudentRate, 
+  MongoClassSession 
+} from &#x27;../../core/services/data.service&#x27;;
+import { AuthService } from &#x27;../../core/services/auth.service&#x27;;
+import { StatCardComponent } from &#x27;../../shared/components/stat-card/stat-card.component&#x27;;
+import { DataTableComponent, TableColumn } from &#x27;../../shared/components/data-table/data-table.component&#x27;;
+
+@Component({
+  selector: &#x27;app-profesor-dashboard&#x27;,
+  standalone: true,
+  templateUrl: &#x27;./profesor-dashboard.page.html&#x27;,
+  styleUrls: [&#x27;./profesor-dashboard.page.scss&#x27;],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonContent, 
+    IonHeader, 
+    IonTitle, 
+    IonToolbar, 
+    IonButtons, 
+    IonMenuButton, 
+    IonGrid, 
+    IonRow, 
+    IonCol,
+    IonButton,
+    IonIcon,
+    IonSpinner,
+    StatCardComponent,
+    DataTableComponent
+  ],
+  providers: [CurrencyPipe, DatePipe]
+})
+export class ProfesorDashboardPage implements OnInit {
+  private dataService &#x3D; inject(DataService);
+  private authService &#x3D; inject(AuthService);
+  private cdr &#x3D; inject(ChangeDetectorRef);
+
+  isLoading &#x3D; true;
+
+  /** Catálogo completo de profesores disponibles para conmutar */
+  allTeachers: TeacherRecord[] &#x3D; [];
+
+  /** Profesor actualmente visualizado */
+  selectedTeacherId: number &#x3D; 201;
+  currentTeacher: TeacherRecord | null &#x3D; null;
+
+  /** Alumnos que tiene asignados este profesor */
+  assignedStudents: SqlStudentRate[] &#x3D; [];
+
+  /** Sesiones impartidas por este profesor */
+  teacherSessions: MongoClassSession[] &#x3D; [];
+
+  /** Resumen de métricas del profesor */
+  totalMoneyEarned &#x3D; 0;
+  totalHoursTaught &#x3D; 0;
+  activeStudentsCount &#x3D; 0;
+
+  /** Columnas de la tabla agnóstica de sesiones del profesor */
+  sessionColumns: TableColumn[] &#x3D; [
+    { key: &#x27;estudianteNombre&#x27;, label: &#x27;Alumno&#x27; },
+    { key: &#x27;materia&#x27;, label: &#x27;Asignatura Impartida&#x27; },
+    { key: &#x27;fecha&#x27;, label: &#x27;Fecha y Hora&#x27; },
+    { key: &#x27;duracionMin&#x27;, label: &#x27;Duración (min)&#x27;, align: &#x27;center&#x27; },
+    { key: &#x27;importe&#x27;, label: &#x27;Honorarios Ganados&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; },
+    { 
+      key: &#x27;estado&#x27;, 
+      label: &#x27;Estado de Pago&#x27;, 
+      type: &#x27;badge&#x27;, 
+      align: &#x27;center&#x27;,
+      badgeColorMap: {
+        &#x27;Confirmada&#x27;: &#x27;success&#x27;,
+        &#x27;En Curso&#x27;: &#x27;primary&#x27;,
+        &#x27;Pendiente&#x27;: &#x27;warning&#x27;,
+        &#x27;Cancelada&#x27;: &#x27;danger&#x27;
+      }
+    }
+  ];
+
+  constructor() {
+    addIcons({
+      cashOutline,
+      peopleOutline,
+      timeOutline,
+      schoolOutline,
+      walletOutline,
+      downloadOutline,
+      documentTextOutline,
+      star,
+      callOutline,
+      mailOutline,
+      checkmarkCircle,
+      sparklesOutline,
+      personCircleOutline,
+      cardOutline,
+      checkmarkDoneOutline,
+      chatbubblesOutline
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData(): void {
+    this.isLoading &#x3D; true;
+    this.cdr.markForCheck();
+
+    this.dataService.getTeachersCatalog().subscribe({
+      next: (teachers) &#x3D;&gt; {
+        this.allTeachers &#x3D; teachers;
+
+        // Comprobar si el usuario en sesión es un profesor específico
+        const user &#x3D; this.authService.currentUserValue;
+        if (user &amp;&amp; user.role &#x3D;&#x3D;&#x3D; &#x27;Teacher&#x27;) {
+          const match &#x3D; teachers.find(t &#x3D;&gt; t.email.toLowerCase() &#x3D;&#x3D;&#x3D; user.email.toLowerCase());
+          if (match) {
+            this.selectedTeacherId &#x3D; match.id;
+          }
+        }
+
+        this.selectTeacher(this.selectedTeacherId);
+      },
+      error: (err) &#x3D;&gt; {
+        console.error(&#x27;Error al cargar catálogo de profesores:&#x27;, err);
+        this.isLoading &#x3D; false;
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  /** Cambia el profesor seleccionado en el selector */
+  onTeacherSelected(teacherId: number): void {
+    this.selectedTeacherId &#x3D; teacherId;
+    this.selectTeacher(teacherId);
+  }
+
+  selectTeacher(teacherId: number): void {
+    const teacher &#x3D; this.allTeachers.find(t &#x3D;&gt; t.id &#x3D;&#x3D;&#x3D; teacherId) || this.allTeachers[0];
+    if (!teacher) {
+      this.isLoading &#x3D; false;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    this.currentTeacher &#x3D; teacher;
+
+    this.dataService.getTeacherPortalData(teacher.email).subscribe({
+      next: (portalData) &#x3D;&gt; {
+        this.assignedStudents &#x3D; portalData.students;
+        this.teacherSessions &#x3D; portalData.sessions;
+        this.totalMoneyEarned &#x3D; portalData.totalEarned;
+        this.totalHoursTaught &#x3D; portalData.hoursCount;
+        this.activeStudentsCount &#x3D; portalData.students.length;
+        this.isLoading &#x3D; false;
+        this.cdr.markForCheck();
+      },
+      error: (err) &#x3D;&gt; {
+        console.error(&#x27;Error al cargar datos del profesor:&#x27;, err);
+        this.isLoading &#x3D; false;
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  /** Calcula las iniciales del profesor */
+  getTeacherInitials(nombre?: string): string {
+    if (!nombre) return &#x27;PR&#x27;;
+    const clean &#x3D; nombre.replace(/(Dra\.|Dr\.|Prof\.)/g, &#x27;&#x27;).trim();
+    const parts &#x3D; clean.split(&#x27; &#x27;);
+    if (parts.length &gt;&#x3D; 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return clean.substring(0, 2).toUpperCase();
+  }
+
+  /** Genera e imprime en PDF el informe oficial de honorarios ganados */
+  exportEarningsPdf(): void {
+    if (!this.currentTeacher) return;
+
+    const doc &#x3D; new jsPDF({
+      orientation: &#x27;portrait&#x27;,
+      unit: &#x27;mm&#x27;,
+      format: &#x27;a4&#x27;
+    });
+
+    const primaryColor: [number, number, number] &#x3D; [37, 99, 235];
+    const darkColor: [number, number, number] &#x3D; [15, 23, 42];
+    const grayColor: [number, number, number] &#x3D; [100, 116, 139];
+
+    // Encabezado
+    doc.setFillColor(...primaryColor);
+    doc.rect(0, 0, 210, 26, &#x27;F&#x27;);
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFont(&#x27;helvetica&#x27;, &#x27;bold&#x27;);
+    doc.setFontSize(16);
+    doc.text(&#x27;iTUTOR • Liquidación Oficial de Honorarios Docentes&#x27;, 14, 17);
+
+    // Datos del profesor
+    doc.setTextColor(...darkColor);
+    doc.setFontSize(13);
+    doc.text(&#x60;Profesor/a: ${this.currentTeacher.nombre}&#x60;, 14, 40);
+
+    doc.setFont(&#x27;helvetica&#x27;, &#x27;normal&#x27;);
+    doc.setFontSize(10);
+    doc.setTextColor(...grayColor);
+    doc.text(&#x60;Especialidad: ${this.currentTeacher.especialidad} (${this.currentTeacher.departamento})&#x60;, 14, 47);
+    doc.text(&#x60;Email oficial: ${this.currentTeacher.email} | Tel: ${this.currentTeacher.telefono}&#x60;, 14, 53);
+    doc.text(&#x60;Tarifa estipulada: ${this.currentTeacher.tarifaHora} € / hora&#x60;, 14, 59);
+
+    // Tarjeta de Resumen
+    doc.setFillColor(248, 250, 252);
+    doc.roundedRect(14, 66, 182, 22, 2, 2, &#x27;F&#x27;);
+
+    doc.setFontSize(9);
+    doc.setTextColor(...grayColor);
+    doc.text(&#x27;TOTAL DINERO GANADO&#x27;, 20, 74);
+    doc.setFontSize(14);
+    doc.setFont(&#x27;helvetica&#x27;, &#x27;bold&#x27;);
+    doc.setTextColor(16, 185, 129); // Verde esmeralda
+    doc.text(&#x60;${this.totalMoneyEarned},00 €&#x60;, 20, 83);
+
+    doc.setFont(&#x27;helvetica&#x27;, &#x27;normal&#x27;);
+    doc.setFontSize(9);
+    doc.setTextColor(...grayColor);
+    doc.text(&#x27;ALUMNOS ASIGNADOS&#x27;, 90, 74);
+    doc.setFontSize(14);
+    doc.setFont(&#x27;helvetica&#x27;, &#x27;bold&#x27;);
+    doc.setTextColor(...darkColor);
+    doc.text(&#x60;${this.assignedStudents.length} estudiantes&#x60;, 90, 83);
+
+    doc.setFont(&#x27;helvetica&#x27;, &#x27;normal&#x27;);
+    doc.setFontSize(9);
+    doc.setTextColor(...grayColor);
+    doc.text(&#x27;HORAS IMPARTIDAS&#x27;, 150, 74);
+    doc.setFontSize(14);
+    doc.setFont(&#x27;helvetica&#x27;, &#x27;bold&#x27;);
+    doc.setTextColor(...primaryColor);
+    doc.text(&#x60;${this.totalHoursTaught} horas&#x60;, 150, 83);
+
+    // Tabla de sesiones
+    const tableData &#x3D; this.teacherSessions.map(s &#x3D;&gt; [
+      s.estudianteNombre,
+      s.materia,
+      s.fecha,
+      &#x60;${s.duracionMin} min&#x60;,
+      &#x60;${s.importe} €&#x60;,
+      s.estado
+    ]);
+
+    autoTable(doc, {
+      startY: 96,
+      head: [[&#x27;Alumno&#x27;, &#x27;Asignatura&#x27;, &#x27;Fecha y Hora&#x27;, &#x27;Duración&#x27;, &#x27;Ganancia&#x27;, &#x27;Estado&#x27;]],
+      body: tableData,
+      theme: &#x27;grid&#x27;,
+      headStyles: {
+        fillColor: primaryColor,
+        textColor: [255, 255, 255],
+        fontSize: 9,
+        fontStyle: &#x27;bold&#x27;
+      },
+      styles: {
+        fontSize: 8.5,
+        cellPadding: 3,
+        textColor: [30, 41, 59]
+      },
+      columnStyles: {
+        0: { fontStyle: &#x27;bold&#x27; },
+        4: { fontStyle: &#x27;bold&#x27;, halign: &#x27;right&#x27; },
+        5: { halign: &#x27;center&#x27; }
+      }
+    });
+
+    const timestamp &#x3D; new Date().toISOString().slice(0, 10);
+    doc.save(&#x60;iTUTOR_Honorarios_${this.currentTeacher.nombre.replace(/\s+/g, &#x27;_&#x27;)}_${timestamp}.pdf&#x60;);
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;!-- ENCABEZADO DEL PORTAL DOCENTE --&gt;
+&lt;ion-header class&#x3D;&quot;ion-no-border teacher-header&quot; role&#x3D;&quot;banner&quot;&gt;
+  &lt;ion-toolbar class&#x3D;&quot;teacher-toolbar&quot;&gt;
+    &lt;ion-buttons slot&#x3D;&quot;start&quot;&gt;
+      &lt;ion-menu-button 
+        autoHide&#x3D;&quot;false&quot; 
+        aria-label&#x3D;&quot;Abrir menú principal de navegación&quot;
+        class&#x3D;&quot;menu-btn&quot;
+      &gt;&lt;/ion-menu-button&gt;
+    &lt;/ion-buttons&gt;
+
+    &lt;div class&#x3D;&quot;header-content&quot;&gt;
+      &lt;ion-title class&#x3D;&quot;teacher-title&quot;&gt;
+        Portal Docente
+      &lt;/ion-title&gt;
+      &lt;span class&#x3D;&quot;header-badge-tag&quot;&gt;
+        Gestión de Alumnos &amp; Honorarios
+      &lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;!-- SELECTOR DE PROFESOR Y DESCARGA PDF --&gt;
+    &lt;ion-buttons slot&#x3D;&quot;end&quot; class&#x3D;&quot;header-actions&quot;&gt;
+      &lt;!-- Selector para conmutar fácilmente entre los 10 profesores --&gt;
+      @if (allTeachers.length &gt; 0) {
+        &lt;div class&#x3D;&quot;teacher-selector-box&quot;&gt;
+          &lt;label for&#x3D;&quot;teacher-select&quot; class&#x3D;&quot;selector-label&quot;&gt;Profesor:&lt;/label&gt;
+          &lt;select 
+            id&#x3D;&quot;teacher-select&quot; 
+            [ngModel]&#x3D;&quot;selectedTeacherId&quot; 
+            (ngModelChange)&#x3D;&quot;onTeacherSelected($event)&quot;
+            class&#x3D;&quot;custom-select&quot;
+          &gt;
+            @for (t of allTeachers; track t.id) {
+              &lt;option [value]&#x3D;&quot;t.id&quot;&gt;
+                {{ t.nombre }} ({{ t.departamento }})
+              &lt;/option&gt;
+            }
+          &lt;/select&gt;
+        &lt;/div&gt;
+      }
+
+      &lt;ion-button 
+        fill&#x3D;&quot;solid&quot; 
+        color&#x3D;&quot;primary&quot; 
+        size&#x3D;&quot;small&quot; 
+        class&#x3D;&quot;export-btn&quot;
+        (click)&#x3D;&quot;exportEarningsPdf()&quot;
+        [disabled]&#x3D;&quot;isLoading || !currentTeacher&quot;
+        aria-label&#x3D;&quot;Descargar liquidación de honorarios en formato PDF&quot;
+      &gt;
+        &lt;ion-icon slot&#x3D;&quot;start&quot; name&#x3D;&quot;document-text-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
+        &lt;span class&#x3D;&quot;btn-text&quot;&gt;Descargar Liquidación&lt;/span&gt;
+      &lt;/ion-button&gt;
+    &lt;/ion-buttons&gt;
+  &lt;/ion-toolbar&gt;
+&lt;/ion-header&gt;
+
+&lt;!-- CONTENIDO PRINCIPAL --&gt;
+&lt;ion-content class&#x3D;&quot;teacher-content&quot; [fullscreen]&#x3D;&quot;true&quot; role&#x3D;&quot;main&quot;&gt;
+  &lt;div class&#x3D;&quot;teacher-container&quot;&gt;
+
+    &lt;!-- ESTADO DE CARGA --&gt;
+    @if (isLoading) {
+      &lt;div class&#x3D;&quot;loading-container&quot; role&#x3D;&quot;status&quot; aria-live&#x3D;&quot;polite&quot;&gt;
+        &lt;ion-spinner name&#x3D;&quot;crescent&quot; color&#x3D;&quot;primary&quot;&gt;&lt;/ion-spinner&gt;
+        &lt;p class&#x3D;&quot;loading-text&quot;&gt;Cargando expediente del profesor y calculando honorarios...&lt;/p&gt;
+      &lt;/div&gt;
+    } @else if (currentTeacher) {
+
+      &lt;!-- HERO BANNER DEL PROFESOR --&gt;
+      &lt;section class&#x3D;&quot;teacher-hero-card&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Ficha del docente&quot;&gt;
+        &lt;div class&#x3D;&quot;hero-left&quot;&gt;
+          &lt;div class&#x3D;&quot;teacher-avatar&quot;&gt;
+            {{ getTeacherInitials(currentTeacher.nombre) }}
+          &lt;/div&gt;
+          &lt;div class&#x3D;&quot;teacher-info&quot;&gt;
+            &lt;div class&#x3D;&quot;teacher-name-row&quot;&gt;
+              &lt;h1 class&#x3D;&quot;teacher-name&quot;&gt;{{ currentTeacher.nombre }}&lt;/h1&gt;
+              &lt;span class&#x3D;&quot;status-badge&quot; [class.badge-active]&#x3D;&quot;currentTeacher.estado &#x3D;&#x3D;&#x3D; &#x27;Activo&#x27;&quot;&gt;
+                &lt;ion-icon name&#x3D;&quot;checkmark-circle&quot;&gt;&lt;/ion-icon&gt; {{ currentTeacher.estado }}
+              &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;p class&#x3D;&quot;teacher-spec&quot;&gt;{{ currentTeacher.especialidad }}&lt;/p&gt;
+            &lt;div class&#x3D;&quot;teacher-meta-chips&quot;&gt;
+              &lt;span class&#x3D;&quot;meta-chip&quot;&gt;
+                &lt;ion-icon name&#x3D;&quot;school-outline&quot;&gt;&lt;/ion-icon&gt; Depto. {{ currentTeacher.departamento }}
+              &lt;/span&gt;
+              &lt;span class&#x3D;&quot;meta-chip&quot;&gt;
+                &lt;ion-icon name&#x3D;&quot;card-outline&quot;&gt;&lt;/ion-icon&gt; Tarifa: {{ currentTeacher.tarifaHora }} € / h
+              &lt;/span&gt;
+              &lt;span class&#x3D;&quot;meta-chip&quot;&gt;
+                &lt;ion-icon name&#x3D;&quot;call-outline&quot;&gt;&lt;/ion-icon&gt; {{ currentTeacher.telefono }}
+              &lt;/span&gt;
+              &lt;span class&#x3D;&quot;meta-chip rating-chip&quot;&gt;
+                &lt;ion-icon name&#x3D;&quot;star&quot;&gt;&lt;/ion-icon&gt; {{ currentTeacher.calificacion }} / 5.0
+              &lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;hero-right&quot;&gt;
+          &lt;div class&#x3D;&quot;earnings-highlight-box&quot;&gt;
+            &lt;span class&#x3D;&quot;earnings-label&quot;&gt;TOTAL DINERO GANADO&lt;/span&gt;
+            &lt;span class&#x3D;&quot;earnings-value&quot;&gt;{{ totalMoneyEarned | currency:&#x27;EUR&#x27;:&#x27;symbol&#x27;:&#x27;1.0-0&#x27; }}&lt;/span&gt;
+            &lt;span class&#x3D;&quot;earnings-subtext&quot;&gt;Honorarios acumulados&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/section&gt;
+
+      &lt;!-- KPI STAT CARDS (4 Métricas clave) --&gt;
+      &lt;section class&#x3D;&quot;stats-section&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Indicadores del profesor&quot;&gt;
+        &lt;ion-grid class&#x3D;&quot;ion-no-padding&quot;&gt;
+          &lt;ion-row class&#x3D;&quot;stats-row&quot;&gt;
+            &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+              &lt;app-stat-card
+                title&#x3D;&quot;Dinero Total Ganado&quot;
+                [value]&#x3D;&quot;totalMoneyEarned + &#x27; €&#x27;&quot;
+                icon&#x3D;&quot;cash-outline&quot;
+                [growthPercentage]&#x3D;&quot;12.5&quot;
+                period&#x3D;&quot;honorarios totales&quot;
+                iconVariant&#x3D;&quot;primary&quot;
+              &gt;&lt;/app-stat-card&gt;
+            &lt;/ion-col&gt;
+
+            &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+              &lt;app-stat-card
+                title&#x3D;&quot;Alumnos que Tiene&quot;
+                [value]&#x3D;&quot;assignedStudents.length&quot;
+                icon&#x3D;&quot;people-outline&quot;
+                [growthPercentage]&#x3D;&quot;8.0&quot;
+                period&#x3D;&quot;estudiantes asignados&quot;
+                iconVariant&#x3D;&quot;secondary&quot;
+              &gt;&lt;/app-stat-card&gt;
+            &lt;/ion-col&gt;
+
+            &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+              &lt;app-stat-card
+                title&#x3D;&quot;Horas Impartidas&quot;
+                [value]&#x3D;&quot;totalHoursTaught + &#x27; h&#x27;&quot;
+                icon&#x3D;&quot;time-outline&quot;
+                [growthPercentage]&#x3D;&quot;15.2&quot;
+                period&#x3D;&quot;tutorías completadas&quot;
+                iconVariant&#x3D;&quot;tertiary&quot;
+              &gt;&lt;/app-stat-card&gt;
+            &lt;/ion-col&gt;
+
+            &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+              &lt;app-stat-card
+                title&#x3D;&quot;Tarifa por Hora&quot;
+                [value]&#x3D;&quot;currentTeacher.tarifaHora + &#x27; €/h&#x27;&quot;
+                icon&#x3D;&quot;school-outline&quot;
+                [growthPercentage]&#x3D;&quot;5.0&quot;
+                period&#x3D;&quot;tarifa homologada&quot;
+                iconVariant&#x3D;&quot;warning&quot;
+              &gt;&lt;/app-stat-card&gt;
+            &lt;/ion-col&gt;
+          &lt;/ion-row&gt;
+        &lt;/ion-grid&gt;
+      &lt;/section&gt;
+
+      &lt;!-- SECCIÓN 1: ALUMNOS ASIGNADOS AL PROFESOR --&gt;
+      &lt;section class&#x3D;&quot;students-section&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Alumnos del profesor&quot;&gt;
+        &lt;div class&#x3D;&quot;section-header&quot;&gt;
+          &lt;div class&#x3D;&quot;section-title-box&quot;&gt;
+            &lt;h2 class&#x3D;&quot;section-title&quot;&gt;
+              &lt;ion-icon name&#x3D;&quot;people-outline&quot;&gt;&lt;/ion-icon&gt;
+              Alumnos que Tiene Asignados ({{ assignedStudents.length }})
+            &lt;/h2&gt;
+            &lt;p class&#x3D;&quot;section-subtitle&quot;&gt;
+              Expedientes directos de los estudiantes a cargo de {{ currentTeacher.nombre }}
+            &lt;/p&gt;
+          &lt;/div&gt;
+          &lt;span class&#x3D;&quot;count-pill&quot;&gt;{{ assignedStudents.length }} Alumnos&lt;/span&gt;
+        &lt;/div&gt;
+
+        @if (assignedStudents.length &#x3D;&#x3D;&#x3D; 0) {
+          &lt;div class&#x3D;&quot;empty-students-card&quot;&gt;
+            &lt;ion-icon name&#x3D;&quot;people-outline&quot;&gt;&lt;/ion-icon&gt;
+            &lt;p&gt;Este profesor actualmente no tiene alumnos asignados directamente.&lt;/p&gt;
+          &lt;/div&gt;
+        } @else {
+          &lt;div class&#x3D;&quot;students-cards-grid&quot;&gt;
+            &lt;div class&#x3D;&quot;student-card&quot; *ngFor&#x3D;&quot;let student of assignedStudents&quot;&gt;
+              &lt;div class&#x3D;&quot;student-card-header&quot;&gt;
+                &lt;div class&#x3D;&quot;student-avatar&quot;&gt;
+                  {{ student.nombre.substring(0, 2).toUpperCase() }}
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;student-header-info&quot;&gt;
+                  &lt;h3 class&#x3D;&quot;student-name&quot;&gt;{{ student.nombre }}&lt;/h3&gt;
+                  &lt;span class&#x3D;&quot;student-id&quot;&gt;{{ student.matricula }}&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;span class&#x3D;&quot;plan-tag&quot; [class.plan-premium]&#x3D;&quot;student.plan &#x3D;&#x3D;&#x3D; &#x27;Premium&#x27;&quot; [class.plan-intensivo]&#x3D;&quot;student.plan &#x3D;&#x3D;&#x3D; &#x27;Intensivo&#x27;&quot;&gt;
+                  {{ student.plan }}
+                &lt;/span&gt;
+              &lt;/div&gt;
+
+              &lt;div class&#x3D;&quot;student-card-body&quot;&gt;
+                &lt;div class&#x3D;&quot;info-row&quot;&gt;
+                  &lt;span class&#x3D;&quot;info-label&quot;&gt;Asignatura Principal:&lt;/span&gt;
+                  &lt;span class&#x3D;&quot;info-value subject-value&quot;&gt;{{ student.asignaturaPrincipal }}&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;info-row&quot;&gt;
+                  &lt;span class&#x3D;&quot;info-label&quot;&gt;Email:&lt;/span&gt;
+                  &lt;span class&#x3D;&quot;info-value&quot;&gt;{{ student.email }}&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;info-row&quot;&gt;
+                  &lt;span class&#x3D;&quot;info-label&quot;&gt;Teléfono:&lt;/span&gt;
+                  &lt;span class&#x3D;&quot;info-value&quot;&gt;{{ student.telefono }}&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;info-row&quot;&gt;
+                  &lt;span class&#x3D;&quot;info-label&quot;&gt;Horas con este profesor:&lt;/span&gt;
+                  &lt;span class&#x3D;&quot;info-value font-bold&quot;&gt;{{ student.horasTotales }} horas&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;info-row&quot;&gt;
+                  &lt;span class&#x3D;&quot;info-label&quot;&gt;Tarifa aplicada:&lt;/span&gt;
+                  &lt;span class&#x3D;&quot;info-value&quot;&gt;{{ student.tarifaHora }} € / h&lt;/span&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+
+              &lt;div class&#x3D;&quot;student-card-footer&quot;&gt;
+                &lt;div class&#x3D;&quot;fee-badge&quot;&gt;
+                  &lt;span class&#x3D;&quot;fee-label&quot;&gt;Total Generado:&lt;/span&gt;
+                  &lt;span class&#x3D;&quot;fee-amount&quot;&gt;{{ (student.horasTotales * student.tarifaHora) | currency:&#x27;EUR&#x27;:&#x27;symbol&#x27;:&#x27;1.0-0&#x27; }}&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;span class&#x3D;&quot;status-chip&quot; [class.chip-paid]&#x3D;&quot;student.estado &#x3D;&#x3D;&#x3D; &#x27;Al día&#x27;&quot;&gt;
+                  &lt;ion-icon name&#x3D;&quot;checkmark-circle&quot;&gt;&lt;/ion-icon&gt; {{ student.estado }}
+                &lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        }
+      &lt;/section&gt;
+
+      &lt;!-- SECCIÓN 2: HISTÓRICO DE CLASES Y HONORARIOS (Dumb Component Integrado) --&gt;
+      &lt;section class&#x3D;&quot;sessions-section&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Sesiones y honorarios del profesor&quot;&gt;
+        &lt;app-data-table
+          [title]&#x3D;&quot;&#x27;Histórico de Sesiones y Honorarios • &#x27; + currentTeacher.nombre&quot;
+          subtitle&#x3D;&quot;Desglose detallado de clases impartidas, horas lectivas y cobros correspondientes&quot;
+          [columns]&#x3D;&quot;sessionColumns&quot;
+          [rows]&#x3D;&quot;teacherSessions&quot;
+          [showActions]&#x3D;&quot;false&quot;
+        &gt;&lt;/app-data-table&gt;
+      &lt;/section&gt;
+
+    }
+
+  &lt;/div&gt;
+&lt;/ion-content&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./profesor-dashboard.page.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.teacher-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.teacher-toolbar {
+  --background: #ffffff;
+  --min-height: 64px;
+  padding: 0 16px;
+
+  .menu-btn {
+    color: #1e293b;
+    margin-right: 8px;
+  }
+
+  .header-content {
+    display: flex;
+    flex-direction: column;
+
+    .teacher-title {
+      font-family: &#x27;Outfit&#x27;, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0f172a;
+      padding: 0;
+    }
+
+    .header-badge-tag {
+      font-size: 0.75rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .teacher-selector-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 4px 10px;
+      border-radius: 8px;
+
+      .selector-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #475569;
+      }
+
+      .custom-select {
+        border: none;
+        background: transparent;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: #0f172a;
+        outline: none;
+        cursor: pointer;
+      }
+    }
+
+    .export-btn {
+      --background: #2563eb;
+      --border-radius: 8px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      text-transform: none;
+    }
+  }
+}
+
+.teacher-content {
+  --background: #f8fafc;
+}
+
+.teacher-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  gap: 16px;
+
+  .loading-text {
+    font-size: 0.9375rem;
+    color: #64748b;
+    font-weight: 500;
+  }
+}
+
+/* HERO BANNER DEL PROFESOR */
+.teacher-hero-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+
+  .hero-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .teacher-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: #ffffff;
+      font-family: &#x27;Outfit&#x27;, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.25);
+    }
+
+    .teacher-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      .teacher-name-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .teacher-name {
+          font-family: &#x27;Outfit&#x27;, sans-serif;
+          font-size: 1.625rem;
+          font-weight: 800;
+          color: #0f172a;
+          margin: 0;
+        }
+
+        .status-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          background: #dcfce7;
+          color: #166534;
+          font-size: 0.75rem;
+          font-weight: 700;
+          padding: 3px 10px;
+          border-radius: 20px;
+        }
+      }
+
+      .teacher-spec {
+        font-size: 0.9375rem;
+        color: #475569;
+        font-weight: 500;
+        margin: 0;
+      }
+
+      .teacher-meta-chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 4px;
+
+        .meta-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          background: #ffffff;
+          border: 1px solid #cbd5e1;
+          color: #334155;
+          font-size: 0.8125rem;
+          font-weight: 600;
+          padding: 4px 10px;
+          border-radius: 8px;
+
+          ion-icon {
+            font-size: 0.9375rem;
+            color: #64748b;
+          }
+
+          &amp;.rating-chip {
+            background: #fef3c7;
+            border-color: #fde68a;
+            color: #92400e;
+
+            ion-icon {
+              color: #f59e0b;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .hero-right {
+    .earnings-highlight-box {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 18px 24px;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+
+      .earnings-label {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: #94a3b8;
+      }
+
+      .earnings-value {
+        font-family: &#x27;Outfit&#x27;, sans-serif;
+        font-size: 2rem;
+        font-weight: 800;
+        color: #34d399; /* Verde esmeralda vivo */
+        line-height: 1.1;
+        margin: 4px 0;
+      }
+
+      .earnings-subtext {
+        font-size: 0.75rem;
+        color: #cbd5e1;
+      }
+    }
+  }
+}
+
+/* STATS */
+.stats-section {
+  .stats-row {
+    margin: -8px;
+
+    ion-col {
+      padding: 8px;
+    }
+  }
+}
+
+/* SECCIÓN ALUMNOS ASIGNADOS */
+.students-section {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 14px;
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: &#x27;Outfit&#x27;, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+
+      ion-icon {
+        color: #2563eb;
+      }
+    }
+
+    .section-subtitle {
+      font-size: 0.8125rem;
+      color: #64748b;
+      margin: 2px 0 0 0;
+    }
+
+    .count-pill {
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 12px;
+    }
+  }
+
+  .empty-students-card {
+    text-align: center;
+    padding: 40px 20px;
+    color: #64748b;
+
+    ion-icon {
+      font-size: 2.5rem;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+  }
+
+  .students-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+
+    .student-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      &amp;:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+        border-color: #cbd5e1;
+      }
+
+      .student-card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .student-avatar {
+          width: 42px;
+          height: 42px;
+          border-radius: 10px;
+          background: #3b82f6;
+          color: #ffffff;
+          font-weight: 700;
+          font-size: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .student-header-info {
+          flex: 1;
+
+          .student-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+          }
+
+          .student-id {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-family: monospace;
+          }
+        }
+
+        .plan-tag {
+          font-size: 0.6875rem;
+          font-weight: 700;
+          padding: 3px 8px;
+          border-radius: 6px;
+          background: #e2e8f0;
+          color: #475569;
+
+          &amp;.plan-premium {
+            background: #ede9fe;
+            color: #6d28d9;
+          }
+
+          &amp;.plan-intensivo {
+            background: #e0f2fe;
+            color: #0369a1;
+          }
+        }
+      }
+
+      .student-card-body {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.8125rem;
+
+        .info-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .info-label {
+            color: #64748b;
+          }
+
+          .info-value {
+            color: #1e293b;
+            font-weight: 500;
+
+            &amp;.subject-value {
+              font-weight: 600;
+              color: #2563eb;
+            }
+
+            &amp;.font-bold {
+              font-weight: 700;
+            }
+          }
+        }
+      }
+
+      .student-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #e2e8f0;
+        padding-top: 10px;
+
+        .fee-badge {
+          display: flex;
+          flex-direction: column;
+
+          .fee-label {
+            font-size: 0.6875rem;
+            color: #64748b;
+          }
+
+          .fee-amount {
+            font-size: 1.0625rem;
+            font-weight: 800;
+            color: #059669;
+          }
+        }
+
+        .status-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: #64748b;
+
+          &amp;.chip-paid {
+            color: #15803d;
+
+            ion-icon {
+              color: #22c55e;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* SECCIÓN SESIONES */
+.sessions-section {
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .teacher-hero-card {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .hero-right {
+      width: 100%;
+
+      .earnings-highlight-box {
+        align-items: flex-start;
+      }
+    }
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Leyenda</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Elemento Html</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Componente</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Elemento Html con directiva</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><!-- ENCABEZADO DEL PORTAL DOCENTE --><ion-header class="ion-no-border teacher-header" role="banner">  <ion-toolbar class="teacher-toolbar">    <ion-buttons slot="start">      <ion-menu-button         autoHide="false"         aria-label="Abrir menú principal de navegación"        class="menu-btn"      ></ion-menu-button>    </ion-buttons>    <div class="header-content">      <ion-title class="teacher-title">        Portal Docente      </ion-title>      <span class="header-badge-tag">        Gestión de Alumnos & Honorarios      </span>    </div>    <!-- SELECTOR DE PROFESOR Y DESCARGA PDF -->    <ion-buttons slot="end" class="header-actions">      <!-- Selector para conmutar fácilmente entre los 10 profesores -->      @if (allTeachers.length > 0) {        <div class="teacher-selector-box">          <label for="teacher-select" class="selector-label">Profesor:</label>          <select             id="teacher-select"             [ngModel]="selectedTeacherId"             (ngModelChange)="onTeacherSelected($event)"            class="custom-select"          >            @for (t of allTeachers; track t.id) {              <option [value]="t.id">                {{ t.nombre }} ({{ t.departamento }})              </option>            }          </select>        </div>      }      <ion-button         fill="solid"         color="primary"         size="small"         class="export-btn"        (click)="exportEarningsPdf()"        [disabled]="isLoading || !currentTeacher"        aria-label="Descargar liquidación de honorarios en formato PDF"      >        <ion-icon slot="start" name="document-text-outline" aria-hidden="true"></ion-icon>        <span class="btn-text">Descargar Liquidación</span>      </ion-button>    </ion-buttons>  </ion-toolbar></ion-header><!-- CONTENIDO PRINCIPAL --><ion-content class="teacher-content" [fullscreen]="true" role="main">  <div class="teacher-container">    <!-- ESTADO DE CARGA -->    @if (isLoading) {      <div class="loading-container" role="status" aria-live="polite">        <ion-spinner name="crescent" color="primary"></ion-spinner>        <p class="loading-text">Cargando expediente del profesor y calculando honorarios...</p>      </div>    } @else if (currentTeacher) {      <!-- HERO BANNER DEL PROFESOR -->      <section class="teacher-hero-card" role="region" aria-label="Ficha del docente">        <div class="hero-left">          <div class="teacher-avatar">            {{ getTeacherInitials(currentTeacher.nombre) }}          </div>          <div class="teacher-info">            <div class="teacher-name-row">              <h1 class="teacher-name">{{ currentTeacher.nombre }}</h1>              <span class="status-badge" [class.badge-active]="currentTeacher.estado === \'Activo\'">                <ion-icon name="checkmark-circle"></ion-icon> {{ currentTeacher.estado }}              </span>            </div>            <p class="teacher-spec">{{ currentTeacher.especialidad }}</p>            <div class="teacher-meta-chips">              <span class="meta-chip">                <ion-icon name="school-outline"></ion-icon> Depto. {{ currentTeacher.departamento }}              </span>              <span class="meta-chip">                <ion-icon name="card-outline"></ion-icon> Tarifa: {{ currentTeacher.tarifaHora }} € / h              </span>              <span class="meta-chip">                <ion-icon name="call-outline"></ion-icon> {{ currentTeacher.telefono }}              </span>              <span class="meta-chip rating-chip">                <ion-icon name="star"></ion-icon> {{ currentTeacher.calificacion }} / 5.0              </span>            </div>          </div>        </div>        <div class="hero-right">          <div class="earnings-highlight-box">            <span class="earnings-label">TOTAL DINERO GANADO</span>            <span class="earnings-value">{{ totalMoneyEarned | currency:\'EUR\':\'symbol\':\'1.0-0\' }}</span>            <span class="earnings-subtext">Honorarios acumulados</span>          </div>        </div>      </section>      <!-- KPI STAT CARDS (4 Métricas clave) -->      <section class="stats-section" role="region" aria-label="Indicadores del profesor">        <ion-grid class="ion-no-padding">          <ion-row class="stats-row">            <ion-col size="12" size-sm="6" size-xl="3">              <app-stat-card                title="Dinero Total Ganado"                [value]="totalMoneyEarned + \' €\'"                icon="cash-outline"                [growthPercentage]="12.5"                period="honorarios totales"                iconVariant="primary"              ></app-stat-card>            </ion-col>            <ion-col size="12" size-sm="6" size-xl="3">              <app-stat-card                title="Alumnos que Tiene"                [value]="assignedStudents.length"                icon="people-outline"                [growthPercentage]="8.0"                period="estudiantes asignados"                iconVariant="secondary"              ></app-stat-card>            </ion-col>            <ion-col size="12" size-sm="6" size-xl="3">              <app-stat-card                title="Horas Impartidas"                [value]="totalHoursTaught + \' h\'"                icon="time-outline"                [growthPercentage]="15.2"                period="tutorías completadas"                iconVariant="tertiary"              ></app-stat-card>            </ion-col>            <ion-col size="12" size-sm="6" size-xl="3">              <app-stat-card                title="Tarifa por Hora"                [value]="currentTeacher.tarifaHora + \' €/h\'"                icon="school-outline"                [growthPercentage]="5.0"                period="tarifa homologada"                iconVariant="warning"              ></app-stat-card>            </ion-col>          </ion-row>        </ion-grid>      </section>      <!-- SECCIÓN 1: ALUMNOS ASIGNADOS AL PROFESOR -->      <section class="students-section" role="region" aria-label="Alumnos del profesor">        <div class="section-header">          <div class="section-title-box">            <h2 class="section-title">              <ion-icon name="people-outline"></ion-icon>              Alumnos que Tiene Asignados ({{ assignedStudents.length }})            </h2>            <p class="section-subtitle">              Expedientes directos de los estudiantes a cargo de {{ currentTeacher.nombre }}            </p>          </div>          <span class="count-pill">{{ assignedStudents.length }} Alumnos</span>        </div>        @if (assignedStudents.length === 0) {          <div class="empty-students-card">            <ion-icon name="people-outline"></ion-icon>            <p>Este profesor actualmente no tiene alumnos asignados directamente.</p>          </div>        } @else {          <div class="students-cards-grid">            <div class="student-card" *ngFor="let student of assignedStudents">              <div class="student-card-header">                <div class="student-avatar">                  {{ student.nombre.substring(0, 2).toUpperCase() }}                </div>                <div class="student-header-info">                  <h3 class="student-name">{{ student.nombre }}</h3>                  <span class="student-id">{{ student.matricula }}</span>                </div>                <span class="plan-tag" [class.plan-premium]="student.plan === \'Premium\'" [class.plan-intensivo]="student.plan === \'Intensivo\'">                  {{ student.plan }}                </span>              </div>              <div class="student-card-body">                <div class="info-row">                  <span class="info-label">Asignatura Principal:</span>                  <span class="info-value subject-value">{{ student.asignaturaPrincipal }}</span>                </div>                <div class="info-row">                  <span class="info-label">Email:</span>                  <span class="info-value">{{ student.email }}</span>                </div>                <div class="info-row">                  <span class="info-label">Teléfono:</span>                  <span class="info-value">{{ student.telefono }}</span>                </div>                <div class="info-row">                  <span class="info-label">Horas con este profesor:</span>                  <span class="info-value font-bold">{{ student.horasTotales }} horas</span>                </div>                <div class="info-row">                  <span class="info-label">Tarifa aplicada:</span>                  <span class="info-value">{{ student.tarifaHora }} € / h</span>                </div>              </div>              <div class="student-card-footer">                <div class="fee-badge">                  <span class="fee-label">Total Generado:</span>                  <span class="fee-amount">{{ (student.horasTotales * student.tarifaHora) | currency:\'EUR\':\'symbol\':\'1.0-0\' }}</span>                </div>                <span class="status-chip" [class.chip-paid]="student.estado === \'Al día\'">                  <ion-icon name="checkmark-circle"></ion-icon> {{ student.estado }}                </span>              </div>            </div>          </div>        }      </section>      <!-- SECCIÓN 2: HISTÓRICO DE CLASES Y HONORARIOS (Dumb Component Integrado) -->      <section class="sessions-section" role="region" aria-label="Sesiones y honorarios del profesor">        <app-data-table          [title]="\'Histórico de Sesiones y Honorarios • \' + currentTeacher.nombre"          subtitle="Desglose detallado de clases impartidas, horas lectivas y cobros correspondientes"          [columns]="sessionColumns"          [rows]="teacherSessions"          [showActions]="false"        ></app-data-table>      </section>    }  </div></ion-content></div>'
+    var COMPONENTS = [{'name': 'AdminDashboardPage', 'selector': 'app-admin-dashboard'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'DataTableComponent', 'selector': 'app-data-table'},{'name': 'HomePage', 'selector': 'app-home'},{'name': 'LoginPage', 'selector': 'app-login'},{'name': 'MisClasesPage', 'selector': 'app-mis-clases'},{'name': 'ProfesorDashboardPage', 'selector': 'app-profesor-dashboard'},{'name': 'StatCardComponent', 'selector': 'app-stat-card'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'ProfesorDashboardPage'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'ProfesorDashboardPage.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var updateDarkModeSwitchOffset = function () {
+                    var content = document.querySelector('.content');
+                    var scrollbarWidth = 0;
+
+                    if (content) {
+                         scrollbarWidth = Math.max(0, content.offsetWidth - content.clientWidth);
+                    }
+
+                    document.documentElement.style.setProperty(
+                         '--content-scrollbar-width',
+                         scrollbarWidth + 'px'
+                    );
+               };
+
+               updateDarkModeSwitchOffset();
+               requestAnimationFrame(updateDarkModeSwitchOffset);
+               window.addEventListener('resize', updateDarkModeSwitchOffset);
+
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

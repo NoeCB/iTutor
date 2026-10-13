@@ -5,13 +5,13 @@ import { delay } from 'rxjs/operators';
 export interface User {
   email: string;
   name?: string;
-  role: 'Admin' | 'Standard';
+  role: 'Admin' | 'Standard' | 'Teacher';
 }
 
 interface StoredAccount {
   email: string;
   name: string;
-  role: 'Admin' | 'Standard';
+  role: 'Admin' | 'Standard' | 'Teacher';
   /** Salt criptográfico único por usuario */
   salt: string;
   /**
@@ -27,8 +27,11 @@ interface StoredAccount {
 export class AuthService {
   /**
    * Cuentas registradas en el sistema iTUTOR (Sin contraseñas en texto plano en el código):
-   * - Admin: noeliacantador@itutor.es
-   * - Alumno (Standard): paulagarcia@itutor.es
+   * - Admin: noeliacantador@itutor.es (clave: noelia)
+   * - Alumna (Standard): paulagarcia@itutor.es (clave: paula)
+   * - Profesor (Teacher): elena.ramos@itutor.es (clave: elena)
+   * - Profesor (Teacher): carlos.mendez@itutor.es (clave: carlos)
+   * - Profesor genérico: profesor@itutor.es (clave: profe)
    */
   private readonly ACCOUNTS: StoredAccount[] = [
     {
@@ -44,27 +47,92 @@ export class AuthService {
       role: 'Standard',
       salt: 'salt_student_2026',
       passwordHash: '$2b$12$salt_student_2026$3d1b2dc58c0ca993'
+    },
+    {
+      email: 'elena.ramos@itutor.es',
+      name: 'Dra. Elena Ramos',
+      role: 'Teacher',
+      salt: 'salt_teacher_2026',
+      passwordHash: '$2b$12$salt_teacher_2026$a8be79c5c8293d93'
+    },
+    {
+      email: 'carlos.mendez@itutor.es',
+      name: 'Prof. Carlos Méndez',
+      role: 'Teacher',
+      salt: 'salt_carlos_2026',
+      passwordHash: '$2b$12$salt_carlos_2026$d7e605c5c10bc993'
+    },
+    {
+      email: 'profesor@itutor.es',
+      name: 'Dra. Elena Ramos (Demo Profesor)',
+      role: 'Teacher',
+      salt: 'salt_profe_2026',
+      passwordHash: '$2b$12$salt_profe_2026$77cd5dc5eb524993'
     }
   ];
 
-  private currentUserSubject = new BehaviorSubject<User | null>({
-    email: 'noeliacantador@itutor.es',
-    name: 'Noelia Cantador',
-    role: 'Admin'
-  });
+  /**
+   * Estado de sesión. Arranca SIEMPRE como `null` (sesión anónima): ninguna
+   * credencial se asume por defecto, de forma que el `authGuard` no pueda
+   * eludirse navegando directamente por URL a una ruta protegida.
+   * Solo `authenticate()` (login explícito) o la rehidratación de una sesión
+   * previamente validada en `localStorage` pueden poblar este estado.
+   */
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor() {
-    const saved = localStorage.getItem('user');
-    if (saved) {
-      try {
-        this.currentUserSubject.next(JSON.parse(saved));
-      } catch {
-        this.login('noeliacantador@itutor.es', 'Admin');
-      }
-    } else {
-      this.login('noeliacantador@itutor.es', 'Admin');
+    this.restoreSession();
+  }
+
+  /**
+   * Rehidrata la sesión desde `localStorage` validando que el usuario
+   * persistido corresponda a una cuenta real y a un rol conocido.
+   * Cualquier dato corrupto, manipulado o desconocido provoca el cierre
+   * inmediato de la sesión en lugar de conceder acceso por defecto.
+   */
+  private restoreSession(): void {
+    const savedUser = localStorage.getItem('user');
+    const savedToken = localStorage.getItem('token');
+
+    if (!savedUser || !savedToken) {
+      this.clearSession();
+      return;
     }
+
+    try {
+      const parsed = JSON.parse(savedUser) as Partial<User>;
+      const account = this.ACCOUNTS.find(
+        acc => acc.email === (parsed.email || '').trim().toLowerCase()
+      );
+
+      // El rol persistido debe coincidir con el rol real de la cuenta en el
+      // sistema: así se evita la escalada de privilegios editando localStorage.
+      if (!account || parsed.role !== account.role) {
+        this.clearSession();
+        return;
+      }
+
+      this.currentUserSubject.next({
+        email: account.email,
+        name: account.name,
+        role: account.role
+      });
+    } catch {
+      this.clearSession();
+    }
+  }
+
+  /** Limpia por completo el estado de sesión y las credenciales almacenadas. */
+  private clearSession(): void {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    this.currentUserSubject.next(null);
+  }
+
+  /** Indica si existe una sesión autenticada activa. */
+  get isAuthenticated(): boolean {
+    return this.currentUserSubject.value !== null;
   }
 
   /**
@@ -107,7 +175,7 @@ export class AuthService {
     return this.currentUserValue;
   }
 
-  login(email: string, role: 'Admin' | 'Standard', name?: string): void {
+  login(email: string, role: 'Admin' | 'Standard' | 'Teacher', name?: string): void {
     const normalizedEmail = email.trim().toLowerCase();
     const account = this.ACCOUNTS.find(acc => acc.email === normalizedEmail);
     const user: User = {

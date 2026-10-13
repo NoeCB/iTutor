@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="utf-8" />
@@ -8,7 +8,12 @@
   <base href="/" />
 
   <meta name="color-scheme" content="light" />
-  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <!--
+    Accesibilidad (WCAG 2.1 AA - criterio 1.4.4 "Redimensionar el texto"):
+    NO se restringe el zoom del usuario. Se han eliminado `maximum-scale=1.0`
+    y `user-scalable=no` para permitir ampliar el contenido hasta el 200 %.
+  -->
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0" />
   <meta name="format-detection" content="telephone=no" />
   <meta name="msapplication-tap-highlight" content="no" />
 

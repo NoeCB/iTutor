@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, AsyncValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -51,15 +51,18 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginPage {
+  // Inyección mediante la función inject() (patrón recomendado en Angular
+  // moderno). Se declara ANTES de loginForm para que las dependencias estén
+  // resueltas cuando el constructor construya el formulario reactivo.
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
+
   loginForm: FormGroup;
   authError: string | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private cdr: ChangeDetectorRef
-  ) {
+  constructor() {
     addIcons({
       mailOutline,
       lockClosedOutline,
@@ -116,9 +119,35 @@ export class LoginPage {
 
       if (loggedUser.role === 'Admin') {
         this.router.navigate(['/admin-dashboard']);
+      } else if (loggedUser.role === 'Teacher') {
+        this.router.navigate(['/portal-profesor']);
       } else {
         this.router.navigate(['/mis-clases']);
       }
     }
+  }
+
+  /** Rellena credenciales demo para pruebas rápidas de evaluación */
+  fillDemoAccount(type: 'admin' | 'alumna' | 'profesora'): void {
+    if (type === 'admin') {
+      this.loginForm.patchValue({
+        email: 'noeliacantador@itutor.es',
+        password: 'noelia'
+      });
+    } else if (type === 'profesora') {
+      this.loginForm.patchValue({
+        email: 'elena.ramos@itutor.es',
+        password: 'elena'
+      });
+    } else {
+      this.loginForm.patchValue({
+        email: 'paulagarcia@itutor.es',
+        password: 'paula'
+      });
+    }
+    this.loginForm.get('email')?.markAsTouched();
+    this.loginForm.get('password')?.markAsTouched();
+    this.authError = null;
+    this.cdr.markForCheck();
   }
 }

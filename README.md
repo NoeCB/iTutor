@@ -8,12 +8,13 @@
 
 ## 1. Credenciales de Acceso para Evaluación
 
-La aplicación cuenta con control de acceso basado en roles (`Admin` y `Standard`), validación reactiva/asíncrona de correo en tiempo real, protección de rutas mediante `CanActivateFn` ([`authGuard`](./src/app/core/guards/auth.guard.ts)) e inyección de tokens JWT mediante [`authInterceptor`](./src/app/core/interceptors/auth.interceptor.ts).
+La aplicación cuenta con control de acceso basado en roles (`Admin`, `Teacher` y `Standard`), validación reactiva/asíncrona de correo en tiempo real, protección de rutas mediante `CanActivateFn` ([`authGuard`](./src/app/core/guards/auth.guard.ts)) e inyección de tokens JWT mediante [`authInterceptor`](./src/app/core/interceptors/auth.interceptor.ts).
 
-| Rol en el Sistema | Correo Electrónico | Contraseña | Ruta de Destino |
-| :--- | :--- | :--- | :--- |
-| **Administrador (Admin)** | `noeliacantador@itutor.es` | `noelia` | `/admin-dashboard` |
-| **Usuario Estándar (Alumna)** | `paulagarcia@itutor.es` | `paula` | `/mis-clases` |
+| Rol en el Sistema | Correo Electrónico | Contraseña | Ruta de Destino | Descripción de la Vista |
+| :--- | :--- | :--- | :--- | :--- |
+| **Administrador (Admin)** | `noeliacantador@itutor.es` | `noelia` | `/admin-dashboard` | Métricas, **Listado de Profesores (10)** y **Listado de Alumnos (10)**. *(Sin sección de apuntes)* |
+| **Profesor Docente (Teacher)** | `elena.ramos@itutor.es` | `elena` | `/portal-profesor` | **Portal Docente**: Expediente, alumnos que tiene a su cargo y **todo el dinero ganado**. |
+| **Usuario Estándar (Alumna)** | `paulagarcia@itutor.es` | `paula` | `/mis-clases` | Portal de Alumna: Calendario interactivo, Mis Apuntes, Mensajería y Justificantes de Pago. |
 
 ---
 
@@ -51,15 +52,21 @@ La aplicación cuenta con control de acceso basado en roles (`Admin` y `Standard
 ---
 
 ## 3. Manual de Usuario Final
-
+ 
 1. **Inicio de Sesión (`/login`):**
-   * Introduce tu correo y contraseña en la tarjeta central de **iTUTOR**.
+   * Introduce tu correo y contraseña en la tarjeta central de **iTUTOR**, o pulsa uno de los chips de acceso rápido de prueba (**Admin**, **Profesora** o **Alumna**).
    * El sistema verifica asíncronamente si el correo existe en la base de datos antes de habilitar el acceso.
 2. **Vista de Administrador (`noeliacantador@itutor.es` / `noelia`):**
-   * Visualiza los 4 KPIs financieros y académicos en la parte superior.
-   * Filtra en tiempo real por mes (*Todos, Sep, Oct, Nov, Dic*) para actualizar los gráficos de **Chart.js** y la tabla inferior.
-   * Utiliza el buscador integrado de la tabla para localizar alumnos o asignaturas y pulsa los botones superiores **CSV** o **Exportar PDF** para descargar los informes.
-3. **Vista de Alumna (`paulagarcia@itutor.es` / `paula`):**
+   * **Métricas & Sesiones:** Visualiza los 4 KPIs financieros/académicos, filtra por mes (*Todos, Sep, Oct, Nov, Dic*), consulta los gráficos Chart.js y exporta el informe de sesiones a PDF o CSV.
+   * **Listado de Profesores (10):** Consulta el catálogo completo de los 10 profesores de iTUTOR con sus especialidades, alumnos asignados, horas dadas, total ganado y exportación de nóminas/censo.
+   * **Listado de Alumnos (10):** Consulta el censo de los 10 alumnos matriculados, planes (Básico, Intensivo, Premium), profesor tutor asignado y saldos pendientes.
+   * *(Nota: El rol Administrador no cuenta con sección de apuntes, centrando su panel en la gestión de docentes, alumnos y finanzas).*
+3. **Vista de Profesor (`elena.ramos@itutor.es` / `elena`):**
+   * **Alumnos que tiene:** Tarjetas detalladas de los estudiantes asignados a su cargo, materias, horas cursadas y volumen económico generado.
+   * **Todo el dinero ganado:** Desglose del total ganado en honorarios acumulados, tarifa/hora oficial y métricas de rendimiento.
+   * **Histórico de clases:** Tabla interactiva de sesiones impartidas con buscador integrado.
+   * **Liquidación en PDF:** Botón superior para descargar el certificado oficial de liquidación de honorarios.
+4. **Vista de Alumna (`paulagarcia@itutor.es` / `paula`):**
    * **Mis Tutorías:** Explora el calendario de Octubre 2026 y haz clic en cualquier día con clase (ej. **10 de octubre**) para abrir el recuadro de detalle de **Ecuaciones Diferenciales** con la **Dra. Elena Ramos**.
    * **Mis Apuntes:** Filtra tus temas por asignatura y descarga los apuntes en PDF.
    * **Mensajes con Profesores:** Chatea en directo con tus profesores tutores.
@@ -79,6 +86,61 @@ npm start
 # 3. Compilar para producción (genera carpeta www/ lista para Vercel / Netlify / Firebase)
 npm run build
 
-# 4. Generar documentación técnica automatizada con Compodoc
-npx @compodoc/compodoc -p tsconfig.app.json -d documentation
+# 4. Ejecutar la batería de pruebas unitarias (una sola pasada, sin modo watch)
+npm run test:ci
+
+# 5. Generar documentación técnica automatizada con Compodoc (carpeta documentation/)
+npm run docs
+
+# 6. Servir la documentación generada en el navegador (http://localhost:8080)
+npm run docs:serve
 ```
+
+> **Nota sobre la generación de documentación:** se emplea `tsconfig.doc.json` en
+> lugar de `tsconfig.app.json`. Este último solo declara `src/main.ts` en su clave
+> `files`, por lo que Compodoc no descubriría los componentes *standalone*
+> cargados de forma diferida con `loadComponent()` y generaría una documentación
+> vacía.
+
+---
+
+## 5. Control de Calidad: Pruebas Unitarias (Quality Gate)
+
+El *pipeline* de integración continua ejecuta la batería de pruebas y **bloquea
+el flujo si alguna falla**, antes de compilar el artefacto de producción.
+
+| Suite de pruebas | Qué verifica |
+| :--- | :--- |
+| `auth.spec.ts` | Estado inicial anónimo, verificación de credenciales contra hash, cierre de sesión y resistencia a la manipulación de `localStorage` (escalada de privilegios). |
+| `auth-guard.spec.ts` | Las dos capas del guard: autenticación y autorización por rol, incluida la política de supervisión del rol Admin. |
+| `data.service.spec.ts` | Consumo de las fuentes SQL y NoSQL, orquestación concurrente con `forkJoin` y cálculos de agregación de honorarios. |
+| `data-table.component.spec.ts` | El componente reutilizable: entrada por `@Input`, filtrado del buscador y emisión de eventos por `@Output`. |
+
+---
+
+## 6. Nota Técnica sobre el Modelo de Seguridad (Alcance Académico)
+
+Para que la evaluación sea transparente, se detalla el alcance real de la capa
+de autenticación implementada:
+
+* **Sin sesión por defecto.** `AuthService` arranca con el estado en `null`. El
+  acceso a una ruta protegida escribiendo su URL directamente redirige siempre a
+  `/login`, y la rehidratación de la sesión valida que el rol persistido coincida
+  con el rol real de la cuenta, de modo que editar `localStorage` no permite
+  escalar privilegios.
+* **Contraseñas.** En el código **no** se almacena ninguna contraseña en claro,
+  únicamente el hash derivado con *salt* y 1024 rondas de estiramiento. No
+  obstante, se trata de una **simulación didáctica** (variante de FNV-1a): **no
+  es bcrypt, Argon2 ni PBKDF2** y no debe considerarse criptográficamente
+  segura. El prefijo `$2b$12$` se conserva solo para imitar el formato de
+  almacenamiento típico de bcrypt.
+* **Token.** El token emitido reproduce la estructura de un JWT
+  (`header.payload.signature`) para poder ejercitar el `authInterceptor`, pero
+  **no está firmado** ni es validado por un backend real.
+* **Datos.** Todas las cuentas y registros son **sintéticos y anonimizados**: no
+  corresponden a personas reales. Las credenciales de prueba se publican en este
+  README por exigencia expresa del entregable.
+
+En un sistema de producción, la verificación de contraseñas y la firma de tokens
+deben residir **siempre en el servidor**; el cliente nunca debe validar
+credenciales.

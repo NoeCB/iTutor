@@ -31,24 +31,36 @@
                 formControlName="email"
                 autocomplete="email"
               ></ion-input>
-              <ion-spinner *ngIf="loginForm.get('email')?.pending" name="crescent" slot="end" class="async-spinner"></ion-spinner>
+              @if (loginForm.get('email')?.pending) {
+                <ion-spinner name="crescent" slot="end" class="async-spinner"></ion-spinner>
+              }
             </ion-item>
 
             <!-- Mensajes de validación reactiva y asíncrona -->
-            <div class="validation-feedback" *ngIf="loginForm.get('email')?.touched || loginForm.get('email')?.pending">
-              <ion-text color="danger" *ngIf="loginForm.get('email')?.hasError('required')">
-                <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> El correo electrónico es obligatorio.</p>
-              </ion-text>
-              <ion-text color="danger" *ngIf="loginForm.get('email')?.hasError('email')">
-                <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> Introduce un formato de correo válido.</p>
-              </ion-text>
-              <ion-text color="warning" *ngIf="loginForm.get('email')?.pending">
-                <p class="feedback-msg pending-msg">Verificando cuenta en el servidor...</p>
-              </ion-text>
-              <ion-text color="danger" *ngIf="loginForm.get('email')?.hasError('emailNotRegistered')">
-                <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> Este correo no pertenece a ningún usuario registrado en iTUTOR.</p>
-              </ion-text>
-            </div>
+            @if (loginForm.get('email')?.touched || loginForm.get('email')?.pending) {
+              <div class="validation-feedback">
+                @if (loginForm.get('email')?.hasError('required')) {
+                  <ion-text color="danger">
+                    <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> El correo electrónico es obligatorio.</p>
+                  </ion-text>
+                }
+                @if (loginForm.get('email')?.hasError('email')) {
+                  <ion-text color="danger">
+                    <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> Introduce un formato de correo válido.</p>
+                  </ion-text>
+                }
+                @if (loginForm.get('email')?.pending) {
+                  <ion-text color="warning">
+                    <p class="feedback-msg pending-msg">Verificando cuenta en el servidor...</p>
+                  </ion-text>
+                }
+                @if (loginForm.get('email')?.hasError('emailNotRegistered')) {
+                  <ion-text color="danger">
+                    <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> Este correo no pertenece a ningún usuario registrado en iTUTOR.</p>
+                  </ion-text>
+                }
+              </div>
+            }
           </div>
 
           <!-- Campo 2: Contraseña -->
@@ -65,16 +77,43 @@
               ></ion-input>
             </ion-item>
 
-            <div class="validation-feedback" *ngIf="(loginForm.get('password')?.touched && loginForm.get('password')?.invalid) || authError">
-              <ion-text color="danger" *ngIf="loginForm.get('password')?.hasError('required')">
-                <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> La contraseña es obligatoria.</p>
-              </ion-text>
-              <ion-text color="danger" *ngIf="loginForm.get('password')?.hasError('minlength')">
-                <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> La contraseña debe tener al menos 5 caracteres.</p>
-              </ion-text>
-              <ion-text color="danger" *ngIf="authError">
-                <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> {{ authError }}</p>
-              </ion-text>
+            @if ((loginForm.get('password')?.touched && loginForm.get('password')?.invalid) || authError) {
+              <div class="validation-feedback">
+                @if (loginForm.get('password')?.hasError('required')) {
+                  <ion-text color="danger">
+                    <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> La contraseña es obligatoria.</p>
+                  </ion-text>
+                }
+                @if (loginForm.get('password')?.hasError('minlength')) {
+                  <ion-text color="danger">
+                    <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> La contraseña debe tener al menos 5 caracteres.</p>
+                  </ion-text>
+                }
+                @if (authError) {
+                  <ion-text color="danger">
+                    <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> {{ authError }}</p>
+                  </ion-text>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Selector de Accesos Demo Rápidos (Admin / Alumna / Profesora) -->
+          <div class="demo-accounts-box">
+            <span class="demo-label">Acceso de prueba rápido:</span>
+            <div class="demo-chips-grid">
+              <button type="button" class="demo-chip" (click)="fillDemoAccount('admin')" title="Autocompletar como Noelia (Admin)">
+                <span class="chip-dot dot-admin"></span>
+                <strong>Admin</strong> (Noelia)
+              </button>
+              <button type="button" class="demo-chip" (click)="fillDemoAccount('profesora')" title="Autocompletar como Dra. Elena (Docente)">
+                <span class="chip-dot dot-prof"></span>
+                <strong>Profesora</strong> (Dra. Elena)
+              </button>
+              <button type="button" class="demo-chip" (click)="fillDemoAccount('alumna')" title="Autocompletar como Paula (Alumna)">
+                <span class="chip-dot dot-student"></span>
+                <strong>Alumna</strong> (Paula)
+              </button>
             </div>
           </div>
 
