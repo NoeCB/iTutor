@@ -1,0 +1,4010 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>iTUTOR - Documentación Técnica</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">iTUTOR - Documentación Técnica</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search">
+    <input type="text" placeholder="Escribe para buscar">
+    <button type="button"
+        class="search-input-clear"
+        aria-label="Clear search"
+        data-search-input-clear>&times;</button>
+</div>
+            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Componentes</li>
+  <li class="breadcrumb-item"
+  >
+  AdminDashboardPage</li>
+</ol>
+
+<div class="io-file io-file-path" data-compodoc="entity-file-path">
+    <span class="icon ion-ios-document" aria-hidden="true"></span>
+    <code>src/app/features/admin-dashboard/admin-dashboard.page.ts</code>
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#api" class="nav-link"
+                role="tab" id="api-tab" data-bs-toggle="tab" data-link="api">API</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+
+
+    <p class="comment">
+        <h3>Implementa</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.dev/api/core/OnInit" target="_blank" >OnInit</a></code>
+                    <code><a href="https://angular.dev/api/core/AfterViewInit" target="_blank" >AfterViewInit</a></code>
+                    <code><a href="https://angular.dev/api/core/OnDestroy" target="_blank" >OnDestroy</a></code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Meta datos</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+            <tr>
+                <td class="col-md-3">changeDetection</td>
+                <td class="col-md-9"><code>ChangeDetectionStrategy.OnPush</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">providers</td>
+                <td class="col-md-9">
+                                <code><a href="https://angular.dev/api/common/CurrencyPipe" target="_blank" >CurrencyPipe</a></code>
+                                <code><a href="https://angular.dev/api/common/DatePipe" target="_blank" >DatePipe</a></code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-admin-dashboard</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                        <div>        <code><a href="https://angular.dev/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+</div>
+                        <div>        <code><a href="https://angular.dev/api/forms/FormsModule" target="_blank" >FormsModule</a></code>
+</div>
+                        <div>    <code>IonContent</code>
+</div>
+                        <div>    <code>IonHeader</code>
+</div>
+                        <div>    <code>IonTitle</code>
+</div>
+                        <div>    <code>IonToolbar</code>
+</div>
+                        <div>    <code>IonButtons</code>
+</div>
+                        <div>    <code>IonMenuButton</code>
+</div>
+                        <div>    <code>IonGrid</code>
+</div>
+                        <div>    <code>IonRow</code>
+</div>
+                        <div>    <code>IonCol</code>
+</div>
+                        <div>    <code>IonCard</code>
+</div>
+                        <div>    <code>IonCardHeader</code>
+</div>
+                        <div>    <code>IonCardTitle</code>
+</div>
+                        <div>    <code>IonCardSubtitle</code>
+</div>
+                        <div>    <code>IonCardContent</code>
+</div>
+                        <div>    <code>IonSegment</code>
+</div>
+                        <div>    <code>IonSegmentButton</code>
+</div>
+                        <div>    <code>IonLabel</code>
+</div>
+                        <div>    <code>IonButton</code>
+</div>
+                        <div>    <code>IonIcon</code>
+</div>
+                        <div>    <code>IonSpinner</code>
+</div>
+                        <div>    <code>IonBadge</code>
+</div>
+                        <div>        <code><a href="../components/StatCardComponent.html" target="_self" >StatCardComponent</a></code>
+</div>
+                        <div>        <code><a href="../components/DataTableComponent.html" target="_self" >DataTableComponent</a></code>
+</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./admin-dashboard.page.scss</code></td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./admin-dashboard.page.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+        <section data-compodoc="block-relationships">
+            <h3>Relationships</h3>
+
+            <div class="row pt-3">
+                <div class="col-sm-6">
+                    <h4>Used by</h4>
+                        <p class="comment"><i>No hay resultados que coincidan.</i></p>
+                </div>
+
+                <div class="col-sm-6">
+                    <h4>Depends on</h4>
+                        <ul class="list-unstyled relationships-list">
+                                <li>
+                                            <code><a href="https://angular.dev/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="https://angular.dev/api/forms/FormsModule" target="_blank" >FormsModule</a></code>
+                                </li>
+                                <li>
+                                        <code>IonContent</code>
+                                </li>
+                                <li>
+                                        <code>IonHeader</code>
+                                </li>
+                                <li>
+                                        <code>IonTitle</code>
+                                </li>
+                                <li>
+                                        <code>IonToolbar</code>
+                                </li>
+                                <li>
+                                        <code>IonButtons</code>
+                                </li>
+                                <li>
+                                        <code>IonMenuButton</code>
+                                </li>
+                                <li>
+                                        <code>IonGrid</code>
+                                </li>
+                                <li>
+                                        <code>IonRow</code>
+                                </li>
+                                <li>
+                                        <code>IonCol</code>
+                                </li>
+                                <li>
+                                        <code>IonCard</code>
+                                </li>
+                                <li>
+                                        <code>IonCardHeader</code>
+                                </li>
+                                <li>
+                                        <code>IonCardTitle</code>
+                                </li>
+                                <li>
+                                        <code>IonCardSubtitle</code>
+                                </li>
+                                <li>
+                                        <code>IonCardContent</code>
+                                </li>
+                                <li>
+                                        <code>IonSegment</code>
+                                </li>
+                                <li>
+                                        <code>IonSegmentButton</code>
+                                </li>
+                                <li>
+                                        <code>IonLabel</code>
+                                </li>
+                                <li>
+                                        <code>IonButton</code>
+                                </li>
+                                <li>
+                                        <code>IonIcon</code>
+                                </li>
+                                <li>
+                                        <code>IonSpinner</code>
+                                </li>
+                                <li>
+                                        <code>IonBadge</code>
+                                </li>
+                                <li>
+                                            <code><a href="../components/StatCardComponent.html" target="_self" >StatCardComponent</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="../components/DataTableComponent.html" target="_self" >DataTableComponent</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="https://angular.dev/api/common/CurrencyPipe" target="_blank" >CurrencyPipe</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="https://angular.dev/api/common/DatePipe" target="_blank" >DatePipe</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="https://angular.dev/api/core/OnInit" target="_blank" >OnInit</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="https://angular.dev/api/core/AfterViewInit" target="_blank" >AfterViewInit</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="https://angular.dev/api/core/OnDestroy" target="_blank" >OnDestroy</a></code>
+                                </li>
+                        </ul>
+                </div>
+            </div>
+        </section>
+</div>
+
+    <div class="tab-pane fade " id="api">    <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Propiedades</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#activeTab" >activeTab</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#cdr" >cdr</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#classesChart" >classesChart</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier"></span>
+                                <a href="#classesChartCanvas" >classesChartCanvas</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#dataService" >dataService</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#filteredSessions" >filteredSessions</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#isLoading" >isLoading</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#kpis" >kpis</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Opcional</span>
+                                <a href="#querySub" >querySub</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#rawNoSqlSessions" >rawNoSqlSessions</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#rawSqlStudents" >rawSqlStudents</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#rawTeachers" >rawTeachers</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#revenueChart" >revenueChart</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier"></span>
+                                <a href="#revenueChartCanvas" >revenueChartCanvas</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#route" >route</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#router" >router</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#selectedPeriod" >selectedPeriod</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#studentKpis" >studentKpis</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#studentTableColumns" >studentTableColumns</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#tableColumns" >tableColumns</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#teacherKpis" >teacherKpis</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#teacherTableColumns" >teacherTableColumns</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#applyPeriodFilter" >applyPeriodFilter</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#calculateTeachersAndStudentsKpis" >calculateTeachersAndStudentsKpis</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#computeClassesByBranch" >computeClassesByBranch</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#computeRevenueBySubject" >computeRevenueBySubject</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#exportToCsv" >exportToCsv</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#exportToPdf" >exportToPdf</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#fetchConcurrentData" >fetchConcurrentData</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#handleDelete" >handleDelete</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#handleEdit" >handleEdit</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#handleView" >handleView</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#initCharts" >initCharts</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#initOrUpdateCharts" >initOrUpdateCharts</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#ngAfterViewInit" >ngAfterViewInit</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#ngOnDestroy" >ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#onFilterChange" >onFilterChange</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#onTabChange" >onTabChange</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#updateChartsData" >updateChartsData</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#viewTeacherPortal" >viewTeacherPortal</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+
+
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor()</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="234" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:234</a></div>
+                            </td>
+                        </tr>
+
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applyPeriodFilter"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>applyPeriodFilter</b></span>
+                        <a href="#applyPeriodFilter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>applyPeriodFilter()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="378"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:378</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Filtrado en memoria y recálculo dinámico de estadísticas KPI</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="calculateTeachersAndStudentsKpis"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>calculateTeachersAndStudentsKpis</b></span>
+                        <a href="#calculateTeachersAndStudentsKpis"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>calculateTeachersAndStudentsKpis()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="338"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:338</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Calcula métricas de los 10 profesores y 10 alumnos</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="computeClassesByBranch"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>computeClassesByBranch</b></span>
+                        <a href="#computeClassesByBranch"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>computeClassesByBranch()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="540"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:540</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>{ labels: string[]; values: number[] }</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="computeRevenueBySubject"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>computeRevenueBySubject</b></span>
+                        <a href="#computeRevenueBySubject"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>computeRevenueBySubject()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="526"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:526</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>{ labels: string[]; values: number[] }</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="exportToCsv"></a>
+                    <span class="name">
+                        <span ><b>exportToCsv</b></span>
+                        <a href="#exportToCsv"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>exportToCsv()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="553"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:553</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Exportación a CSV adaptada a la pestaña activa</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="exportToPdf"></a>
+                    <span class="name">
+                        <span ><b>exportToPdf</b></span>
+                        <a href="#exportToPdf"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>exportToPdf()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="589"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:589</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Exportación a PDF adaptada a la pestaña activa</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fetchConcurrentData"></a>
+                    <span class="name">
+                        <span ><b>fetchConcurrentData</b></span>
+                        <a href="#fetchConcurrentData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>fetchConcurrentData()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="295"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:295</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Consumo concurrente mediante DataService (forkJoin de Alumnos SQL, Profesores SQL y Sesiones NoSQL)</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleDelete"></a>
+                    <span class="name">
+                        <span ><b>handleDelete</b></span>
+                        <a href="#handleDelete"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>handleDelete(item: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="728"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:728</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>item</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleEdit"></a>
+                    <span class="name">
+                        <span ><b>handleEdit</b></span>
+                        <a href="#handleEdit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>handleEdit(item: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="724"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:724</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>item</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleView"></a>
+                    <span class="name">
+                        <span ><b>handleView</b></span>
+                        <a href="#handleView"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>handleView(item: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="743"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:743</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>item</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initCharts"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>initCharts</b></span>
+                        <a href="#initCharts"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>initCharts()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="428"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:428</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Creación de las instancias de Chart.js</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initOrUpdateCharts"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>initOrUpdateCharts</b></span>
+                        <a href="#initOrUpdateCharts"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>initOrUpdateCharts()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="417"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:417</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Inicialización o actualización condicional de los gráficos de Chart.js</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngAfterViewInit"></a>
+                    <span class="name">
+                        <span ><b>ngAfterViewInit</b></span>
+                        <a href="#ngAfterViewInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngAfterViewInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="272"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:272</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngOnDestroy</b></span>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="278"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:278</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="257"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:257</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onFilterChange"></a>
+                    <span class="name">
+                        <span ><b>onFilterChange</b></span>
+                        <a href="#onFilterChange"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onFilterChange(period: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="370"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:370</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Manejador del filtro de mes</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>period</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onTabChange"></a>
+                    <span class="name">
+                        <span ><b>onTabChange</b></span>
+                        <a href="#onTabChange"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onTabChange(tab: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="326"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:326</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Cambio entre Pestaña Métricas / Profesores / Alumnos</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>tab</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateChartsData"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>updateChartsData</b></span>
+                        <a href="#updateChartsData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateChartsData()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="510"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:510</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Actualización reactiva de datos en gráficos existentes</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="viewTeacherPortal"></a>
+                    <span class="name">
+                        <span ><b>viewTeacherPortal</b></span>
+                        <a href="#viewTeacherPortal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>viewTeacherPortal(teacher: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="365"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:365</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Navega directamente al portal del profesor seleccionado</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>teacher</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Propiedades
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="activeTab"></a>
+                    <span class="name">
+                        <span ><b>activeTab</b></span>
+                        <a href="#activeTab"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>&quot;metricas&quot; | &quot;profesores&quot; | &quot;alumnos&quot;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;metricas&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="122" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:122</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cdr"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>cdr</b></span>
+                        <a href="#cdr"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>inject(ChangeDetectorRef)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="110" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:110</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="classesChart"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>classesChart</b></span>
+                        <a href="#classesChart"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>Chart | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="117" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:117</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="classesChartCanvas"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>classesChartCanvas</b></span>
+                        <a href="#classesChartCanvas"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>ElementRef&lt;HTMLCanvasElement&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decoradores : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;classesChartCanvas&#x27;)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="113" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:113</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dataService"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>dataService</b></span>
+                        <a href="#dataService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>inject(DataService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="107" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:107</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filteredSessions"></a>
+                    <span class="name">
+                        <span ><b>filteredSessions</b></span>
+                        <a href="#filteredSessions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/MongoClassSession.html" target="_self" >MongoClassSession[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="131" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:131</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isLoading"></a>
+                    <span class="name">
+                        <span ><b>isLoading</b></span>
+                        <a href="#isLoading"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>true</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="121" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:121</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="kpis"></a>
+                    <span class="name">
+                        <span ><b>kpis</b></span>
+                        <a href="#kpis"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>{
+    ingresosTotales: &#x27;0 €&#x27;,
+    ingresosCrecimiento: 14.2,
+    estudiantesActivos: 0,
+    estudiantesCrecimiento: 8.5,
+    horasImpartidas: &#x27;0 h&#x27;,
+    horasCrecimiento: 18.0,
+    tasaAsistencia: &#x27;0%&#x27;,
+    asistenciaCrecimiento: 2.4
+  }</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="134" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:134</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="querySub"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Opcional</span>
+                        <span ><b>querySub</b></span>
+                        <a href="#querySub"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>Subscription</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="118" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:118</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="rawNoSqlSessions"></a>
+                    <span class="name">
+                        <span ><b>rawNoSqlSessions</b></span>
+                        <a href="#rawNoSqlSessions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/MongoClassSession.html" target="_self" >MongoClassSession[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="128" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:128</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="rawSqlStudents"></a>
+                    <span class="name">
+                        <span ><b>rawSqlStudents</b></span>
+                        <a href="#rawSqlStudents"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/SqlStudentRate.html" target="_self" >SqlStudentRate[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="126" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:126</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="rawTeachers"></a>
+                    <span class="name">
+                        <span ><b>rawTeachers</b></span>
+                        <a href="#rawTeachers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/TeacherRecord.html" target="_self" >TeacherRecord[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="127" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:127</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="revenueChart"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>revenueChart</b></span>
+                        <a href="#revenueChart"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>Chart | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="116" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:116</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="revenueChartCanvas"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>revenueChartCanvas</b></span>
+                        <a href="#revenueChartCanvas"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>ElementRef&lt;HTMLCanvasElement&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decoradores : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;revenueChartCanvas&#x27;)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="112" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:112</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="route"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>route</b></span>
+                        <a href="#route"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>inject(ActivatedRoute)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="108" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:108</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="router"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>router</b></span>
+                        <a href="#router"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>inject(Router)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="109" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:109</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectedPeriod"></a>
+                    <span class="name">
+                        <span ><b>selectedPeriod</b></span>
+                        <a href="#selectedPeriod"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>&quot;todos&quot; | &quot;septiembre&quot; | &quot;octubre&quot; | &quot;noviembre&quot; | &quot;diciembre&quot;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;todos&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="123" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:123</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="studentKpis"></a>
+                    <span class="name">
+                        <span ><b>studentKpis</b></span>
+                        <a href="#studentKpis"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>{
+    totalAlumnos: 10,
+    saldoPendienteTotal: &#x27;0 €&#x27;,
+    horasTotalesAlumnos: &#x27;0 h&#x27;,
+    tarifaMedia: &#x27;0 €/h&#x27;
+  }</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="154" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:154</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="studentTableColumns"></a>
+                    <span class="name">
+                        <span ><b>studentTableColumns</b></span>
+                        <a href="#studentTableColumns"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/TableColumn.html" target="_self" >TableColumn[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[
+    { key: &#x27;matricula&#x27;, label: &#x27;Matrícula&#x27; },
+    { key: &#x27;nombre&#x27;, label: &#x27;Estudiante&#x27; },
+    { key: &#x27;asignaturaPrincipal&#x27;, label: &#x27;Asignatura Principal&#x27; },
+    { 
+      key: &#x27;plan&#x27;, 
+      label: &#x27;Plan&#x27;, 
+      type: &#x27;badge&#x27;, 
+      align: &#x27;center&#x27;,
+      badgeColorMap: {
+        &#x27;Premium&#x27;: &#x27;secondary&#x27;,
+        &#x27;Intensivo&#x27;: &#x27;primary&#x27;,
+        &#x27;Básico&#x27;: &#x27;medium&#x27;
+      }
+    },
+    { key: &#x27;profesorAsignado&#x27;, label: &#x27;Profesor Tutor&#x27; },
+    { key: &#x27;horasTotales&#x27;, label: &#x27;Horas&#x27;, align: &#x27;center&#x27; },
+    { key: &#x27;tarifaHora&#x27;, label: &#x27;Tarifa/h&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; },
+    { key: &#x27;saldoPendiente&#x27;, label: &#x27;Saldo Pend.&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; },
+    { 
+      key: &#x27;estado&#x27;, 
+      label: &#x27;Estado&#x27;, 
+      type: &#x27;badge&#x27;, 
+      align: &#x27;center&#x27;,
+      badgeColorMap: {
+        &#x27;Al día&#x27;: &#x27;success&#x27;,
+        &#x27;Pendiente&#x27;: &#x27;warning&#x27;
+      }
+    }
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="205" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:205</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Columnas de la tabla de alumnos</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="tableColumns"></a>
+                    <span class="name">
+                        <span ><b>tableColumns</b></span>
+                        <a href="#tableColumns"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/TableColumn.html" target="_self" >TableColumn[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[
+    { key: &#x27;estudianteNombre&#x27;, label: &#x27;Estudiante&#x27; },
+    { key: &#x27;materia&#x27;, label: &#x27;Asignatura (Rama)&#x27; },
+    { key: &#x27;tutor&#x27;, label: &#x27;Profesor Tutor&#x27; },
+    { key: &#x27;fecha&#x27;, label: &#x27;Fecha y Hora&#x27; },
+    { key: &#x27;importe&#x27;, label: &#x27;Tarifa&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; },
+    { 
+      key: &#x27;estado&#x27;, 
+      label: &#x27;Estado&#x27;, 
+      type: &#x27;badge&#x27;, 
+      align: &#x27;center&#x27;,
+      badgeColorMap: {
+        &#x27;Confirmada&#x27;: &#x27;success&#x27;,
+        &#x27;En Curso&#x27;: &#x27;primary&#x27;,
+        &#x27;Pendiente&#x27;: &#x27;warning&#x27;,
+        &#x27;Cancelada&#x27;: &#x27;danger&#x27;
+      }
+    }
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="162" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:162</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Columnas de la tabla de sesiones</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="teacherKpis"></a>
+                    <span class="name">
+                        <span ><b>teacherKpis</b></span>
+                        <a href="#teacherKpis"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>{
+    totalProfesores: 10,
+    totalGanado: &#x27;0 €&#x27;,
+    totalHoras: &#x27;0 h&#x27;,
+    valoracionMedia: &#x27;4.8 ⭐&#x27;
+  }</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="146" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:146</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="teacherTableColumns"></a>
+                    <span class="name">
+                        <span ><b>teacherTableColumns</b></span>
+                        <a href="#teacherTableColumns"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/TableColumn.html" target="_self" >TableColumn[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[
+    { key: &#x27;nombre&#x27;, label: &#x27;Profesor / Docente&#x27; },
+    { key: &#x27;especialidad&#x27;, label: &#x27;Especialidad Docente&#x27; },
+    { key: &#x27;departamento&#x27;, label: &#x27;Departamento&#x27; },
+    { key: &#x27;alumnosCount&#x27;, label: &#x27;Alumnos&#x27;, align: &#x27;center&#x27; },
+    { key: &#x27;horasImpartidas&#x27;, label: &#x27;Horas Dadas&#x27;, align: &#x27;center&#x27; },
+    { key: &#x27;tarifaHora&#x27;, label: &#x27;Tarifa/Hora&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; },
+    { key: &#x27;totalGanado&#x27;, label: &#x27;Total Ganado&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; },
+    { key: &#x27;telefono&#x27;, label: &#x27;Contacto&#x27; },
+    { 
+      key: &#x27;estado&#x27;, 
+      label: &#x27;Estado&#x27;, 
+      type: &#x27;badge&#x27;, 
+      align: &#x27;center&#x27;,
+      badgeColorMap: {
+        &#x27;Activo&#x27;: &#x27;success&#x27;,
+        &#x27;Disponible&#x27;: &#x27;primary&#x27;
+      }
+    }
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="183" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:183</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Columnas de la tabla de profesores</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { 
+  Component, 
+  OnInit, 
+  AfterViewInit, 
+  OnDestroy, 
+  ViewChild, 
+  ElementRef, 
+  ChangeDetectionStrategy, 
+  ChangeDetectorRef, 
+  inject 
+} from &#x27;@angular/core&#x27;;
+import { CommonModule, CurrencyPipe, DatePipe } from &#x27;@angular/common&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+import { ActivatedRoute, Router } from &#x27;@angular/router&#x27;;
+import { 
+  IonContent, 
+  IonHeader, 
+  IonTitle, 
+  IonToolbar, 
+  IonButtons, 
+  IonMenuButton, 
+  IonGrid, 
+  IonRow, 
+  IonCol,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardSubtitle,
+  IonCardContent,
+  IonSegment,
+  IonSegmentButton,
+  IonLabel,
+  IonButton,
+  IonIcon,
+  IonSpinner,
+  IonBadge
+} from &#x27;@ionic/angular&#x27;;
+import { addIcons } from &#x27;ionicons&#x27;;
+import { 
+  downloadOutline, 
+  documentTextOutline, 
+  filterOutline, 
+  refreshOutline, 
+  cashOutline, 
+  peopleOutline, 
+  timeOutline, 
+  schoolOutline, 
+  barChartOutline, 
+  pieChartOutline,
+  sparklesOutline,
+  walletOutline,
+  checkmarkCircleOutline,
+  alertCircleOutline,
+  eyeOutline,
+  cardOutline
+} from &#x27;ionicons/icons&#x27;;
+import Chart from &#x27;chart.js/auto&#x27;;
+import jsPDF from &#x27;jspdf&#x27;;
+import autoTable from &#x27;jspdf-autotable&#x27;;
+import { Subscription } from &#x27;rxjs&#x27;;
+
+import { 
+  DataService, 
+  MongoClassSession, 
+  SqlStudentRate,
+  TeacherRecord 
+} from &#x27;../../core/services/data.service&#x27;;
+import { StatCardComponent } from &#x27;../../shared/components/stat-card/stat-card.component&#x27;;
+import { DataTableComponent, TableColumn } from &#x27;../../shared/components/data-table/data-table.component&#x27;;
+
+@Component({
+  selector: &#x27;app-admin-dashboard&#x27;,
+  standalone: true,
+  templateUrl: &#x27;./admin-dashboard.page.html&#x27;,
+  styleUrls: [&#x27;./admin-dashboard.page.scss&#x27;],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonContent, 
+    IonHeader, 
+    IonTitle, 
+    IonToolbar, 
+    IonButtons, 
+    IonMenuButton, 
+    IonGrid, 
+    IonRow, 
+    IonCol,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardSubtitle,
+    IonCardContent,
+    IonSegment,
+    IonSegmentButton,
+    IonLabel,
+    IonButton,
+    IonIcon,
+    IonSpinner,
+    IonBadge,
+    StatCardComponent,
+    DataTableComponent
+  ],
+  providers: [CurrencyPipe, DatePipe]
+})
+export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
+  private dataService &#x3D; inject(DataService);
+  private route &#x3D; inject(ActivatedRoute);
+  private router &#x3D; inject(Router);
+  private cdr &#x3D; inject(ChangeDetectorRef);
+
+  @ViewChild(&#x27;revenueChartCanvas&#x27;) revenueChartCanvas!: ElementRef&lt;HTMLCanvasElement&gt;;
+  @ViewChild(&#x27;classesChartCanvas&#x27;) classesChartCanvas!: ElementRef&lt;HTMLCanvasElement&gt;;
+
+  // Instancias de gráficos Chart.js
+  private revenueChart: Chart | null &#x3D; null;
+  private classesChart: Chart | null &#x3D; null;
+  private querySub?: Subscription;
+
+  // Estado del Dashboard
+  isLoading &#x3D; true;
+  activeTab: &#x27;metricas&#x27; | &#x27;profesores&#x27; | &#x27;alumnos&#x27; &#x3D; &#x27;metricas&#x27;;
+  selectedPeriod: &#x27;todos&#x27; | &#x27;septiembre&#x27; | &#x27;octubre&#x27; | &#x27;noviembre&#x27; | &#x27;diciembre&#x27; &#x3D; &#x27;todos&#x27;;
+
+  // Datos brutos recuperados concurrentemente mediante forkJoin
+  rawSqlStudents: SqlStudentRate[] &#x3D; [];
+  rawTeachers: TeacherRecord[] &#x3D; [];
+  rawNoSqlSessions: MongoClassSession[] &#x3D; [];
+
+  // Datos filtrados reactivamente para métricas
+  filteredSessions: MongoClassSession[] &#x3D; [];
+
+  // KPIs dinámicos calculados
+  kpis &#x3D; {
+    ingresosTotales: &#x27;0 €&#x27;,
+    ingresosCrecimiento: 14.2,
+    estudiantesActivos: 0,
+    estudiantesCrecimiento: 8.5,
+    horasImpartidas: &#x27;0 h&#x27;,
+    horasCrecimiento: 18.0,
+    tasaAsistencia: &#x27;0%&#x27;,
+    asistenciaCrecimiento: 2.4
+  };
+
+  // KPIs específicos de profesores
+  teacherKpis &#x3D; {
+    totalProfesores: 10,
+    totalGanado: &#x27;0 €&#x27;,
+    totalHoras: &#x27;0 h&#x27;,
+    valoracionMedia: &#x27;4.8 ⭐&#x27;
+  };
+
+  // KPIs específicos de alumnos
+  studentKpis &#x3D; {
+    totalAlumnos: 10,
+    saldoPendienteTotal: &#x27;0 €&#x27;,
+    horasTotalesAlumnos: &#x27;0 h&#x27;,
+    tarifaMedia: &#x27;0 €/h&#x27;
+  };
+
+  /** Columnas de la tabla de sesiones */
+  tableColumns: TableColumn[] &#x3D; [
+    { key: &#x27;estudianteNombre&#x27;, label: &#x27;Estudiante&#x27; },
+    { key: &#x27;materia&#x27;, label: &#x27;Asignatura (Rama)&#x27; },
+    { key: &#x27;tutor&#x27;, label: &#x27;Profesor Tutor&#x27; },
+    { key: &#x27;fecha&#x27;, label: &#x27;Fecha y Hora&#x27; },
+    { key: &#x27;importe&#x27;, label: &#x27;Tarifa&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; },
+    { 
+      key: &#x27;estado&#x27;, 
+      label: &#x27;Estado&#x27;, 
+      type: &#x27;badge&#x27;, 
+      align: &#x27;center&#x27;,
+      badgeColorMap: {
+        &#x27;Confirmada&#x27;: &#x27;success&#x27;,
+        &#x27;En Curso&#x27;: &#x27;primary&#x27;,
+        &#x27;Pendiente&#x27;: &#x27;warning&#x27;,
+        &#x27;Cancelada&#x27;: &#x27;danger&#x27;
+      }
+    }
+  ];
+
+  /** Columnas de la tabla de profesores */
+  teacherTableColumns: TableColumn[] &#x3D; [
+    { key: &#x27;nombre&#x27;, label: &#x27;Profesor / Docente&#x27; },
+    { key: &#x27;especialidad&#x27;, label: &#x27;Especialidad Docente&#x27; },
+    { key: &#x27;departamento&#x27;, label: &#x27;Departamento&#x27; },
+    { key: &#x27;alumnosCount&#x27;, label: &#x27;Alumnos&#x27;, align: &#x27;center&#x27; },
+    { key: &#x27;horasImpartidas&#x27;, label: &#x27;Horas Dadas&#x27;, align: &#x27;center&#x27; },
+    { key: &#x27;tarifaHora&#x27;, label: &#x27;Tarifa/Hora&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; },
+    { key: &#x27;totalGanado&#x27;, label: &#x27;Total Ganado&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; },
+    { key: &#x27;telefono&#x27;, label: &#x27;Contacto&#x27; },
+    { 
+      key: &#x27;estado&#x27;, 
+      label: &#x27;Estado&#x27;, 
+      type: &#x27;badge&#x27;, 
+      align: &#x27;center&#x27;,
+      badgeColorMap: {
+        &#x27;Activo&#x27;: &#x27;success&#x27;,
+        &#x27;Disponible&#x27;: &#x27;primary&#x27;
+      }
+    }
+  ];
+
+  /** Columnas de la tabla de alumnos */
+  studentTableColumns: TableColumn[] &#x3D; [
+    { key: &#x27;matricula&#x27;, label: &#x27;Matrícula&#x27; },
+    { key: &#x27;nombre&#x27;, label: &#x27;Estudiante&#x27; },
+    { key: &#x27;asignaturaPrincipal&#x27;, label: &#x27;Asignatura Principal&#x27; },
+    { 
+      key: &#x27;plan&#x27;, 
+      label: &#x27;Plan&#x27;, 
+      type: &#x27;badge&#x27;, 
+      align: &#x27;center&#x27;,
+      badgeColorMap: {
+        &#x27;Premium&#x27;: &#x27;secondary&#x27;,
+        &#x27;Intensivo&#x27;: &#x27;primary&#x27;,
+        &#x27;Básico&#x27;: &#x27;medium&#x27;
+      }
+    },
+    { key: &#x27;profesorAsignado&#x27;, label: &#x27;Profesor Tutor&#x27; },
+    { key: &#x27;horasTotales&#x27;, label: &#x27;Horas&#x27;, align: &#x27;center&#x27; },
+    { key: &#x27;tarifaHora&#x27;, label: &#x27;Tarifa/h&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; },
+    { key: &#x27;saldoPendiente&#x27;, label: &#x27;Saldo Pend.&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; },
+    { 
+      key: &#x27;estado&#x27;, 
+      label: &#x27;Estado&#x27;, 
+      type: &#x27;badge&#x27;, 
+      align: &#x27;center&#x27;,
+      badgeColorMap: {
+        &#x27;Al día&#x27;: &#x27;success&#x27;,
+        &#x27;Pendiente&#x27;: &#x27;warning&#x27;
+      }
+    }
+  ];
+
+  constructor() {
+    addIcons({
+      downloadOutline,
+      documentTextOutline,
+      filterOutline,
+      refreshOutline,
+      cashOutline,
+      peopleOutline,
+      timeOutline,
+      schoolOutline,
+      barChartOutline,
+      pieChartOutline,
+      sparklesOutline,
+      walletOutline,
+      checkmarkCircleOutline,
+      alertCircleOutline,
+      eyeOutline,
+      cardOutline
+    });
+  }
+
+  ngOnInit(): void {
+    this.fetchConcurrentData();
+
+    // Sincronizar pestaña si entra desde el menú lateral con parámetro
+    this.querySub &#x3D; this.route.queryParams.subscribe(params &#x3D;&gt; {
+      if (params[&#x27;vista&#x27;] &amp;&amp; (params[&#x27;vista&#x27;] &#x3D;&#x3D;&#x3D; &#x27;metricas&#x27; || params[&#x27;vista&#x27;] &#x3D;&#x3D;&#x3D; &#x27;profesores&#x27; || params[&#x27;vista&#x27;] &#x3D;&#x3D;&#x3D; &#x27;alumnos&#x27;)) {
+        this.activeTab &#x3D; params[&#x27;vista&#x27;];
+        this.cdr.markForCheck();
+        if (this.activeTab &#x3D;&#x3D;&#x3D; &#x27;metricas&#x27;) {
+          setTimeout(() &#x3D;&gt; this.initOrUpdateCharts(), 100);
+        }
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    if (!this.isLoading &amp;&amp; this.activeTab &#x3D;&#x3D;&#x3D; &#x27;metricas&#x27;) {
+      this.initCharts();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.querySub) {
+      this.querySub.unsubscribe();
+    }
+    if (this.revenueChart) {
+      this.revenueChart.destroy();
+      this.revenueChart &#x3D; null;
+    }
+    if (this.classesChart) {
+      this.classesChart.destroy();
+      this.classesChart &#x3D; null;
+    }
+  }
+
+  /**
+   * Consumo concurrente mediante DataService (forkJoin de Alumnos SQL, Profesores SQL y Sesiones NoSQL)
+   */
+  fetchConcurrentData(): void {
+    this.isLoading &#x3D; true;
+    this.cdr.markForCheck();
+
+    this.dataService.getCombinedDashboardData().subscribe({
+      next: (data) &#x3D;&gt; {
+        this.rawSqlStudents &#x3D; data.catalogoSql;
+        this.rawTeachers &#x3D; data.profesoresSql;
+        this.rawNoSqlSessions &#x3D; data.sesionesNoSql;
+        
+        this.applyPeriodFilter();
+        this.calculateTeachersAndStudentsKpis();
+
+        this.isLoading &#x3D; false;
+        this.cdr.markForCheck();
+
+        if (this.activeTab &#x3D;&#x3D;&#x3D; &#x27;metricas&#x27;) {
+          setTimeout(() &#x3D;&gt; {
+            this.initOrUpdateCharts();
+          }, 50);
+        }
+      },
+      error: (err) &#x3D;&gt; {
+        console.error(&#x27;Error al consumir datos concurrentes del Dashboard:&#x27;, err);
+        this.isLoading &#x3D; false;
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  /** Cambio entre Pestaña Métricas / Profesores / Alumnos */
+  onTabChange(tab: any): void {
+    this.activeTab &#x3D; tab;
+    this.cdr.markForCheck();
+
+    if (this.activeTab &#x3D;&#x3D;&#x3D; &#x27;metricas&#x27;) {
+      setTimeout(() &#x3D;&gt; {
+        this.initOrUpdateCharts();
+      }, 50);
+    }
+  }
+
+  /** Calcula métricas de los 10 profesores y 10 alumnos */
+  private calculateTeachersAndStudentsKpis(): void {
+    // Profesores
+    const totalGanado &#x3D; this.rawTeachers.reduce((sum, t) &#x3D;&gt; sum + t.totalGanado, 0);
+    const totalHoras &#x3D; this.rawTeachers.reduce((sum, t) &#x3D;&gt; sum + t.horasImpartidas, 0);
+    const avgRating &#x3D; (this.rawTeachers.reduce((sum, t) &#x3D;&gt; sum + t.calificacion, 0) / (this.rawTeachers.length || 1)).toFixed(1);
+
+    this.teacherKpis &#x3D; {
+      totalProfesores: this.rawTeachers.length,
+      totalGanado: &#x60;${totalGanado.toLocaleString(&#x27;es-ES&#x27;)} €&#x60;,
+      totalHoras: &#x60;${totalHoras} h&#x60;,
+      valoracionMedia: &#x60;${avgRating} ⭐&#x60;
+    };
+
+    // Alumnos
+    const saldoPend &#x3D; this.rawSqlStudents.reduce((sum, s) &#x3D;&gt; sum + s.saldoPendiente, 0);
+    const horasAlumnos &#x3D; this.rawSqlStudents.reduce((sum, s) &#x3D;&gt; sum + s.horasTotales, 0);
+    const tarifaMedia &#x3D; Math.round(this.rawSqlStudents.reduce((sum, s) &#x3D;&gt; sum + s.tarifaHora, 0) / (this.rawSqlStudents.length || 1));
+
+    this.studentKpis &#x3D; {
+      totalAlumnos: this.rawSqlStudents.length,
+      saldoPendienteTotal: &#x60;${saldoPend.toLocaleString(&#x27;es-ES&#x27;)} €&#x60;,
+      horasTotalesAlumnos: &#x60;${horasAlumnos} h&#x60;,
+      tarifaMedia: &#x60;${tarifaMedia} €/h&#x60;
+    };
+  }
+
+  /** Navega directamente al portal del profesor seleccionado */
+  viewTeacherPortal(teacher: any): void {
+    this.router.navigate([&#x27;/portal-profesor&#x27;]);
+  }
+
+  /** Manejador del filtro de mes */
+  onFilterChange(period: any): void {
+    this.selectedPeriod &#x3D; period;
+    this.applyPeriodFilter();
+    this.updateChartsData();
+    this.cdr.markForCheck();
+  }
+
+  /** Filtrado en memoria y recálculo dinámico de estadísticas KPI */
+  private applyPeriodFilter(): void {
+    if (this.selectedPeriod &#x3D;&#x3D;&#x3D; &#x27;todos&#x27;) {
+      this.filteredSessions &#x3D; [...this.rawNoSqlSessions];
+    } else {
+      this.filteredSessions &#x3D; this.rawNoSqlSessions.filter(
+        session &#x3D;&gt; session.mes &#x3D;&#x3D;&#x3D; this.selectedPeriod
+      );
+    }
+
+    const totalIngresos &#x3D; this.filteredSessions
+      .filter(s &#x3D;&gt; s.estado !&#x3D;&#x3D; &#x27;Cancelada&#x27;)
+      .reduce((sum, s) &#x3D;&gt; sum + s.importe, 0);
+
+    const totalMinutos &#x3D; this.filteredSessions
+      .filter(s &#x3D;&gt; s.estado !&#x3D;&#x3D; &#x27;Cancelada&#x27;)
+      .reduce((sum, s) &#x3D;&gt; sum + s.duracionMin, 0);
+
+    const alumnosUnicos &#x3D; new Set(
+      this.filteredSessions.map(s &#x3D;&gt; s.estudianteId)
+    ).size;
+
+    const sesionesCompletadas &#x3D; this.filteredSessions.filter(s &#x3D;&gt; s.asistencia).length;
+    const tasaAsistencia &#x3D; this.filteredSessions.length &gt; 0
+      ? Math.round((sesionesCompletadas / this.filteredSessions.length) * 100)
+      : 0;
+
+    this.kpis &#x3D; {
+      ingresosTotales: &#x60;${totalIngresos.toLocaleString(&#x27;es-ES&#x27;, { minimumFractionDigits: 0 })} €&#x60;,
+      ingresosCrecimiento: this.selectedPeriod &#x3D;&#x3D;&#x3D; &#x27;diciembre&#x27; ? -3.4 : 14.2,
+      estudiantesActivos: alumnosUnicos || this.rawSqlStudents.length,
+      estudiantesCrecimiento: 8.5,
+      horasImpartidas: &#x60;${Math.round(totalMinutos / 60)} h&#x60;,
+      horasCrecimiento: 18.0,
+      tasaAsistencia: &#x60;${tasaAsistencia}%&#x60;,
+      asistenciaCrecimiento: 2.4
+    };
+  }
+
+  /** Inicialización o actualización condicional de los gráficos de Chart.js */
+  private initOrUpdateCharts(): void {
+    if (!this.revenueChartCanvas || !this.classesChartCanvas) return;
+
+    if (!this.revenueChart || !this.classesChart) {
+      this.initCharts();
+    } else {
+      this.updateChartsData();
+    }
+  }
+
+  /** Creación de las instancias de Chart.js */
+  private initCharts(): void {
+    if (!this.revenueChartCanvas || !this.classesChartCanvas) return;
+
+    // 1. Gráfico: &quot;Ingresos por Asignatura&quot; (Bar Chart)
+    const revenueData &#x3D; this.computeRevenueBySubject();
+    this.revenueChart &#x3D; new Chart(this.revenueChartCanvas.nativeElement, {
+      type: &#x27;bar&#x27;,
+      data: {
+        labels: revenueData.labels,
+        datasets: [{
+          label: &#x27;Ingresos (€)&#x27;,
+          data: revenueData.values,
+          backgroundColor: [
+            &#x27;rgba(37, 99, 235, 0.85)&#x27;,
+            &#x27;rgba(99, 102, 241, 0.85)&#x27;,
+            &#x27;rgba(14, 165, 233, 0.85)&#x27;,
+            &#x27;rgba(16, 185, 129, 0.85)&#x27;,
+            &#x27;rgba(245, 158, 11, 0.85)&#x27;,
+            &#x27;rgba(168, 85, 247, 0.85)&#x27;
+          ],
+          borderColor: [
+            &#x27;#1d4ed8&#x27;,
+            &#x27;#4f46e5&#x27;,
+            &#x27;#0284c7&#x27;,
+            &#x27;#059669&#x27;,
+            &#x27;#d97706&#x27;,
+            &#x27;#9333ea&#x27;
+          ],
+          borderWidth: 1.5,
+          borderRadius: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: &#x27;#0f172a&#x27;,
+            callbacks: {
+              label: (context) &#x3D;&gt; &#x60; ${context.parsed.y} € facturados&#x60;
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: &#x27;rgba(226, 232, 240, 0.7)&#x27; },
+            ticks: { callback: (value) &#x3D;&gt; &#x60;${value} €&#x60;, color: &#x27;#64748b&#x27; }
+          },
+          x: { grid: { display: false }, ticks: { color: &#x27;#475569&#x27; } }
+        }
+      }
+    });
+
+    // 2. Gráfico: &quot;Clases Impartidas por Rama&quot; (Doughnut)
+    const branchData &#x3D; this.computeClassesByBranch();
+    this.classesChart &#x3D; new Chart(this.classesChartCanvas.nativeElement, {
+      type: &#x27;doughnut&#x27;,
+      data: {
+        labels: branchData.labels,
+        datasets: [{
+          data: branchData.values,
+          backgroundColor: [&#x27;#2563eb&#x27;, &#x27;#6366f1&#x27;, &#x27;#10b981&#x27;],
+          borderWidth: 2,
+          borderColor: &#x27;#ffffff&#x27;
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: &#x27;bottom&#x27;,
+            labels: { boxWidth: 12, padding: 16, color: &#x27;#334155&#x27; }
+          }
+        }
+      }
+    });
+  }
+
+  /** Actualización reactiva de datos en gráficos existentes */
+  private updateChartsData(): void {
+    if (this.revenueChart) {
+      const revenueData &#x3D; this.computeRevenueBySubject();
+      this.revenueChart.data.labels &#x3D; revenueData.labels;
+      this.revenueChart.data.datasets[0].data &#x3D; revenueData.values;
+      this.revenueChart.update(&#x27;active&#x27;);
+    }
+
+    if (this.classesChart) {
+      const branchData &#x3D; this.computeClassesByBranch();
+      this.classesChart.data.labels &#x3D; branchData.labels;
+      this.classesChart.data.datasets[0].data &#x3D; branchData.values;
+      this.classesChart.update(&#x27;active&#x27;);
+    }
+  }
+
+  private computeRevenueBySubject(): { labels: string[]; values: number[] } {
+    const revenueMap: { [key: string]: number } &#x3D; {};
+    this.filteredSessions
+      .filter(s &#x3D;&gt; s.estado !&#x3D;&#x3D; &#x27;Cancelada&#x27;)
+      .forEach(s &#x3D;&gt; {
+        revenueMap[s.materia] &#x3D; (revenueMap[s.materia] || 0) + s.importe;
+      });
+
+    return {
+      labels: Object.keys(revenueMap),
+      values: Object.values(revenueMap)
+    };
+  }
+
+  private computeClassesByBranch(): { labels: string[]; values: number[] } {
+    const branchMap: { [key: string]: number } &#x3D; {};
+    this.filteredSessions.forEach(s &#x3D;&gt; {
+      branchMap[s.rama] &#x3D; (branchMap[s.rama] || 0) + 1;
+    });
+
+    return {
+      labels: Object.keys(branchMap),
+      values: Object.values(branchMap)
+    };
+  }
+
+  /** Exportación a CSV adaptada a la pestaña activa */
+  exportToCsv(): void {
+    let csvContent &#x3D; &#x27;&#x27;;
+    let fileName &#x3D; &#x27;&#x27;;
+
+    if (this.activeTab &#x3D;&#x3D;&#x3D; &#x27;profesores&#x27;) {
+      csvContent &#x3D; &#x27;Nombre,Especialidad,Departamento,Alumnos,Horas,TarifaHora,TotalGanado,Telefono,Estado\n&#x27;;
+      this.rawTeachers.forEach(t &#x3D;&gt; {
+        csvContent +&#x3D; &#x60;&quot;${t.nombre}&quot;,&quot;${t.especialidad}&quot;,&quot;${t.departamento}&quot;,${t.alumnosCount},${t.horasImpartidas},${t.tarifaHora},${t.totalGanado},&quot;${t.telefono}&quot;,&quot;${t.estado}&quot;\n&#x60;;
+      });
+      fileName &#x3D; &#x60;iTUTOR_Listado_Profesores_${new Date().toISOString().slice(0, 10)}.csv&#x60;;
+    } else if (this.activeTab &#x3D;&#x3D;&#x3D; &#x27;alumnos&#x27;) {
+      csvContent &#x3D; &#x27;Matricula,Nombre,Email,AsignaturaPrincipal,Plan,ProfesorAsignado,TarifaHora,SaldoPendiente,HorasTotales,Telefono,Estado\n&#x27;;
+      this.rawSqlStudents.forEach(s &#x3D;&gt; {
+        csvContent +&#x3D; &#x60;&quot;${s.matricula}&quot;,&quot;${s.nombre}&quot;,&quot;${s.email}&quot;,&quot;${s.asignaturaPrincipal}&quot;,&quot;${s.plan}&quot;,&quot;${s.profesorAsignado}&quot;,${s.tarifaHora},${s.saldoPendiente},${s.horasTotales},&quot;${s.telefono}&quot;,&quot;${s.estado}&quot;\n&#x60;;
+      });
+      fileName &#x3D; &#x60;iTUTOR_Listado_Alumnos_${new Date().toISOString().slice(0, 10)}.csv&#x60;;
+    } else {
+      csvContent &#x3D; &#x27;Estudiante,Materia,Rama,Tutor,Fecha,DuracionMin,Importe,Estado,Asistencia\n&#x27;;
+      this.filteredSessions.forEach(s &#x3D;&gt; {
+        csvContent +&#x3D; &#x60;&quot;${s.estudianteNombre}&quot;,&quot;${s.materia}&quot;,&quot;${s.rama}&quot;,&quot;${s.tutor}&quot;,&quot;${s.fecha}&quot;,${s.duracionMin},${s.importe},&quot;${s.estado}&quot;,${s.asistencia}\n&#x60;;
+      });
+      fileName &#x3D; &#x60;iTUTOR_Sesiones_${this.selectedPeriod}_${new Date().toISOString().slice(0, 10)}.csv&#x60;;
+    }
+
+    const blob &#x3D; new Blob([csvContent], { type: &#x27;text/csv;charset&#x3D;utf-8;&#x27; });
+    const url &#x3D; URL.createObjectURL(blob);
+    const link &#x3D; document.createElement(&#x27;a&#x27;);
+    link.setAttribute(&#x27;href&#x27;, url);
+    link.setAttribute(&#x27;download&#x27;, fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  /** Exportación a PDF adaptada a la pestaña activa */
+  exportToPdf(): void {
+    const doc &#x3D; new jsPDF({
+      orientation: &#x27;landscape&#x27;,
+      unit: &#x27;mm&#x27;,
+      format: &#x27;a4&#x27;
+    });
+
+    const primaryColor: [number, number, number] &#x3D; [37, 99, 235];
+    const darkColor: [number, number, number] &#x3D; [15, 23, 42];
+    const grayColor: [number, number, number] &#x3D; [100, 116, 139];
+
+    // Encabezado
+    doc.setFillColor(...primaryColor);
+    doc.rect(0, 0, 297, 24, &#x27;F&#x27;);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont(&#x27;helvetica&#x27;, &#x27;bold&#x27;);
+    doc.setFontSize(18);
+    doc.text(&#x27;iTUTOR&#x27;, 14, 15);
+    doc.setFont(&#x27;helvetica&#x27;, &#x27;normal&#x27;);
+    doc.setFontSize(10);
+    doc.text(&#x27;Plataforma Inteligente de Gestión Académica • Informe Oficial&#x27;, 50, 14);
+
+    if (this.activeTab &#x3D;&#x3D;&#x3D; &#x27;profesores&#x27;) {
+      doc.setTextColor(...darkColor);
+      doc.setFont(&#x27;helvetica&#x27;, &#x27;bold&#x27;);
+      doc.setFontSize(14);
+      doc.text(&#x27;Censo Oficial de Profesores y Honorarios Docentes&#x27;, 14, 34);
+
+      doc.setFont(&#x27;helvetica&#x27;, &#x27;normal&#x27;);
+      doc.setFontSize(9);
+      doc.setTextColor(...grayColor);
+      doc.text(&#x60;Total docentes en plantilla: ${this.rawTeachers.length} | Honorarios globales: ${this.teacherKpis.totalGanado}&#x60;, 14, 40);
+
+      const tableData &#x3D; this.rawTeachers.map(t &#x3D;&gt; [
+        t.nombre,
+        t.especialidad,
+        t.departamento,
+        t.alumnosAsignados.join(&#x27;, &#x27;),
+        &#x60;${t.horasImpartidas} h&#x60;,
+        &#x60;${t.tarifaHora} €/h&#x60;,
+        &#x60;${t.totalGanado} €&#x60;,
+        &#x60;${t.calificacion} ⭐&#x60;,
+        t.telefono,
+        t.estado
+      ]);
+
+      autoTable(doc, {
+        startY: 46,
+        head: [[&#x27;Profesor&#x27;, &#x27;Especialidad&#x27;, &#x27;Rama&#x27;, &#x27;Alumnos Asignados&#x27;, &#x27;Horas&#x27;, &#x27;Tarifa&#x27;, &#x27;Total Ganado&#x27;, &#x27;Valoración&#x27;, &#x27;Contacto&#x27;, &#x27;Estado&#x27;]],
+        body: tableData,
+        theme: &#x27;grid&#x27;,
+        headStyles: { fillColor: primaryColor, textColor: [255, 255, 255], fontStyle: &#x27;bold&#x27;, fontSize: 8 },
+        styles: { fontSize: 7.5, cellPadding: 2.5, textColor: [30, 41, 59] },
+        columnStyles: {
+          0: { fontStyle: &#x27;bold&#x27;, cellWidth: 34 },
+          1: { cellWidth: 38 },
+          6: { fontStyle: &#x27;bold&#x27;, halign: &#x27;right&#x27;, cellWidth: 22 }
+        }
+      });
+
+      doc.save(&#x60;iTUTOR_Listado_Profesores_${new Date().toISOString().slice(0, 10)}.pdf&#x60;);
+    } else if (this.activeTab &#x3D;&#x3D;&#x3D; &#x27;alumnos&#x27;) {
+      doc.setTextColor(...darkColor);
+      doc.setFont(&#x27;helvetica&#x27;, &#x27;bold&#x27;);
+      doc.setFontSize(14);
+      doc.text(&#x27;Censo Oficial de Alumnos Matriculados y Tarifas SQL&#x27;, 14, 34);
+
+      doc.setFont(&#x27;helvetica&#x27;, &#x27;normal&#x27;);
+      doc.setFontSize(9);
+      doc.setTextColor(...grayColor);
+      doc.text(&#x60;Total alumnos activos: ${this.rawSqlStudents.length} | Saldo pendiente global: ${this.studentKpis.saldoPendienteTotal}&#x60;, 14, 40);
+
+      const tableData &#x3D; this.rawSqlStudents.map(s &#x3D;&gt; [
+        s.matricula,
+        s.nombre,
+        s.email,
+        s.asignaturaPrincipal,
+        s.plan,
+        s.profesorAsignado,
+        &#x60;${s.horasTotales} h&#x60;,
+        &#x60;${s.tarifaHora} €/h&#x60;,
+        &#x60;${s.saldoPendiente} €&#x60;,
+        s.estado
+      ]);
+
+      autoTable(doc, {
+        startY: 46,
+        head: [[&#x27;Matrícula&#x27;, &#x27;Estudiante&#x27;, &#x27;Email&#x27;, &#x27;Asignatura Principal&#x27;, &#x27;Plan&#x27;, &#x27;Profesor Tutor&#x27;, &#x27;Horas&#x27;, &#x27;Tarifa&#x27;, &#x27;Saldo Pendiente&#x27;, &#x27;Estado&#x27;]],
+        body: tableData,
+        theme: &#x27;grid&#x27;,
+        headStyles: { fillColor: primaryColor, textColor: [255, 255, 255], fontStyle: &#x27;bold&#x27;, fontSize: 8 },
+        styles: { fontSize: 7.5, cellPadding: 2.5, textColor: [30, 41, 59] },
+        columnStyles: {
+          0: { fontStyle: &#x27;bold&#x27;, cellWidth: 26 },
+          1: { fontStyle: &#x27;bold&#x27;, cellWidth: 34 },
+          8: { fontStyle: &#x27;bold&#x27;, halign: &#x27;right&#x27;, cellWidth: 22 }
+        }
+      });
+
+      doc.save(&#x60;iTUTOR_Listado_Alumnos_${new Date().toISOString().slice(0, 10)}.pdf&#x60;);
+    } else {
+      doc.setTextColor(...darkColor);
+      doc.setFont(&#x27;helvetica&#x27;, &#x27;bold&#x27;);
+      doc.setFontSize(13);
+      doc.text(&#x27;Informe de Gestión Académica y Financiera (Sesiones)&#x27;, 14, 34);
+
+      const tableData &#x3D; this.filteredSessions.map(s &#x3D;&gt; [
+        s.estudianteNombre,
+        s.materia,
+        s.rama,
+        s.tutor,
+        s.fecha,
+        &#x60;${s.duracionMin} min&#x60;,
+        &#x60;${s.importe} €&#x60;,
+        s.estado,
+        s.asistencia ? &#x27;Sí&#x27; : &#x27;No&#x27;
+      ]);
+
+      autoTable(doc, {
+        startY: 44,
+        head: [[&#x27;Estudiante&#x27;, &#x27;Asignatura&#x27;, &#x27;Rama&#x27;, &#x27;Profesor Tutor&#x27;, &#x27;Fecha y Hora&#x27;, &#x27;Duración&#x27;, &#x27;Importe&#x27;, &#x27;Estado&#x27;, &#x27;Asistió&#x27;]],
+        body: tableData,
+        theme: &#x27;grid&#x27;,
+        headStyles: { fillColor: primaryColor, textColor: [255, 255, 255], fontSize: 8.5, fontStyle: &#x27;bold&#x27; },
+        styles: { fontSize: 8, cellPadding: 2.5, textColor: [30, 41, 59] },
+        columnStyles: {
+          0: { fontStyle: &#x27;bold&#x27;, cellWidth: 42 },
+          6: { halign: &#x27;right&#x27;, fontStyle: &#x27;bold&#x27;, cellWidth: 20 }
+        }
+      });
+
+      doc.save(&#x60;iTUTOR_Informe_Sesiones_${this.selectedPeriod}_${new Date().toISOString().slice(0, 10)}.pdf&#x60;);
+    }
+  }
+
+  handleEdit(item: any): void {
+    console.log(&#x27;Editar registro:&#x27;, item);
+  }
+
+  handleDelete(item: any): void {
+    console.log(&#x27;Eliminar registro:&#x27;, item);
+    if (this.activeTab &#x3D;&#x3D;&#x3D; &#x27;profesores&#x27;) {
+      this.rawTeachers &#x3D; this.rawTeachers.filter(t &#x3D;&gt; t.id !&#x3D;&#x3D; item.id);
+      this.calculateTeachersAndStudentsKpis();
+    } else if (this.activeTab &#x3D;&#x3D;&#x3D; &#x27;alumnos&#x27;) {
+      this.rawSqlStudents &#x3D; this.rawSqlStudents.filter(s &#x3D;&gt; s.id !&#x3D;&#x3D; item.id);
+      this.calculateTeachersAndStudentsKpis();
+    } else {
+      this.rawNoSqlSessions &#x3D; this.rawNoSqlSessions.filter(s &#x3D;&gt; s._id !&#x3D;&#x3D; item._id);
+      this.applyPeriodFilter();
+      this.updateChartsData();
+    }
+  }
+
+  handleView(item: any): void {
+    console.log(&#x27;Ver detalle:&#x27;, item);
+    if (this.activeTab &#x3D;&#x3D;&#x3D; &#x27;profesores&#x27;) {
+      this.viewTeacherPortal(item);
+    }
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;!-- ENCABEZADO ACCESIBLE (WCAG Landmark: banner) --&gt;
+&lt;ion-header class&#x3D;&quot;ion-no-border dashboard-header&quot; role&#x3D;&quot;banner&quot;&gt;
+  &lt;ion-toolbar class&#x3D;&quot;dashboard-toolbar&quot;&gt;
+    &lt;!-- Menú Hamburguesa para Móvil --&gt;
+    &lt;ion-buttons slot&#x3D;&quot;start&quot;&gt;
+      &lt;ion-menu-button 
+        autoHide&#x3D;&quot;false&quot; 
+        aria-label&#x3D;&quot;Abrir menú principal de navegación&quot;
+        class&#x3D;&quot;menu-btn&quot;
+        tabindex&#x3D;&quot;0&quot;
+      &gt;&lt;/ion-menu-button&gt;
+    &lt;/ion-buttons&gt;
+
+    &lt;div class&#x3D;&quot;header-content&quot;&gt;
+      &lt;ion-title class&#x3D;&quot;dashboard-title&quot;&gt;
+        Panel de Administración
+      &lt;/ion-title&gt;
+      &lt;span class&#x3D;&quot;header-period&quot; aria-label&#x3D;&quot;Periodo académico en curso&quot;&gt;
+        Gestión Integral de Alumnos, Profesores &amp; Finanzas
+      &lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;!-- ACCIONES RÁPIDAS DE EXPORTACIÓN (Header Action Group) --&gt;
+    &lt;ion-buttons slot&#x3D;&quot;end&quot; class&#x3D;&quot;export-actions&quot; role&#x3D;&quot;group&quot; aria-label&#x3D;&quot;Opciones de exportación de datos&quot;&gt;
+      &lt;ion-button 
+        fill&#x3D;&quot;outline&quot; 
+        color&#x3D;&quot;medium&quot; 
+        size&#x3D;&quot;small&quot; 
+        class&#x3D;&quot;export-btn&quot;
+        (click)&#x3D;&quot;exportToCsv()&quot;
+        [disabled]&#x3D;&quot;isLoading&quot;
+        aria-label&#x3D;&quot;Descargar datos en formato CSV limpio para Excel&quot;
+        tabindex&#x3D;&quot;0&quot;
+      &gt;
+        &lt;ion-icon slot&#x3D;&quot;start&quot; name&#x3D;&quot;download-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
+        &lt;span class&#x3D;&quot;btn-text&quot;&gt;CSV&lt;/span&gt;
+      &lt;/ion-button&gt;
+
+      &lt;ion-button 
+        fill&#x3D;&quot;solid&quot; 
+        color&#x3D;&quot;primary&quot; 
+        size&#x3D;&quot;small&quot; 
+        class&#x3D;&quot;export-btn export-pdf-btn&quot;
+        (click)&#x3D;&quot;exportToPdf()&quot;
+        [disabled]&#x3D;&quot;isLoading&quot;
+        aria-label&#x3D;&quot;Generar y descargar informe corporativo en formato PDF&quot;
+        tabindex&#x3D;&quot;0&quot;
+      &gt;
+        &lt;ion-icon slot&#x3D;&quot;start&quot; name&#x3D;&quot;document-text-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
+        &lt;span class&#x3D;&quot;btn-text&quot;&gt;Exportar PDF&lt;/span&gt;
+      &lt;/ion-button&gt;
+    &lt;/ion-buttons&gt;
+  &lt;/ion-toolbar&gt;
+&lt;/ion-header&gt;
+
+&lt;!-- CONTENIDO PRINCIPAL (WCAG Landmark: main) --&gt;
+&lt;ion-content class&#x3D;&quot;dashboard-content&quot; [fullscreen]&#x3D;&quot;true&quot; role&#x3D;&quot;main&quot;&gt;
+  &lt;div class&#x3D;&quot;dashboard-container&quot;&gt;
+
+    &lt;!-- SELECTOR DE VISTAS PRINCIPALES: MÉTRICAS / LISTADO PROFESORES / LISTADO ALUMNOS --&gt;
+    &lt;div class&#x3D;&quot;admin-tabs-wrapper&quot; role&#x3D;&quot;navigation&quot; aria-label&#x3D;&quot;Selector de vistas del administrador&quot;&gt;
+      &lt;ion-segment 
+        [value]&#x3D;&quot;activeTab&quot; 
+        (ionChange)&#x3D;&quot;onTabChange($event.detail.value)&quot;
+        class&#x3D;&quot;admin-main-segment&quot;
+      &gt;
+        &lt;ion-segment-button value&#x3D;&quot;metricas&quot;&gt;
+          &lt;ion-icon name&#x3D;&quot;bar-chart-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
+          &lt;ion-label&gt;Métricas &amp; Sesiones&lt;/ion-label&gt;
+        &lt;/ion-segment-button&gt;
+
+        &lt;ion-segment-button value&#x3D;&quot;profesores&quot;&gt;
+          &lt;ion-icon name&#x3D;&quot;school-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
+          &lt;ion-label&gt;Listado de Profesores ({{ rawTeachers.length }})&lt;/ion-label&gt;
+        &lt;/ion-segment-button&gt;
+
+        &lt;ion-segment-button value&#x3D;&quot;alumnos&quot;&gt;
+          &lt;ion-icon name&#x3D;&quot;people-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
+          &lt;ion-label&gt;Listado de Alumnos ({{ rawSqlStudents.length }})&lt;/ion-label&gt;
+        &lt;/ion-segment-button&gt;
+      &lt;/ion-segment&gt;
+    &lt;/div&gt;
+
+    &lt;!-- ESTADO DE CARGA ASÍNCRONO (WCAG Live Region para Screen Readers) --&gt;
+    @if (isLoading) {
+      &lt;div 
+        class&#x3D;&quot;loading-container&quot; 
+        role&#x3D;&quot;status&quot; 
+        aria-live&#x3D;&quot;polite&quot;
+        aria-label&#x3D;&quot;Cargando datos y sincronizando catálogo SQL y MongoDB&quot;
+      &gt;
+        &lt;ion-spinner name&#x3D;&quot;crescent&quot; color&#x3D;&quot;primary&quot;&gt;&lt;/ion-spinner&gt;
+        &lt;p class&#x3D;&quot;loading-text&quot;&gt;Sincronizando 10 alumnos, 10 profesores y sesiones concurrentes...&lt;/p&gt;
+      &lt;/div&gt;
+    } @else {
+
+      &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+      &lt;!-- VISTA 1: MÉTRICAS Y SESIONES               --&gt;
+      &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+      @if (activeTab &#x3D;&#x3D;&#x3D; &#x27;metricas&#x27;) {
+
+        &lt;!-- BARRA SUPERIOR DE BIENVENIDA Y FILTRADO EN TIEMPO REAL --&gt;
+        &lt;section class&#x3D;&quot;control-panel-section&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Controles del panel y filtros de tiempo&quot;&gt;
+          &lt;div class&#x3D;&quot;banner-content&quot;&gt;
+            &lt;div class&#x3D;&quot;banner-title-box&quot;&gt;
+              &lt;h1 class&#x3D;&quot;page-main-heading&quot;&gt;Métricas de la Academia&lt;/h1&gt;
+              &lt;p class&#x3D;&quot;page-sub-heading&quot;&gt;
+                Tutorías especializadas de Física, Matemáticas y Química • Sincronización dual SQL y NoSQL
+              &lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;!-- FILTRO DINÁMICO EN TIEMPO REAL (Segmentación por Mes) --&gt;
+            &lt;div class&#x3D;&quot;filter-wrapper&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Filtro temporal de datos&quot;&gt;
+              &lt;label id&#x3D;&quot;period-filter-label&quot; class&#x3D;&quot;filter-label&quot;&gt;
+                &lt;ion-icon name&#x3D;&quot;filter-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
+                Filtrar Periodo:
+              &lt;/label&gt;
+              &lt;ion-segment 
+                [value]&#x3D;&quot;selectedPeriod&quot; 
+                (ionChange)&#x3D;&quot;onFilterChange($event.detail.value)&quot;
+                class&#x3D;&quot;time-segment&quot;
+                aria-labelledby&#x3D;&quot;period-filter-label&quot;
+              &gt;
+                &lt;ion-segment-button value&#x3D;&quot;todos&quot; aria-label&#x3D;&quot;Mostrar todos los meses&quot;&gt;
+                  &lt;ion-label&gt;Todos&lt;/ion-label&gt;
+                &lt;/ion-segment-button&gt;
+                &lt;ion-segment-button value&#x3D;&quot;septiembre&quot; aria-label&#x3D;&quot;Filtrar mes de septiembre&quot;&gt;
+                  &lt;ion-label&gt;Sep&lt;/ion-label&gt;
+                &lt;/ion-segment-button&gt;
+                &lt;ion-segment-button value&#x3D;&quot;octubre&quot; aria-label&#x3D;&quot;Filtrar mes de octubre&quot;&gt;
+                  &lt;ion-label&gt;Oct&lt;/ion-label&gt;
+                &lt;/ion-segment-button&gt;
+                &lt;ion-segment-button value&#x3D;&quot;noviembre&quot; aria-label&#x3D;&quot;Filtrar mes de noviembre&quot;&gt;
+                  &lt;ion-label&gt;Nov&lt;/ion-label&gt;
+                &lt;/ion-segment-button&gt;
+                &lt;ion-segment-button value&#x3D;&quot;diciembre&quot; aria-label&#x3D;&quot;Filtrar mes de diciembre&quot;&gt;
+                  &lt;ion-label&gt;Dic&lt;/ion-label&gt;
+                &lt;/ion-segment-button&gt;
+              &lt;/ion-segment&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;!-- KPI STAT CARDS (Métricas) --&gt;
+        &lt;section class&#x3D;&quot;stats-section&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Indicadores clave de rendimiento&quot;&gt;
+          &lt;ion-grid class&#x3D;&quot;ion-no-padding&quot;&gt;
+            &lt;ion-row class&#x3D;&quot;stats-row&quot;&gt;
+              &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+                &lt;app-stat-card
+                  title&#x3D;&quot;Ingresos del Periodo&quot;
+                  [value]&#x3D;&quot;kpis.ingresosTotales&quot;
+                  icon&#x3D;&quot;cash-outline&quot;
+                  [growthPercentage]&#x3D;&quot;kpis.ingresosCrecimiento&quot;
+                  period&#x3D;&quot;vs. periodo previo&quot;
+                  iconVariant&#x3D;&quot;primary&quot;
+                &gt;&lt;/app-stat-card&gt;
+              &lt;/ion-col&gt;
+
+              &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+                &lt;app-stat-card
+                  title&#x3D;&quot;Alumnos con Sesiones&quot;
+                  [value]&#x3D;&quot;kpis.estudiantesActivos&quot;
+                  icon&#x3D;&quot;people-outline&quot;
+                  [growthPercentage]&#x3D;&quot;kpis.estudiantesCrecimiento&quot;
+                  period&#x3D;&quot;estudiantes únicos&quot;
+                  iconVariant&#x3D;&quot;secondary&quot;
+                &gt;&lt;/app-stat-card&gt;
+              &lt;/ion-col&gt;
+
+              &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+                &lt;app-stat-card
+                  title&#x3D;&quot;Horas Académicas&quot;
+                  [value]&#x3D;&quot;kpis.horasImpartidas&quot;
+                  icon&#x3D;&quot;time-outline&quot;
+                  [growthPercentage]&#x3D;&quot;kpis.horasCrecimiento&quot;
+                  period&#x3D;&quot;en el aula virtual&quot;
+                  iconVariant&#x3D;&quot;tertiary&quot;
+                &gt;&lt;/app-stat-card&gt;
+              &lt;/ion-col&gt;
+
+              &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+                &lt;app-stat-card
+                  title&#x3D;&quot;Tasa de Asistencia&quot;
+                  [value]&#x3D;&quot;kpis.tasaAsistencia&quot;
+                  icon&#x3D;&quot;school-outline&quot;
+                  [growthPercentage]&#x3D;&quot;kpis.asistenciaCrecimiento&quot;
+                  period&#x3D;&quot;efectividad sesiones&quot;
+                  iconVariant&#x3D;&quot;warning&quot;
+                &gt;&lt;/app-stat-card&gt;
+              &lt;/ion-col&gt;
+            &lt;/ion-row&gt;
+          &lt;/ion-grid&gt;
+        &lt;/section&gt;
+
+        &lt;!-- GRÁFICOS CHART.JS --&gt;
+        &lt;section class&#x3D;&quot;charts-section&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Visualización gráfica de datos analíticos&quot;&gt;
+          &lt;ion-grid class&#x3D;&quot;ion-no-padding&quot;&gt;
+            &lt;ion-row class&#x3D;&quot;charts-row&quot;&gt;
+
+              &lt;ion-col size&#x3D;&quot;12&quot; size-lg&#x3D;&quot;6&quot; class&#x3D;&quot;chart-col&quot;&gt;
+                &lt;ion-card class&#x3D;&quot;chart-card&quot;&gt;
+                  &lt;ion-card-header class&#x3D;&quot;chart-card-header&quot;&gt;
+                    &lt;div class&#x3D;&quot;chart-header-left&quot;&gt;
+                      &lt;ion-card-title class&#x3D;&quot;chart-title&quot;&gt;
+                        &lt;ion-icon name&#x3D;&quot;bar-chart-outline&quot; aria-hidden&#x3D;&quot;true&quot; class&#x3D;&quot;chart-icon&quot;&gt;&lt;/ion-icon&gt;
+                        Ingresos por Asignatura
+                      &lt;/ion-card-title&gt;
+                      &lt;ion-card-subtitle class&#x3D;&quot;chart-subtitle&quot;&gt;
+                        Facturación en euros agrupada por materia en {{ selectedPeriod }}
+                      &lt;/ion-card-subtitle&gt;
+                    &lt;/div&gt;
+                    &lt;ion-badge color&#x3D;&quot;primary&quot; class&#x3D;&quot;chart-badge&quot;&gt;Física, Mates &amp; Química&lt;/ion-badge&gt;
+                  &lt;/ion-card-header&gt;
+
+                  &lt;ion-card-content class&#x3D;&quot;chart-card-content&quot;&gt;
+                    &lt;div class&#x3D;&quot;canvas-wrapper&quot;&gt;
+                      &lt;canvas #revenueChartCanvas role&#x3D;&quot;img&quot;&gt;
+                        Gráfico de ingresos no disponible.
+                      &lt;/canvas&gt;
+                    &lt;/div&gt;
+                  &lt;/ion-card-content&gt;
+                &lt;/ion-card&gt;
+              &lt;/ion-col&gt;
+
+              &lt;ion-col size&#x3D;&quot;12&quot; size-lg&#x3D;&quot;6&quot; class&#x3D;&quot;chart-col&quot;&gt;
+                &lt;ion-card class&#x3D;&quot;chart-card&quot;&gt;
+                  &lt;ion-card-header class&#x3D;&quot;chart-card-header&quot;&gt;
+                    &lt;div class&#x3D;&quot;chart-header-left&quot;&gt;
+                      &lt;ion-card-title class&#x3D;&quot;chart-title&quot;&gt;
+                        &lt;ion-icon name&#x3D;&quot;pie-chart-outline&quot; aria-hidden&#x3D;&quot;true&quot; class&#x3D;&quot;chart-icon&quot;&gt;&lt;/ion-icon&gt;
+                        Distribución de Tutorías por Rama
+                      &lt;/ion-card-title&gt;
+                      &lt;ion-card-subtitle class&#x3D;&quot;chart-subtitle&quot;&gt;
+                        Volumen comparativo de clases impartidas
+                      &lt;/ion-card-subtitle&gt;
+                    &lt;/div&gt;
+                    &lt;ion-badge color&#x3D;&quot;tertiary&quot; class&#x3D;&quot;chart-badge&quot;&gt;Histórico&lt;/ion-badge&gt;
+                  &lt;/ion-card-header&gt;
+
+                  &lt;ion-card-content class&#x3D;&quot;chart-card-content&quot;&gt;
+                    &lt;div class&#x3D;&quot;canvas-wrapper&quot;&gt;
+                      &lt;canvas #classesChartCanvas role&#x3D;&quot;img&quot;&gt;
+                        Gráfico de ramas no disponible.
+                      &lt;/canvas&gt;
+                    &lt;/div&gt;
+                  &lt;/ion-card-content&gt;
+                &lt;/ion-card&gt;
+              &lt;/ion-col&gt;
+
+            &lt;/ion-row&gt;
+          &lt;/ion-grid&gt;
+        &lt;/section&gt;
+
+        &lt;!-- TABLA DE SESIONES --&gt;
+        &lt;section class&#x3D;&quot;table-section&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Tabla de sesiones de tutoría sincronizadas&quot;&gt;
+          &lt;app-data-table
+            [title]&#x3D;&quot;&#x27;Registro de Tutorías • Periodo: &#x27; + (selectedPeriod | uppercase)&quot;
+            subtitle&#x3D;&quot;Datos en tiempo real de MongoDB combinados con el catálogo de tarifas SQL&quot;
+            [columns]&#x3D;&quot;tableColumns&quot;
+            [rows]&#x3D;&quot;filteredSessions&quot;
+            [showActions]&#x3D;&quot;true&quot;
+            (onEdit)&#x3D;&quot;handleEdit($event)&quot;
+            (onDelete)&#x3D;&quot;handleDelete($event)&quot;
+            (onView)&#x3D;&quot;handleView($event)&quot;
+          &gt;&lt;/app-data-table&gt;
+        &lt;/section&gt;
+
+      }
+
+      &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+      &lt;!-- VISTA 2: LISTADO DE PROFESORES (10)         --&gt;
+      &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+      @if (activeTab &#x3D;&#x3D;&#x3D; &#x27;profesores&#x27;) {
+
+        &lt;section class&#x3D;&quot;teachers-overview-section&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Censo de profesores&quot;&gt;
+          &lt;!-- KPIs RÁPIDOS PROFESORES --&gt;
+          &lt;ion-grid class&#x3D;&quot;ion-no-padding&quot;&gt;
+            &lt;ion-row class&#x3D;&quot;stats-row&quot;&gt;
+              &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+                &lt;app-stat-card
+                  title&#x3D;&quot;Docentes en Plantilla&quot;
+                  [value]&#x3D;&quot;teacherKpis.totalProfesores&quot;
+                  icon&#x3D;&quot;school-outline&quot;
+                  [growthPercentage]&#x3D;&quot;10.0&quot;
+                  period&#x3D;&quot;profesores oficiales&quot;
+                  iconVariant&#x3D;&quot;primary&quot;
+                &gt;&lt;/app-stat-card&gt;
+              &lt;/ion-col&gt;
+
+              &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+                &lt;app-stat-card
+                  title&#x3D;&quot;Total Honorarios Generados&quot;
+                  [value]&#x3D;&quot;teacherKpis.totalGanado&quot;
+                  icon&#x3D;&quot;cash-outline&quot;
+                  [growthPercentage]&#x3D;&quot;14.8&quot;
+                  period&#x3D;&quot;acumulado total&quot;
+                  iconVariant&#x3D;&quot;secondary&quot;
+                &gt;&lt;/app-stat-card&gt;
+              &lt;/ion-col&gt;
+
+              &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+                &lt;app-stat-card
+                  title&#x3D;&quot;Horas Impartidas Globales&quot;
+                  [value]&#x3D;&quot;teacherKpis.totalHoras&quot;
+                  icon&#x3D;&quot;time-outline&quot;
+                  [growthPercentage]&#x3D;&quot;12.0&quot;
+                  period&#x3D;&quot;tutorías completadas&quot;
+                  iconVariant&#x3D;&quot;tertiary&quot;
+                &gt;&lt;/app-stat-card&gt;
+              &lt;/ion-col&gt;
+
+              &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+                &lt;app-stat-card
+                  title&#x3D;&quot;Valoración Promedio&quot;
+                  [value]&#x3D;&quot;teacherKpis.valoracionMedia&quot;
+                  icon&#x3D;&quot;school-outline&quot;
+                  [growthPercentage]&#x3D;&quot;3.2&quot;
+                  period&#x3D;&quot;satisfacción alumnos&quot;
+                  iconVariant&#x3D;&quot;warning&quot;
+                &gt;&lt;/app-stat-card&gt;
+              &lt;/ion-col&gt;
+            &lt;/ion-row&gt;
+          &lt;/ion-grid&gt;
+
+          &lt;!-- TABLA COMPLETA DE LOS 10 PROFESORES --&gt;
+          &lt;div class&#x3D;&quot;teachers-table-box&quot;&gt;
+            &lt;app-data-table
+              title&#x3D;&quot;Listado Oficial de Profesores y Docentes iTUTOR (10)&quot;
+              subtitle&#x3D;&quot;Catálogo de profesores homologados con especialidades, asignaciones lectivas y honorarios&quot;
+              [columns]&#x3D;&quot;teacherTableColumns&quot;
+              [rows]&#x3D;&quot;rawTeachers&quot;
+              [showActions]&#x3D;&quot;true&quot;
+              (onView)&#x3D;&quot;handleView($event)&quot;
+              (onDelete)&#x3D;&quot;handleDelete($event)&quot;
+            &gt;&lt;/app-data-table&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+
+      }
+
+      &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+      &lt;!-- VISTA 3: LISTADO DE ALUMNOS (10)            --&gt;
+      &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+      @if (activeTab &#x3D;&#x3D;&#x3D; &#x27;alumnos&#x27;) {
+
+        &lt;section class&#x3D;&quot;students-overview-section&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Censo de alumnos&quot;&gt;
+          &lt;!-- KPIs RÁPIDOS ALUMNOS --&gt;
+          &lt;ion-grid class&#x3D;&quot;ion-no-padding&quot;&gt;
+            &lt;ion-row class&#x3D;&quot;stats-row&quot;&gt;
+              &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+                &lt;app-stat-card
+                  title&#x3D;&quot;Alumnos Matriculados&quot;
+                  [value]&#x3D;&quot;studentKpis.totalAlumnos&quot;
+                  icon&#x3D;&quot;people-outline&quot;
+                  [growthPercentage]&#x3D;&quot;15.0&quot;
+                  period&#x3D;&quot;estudiantes activos&quot;
+                  iconVariant&#x3D;&quot;primary&quot;
+                &gt;&lt;/app-stat-card&gt;
+              &lt;/ion-col&gt;
+
+              &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+                &lt;app-stat-card
+                  title&#x3D;&quot;Saldo Pendiente Global&quot;
+                  [value]&#x3D;&quot;studentKpis.saldoPendienteTotal&quot;
+                  icon&#x3D;&quot;wallet-outline&quot;
+                  [growthPercentage]&#x3D;&quot;-5.4&quot;
+                  period&#x3D;&quot;cobros pendientes&quot;
+                  iconVariant&#x3D;&quot;warning&quot;
+                &gt;&lt;/app-stat-card&gt;
+              &lt;/ion-col&gt;
+
+              &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+                &lt;app-stat-card
+                  title&#x3D;&quot;Horas Totales Cursadas&quot;
+                  [value]&#x3D;&quot;studentKpis.horasTotalesAlumnos&quot;
+                  icon&#x3D;&quot;time-outline&quot;
+                  [growthPercentage]&#x3D;&quot;18.2&quot;
+                  period&#x3D;&quot;horas de aprendizaje&quot;
+                  iconVariant&#x3D;&quot;tertiary&quot;
+                &gt;&lt;/app-stat-card&gt;
+              &lt;/ion-col&gt;
+
+              &lt;ion-col size&#x3D;&quot;12&quot; size-sm&#x3D;&quot;6&quot; size-xl&#x3D;&quot;3&quot;&gt;
+                &lt;app-stat-card
+                  title&#x3D;&quot;Tarifa Media Aplicada&quot;
+                  [value]&#x3D;&quot;studentKpis.tarifaMedia&quot;
+                  icon&#x3D;&quot;cash-outline&quot;
+                  [growthPercentage]&#x3D;&quot;4.1&quot;
+                  period&#x3D;&quot;precio hora medio&quot;
+                  iconVariant&#x3D;&quot;secondary&quot;
+                &gt;&lt;/app-stat-card&gt;
+              &lt;/ion-col&gt;
+            &lt;/ion-row&gt;
+          &lt;/ion-grid&gt;
+
+          &lt;!-- TABLA COMPLETA DE LOS 10 ALUMNOS --&gt;
+          &lt;div class&#x3D;&quot;students-table-box&quot;&gt;
+            &lt;app-data-table
+              title&#x3D;&quot;Listado Oficial de Alumnos Matriculados iTUTOR (10)&quot;
+              subtitle&#x3D;&quot;Expediente académico de estudiantes, matrículas, asignaturas contratadas y profesor tutor&quot;
+              [columns]&#x3D;&quot;studentTableColumns&quot;
+              [rows]&#x3D;&quot;rawSqlStudents&quot;
+              [showActions]&#x3D;&quot;true&quot;
+              (onView)&#x3D;&quot;handleView($event)&quot;
+              (onDelete)&#x3D;&quot;handleDelete($event)&quot;
+            &gt;&lt;/app-data-table&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+
+      }
+
+    }
+
+  &lt;/div&gt;
+&lt;/ion-content&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./admin-dashboard.page.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">/* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+   TUTORFLOW - ADMIN DASHBOARD (FASE 3 &amp; FASE 4 WCAG ACCESSIBILITY)
+   &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+
+/* ACCESIBILIDAD UNIVERSAL: FOCO VISIBLE PARA TECLADO (WCAG 2.1 AA) */
+*:focus-visible {
+  outline: 2px solid #2563eb !important;
+  outline-offset: 2px !important;
+}
+
+/* ENCABEZADO Y ACCIONES DE EXPORTACIÓN */
+.dashboard-header {
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff;
+
+  .dashboard-toolbar {
+    --background: #ffffff;
+    --border-width: 0;
+    --padding-start: 12px;
+    --padding-end: 20px;
+    --min-height: 64px;
+
+    .menu-btn {
+      color: #0f172a;
+      --color: #0f172a;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+
+      .dashboard-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #0f172a;
+        letter-spacing: -0.02em;
+        padding: 0;
+
+        @media (min-width: 640px) {
+          font-size: 1.25rem;
+        }
+      }
+
+      .header-period {
+        display: none;
+        font-size: 0.8125rem;
+        color: #64748b;
+        font-weight: 500;
+
+        @media (min-width: 768px) {
+          display: inline;
+        }
+      }
+    }
+
+    .export-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .export-btn {
+        --border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.8125rem;
+        height: 36px;
+        margin: 0;
+
+        .btn-text {
+          margin-left: 4px;
+        }
+
+        &amp;.export-pdf-btn {
+          --box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
+      }
+    }
+  }
+}
+
+/* CONTENEDOR PRINCIPAL */
+.dashboard-content {
+  --background: #f8fafc;
+}
+
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 16px 48px 16px;
+
+  @media (min-width: 768px) {
+    padding: 28px 24px 64px 24px;
+  }
+}
+
+/* BARRA DE BIENVENIDA Y FILTROS */
+.control-panel-section {
+  margin-bottom: 24px;
+
+  .banner-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @media (min-width: 992px) {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .banner-title-box {
+      .page-main-heading {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #0f172a;
+        letter-spacing: -0.025em;
+
+        @media (min-width: 768px) {
+          font-size: 1.75rem;
+        }
+      }
+
+      .page-sub-heading {
+        margin: 6px 0 0 0;
+        font-size: 0.875rem;
+        color: #475569;
+        max-width: 650px;
+      }
+    }
+
+    .filter-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      .filter-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #475569;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .time-segment {
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        padding: 3px;
+        max-width: 380px;
+
+        ion-segment-button {
+          --indicator-color: #2563eb;
+          --indicator-box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+          --color: #334155;
+          --color-checked: #ffffff;
+          font-weight: 600;
+          font-size: 0.75rem;
+          min-height: 32px;
+          border-radius: 8px;
+        }
+      }
+    }
+  }
+}
+
+/* ESTADO DE CARGA */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+
+  ion-spinner {
+    width: 44px;
+    height: 44px;
+  }
+
+  .loading-text {
+    margin-top: 16px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #475569;
+  }
+}
+
+/* SECCIÓN STATS */
+.stats-section {
+  margin-bottom: 24px;
+
+  .stats-row {
+    margin: -8px;
+
+    ion-col {
+      padding: 8px;
+    }
+  }
+}
+
+/* SECCIÓN GRÁFICOS CHART.JS */
+.charts-section {
+  margin-bottom: 28px;
+
+  .charts-row {
+    margin: -8px;
+
+    .chart-col {
+      padding: 8px;
+    }
+  }
+
+  .chart-card {
+    margin: 0;
+    height: 100%;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    display: flex;
+    flex-direction: column;
+
+    .chart-card-header {
+      padding: 18px 20px 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid #f1f5f9;
+
+      .chart-header-left {
+        .chart-title {
+          font-size: 1rem;
+          font-weight: 700;
+          color: #0f172a;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .chart-icon {
+            font-size: 1.15rem;
+            color: #2563eb;
+          }
+        }
+
+        .chart-subtitle {
+          margin: 4px 0 0 0;
+          font-size: 0.8125rem;
+          color: #475569;
+        }
+      }
+
+      .chart-badge {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 6px;
+      }
+    }
+
+    .chart-card-content {
+      padding: 16px 20px 20px 20px;
+      flex: 1;
+
+      .canvas-wrapper {
+        position: relative;
+        height: 280px;
+        width: 100%;
+
+        @media (min-width: 992px) {
+          height: 300px;
+        }
+
+        canvas {
+          width: 100% !important;
+          height: 100% !important;
+        }
+      }
+    }
+  }
+}
+
+/* SECCIÓN TABLA */
+.table-section {
+  margin-top: 8px;
+}
+
+/* TABS DEL ADMINISTRADOR (Métricas / Profesores / Alumnos) */
+.admin-tabs-wrapper {
+  margin-bottom: 24px;
+
+  .admin-main-segment {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+    ion-segment-button {
+      --color: #64748b;
+      --color-checked: #2563eb;
+      --indicator-color: #eff6ff;
+      --indicator-box-shadow: 0 1px 3px rgba(37, 99, 235, 0.15);
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      min-height: 42px;
+      transition: all 0.2s ease;
+
+      ion-icon {
+        margin-right: 6px;
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+.teachers-overview-section,
+.students-overview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  .teachers-table-box,
+  .students-table-box {
+    margin-top: 8px;
+  }
+}
+
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Leyenda</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Elemento Html</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Componente</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Elemento Html con directiva</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><!-- ENCABEZADO ACCESIBLE (WCAG Landmark: banner) --><ion-header class="ion-no-border dashboard-header" role="banner">  <ion-toolbar class="dashboard-toolbar">    <!-- Menú Hamburguesa para Móvil -->    <ion-buttons slot="start">      <ion-menu-button         autoHide="false"         aria-label="Abrir menú principal de navegación"        class="menu-btn"        tabindex="0"      ></ion-menu-button>    </ion-buttons>    <div class="header-content">      <ion-title class="dashboard-title">        Panel de Administración      </ion-title>      <span class="header-period" aria-label="Periodo académico en curso">        Gestión Integral de Alumnos, Profesores & Finanzas      </span>    </div>    <!-- ACCIONES RÁPIDAS DE EXPORTACIÓN (Header Action Group) -->    <ion-buttons slot="end" class="export-actions" role="group" aria-label="Opciones de exportación de datos">      <ion-button         fill="outline"         color="medium"         size="small"         class="export-btn"        (click)="exportToCsv()"        [disabled]="isLoading"        aria-label="Descargar datos en formato CSV limpio para Excel"        tabindex="0"      >        <ion-icon slot="start" name="download-outline" aria-hidden="true"></ion-icon>        <span class="btn-text">CSV</span>      </ion-button>      <ion-button         fill="solid"         color="primary"         size="small"         class="export-btn export-pdf-btn"        (click)="exportToPdf()"        [disabled]="isLoading"        aria-label="Generar y descargar informe corporativo en formato PDF"        tabindex="0"      >        <ion-icon slot="start" name="document-text-outline" aria-hidden="true"></ion-icon>        <span class="btn-text">Exportar PDF</span>      </ion-button>    </ion-buttons>  </ion-toolbar></ion-header><!-- CONTENIDO PRINCIPAL (WCAG Landmark: main) --><ion-content class="dashboard-content" [fullscreen]="true" role="main">  <div class="dashboard-container">    <!-- SELECTOR DE VISTAS PRINCIPALES: MÉTRICAS / LISTADO PROFESORES / LISTADO ALUMNOS -->    <div class="admin-tabs-wrapper" role="navigation" aria-label="Selector de vistas del administrador">      <ion-segment         [value]="activeTab"         (ionChange)="onTabChange($event.detail.value)"        class="admin-main-segment"      >        <ion-segment-button value="metricas">          <ion-icon name="bar-chart-outline" aria-hidden="true"></ion-icon>          <ion-label>Métricas & Sesiones</ion-label>        </ion-segment-button>        <ion-segment-button value="profesores">          <ion-icon name="school-outline" aria-hidden="true"></ion-icon>          <ion-label>Listado de Profesores ({{ rawTeachers.length }})</ion-label>        </ion-segment-button>        <ion-segment-button value="alumnos">          <ion-icon name="people-outline" aria-hidden="true"></ion-icon>          <ion-label>Listado de Alumnos ({{ rawSqlStudents.length }})</ion-label>        </ion-segment-button>      </ion-segment>    </div>    <!-- ESTADO DE CARGA ASÍNCRONO (WCAG Live Region para Screen Readers) -->    @if (isLoading) {      <div         class="loading-container"         role="status"         aria-live="polite"        aria-label="Cargando datos y sincronizando catálogo SQL y MongoDB"      >        <ion-spinner name="crescent" color="primary"></ion-spinner>        <p class="loading-text">Sincronizando 10 alumnos, 10 profesores y sesiones concurrentes...</p>      </div>    } @else {      <!-- ========================================== -->      <!-- VISTA 1: MÉTRICAS Y SESIONES               -->      <!-- ========================================== -->      @if (activeTab === \'metricas\') {        <!-- BARRA SUPERIOR DE BIENVENIDA Y FILTRADO EN TIEMPO REAL -->        <section class="control-panel-section" role="region" aria-label="Controles del panel y filtros de tiempo">          <div class="banner-content">            <div class="banner-title-box">              <h1 class="page-main-heading">Métricas de la Academia</h1>              <p class="page-sub-heading">                Tutorías especializadas de Física, Matemáticas y Química • Sincronización dual SQL y NoSQL              </p>            </div>            <!-- FILTRO DINÁMICO EN TIEMPO REAL (Segmentación por Mes) -->            <div class="filter-wrapper" role="region" aria-label="Filtro temporal de datos">              <label id="period-filter-label" class="filter-label">                <ion-icon name="filter-outline" aria-hidden="true"></ion-icon>                Filtrar Periodo:              </label>              <ion-segment                 [value]="selectedPeriod"                 (ionChange)="onFilterChange($event.detail.value)"                class="time-segment"                aria-labelledby="period-filter-label"              >                <ion-segment-button value="todos" aria-label="Mostrar todos los meses">                  <ion-label>Todos</ion-label>                </ion-segment-button>                <ion-segment-button value="septiembre" aria-label="Filtrar mes de septiembre">                  <ion-label>Sep</ion-label>                </ion-segment-button>                <ion-segment-button value="octubre" aria-label="Filtrar mes de octubre">                  <ion-label>Oct</ion-label>                </ion-segment-button>                <ion-segment-button value="noviembre" aria-label="Filtrar mes de noviembre">                  <ion-label>Nov</ion-label>                </ion-segment-button>                <ion-segment-button value="diciembre" aria-label="Filtrar mes de diciembre">                  <ion-label>Dic</ion-label>                </ion-segment-button>              </ion-segment>            </div>          </div>        </section>        <!-- KPI STAT CARDS (Métricas) -->        <section class="stats-section" role="region" aria-label="Indicadores clave de rendimiento">          <ion-grid class="ion-no-padding">            <ion-row class="stats-row">              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Ingresos del Periodo"                  [value]="kpis.ingresosTotales"                  icon="cash-outline"                  [growthPercentage]="kpis.ingresosCrecimiento"                  period="vs. periodo previo"                  iconVariant="primary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Alumnos con Sesiones"                  [value]="kpis.estudiantesActivos"                  icon="people-outline"                  [growthPercentage]="kpis.estudiantesCrecimiento"                  period="estudiantes únicos"                  iconVariant="secondary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Horas Académicas"                  [value]="kpis.horasImpartidas"                  icon="time-outline"                  [growthPercentage]="kpis.horasCrecimiento"                  period="en el aula virtual"                  iconVariant="tertiary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Tasa de Asistencia"                  [value]="kpis.tasaAsistencia"                  icon="school-outline"                  [growthPercentage]="kpis.asistenciaCrecimiento"                  period="efectividad sesiones"                  iconVariant="warning"                ></app-stat-card>              </ion-col>            </ion-row>          </ion-grid>        </section>        <!-- GRÁFICOS CHART.JS -->        <section class="charts-section" role="region" aria-label="Visualización gráfica de datos analíticos">          <ion-grid class="ion-no-padding">            <ion-row class="charts-row">              <ion-col size="12" size-lg="6" class="chart-col">                <ion-card class="chart-card">                  <ion-card-header class="chart-card-header">                    <div class="chart-header-left">                      <ion-card-title class="chart-title">                        <ion-icon name="bar-chart-outline" aria-hidden="true" class="chart-icon"></ion-icon>                        Ingresos por Asignatura                      </ion-card-title>                      <ion-card-subtitle class="chart-subtitle">                        Facturación en euros agrupada por materia en {{ selectedPeriod }}                      </ion-card-subtitle>                    </div>                    <ion-badge color="primary" class="chart-badge">Física, Mates & Química</ion-badge>                  </ion-card-header>                  <ion-card-content class="chart-card-content">                    <div class="canvas-wrapper">                      <canvas #revenueChartCanvas role="img">                        Gráfico de ingresos no disponible.                      </canvas>                    </div>                  </ion-card-content>                </ion-card>              </ion-col>              <ion-col size="12" size-lg="6" class="chart-col">                <ion-card class="chart-card">                  <ion-card-header class="chart-card-header">                    <div class="chart-header-left">                      <ion-card-title class="chart-title">                        <ion-icon name="pie-chart-outline" aria-hidden="true" class="chart-icon"></ion-icon>                        Distribución de Tutorías por Rama                      </ion-card-title>                      <ion-card-subtitle class="chart-subtitle">                        Volumen comparativo de clases impartidas                      </ion-card-subtitle>                    </div>                    <ion-badge color="tertiary" class="chart-badge">Histórico</ion-badge>                  </ion-card-header>                  <ion-card-content class="chart-card-content">                    <div class="canvas-wrapper">                      <canvas #classesChartCanvas role="img">                        Gráfico de ramas no disponible.                      </canvas>                    </div>                  </ion-card-content>                </ion-card>              </ion-col>            </ion-row>          </ion-grid>        </section>        <!-- TABLA DE SESIONES -->        <section class="table-section" role="region" aria-label="Tabla de sesiones de tutoría sincronizadas">          <app-data-table            [title]="\'Registro de Tutorías • Periodo: \' + (selectedPeriod | uppercase)"            subtitle="Datos en tiempo real de MongoDB combinados con el catálogo de tarifas SQL"            [columns]="tableColumns"            [rows]="filteredSessions"            [showActions]="true"            (onEdit)="handleEdit($event)"            (onDelete)="handleDelete($event)"            (onView)="handleView($event)"          ></app-data-table>        </section>      }      <!-- ========================================== -->      <!-- VISTA 2: LISTADO DE PROFESORES (10)         -->      <!-- ========================================== -->      @if (activeTab === \'profesores\') {        <section class="teachers-overview-section" role="region" aria-label="Censo de profesores">          <!-- KPIs RÁPIDOS PROFESORES -->          <ion-grid class="ion-no-padding">            <ion-row class="stats-row">              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Docentes en Plantilla"                  [value]="teacherKpis.totalProfesores"                  icon="school-outline"                  [growthPercentage]="10.0"                  period="profesores oficiales"                  iconVariant="primary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Total Honorarios Generados"                  [value]="teacherKpis.totalGanado"                  icon="cash-outline"                  [growthPercentage]="14.8"                  period="acumulado total"                  iconVariant="secondary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Horas Impartidas Globales"                  [value]="teacherKpis.totalHoras"                  icon="time-outline"                  [growthPercentage]="12.0"                  period="tutorías completadas"                  iconVariant="tertiary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Valoración Promedio"                  [value]="teacherKpis.valoracionMedia"                  icon="school-outline"                  [growthPercentage]="3.2"                  period="satisfacción alumnos"                  iconVariant="warning"                ></app-stat-card>              </ion-col>            </ion-row>          </ion-grid>          <!-- TABLA COMPLETA DE LOS 10 PROFESORES -->          <div class="teachers-table-box">            <app-data-table              title="Listado Oficial de Profesores y Docentes iTUTOR (10)"              subtitle="Catálogo de profesores homologados con especialidades, asignaciones lectivas y honorarios"              [columns]="teacherTableColumns"              [rows]="rawTeachers"              [showActions]="true"              (onView)="handleView($event)"              (onDelete)="handleDelete($event)"            ></app-data-table>          </div>        </section>      }      <!-- ========================================== -->      <!-- VISTA 3: LISTADO DE ALUMNOS (10)            -->      <!-- ========================================== -->      @if (activeTab === \'alumnos\') {        <section class="students-overview-section" role="region" aria-label="Censo de alumnos">          <!-- KPIs RÁPIDOS ALUMNOS -->          <ion-grid class="ion-no-padding">            <ion-row class="stats-row">              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Alumnos Matriculados"                  [value]="studentKpis.totalAlumnos"                  icon="people-outline"                  [growthPercentage]="15.0"                  period="estudiantes activos"                  iconVariant="primary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Saldo Pendiente Global"                  [value]="studentKpis.saldoPendienteTotal"                  icon="wallet-outline"                  [growthPercentage]="-5.4"                  period="cobros pendientes"                  iconVariant="warning"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Horas Totales Cursadas"                  [value]="studentKpis.horasTotalesAlumnos"                  icon="time-outline"                  [growthPercentage]="18.2"                  period="horas de aprendizaje"                  iconVariant="tertiary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Tarifa Media Aplicada"                  [value]="studentKpis.tarifaMedia"                  icon="cash-outline"                  [growthPercentage]="4.1"                  period="precio hora medio"                  iconVariant="secondary"                ></app-stat-card>              </ion-col>            </ion-row>          </ion-grid>          <!-- TABLA COMPLETA DE LOS 10 ALUMNOS -->          <div class="students-table-box">            <app-data-table              title="Listado Oficial de Alumnos Matriculados iTUTOR (10)"              subtitle="Expediente académico de estudiantes, matrículas, asignaturas contratadas y profesor tutor"              [columns]="studentTableColumns"              [rows]="rawSqlStudents"              [showActions]="true"              (onView)="handleView($event)"              (onDelete)="handleDelete($event)"            ></app-data-table>          </div>        </section>      }    }  </div></ion-content></div>'
+    var COMPONENTS = [{'name': 'AdminDashboardPage', 'selector': 'app-admin-dashboard'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'DataTableComponent', 'selector': 'app-data-table'},{'name': 'HomePage', 'selector': 'app-home'},{'name': 'LoginPage', 'selector': 'app-login'},{'name': 'MisClasesPage', 'selector': 'app-mis-clases'},{'name': 'ProfesorDashboardPage', 'selector': 'app-profesor-dashboard'},{'name': 'StatCardComponent', 'selector': 'app-stat-card'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'AdminDashboardPage'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'AdminDashboardPage.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var updateDarkModeSwitchOffset = function () {
+                    var content = document.querySelector('.content');
+                    var scrollbarWidth = 0;
+
+                    if (content) {
+                         scrollbarWidth = Math.max(0, content.offsetWidth - content.clientWidth);
+                    }
+
+                    document.documentElement.style.setProperty(
+                         '--content-scrollbar-width',
+                         scrollbarWidth + 'px'
+                    );
+               };
+
+               updateDarkModeSwitchOffset();
+               requestAnimationFrame(updateDarkModeSwitchOffset);
+               window.addEventListener('resize', updateDarkModeSwitchOffset);
+
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

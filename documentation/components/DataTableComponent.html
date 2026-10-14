@@ -1,0 +1,1898 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>iTUTOR - Documentación Técnica</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">iTUTOR - Documentación Técnica</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search">
+    <input type="text" placeholder="Escribe para buscar">
+    <button type="button"
+        class="search-input-clear"
+        aria-label="Clear search"
+        data-search-input-clear>&times;</button>
+</div>
+            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Componentes</li>
+  <li class="breadcrumb-item"
+  >
+  DataTableComponent</li>
+</ol>
+
+<div class="io-file io-file-path" data-compodoc="entity-file-path">
+    <span class="icon ion-ios-document" aria-hidden="true"></span>
+    <code>src/app/shared/components/data-table/data-table.component.ts</code>
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#api" class="nav-link"
+                role="tab" id="api-tab" data-bs-toggle="tab" data-link="api">API</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Meta datos</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+            <tr>
+                <td class="col-md-3">changeDetection</td>
+                <td class="col-md-9"><code>ChangeDetectionStrategy.OnPush</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-data-table</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                        <div>        <code><a href="https://angular.dev/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+</div>
+                        <div>        <code><a href="https://angular.dev/api/forms/FormsModule" target="_blank" >FormsModule</a></code>
+</div>
+                        <div>    <code>IonCard</code>
+</div>
+                        <div>    <code>IonBadge</code>
+</div>
+                        <div>    <code>IonButton</code>
+</div>
+                        <div>    <code>IonIcon</code>
+</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./data-table.component.scss</code></td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./data-table.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+        <section data-compodoc="block-relationships">
+            <h3>Relationships</h3>
+
+            <div class="row pt-3">
+                <div class="col-sm-6">
+                    <h4>Used by</h4>
+                        <ul class="list-unstyled relationships-list">
+                                <li>
+                                            <code><a href="../components/AdminDashboardPage.html" target="_self" >AdminDashboardPage</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="../components/ProfesorDashboardPage.html" target="_self" >ProfesorDashboardPage</a></code>
+                                </li>
+                        </ul>
+                </div>
+
+                <div class="col-sm-6">
+                    <h4>Depends on</h4>
+                        <ul class="list-unstyled relationships-list">
+                                <li>
+                                            <code><a href="https://angular.dev/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="https://angular.dev/api/forms/FormsModule" target="_blank" >FormsModule</a></code>
+                                </li>
+                                <li>
+                                        <code>IonCard</code>
+                                </li>
+                                <li>
+                                        <code>IonBadge</code>
+                                </li>
+                                <li>
+                                        <code>IonButton</code>
+                                </li>
+                                <li>
+                                        <code>IonIcon</code>
+                                </li>
+                        </ul>
+                </div>
+            </div>
+        </section>
+</div>
+
+    <div class="tab-pane fade " id="api">    <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Propiedades</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#_rows" >_rows</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#searchTerm" >searchTerm</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#getBadgeColor" >getBadgeColor</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#handleDelete" >handleDelete</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#handleEdit" >handleEdit</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#handleView" >handleView</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#trackByIndex" >trackByIndex</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Entradas</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">I</span><a href="#columns" >columns</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">I</span><a href="#emptyMessage" >emptyMessage</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">I</span><a href="#rows" >rows</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">I</span><a href="#showActions" >showActions</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">I</span><a href="#subtitle" >subtitle</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">I</span><a href="#title" >title</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Salidas</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">O</span><a href="#onDelete" >onDelete</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">O</span><a href="#onEdit" >onEdit</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">O</span><a href="#onView" >onView</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Accesorios</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--accessor" aria-hidden="true">A</span>
+                                <a href="#rows" >rows</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--accessor" aria-hidden="true">A</span>
+                                <a href="#displayedRows" >displayedRows</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor()</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="93" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:93</a></div>
+                            </td>
+                        </tr>
+
+            </tbody>
+        </table>
+</section>
+
+    <section data-compodoc="block-inputs">
+    <h3 id="inputs">Entradas</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="columns"></a>
+                        <b>columns</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/TableColumn.html" target="_self" >TableColumn[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Requerido : </i>&nbsp;<b>true</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Definido en <a href="" data-line="48" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:48</a></div>
+                            </td>
+                        </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>Definición de las columnas</p>
+</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="emptyMessage"></a>
+                        <b>emptyMessage</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;No hay datos registrados en este momento.&#x27;</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Definido en <a href="" data-line="82" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:82</a></div>
+                            </td>
+                        </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>Mensaje cuando no hay registros</p>
+</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="rows"></a>
+                        <b>rows</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>any[]</code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Definido en <a href="" data-line="51" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:51</a></div>
+                            </td>
+                        </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>Filas de datos a mostrar</p>
+</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="showActions"></a>
+                        <b>showActions</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>true</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Definido en <a href="" data-line="85" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:85</a></div>
+                            </td>
+                        </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>Habilitar columna de acciones</p>
+</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="subtitle"></a>
+                        <b>subtitle</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Definido en <a href="" data-line="79" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:79</a></div>
+                            </td>
+                        </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>Subtítulo descriptivo</p>
+</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="title"></a>
+                        <b>title</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Definido en <a href="" data-line="76" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:76</a></div>
+                            </td>
+                        </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>Título de la tabla</p>
+</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section data-compodoc="block-outputs">
+    <h3 id="outputs">Salidas</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="onDelete"></a>
+                        <b>onDelete</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://angular.dev/api/core/EventEmitter" target="_blank" >EventEmitter</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Definido en <a href="" data-line="91" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:91</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="onEdit"></a>
+                        <b>onEdit</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://angular.dev/api/core/EventEmitter" target="_blank" >EventEmitter</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Definido en <a href="" data-line="89" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:89</a></div>
+                            </td>
+                        </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>Eventos emitidos hacia el componente padre</p>
+</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="onView"></a>
+                        <b>onView</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://angular.dev/api/core/EventEmitter" target="_blank" >EventEmitter</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Definido en <a href="" data-line="93" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:93</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getBadgeColor"></a>
+                    <span class="name">
+                        <span ><b>getBadgeColor</b></span>
+                        <a href="#getBadgeColor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getBadgeColor(column: <a href="../interfaces/TableColumn.html" target="_self">TableColumn</a>, value: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="117"
+                                    class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:117</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>column</td>
+                                            <td>
+                                                            <code><a href="../interfaces/TableColumn.html" target="_self" >TableColumn</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>value</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleDelete"></a>
+                    <span class="name">
+                        <span ><b>handleDelete</b></span>
+                        <a href="#handleDelete"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>handleDelete(row: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="109"
+                                    class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:109</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>row</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleEdit"></a>
+                    <span class="name">
+                        <span ><b>handleEdit</b></span>
+                        <a href="#handleEdit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>handleEdit(row: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="105"
+                                    class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:105</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>row</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="handleView"></a>
+                    <span class="name">
+                        <span ><b>handleView</b></span>
+                        <a href="#handleView"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>handleView(row: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="113"
+                                    class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:113</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>row</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="trackByIndex"></a>
+                    <span class="name">
+                        <span ><b>trackByIndex</b></span>
+                        <a href="#trackByIndex"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>trackByIndex(index: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="124"
+                                    class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:124</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>index</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Propiedades
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_rows"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>_rows</b></span>
+                        <a href="#_rows"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>any[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="57" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:57</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="searchTerm"></a>
+                    <span class="name">
+                        <span ><b>searchTerm</b></span>
+                        <a href="#searchTerm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="60" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:60</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Término de búsqueda reactivo del buscador integrado (Paso 2.1)</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accesorios
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="rows"></a>
+                        <span class="name"><b>rows</b><a href="#rows"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>rows()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="54" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:54</a></div>
+                                </td>
+                            </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>set</b><code>rows(value: any[])</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="51" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:51</a></div>
+                                </td>
+                            </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description"><p>Filas de datos a mostrar</p>
+</div>
+
+                                <div class="io-description">
+                                        <b>Parámetros :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Nombre</td>
+                                                        <td>Tipo</td>
+                                                    <td>Opcional</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                            <td>value</td>
+                                                    
+                                                            <td>
+                                                                        <code>any[]</code>
+                                                            </td>
+                                                    
+                                                        <td>
+                                                                No
+                                                        </td>
+                                                        
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div class="io-description">
+                                    <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                                </div>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="displayedRows"></a>
+                        <span class="name"><b>displayedRows</b><a href="#displayedRows"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>displayedRows()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="63" class="link-to-prism">src/app/shared/components/data-table/data-table.component.ts:63</a></div>
+                                </td>
+                            </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description"><p>Filas filtradas según el buscador de la tabla</p>
+</div>
+
+                                <div class="io-description">
+                                    <b>Devuelve : </b>    <code>any[]</code>
+
+                                </div>
+                        </td>
+                    </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { 
+  Component, 
+  ChangeDetectionStrategy, 
+  Input, 
+  Output, 
+  EventEmitter 
+} from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+import { 
+  IonCard, 
+  IonBadge, 
+  IonButton, 
+  IonIcon 
+} from &#x27;@ionic/angular&#x27;;
+import { addIcons } from &#x27;ionicons&#x27;;
+import { 
+  createOutline, 
+  trashOutline, 
+  eyeOutline, 
+  fileTrayOutline,
+  searchOutline
+} from &#x27;ionicons/icons&#x27;;
+
+export interface TableColumn {
+  /** Clave de la propiedad en el objeto de datos */
+  key: string;
+  /** Título visible de la cabecera */
+  label: string;
+  /** Tipo de celda para formateo visual */
+  type?: &#x27;text&#x27; | &#x27;badge&#x27; | &#x27;currency&#x27; | &#x27;date&#x27;;
+  /** Alineación del contenido */
+  align?: &#x27;left&#x27; | &#x27;center&#x27; | &#x27;right&#x27;;
+  /** Mapeo de valores a clases o variantes de color para badges */
+  badgeColorMap?: Record&lt;string, string&gt;;
+}
+
+@Component({
+  selector: &#x27;app-data-table&#x27;,
+  standalone: true,
+  imports: [CommonModule, FormsModule, IonCard, IonBadge, IonButton, IonIcon],
+  templateUrl: &#x27;./data-table.component.html&#x27;,
+  styleUrls: [&#x27;./data-table.component.scss&#x27;],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class DataTableComponent {
+  /** Definición de las columnas */
+  @Input({ required: true }) columns: TableColumn[] &#x3D; [];
+
+  /** Filas de datos a mostrar */
+  @Input() set rows(value: any[]) {
+    this._rows &#x3D; value || [];
+  }
+  get rows(): any[] {
+    return this._rows;
+  }
+  private _rows: any[] &#x3D; [];
+
+  /** Término de búsqueda reactivo del buscador integrado (Paso 2.1) */
+  searchTerm: string &#x3D; &#x27;&#x27;;
+
+  /** Filas filtradas según el buscador de la tabla */
+  get displayedRows(): any[] {
+    const query &#x3D; this.searchTerm.trim().toLowerCase();
+    if (!query) {
+      return this._rows;
+    }
+    return this._rows.filter(row &#x3D;&gt;
+      this.columns.some(col &#x3D;&gt;
+        String(row[col.key] ?? &#x27;&#x27;).toLowerCase().includes(query)
+      )
+    );
+  }
+
+  /** Título de la tabla */
+  @Input() title?: string;
+
+  /** Subtítulo descriptivo */
+  @Input() subtitle?: string;
+
+  /** Mensaje cuando no hay registros */
+  @Input() emptyMessage: string &#x3D; &#x27;No hay datos registrados en este momento.&#x27;;
+
+  /** Habilitar columna de acciones */
+  @Input() showActions: boolean &#x3D; true;
+
+  /** Eventos emitidos hacia el componente padre */
+  // eslint-disable-next-line @angular-eslint/no-output-on-prefix
+  @Output() onEdit &#x3D; new EventEmitter&lt;any&gt;();
+  // eslint-disable-next-line @angular-eslint/no-output-on-prefix
+  @Output() onDelete &#x3D; new EventEmitter&lt;any&gt;();
+  // eslint-disable-next-line @angular-eslint/no-output-on-prefix
+  @Output() onView &#x3D; new EventEmitter&lt;any&gt;();
+
+  constructor() {
+    addIcons({
+      createOutline,
+      trashOutline,
+      eyeOutline,
+      fileTrayOutline,
+      searchOutline
+    });
+  }
+
+  handleEdit(row: any): void {
+    this.onEdit.emit(row);
+  }
+
+  handleDelete(row: any): void {
+    this.onDelete.emit(row);
+  }
+
+  handleView(row: any): void {
+    this.onView.emit(row);
+  }
+
+  getBadgeColor(column: TableColumn, value: any): string {
+    if (column.badgeColorMap &amp;&amp; column.badgeColorMap[value]) {
+      return column.badgeColorMap[value];
+    }
+    return &#x27;medium&#x27;;
+  }
+
+  trackByIndex(index: number): number {
+    return index;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;ion-card class&#x3D;&quot;table-card&quot; role&#x3D;&quot;region&quot; [attr.aria-label]&#x3D;&quot;title || &#x27;Tabla de datos&#x27;&quot;&gt;
+  &lt;!-- Cabecera opcional de la tabla --&gt;
+  @if (title || subtitle) {
+    &lt;div class&#x3D;&quot;table-header&quot;&gt;
+      &lt;div class&#x3D;&quot;header-titles&quot;&gt;
+        @if (title) {
+          &lt;h2 class&#x3D;&quot;table-title&quot;&gt;{{ title }}&lt;/h2&gt;
+        }
+        @if (subtitle) {
+          &lt;p class&#x3D;&quot;table-subtitle&quot;&gt;{{ subtitle }}&lt;/p&gt;
+        }
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;table-meta&quot;&gt;
+        &lt;div class&#x3D;&quot;search-box&quot;&gt;
+          &lt;ion-icon name&#x3D;&quot;search-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
+          &lt;input
+            type&#x3D;&quot;search&quot;
+            [(ngModel)]&#x3D;&quot;searchTerm&quot;
+            placeholder&#x3D;&quot;Buscar en la tabla...&quot;
+            aria-label&#x3D;&quot;Buscar registros en la tabla&quot;
+          /&gt;
+        &lt;/div&gt;
+        &lt;span class&#x3D;&quot;count-pill&quot;&gt;
+          {{ displayedRows.length }} {{ displayedRows.length &#x3D;&#x3D;&#x3D; 1 ? &#x27;registro&#x27; : &#x27;registros&#x27; }}
+        &lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  }
+
+  &lt;!-- Contenedor con scroll horizontal responsivo --&gt;
+  &lt;div class&#x3D;&quot;table-container&quot;&gt;
+    &lt;table 
+      class&#x3D;&quot;saas-table&quot; 
+      role&#x3D;&quot;table&quot; 
+      [attr.aria-label]&#x3D;&quot;title || &#x27;Tabla de datos&#x27;&quot;
+    &gt;
+      &lt;thead&gt;
+        &lt;tr role&#x3D;&quot;row&quot;&gt;
+          @for (col of columns; track col.key) {
+            &lt;th 
+              scope&#x3D;&quot;col&quot; 
+              role&#x3D;&quot;columnheader&quot;
+              [class]&#x3D;&quot;&#x27;text-&#x27; + (col.align || &#x27;left&#x27;)&quot;
+            &gt;
+              {{ col.label }}
+            &lt;/th&gt;
+          }
+          @if (showActions) {
+            &lt;th scope&#x3D;&quot;col&quot; role&#x3D;&quot;columnheader&quot; class&#x3D;&quot;text-right actions-column&quot;&gt;
+              Acciones
+            &lt;/th&gt;
+          }
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+
+      &lt;tbody&gt;
+        @if (displayedRows.length &#x3D;&#x3D;&#x3D; 0) {
+          &lt;tr class&#x3D;&quot;empty-row&quot; role&#x3D;&quot;row&quot;&gt;
+            &lt;td 
+              [attr.colspan]&#x3D;&quot;columns.length + (showActions ? 1 : 0)&quot; 
+              class&#x3D;&quot;empty-cell&quot;
+              role&#x3D;&quot;cell&quot;
+            &gt;
+              &lt;div class&#x3D;&quot;empty-state&quot;&gt;
+                &lt;div class&#x3D;&quot;empty-icon-circle&quot; aria-hidden&#x3D;&quot;true&quot;&gt;
+                  &lt;ion-icon name&#x3D;&quot;file-tray-outline&quot;&gt;&lt;/ion-icon&gt;
+                &lt;/div&gt;
+                &lt;h3 class&#x3D;&quot;empty-title&quot;&gt;Sin resultados&lt;/h3&gt;
+                &lt;p class&#x3D;&quot;empty-description&quot;&gt;{{ emptyMessage }}&lt;/p&gt;
+              &lt;/div&gt;
+            &lt;/td&gt;
+          &lt;/tr&gt;
+        } @else {
+          @for (row of displayedRows; track trackByIndex($index)) {
+            &lt;tr role&#x3D;&quot;row&quot; class&#x3D;&quot;data-row&quot;&gt;
+              @for (col of columns; track col.key) {
+                &lt;td 
+                  role&#x3D;&quot;cell&quot; 
+                  [class]&#x3D;&quot;&#x27;text-&#x27; + (col.align || &#x27;left&#x27;)&quot;
+                  [attr.data-label]&#x3D;&quot;col.label&quot;
+                &gt;
+                  &lt;!-- Formato de Badge --&gt;
+                  @if (col.type &#x3D;&#x3D;&#x3D; &#x27;badge&#x27;) {
+                    &lt;ion-badge 
+                      [color]&#x3D;&quot;getBadgeColor(col, row[col.key])&quot; 
+                      class&#x3D;&quot;custom-badge&quot;
+                    &gt;
+                      {{ row[col.key] }}
+                    &lt;/ion-badge&gt;
+                  } 
+                  &lt;!-- Formato de Moneda --&gt;
+                  @else if (col.type &#x3D;&#x3D;&#x3D; &#x27;currency&#x27;) {
+                    &lt;span class&#x3D;&quot;currency-value font-mono&quot;&gt;
+                      {{ row[col.key] | currency:&#x27;EUR&#x27;:&#x27;symbol&#x27;:&#x27;1.2-2&#x27; }}
+                    &lt;/span&gt;
+                  } 
+                  &lt;!-- Formato de Fecha --&gt;
+                  @else if (col.type &#x3D;&#x3D;&#x3D; &#x27;date&#x27;) {
+                    &lt;span class&#x3D;&quot;date-value&quot;&gt;
+                      {{ row[col.key] | date:&#x27;dd/MM/yyyy HH:mm&#x27; }}
+                    &lt;/span&gt;
+                  } 
+                  &lt;!-- Formato Texto / Default --&gt;
+                  @else {
+                    &lt;span class&#x3D;&quot;cell-text&quot;&gt;{{ row[col.key] }}&lt;/span&gt;
+                  }
+                &lt;/td&gt;
+              }
+
+              &lt;!-- Columna de Acciones --&gt;
+              @if (showActions) {
+                &lt;td role&#x3D;&quot;cell&quot; class&#x3D;&quot;text-right actions-cell&quot;&gt;
+                  &lt;div class&#x3D;&quot;actions-group&quot;&gt;
+                    &lt;ion-button 
+                      fill&#x3D;&quot;clear&quot; 
+                      size&#x3D;&quot;small&quot; 
+                      color&#x3D;&quot;medium&quot; 
+                      class&#x3D;&quot;action-btn&quot;
+                      (click)&#x3D;&quot;handleView(row)&quot;
+                      [attr.aria-label]&#x3D;&quot;&#x27;Ver detalles de &#x27; + (row.name || row.title || row.id || &#x27;elemento&#x27;)&quot;
+                    &gt;
+                      &lt;ion-icon slot&#x3D;&quot;icon-only&quot; name&#x3D;&quot;eye-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
+                    &lt;/ion-button&gt;
+
+                    &lt;ion-button 
+                      fill&#x3D;&quot;clear&quot; 
+                      size&#x3D;&quot;small&quot; 
+                      color&#x3D;&quot;primary&quot; 
+                      class&#x3D;&quot;action-btn&quot;
+                      (click)&#x3D;&quot;handleEdit(row)&quot;
+                      [attr.aria-label]&#x3D;&quot;&#x27;Editar &#x27; + (row.name || row.title || row.id || &#x27;elemento&#x27;)&quot;
+                    &gt;
+                      &lt;ion-icon slot&#x3D;&quot;icon-only&quot; name&#x3D;&quot;create-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
+                    &lt;/ion-button&gt;
+
+                    &lt;ion-button 
+                      fill&#x3D;&quot;clear&quot; 
+                      size&#x3D;&quot;small&quot; 
+                      color&#x3D;&quot;danger&quot; 
+                      class&#x3D;&quot;action-btn&quot;
+                      (click)&#x3D;&quot;handleDelete(row)&quot;
+                      [attr.aria-label]&#x3D;&quot;&#x27;Eliminar &#x27; + (row.name || row.title || row.id || &#x27;elemento&#x27;)&quot;
+                    &gt;
+                      &lt;ion-icon slot&#x3D;&quot;icon-only&quot; name&#x3D;&quot;trash-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
+                    &lt;/ion-button&gt;
+                  &lt;/div&gt;
+                &lt;/td&gt;
+              }
+            &lt;/tr&gt;
+          }
+        }
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/div&gt;
+&lt;/ion-card&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./data-table.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.table-card {
+  margin: 0;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+}
+
+.table-header {
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+  background: #ffffff;
+
+  .header-titles {
+    .table-title {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.01em;
+    }
+
+    .table-subtitle {
+      margin: 4px 0 0 0;
+      font-size: 0.8125rem;
+      color: #64748b;
+    }
+  }
+
+  .table-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 6px 12px;
+
+    ion-icon {
+      color: #64748b;
+      font-size: 1rem;
+    }
+
+    input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 0.8125rem;
+      color: #0f172a;
+      min-width: 170px;
+    }
+  }
+
+  .count-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 20px;
+  }
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  /* Estilización sutil del scrollbar */
+  &amp;::-webkit-scrollbar {
+    height: 6px;
+  }
+  &amp;::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+  }
+}
+
+.saas-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 650px; /* Asegura legibilidad en pantallas reducidas */
+
+  thead {
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+
+    th {
+      padding: 12px 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      white-space: nowrap;
+    }
+  }
+
+  tbody {
+    .data-row {
+      border-bottom: 1px solid #f1f5f9;
+      transition: background-color 0.15s ease;
+
+      &amp;:last-child {
+        border-bottom: none;
+      }
+
+      &amp;:hover {
+        background-color: #f8fafc;
+      }
+
+      td {
+        padding: 14px 20px;
+        font-size: 0.875rem;
+        color: #1e293b;
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+/* Alineaciones */
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+
+/* Tipos de datos */
+.custom-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: capitalize;
+}
+
+.currency-value {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.date-value {
+  color: #475569;
+  font-size: 0.8125rem;
+}
+
+.cell-text {
+  font-weight: 500;
+}
+
+/* Acciones */
+.actions-column {
+  padding-right: 24px !important;
+}
+
+.actions-cell {
+  padding-right: 16px !important;
+
+  .actions-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    .action-btn {
+      --padding-start: 6px;
+      --padding-end: 6px;
+      height: 32px;
+      margin: 0;
+
+      ion-icon {
+        font-size: 1.125rem;
+      }
+    }
+  }
+}
+
+/* Empty State */
+.empty-cell {
+  padding: 48px 20px !important;
+  text-align: center;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .empty-icon-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: 12px;
+  }
+
+  .empty-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #334155;
+  }
+
+  .empty-description {
+    margin: 6px 0 0 0;
+    font-size: 0.8125rem;
+    color: #94a3b8;
+    max-width: 320px;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Leyenda</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Elemento Html</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Componente</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Elemento Html con directiva</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><ion-card class="table-card" role="region" [attr.aria-label]="title || \'Tabla de datos\'">  <!-- Cabecera opcional de la tabla -->  @if (title || subtitle) {    <div class="table-header">      <div class="header-titles">        @if (title) {          <h2 class="table-title">{{ title }}</h2>        }        @if (subtitle) {          <p class="table-subtitle">{{ subtitle }}</p>        }      </div>      <div class="table-meta">        <div class="search-box">          <ion-icon name="search-outline" aria-hidden="true"></ion-icon>          <input            type="search"            [(ngModel)]="searchTerm"            placeholder="Buscar en la tabla..."            aria-label="Buscar registros en la tabla"          />        </div>        <span class="count-pill">          {{ displayedRows.length }} {{ displayedRows.length === 1 ? \'registro\' : \'registros\' }}        </span>      </div>    </div>  }  <!-- Contenedor con scroll horizontal responsivo -->  <div class="table-container">    <table       class="saas-table"       role="table"       [attr.aria-label]="title || \'Tabla de datos\'"    >      <thead>        <tr role="row">          @for (col of columns; track col.key) {            <th               scope="col"               role="columnheader"              [class]="\'text-\' + (col.align || \'left\')"            >              {{ col.label }}            </th>          }          @if (showActions) {            <th scope="col" role="columnheader" class="text-right actions-column">              Acciones            </th>          }        </tr>      </thead>      <tbody>        @if (displayedRows.length === 0) {          <tr class="empty-row" role="row">            <td               [attr.colspan]="columns.length + (showActions ? 1 : 0)"               class="empty-cell"              role="cell"            >              <div class="empty-state">                <div class="empty-icon-circle" aria-hidden="true">                  <ion-icon name="file-tray-outline"></ion-icon>                </div>                <h3 class="empty-title">Sin resultados</h3>                <p class="empty-description">{{ emptyMessage }}</p>              </div>            </td>          </tr>        } @else {          @for (row of displayedRows; track trackByIndex($index)) {            <tr role="row" class="data-row">              @for (col of columns; track col.key) {                <td                   role="cell"                   [class]="\'text-\' + (col.align || \'left\')"                  [attr.data-label]="col.label"                >                  <!-- Formato de Badge -->                  @if (col.type === \'badge\') {                    <ion-badge                       [color]="getBadgeColor(col, row[col.key])"                       class="custom-badge"                    >                      {{ row[col.key] }}                    </ion-badge>                  }                   <!-- Formato de Moneda -->                  @else if (col.type === \'currency\') {                    <span class="currency-value font-mono">                      {{ row[col.key] | currency:\'EUR\':\'symbol\':\'1.2-2\' }}                    </span>                  }                   <!-- Formato de Fecha -->                  @else if (col.type === \'date\') {                    <span class="date-value">                      {{ row[col.key] | date:\'dd/MM/yyyy HH:mm\' }}                    </span>                  }                   <!-- Formato Texto / Default -->                  @else {                    <span class="cell-text">{{ row[col.key] }}</span>                  }                </td>              }              <!-- Columna de Acciones -->              @if (showActions) {                <td role="cell" class="text-right actions-cell">                  <div class="actions-group">                    <ion-button                       fill="clear"                       size="small"                       color="medium"                       class="action-btn"                      (click)="handleView(row)"                      [attr.aria-label]="\'Ver detalles de \' + (row.name || row.title || row.id || \'elemento\')"                    >                      <ion-icon slot="icon-only" name="eye-outline" aria-hidden="true"></ion-icon>                    </ion-button>                    <ion-button                       fill="clear"                       size="small"                       color="primary"                       class="action-btn"                      (click)="handleEdit(row)"                      [attr.aria-label]="\'Editar \' + (row.name || row.title || row.id || \'elemento\')"                    >                      <ion-icon slot="icon-only" name="create-outline" aria-hidden="true"></ion-icon>                    </ion-button>                    <ion-button                       fill="clear"                       size="small"                       color="danger"                       class="action-btn"                      (click)="handleDelete(row)"                      [attr.aria-label]="\'Eliminar \' + (row.name || row.title || row.id || \'elemento\')"                    >                      <ion-icon slot="icon-only" name="trash-outline" aria-hidden="true"></ion-icon>                    </ion-button>                  </div>                </td>              }            </tr>          }        }      </tbody>    </table>  </div></ion-card></div>'
+    var COMPONENTS = [{'name': 'AdminDashboardPage', 'selector': 'app-admin-dashboard'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'DataTableComponent', 'selector': 'app-data-table'},{'name': 'HomePage', 'selector': 'app-home'},{'name': 'LoginPage', 'selector': 'app-login'},{'name': 'MisClasesPage', 'selector': 'app-mis-clases'},{'name': 'ProfesorDashboardPage', 'selector': 'app-profesor-dashboard'},{'name': 'StatCardComponent', 'selector': 'app-stat-card'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'DataTableComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'DataTableComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var updateDarkModeSwitchOffset = function () {
+                    var content = document.querySelector('.content');
+                    var scrollbarWidth = 0;
+
+                    if (content) {
+                         scrollbarWidth = Math.max(0, content.offsetWidth - content.clientWidth);
+                    }
+
+                    document.documentElement.style.setProperty(
+                         '--content-scrollbar-width',
+                         scrollbarWidth + 'px'
+                    );
+               };
+
+               updateDarkModeSwitchOffset();
+               requestAnimationFrame(updateDarkModeSwitchOffset);
+               window.addEventListener('resize', updateDarkModeSwitchOffset);
+
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

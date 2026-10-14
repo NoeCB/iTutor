@@ -6,6 +6,7 @@ import {
   EventEmitter 
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { 
   IonCard, 
   IonBadge, 
@@ -17,7 +18,8 @@ import {
   createOutline, 
   trashOutline, 
   eyeOutline, 
-  fileTrayOutline 
+  fileTrayOutline,
+  searchOutline
 } from 'ionicons/icons';
 
 export interface TableColumn {
@@ -36,7 +38,7 @@ export interface TableColumn {
 @Component({
   selector: 'app-data-table',
   standalone: true,
-  imports: [CommonModule, IonCard, IonBadge, IonButton, IonIcon],
+  imports: [CommonModule, FormsModule, IonCard, IonBadge, IonButton, IonIcon],
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -53,6 +55,22 @@ export class DataTableComponent {
     return this._rows;
   }
   private _rows: any[] = [];
+
+  /** Término de búsqueda reactivo del buscador integrado (Paso 2.1) */
+  searchTerm: string = '';
+
+  /** Filas filtradas según el buscador de la tabla */
+  get displayedRows(): any[] {
+    const query = this.searchTerm.trim().toLowerCase();
+    if (!query) {
+      return this._rows;
+    }
+    return this._rows.filter(row =>
+      this.columns.some(col =>
+        String(row[col.key] ?? '').toLowerCase().includes(query)
+      )
+    );
+  }
 
   /** Título de la tabla */
   @Input() title?: string;
@@ -79,7 +97,8 @@ export class DataTableComponent {
       createOutline,
       trashOutline,
       eyeOutline,
-      fileTrayOutline
+      fileTrayOutline,
+      searchOutline
     });
   }
 

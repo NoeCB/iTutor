@@ -1,0 +1,248 @@
+<!-- ENCABEZADO DEL PORTAL DOCENTE -->
+<ion-header class="ion-no-border teacher-header" role="banner">
+  <ion-toolbar class="teacher-toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button 
+        autoHide="false" 
+        aria-label="Abrir menú principal de navegación"
+        class="menu-btn"
+      ></ion-menu-button>
+    </ion-buttons>
+
+    <div class="header-content">
+      <ion-title class="teacher-title">
+        Portal Docente
+      </ion-title>
+      <span class="header-badge-tag">
+        Gestión de Alumnos & Honorarios
+      </span>
+    </div>
+
+    <!-- SELECTOR DE PROFESOR Y DESCARGA PDF -->
+    <ion-buttons slot="end" class="header-actions">
+      <!-- Selector para conmutar fácilmente entre los 10 profesores -->
+      @if (allTeachers.length > 0) {
+        <div class="teacher-selector-box">
+          <label for="teacher-select" class="selector-label">Profesor:</label>
+          <select 
+            id="teacher-select" 
+            [ngModel]="selectedTeacherId" 
+            (ngModelChange)="onTeacherSelected($event)"
+            class="custom-select"
+          >
+            @for (t of allTeachers; track t.id) {
+              <option [value]="t.id">
+                {{ t.nombre }} ({{ t.departamento }})
+              </option>
+            }
+          </select>
+        </div>
+      }
+
+      <ion-button 
+        fill="solid" 
+        color="primary" 
+        size="small" 
+        class="export-btn"
+        (click)="exportEarningsPdf()"
+        [disabled]="isLoading || !currentTeacher"
+        aria-label="Descargar liquidación de honorarios en formato PDF"
+      >
+        <ion-icon slot="start" name="document-text-outline" aria-hidden="true"></ion-icon>
+        <span class="btn-text">Descargar Liquidación</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<!-- CONTENIDO PRINCIPAL -->
+<ion-content class="teacher-content" [fullscreen]="true" role="main">
+  <div class="teacher-container">
+
+    <!-- ESTADO DE CARGA -->
+    @if (isLoading) {
+      <div class="loading-container" role="status" aria-live="polite">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+        <p class="loading-text">Cargando expediente del profesor y calculando honorarios...</p>
+      </div>
+    } @else if (currentTeacher) {
+
+      <!-- HERO BANNER DEL PROFESOR -->
+      <section class="teacher-hero-card" role="region" aria-label="Ficha del docente">
+        <div class="hero-left">
+          <div class="teacher-avatar">
+            {{ getTeacherInitials(currentTeacher.nombre) }}
+          </div>
+          <div class="teacher-info">
+            <div class="teacher-name-row">
+              <h1 class="teacher-name">{{ currentTeacher.nombre }}</h1>
+              <span class="status-badge" [class.badge-active]="currentTeacher.estado === 'Activo'">
+                <ion-icon name="checkmark-circle"></ion-icon> {{ currentTeacher.estado }}
+              </span>
+            </div>
+            <p class="teacher-spec">{{ currentTeacher.especialidad }}</p>
+            <div class="teacher-meta-chips">
+              <span class="meta-chip">
+                <ion-icon name="school-outline"></ion-icon> Depto. {{ currentTeacher.departamento }}
+              </span>
+              <span class="meta-chip">
+                <ion-icon name="card-outline"></ion-icon> Tarifa: {{ currentTeacher.tarifaHora }} € / h
+              </span>
+              <span class="meta-chip">
+                <ion-icon name="call-outline"></ion-icon> {{ currentTeacher.telefono }}
+              </span>
+              <span class="meta-chip rating-chip">
+                <ion-icon name="star"></ion-icon> {{ currentTeacher.calificacion }} / 5.0
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="earnings-highlight-box">
+            <span class="earnings-label">TOTAL DINERO GANADO</span>
+            <span class="earnings-value">{{ totalMoneyEarned | currency:'EUR':'symbol':'1.0-0' }}</span>
+            <span class="earnings-subtext">Honorarios acumulados</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- KPI STAT CARDS (4 Métricas clave) -->
+      <section class="stats-section" role="region" aria-label="Indicadores del profesor">
+        <ion-grid class="ion-no-padding">
+          <ion-row class="stats-row">
+            <ion-col size="12" size-sm="6" size-xl="3">
+              <app-stat-card
+                title="Dinero Total Ganado"
+                [value]="totalMoneyEarned + ' €'"
+                icon="cash-outline"
+                [growthPercentage]="12.5"
+                period="honorarios totales"
+                iconVariant="primary"
+              ></app-stat-card>
+            </ion-col>
+
+            <ion-col size="12" size-sm="6" size-xl="3">
+              <app-stat-card
+                title="Alumnos que Tiene"
+                [value]="assignedStudents.length"
+                icon="people-outline"
+                [growthPercentage]="8.0"
+                period="estudiantes asignados"
+                iconVariant="secondary"
+              ></app-stat-card>
+            </ion-col>
+
+            <ion-col size="12" size-sm="6" size-xl="3">
+              <app-stat-card
+                title="Horas Impartidas"
+                [value]="totalHoursTaught + ' h'"
+                icon="time-outline"
+                [growthPercentage]="15.2"
+                period="tutorías completadas"
+                iconVariant="tertiary"
+              ></app-stat-card>
+            </ion-col>
+
+            <ion-col size="12" size-sm="6" size-xl="3">
+              <app-stat-card
+                title="Tarifa por Hora"
+                [value]="currentTeacher.tarifaHora + ' €/h'"
+                icon="school-outline"
+                [growthPercentage]="5.0"
+                period="tarifa homologada"
+                iconVariant="warning"
+              ></app-stat-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </section>
+
+      <!-- SECCIÓN 1: ALUMNOS ASIGNADOS AL PROFESOR -->
+      <section class="students-section" role="region" aria-label="Alumnos del profesor">
+        <div class="section-header">
+          <div class="section-title-box">
+            <h2 class="section-title">
+              <ion-icon name="people-outline"></ion-icon>
+              Alumnos que Tiene Asignados ({{ assignedStudents.length }})
+            </h2>
+            <p class="section-subtitle">
+              Expedientes directos de los estudiantes a cargo de {{ currentTeacher.nombre }}
+            </p>
+          </div>
+          <span class="count-pill">{{ assignedStudents.length }} Alumnos</span>
+        </div>
+
+        @if (assignedStudents.length === 0) {
+          <div class="empty-students-card">
+            <ion-icon name="people-outline"></ion-icon>
+            <p>Este profesor actualmente no tiene alumnos asignados directamente.</p>
+          </div>
+        } @else {
+          <div class="students-cards-grid">
+            <div class="student-card" *ngFor="let student of assignedStudents">
+              <div class="student-card-header">
+                <div class="student-avatar">
+                  {{ student.nombre.substring(0, 2).toUpperCase() }}
+                </div>
+                <div class="student-header-info">
+                  <h3 class="student-name">{{ student.nombre }}</h3>
+                  <span class="student-id">{{ student.matricula }}</span>
+                </div>
+                <span class="plan-tag" [class.plan-premium]="student.plan === 'Premium'" [class.plan-intensivo]="student.plan === 'Intensivo'">
+                  {{ student.plan }}
+                </span>
+              </div>
+
+              <div class="student-card-body">
+                <div class="info-row">
+                  <span class="info-label">Asignatura Principal:</span>
+                  <span class="info-value subject-value">{{ student.asignaturaPrincipal }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Email:</span>
+                  <span class="info-value">{{ student.email }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Teléfono:</span>
+                  <span class="info-value">{{ student.telefono }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Horas con este profesor:</span>
+                  <span class="info-value font-bold">{{ student.horasTotales }} horas</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Tarifa aplicada:</span>
+                  <span class="info-value">{{ student.tarifaHora }} € / h</span>
+                </div>
+              </div>
+
+              <div class="student-card-footer">
+                <div class="fee-badge">
+                  <span class="fee-label">Total Generado:</span>
+                  <span class="fee-amount">{{ (student.horasTotales * student.tarifaHora) | currency:'EUR':'symbol':'1.0-0' }}</span>
+                </div>
+                <span class="status-chip" [class.chip-paid]="student.estado === 'Al día'">
+                  <ion-icon name="checkmark-circle"></ion-icon> {{ student.estado }}
+                </span>
+              </div>
+            </div>
+          </div>
+        }
+      </section>
+
+      <!-- SECCIÓN 2: HISTÓRICO DE CLASES Y HONORARIOS (Dumb Component Integrado) -->
+      <section class="sessions-section" role="region" aria-label="Sesiones y honorarios del profesor">
+        <app-data-table
+          [title]="'Histórico de Sesiones y Honorarios • ' + currentTeacher.nombre"
+          subtitle="Desglose detallado de clases impartidas, horas lectivas y cobros correspondientes"
+          [columns]="sessionColumns"
+          [rows]="teacherSessions"
+          [showActions]="false"
+        ></app-data-table>
+      </section>
+
+    }
+
+  </div>
+</ion-content>

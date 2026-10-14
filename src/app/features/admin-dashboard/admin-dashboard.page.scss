@@ -286,3 +286,46 @@
 .table-section {
   margin-top: 8px;
 }
+
+/* TABS DEL ADMINISTRADOR (Métricas / Profesores / Alumnos) */
+.admin-tabs-wrapper {
+  margin-bottom: 24px;
+
+  .admin-main-segment {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+    ion-segment-button {
+      --color: #64748b;
+      --color-checked: #2563eb;
+      --indicator-color: #eff6ff;
+      --indicator-box-shadow: 0 1px 3px rgba(37, 99, 235, 0.15);
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      min-height: 42px;
+      transition: all 0.2s ease;
+
+      ion-icon {
+        margin-right: 6px;
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+.teachers-overview-section,
+.students-overview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  .teachers-table-box,
+  .students-table-box {
+    margin-top: 8px;
+  }
+}
+

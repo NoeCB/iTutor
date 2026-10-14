@@ -1,0 +1,47 @@
+name: iTUTOR CI/CD Pipeline (RA 6 & RA 7)
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-test-and-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Unit Tests (Quality Gate - bloquea el despliegue si fallan)
+        # `ng test --no-watch` es la invocación correcta para el builder
+        # @angular/build:unit-test. La variante `npm test -- --run` falla con
+        # "Unknown argument: run" porque ese flag pertenece a la CLI de Vitest,
+        # no al builder de Angular.
+        run: npm run test:ci
+
+      - name: Build Production PWA Bundle
+        run: npm run build
+
+      - name: Generate Automated Technical Documentation (Compodoc - RA 6)
+        # Se usa tsconfig.doc.json (no tsconfig.app.json): este último solo
+        # declara src/main.ts en "files", por lo que Compodoc no descubriría
+        # los componentes standalone cargados de forma diferida y generaría
+        # una documentación vacía.
+        run: npm run docs
+
+      - name: Publish Technical Documentation as Build Artifact (RA 6)
+        uses: actions/upload-artifact@v4
+        with:
+          name: itutor-technical-documentation
+          path: documentation/
+          if-no-files-found: error

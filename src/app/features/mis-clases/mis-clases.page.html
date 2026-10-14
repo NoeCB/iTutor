@@ -1,13 +1,516 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>mis-clases</ion-title>
+<ion-header class="ion-no-border student-header">
+  <ion-toolbar class="student-toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button class="menu-btn"></ion-menu-button>
+    </ion-buttons>
+
+    <div class="header-title-wrap">
+      <ion-title class="page-title">
+        @switch (activeSection) {
+          @case ('tutorias') { Mis Tutorías & Calendario }
+          @case ('apuntes') { Mis Apuntes & Material }
+          @case ('mensajes') { Mensajes con Profesores }
+          @case ('pagos') { Facturación & Pagos }
+          @case ('ajustes') { Ajustes de Cuenta }
+        }
+      </ion-title>
+      <span class="student-pill">Alumna: Paula García</span>
+    </div>
+
+    <!-- Pestañas rápidas superiores sincronizadas con el menú lateral -->
+    <div slot="end" class="quick-tabs">
+      <button type="button" class="tab-pill" [class.active]="activeSection === 'tutorias'" (click)="switchSection('tutorias')">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>Calendario</span>
+      </button>
+      <button type="button" class="tab-pill" [class.active]="activeSection === 'apuntes'" (click)="switchSection('apuntes')">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <span>Mis Apuntes</span>
+      </button>
+      <button type="button" class="tab-pill" [class.active]="activeSection === 'mensajes'" (click)="switchSection('mensajes')">
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+        <span>Profesores</span>
+      </button>
+      <button type="button" class="tab-pill" [class.active]="activeSection === 'pagos'" (click)="switchSection('pagos')">
+        <ion-icon name="wallet-outline"></ion-icon>
+        <span>Mis Pagos</span>
+      </button>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">mis-clases</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="student-content">
+  <div class="student-container">
+
+    <!-- =======================================================================
+         SECCIÓN 1: MIS TUTORÍAS (CALENDARIO DE PAULA + RECUADRO DÍA 10 OCTUBRE)
+         ======================================================================= -->
+    @if (activeSection === 'tutorias') {
+      <div class="section-banner">
+        <div>
+          <h1 class="main-heading">Calendario de Clases de Paula</h1>
+          <p class="sub-heading">Haz clic sobre cualquier día marcado del calendario (por ejemplo, el <strong>10 de octubre</strong>) para abrir el recuadro de la tutoría y tu profesora.</p>
+        </div>
+        <div class="month-selector">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <span>Octubre 2026</span>
+        </div>
+      </div>
+
+      <div class="calendar-layout">
+        <!-- COLUMNA IZQUIERDA: CALENDARIO INTERACTIVO OCTUBRE 2026 -->
+        <ion-card class="calendar-card">
+          <ion-card-content>
+            <div class="calendar-top-bar">
+              <div class="month-title">
+                <h2>Octubre 2026</h2>
+                <span class="classes-count">7 tutorías programadas</span>
+              </div>
+              <div class="legend">
+                <span class="legend-item"><i class="dot blue"></i> Ecuaciones Diferenciales</span>
+                <span class="legend-item"><i class="dot green"></i> Cálculo / Álgebra</span>
+              </div>
+            </div>
+
+            <!-- Cabecera Lunes a Domingo -->
+            <div class="weekdays-grid">
+              @for (w of weekDays; track w) {
+                <div class="weekday-label">{{ w }}</div>
+              }
+            </div>
+
+            <!-- Cuadrícula de días del mes -->
+            <div class="days-grid">
+              @for (cell of calendarCells; track $index) {
+                <button
+                  type="button"
+                  class="day-cell"
+                  [class.empty-cell]="!cell.day"
+                  [class.has-session]="!!cell.session"
+                  [class.selected-day]="cell.day === selectedDay"
+                  [disabled]="!cell.day"
+                  (click)="selectCalendarDay(cell.day)"
+                >
+                  @if (cell.day) {
+                    <span class="day-number">{{ cell.day }}</span>
+                    @if (cell.session) {
+                      <span class="session-pill" [style.background]="cell.session.color">
+                        {{ cell.session.subject === 'Ecuaciones Diferenciales' ? 'Ec. Dif.' : cell.session.subject.split(' ')[0] }}
+                      </span>
+                      <span class="session-time-mini">{{ cell.session.time.split(' ')[0] }}</span>
+                    }
+                  }
+                </button>
+              }
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- COLUMNA DERECHA: RECUADRO DE LA CLASE AL PINCHAR EN EL DÍA (EJ. 10 DE OCTUBRE) -->
+        <div class="detail-column">
+          @if (selectedSession; as sesion) {
+            <ion-card class="session-detail-box">
+              <div class="detail-accent-bar" [style.background]="sesion.color"></div>
+              <ion-card-content class="detail-content">
+                <div class="detail-badges-row">
+                  <span class="date-chip">
+                    <ion-icon name="calendar-outline"></ion-icon>
+                    {{ sesion.dateLabel }}
+                  </span>
+                  <ion-badge [color]="sesion.status === 'Confirmada' ? 'primary' : (sesion.status === 'Completada' ? 'success' : 'tertiary')">
+                    {{ sesion.status }}
+                  </ion-badge>
+                </div>
+
+                <!-- Título de la asignatura (Ej. Ecuaciones Diferenciales) -->
+                <h2 class="subject-title">{{ sesion.subject }}</h2>
+                <p class="topic-subtitle">{{ sesion.topic }}</p>
+
+                <!-- Recuadro de la Profesora -->
+                <div class="teacher-box">
+                  <div class="teacher-avatar" [style.background]="sesion.color">
+                    {{ sesion.teacherInitials }}
+                  </div>
+                  <div class="teacher-meta">
+                    <span class="teacher-label">PROFESORA ASIGNADA</span>
+                    <h3 class="teacher-name">{{ sesion.teacher }}</h3>
+                    <p class="teacher-role">{{ sesion.teacherRole }}</p>
+                  </div>
+                </div>
+
+                <!-- Horario y Aula -->
+                <div class="info-grid">
+                  <div class="info-item">
+                    <ion-icon name="time-outline"></ion-icon>
+                    <div>
+                      <span class="info-label">Horario</span>
+                      <strong>{{ sesion.time }} ({{ sesion.duration }})</strong>
+                    </div>
+                  </div>
+                  <div class="info-item">
+                    <ion-icon name="videocam-outline"></ion-icon>
+                    <div>
+                      <span class="info-label">Aula Virtual</span>
+                      <strong>{{ sesion.room }}</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Notas de la sesión -->
+                <div class="notes-callout">
+                  <span class="callout-title">Plan de la sesión con la profesora:</span>
+                  <p>{{ sesion.notes }}</p>
+                </div>
+
+                <!-- Botones de acción rápida -->
+                <div class="detail-actions">
+                  <ion-button expand="block" class="primary-action-btn" (click)="openChatWithTeacher(sesion.teacher)">
+                    <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>
+                    Escribir a {{ sesion.teacher }}
+                  </ion-button>
+                  <ion-button expand="block" fill="outline" class="secondary-action-btn" (click)="openNotesForSubject(sesion.subject)">
+                    <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                    Ver Apuntes de {{ sesion.subject }}
+                  </ion-button>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          } @else {
+            <ion-card class="empty-day-card">
+              <ion-card-content>
+                <div class="empty-day-icon">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                </div>
+                <h3>Día {{ selectedDay }} de Octubre sin tutorías</h3>
+                <p>No tienes ninguna clase programada este día. Haz clic en el <strong>10 de octubre</strong> (o en los días 3, 6, 15, 20, 24, 29) para ver el detalle de tus clases.</p>
+                <ion-button size="small" (click)="selectCalendarDay(10)">
+                  Ver clase del 10 de Octubre (Ecuaciones Diferenciales)
+                </ion-button>
+              </ion-card-content>
+            </ion-card>
+          }
+
+          <!-- Resumen rápido de próximas clases del mes -->
+          <ion-card class="upcoming-mini-card">
+            <ion-card-content>
+              <h4 class="mini-heading">Todas las sesiones de Paula en Octubre</h4>
+              <div class="mini-list">
+                @for (s of allMonthSessions; track s.day) {
+                  <button
+                    type="button"
+                    class="mini-session-row"
+                    [class.active-row]="s.day === selectedDay"
+                    (click)="selectCalendarDay(s.day)"
+                  >
+                    <span class="mini-day-badge" [style.background]="s.color">{{ s.day }} Oct</span>
+                    <div class="mini-info">
+                      <strong>{{ s.subject }}</strong>
+                      <span>{{ s.teacher }} • {{ s.time }}</span>
+                    </div>
+                  </button>
+                }
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </div>
+    }
+
+    <!-- =======================================================================
+         SECCIÓN 2: MIS APUNTES (EN LUGAR DE ESTUDIANTES)
+         ======================================================================= -->
+    @if (activeSection === 'apuntes') {
+      <div class="section-banner">
+        <div>
+          <h1 class="main-heading">Mis Apuntes & Material de Clase</h1>
+          <p class="sub-heading">Repositorio personal de Paula García con apuntes, pizarras digitales y boletines resueltos por tus profesores.</p>
+        </div>
+      </div>
+
+      <!-- Filtros por asignatura -->
+      <div class="filter-chips">
+        @for (subj of ['Todos', 'Ecuaciones Diferenciales', 'Cálculo Multivariable', 'Álgebra Lineal']; track subj) {
+          <button
+            type="button"
+            class="chip-btn"
+            [class.active]="selectedNotesFilter === subj"
+            (click)="selectedNotesFilter = subj"
+          >
+            {{ subj }}
+          </button>
+        }
+      </div>
+
+      <div class="notes-grid">
+        @for (note of filteredNotes; track note.id) {
+          <ion-card class="note-card">
+            <ion-card-content>
+              <div class="note-top">
+                <div class="doc-icon">
+                  <ion-icon name="document-text-outline"></ion-icon>
+                </div>
+                <ion-badge color="primary">{{ note.subject }}</ion-badge>
+              </div>
+              <h3 class="note-title">{{ note.title }}</h3>
+              <p class="note-summary">{{ note.summary }}</p>
+              <div class="note-meta">
+                <span><ion-icon name="person-outline"></ion-icon> {{ note.teacher }}</span>
+                <span>{{ note.date }} • {{ note.pages }} págs ({{ note.size }})</span>
+              </div>
+              <ion-button expand="block" fill="outline" class="download-note-btn" (click)="downloadNotePdf(note)">
+                <ion-icon name="download-outline" slot="start"></ion-icon>
+                Descargar Apuntes en PDF
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        }
+      </div>
+    }
+
+    <!-- =======================================================================
+         SECCIÓN 3: MENSAJES CON LOS PROFESORES (EN LUGAR DE PROFESORES TUTORES)
+         ======================================================================= -->
+    @if (activeSection === 'mensajes') {
+      <div class="section-banner">
+        <div>
+          <h1 class="main-heading">Mensajes con mis Profesores</h1>
+          <p class="sub-heading">Canal directo de tutoría y resolución de dudas con tus profesores de iTUTOR.</p>
+        </div>
+      </div>
+
+      <div class="chat-layout">
+        <!-- Lista de profesores -->
+        <ion-card class="teachers-list-card">
+          <ion-card-content>
+            <h3 class="chat-side-title">Tus Profesores</h3>
+            @for (conv of conversations; track conv.id) {
+              <button
+                type="button"
+                class="teacher-chat-item"
+                [class.active]="conv.id === selectedTeacherId"
+                (click)="selectConversation(conv.id)"
+              >
+                <div class="chat-avatar">
+                  {{ conv.initials }}
+                  @if (conv.online) {
+                    <span class="online-dot"></span>
+                  }
+                </div>
+                <div class="chat-item-info">
+                  <h4>{{ conv.teacherName }}</h4>
+                  <p>{{ conv.subject }}</p>
+                </div>
+                @if (conv.unread > 0) {
+                  <ion-badge color="primary">{{ conv.unread }}</ion-badge>
+                }
+              </button>
+            }
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Ventana de conversación -->
+        <ion-card class="chat-window-card">
+          <div class="chat-window-header">
+            <div class="chat-avatar">{{ activeConversation.initials }}</div>
+            <div>
+              <h3>{{ activeConversation.teacherName }}</h3>
+              <span>{{ activeConversation.subject }} • En línea</span>
+            </div>
+          </div>
+
+          <div class="chat-messages-body">
+            @for (msg of activeConversation.messages; track $index) {
+              <div class="message-bubble-wrap" [class.mine]="msg.sender === 'student'">
+                <div class="message-bubble">
+                  <p>{{ msg.text }}</p>
+                  <span class="msg-time">{{ msg.time }}</span>
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="chat-input-bar">
+            <input
+              type="text"
+              placeholder="Escribe un mensaje a {{ activeConversation.teacherName }}..."
+              [(ngModel)]="newMessageText"
+              (keyup.enter)="sendMessage()"
+            />
+            <ion-button (click)="sendMessage()" class="send-btn">
+              <ion-icon name="send-outline" slot="start"></ion-icon>
+              Enviar
+            </ion-button>
+          </div>
+        </ion-card>
+      </div>
+    }
+
+    <!-- =======================================================================
+         SECCIÓN 4: FACTURACIÓN & PAGOS (DASHBOARD DE TODO LO QUE HA PAGADO PAULA)
+         ======================================================================= -->
+    @if (activeSection === 'pagos') {
+      <div class="section-banner">
+        <div>
+          <h1 class="main-heading">Dashboard de Facturación & Pagos</h1>
+          <p class="sub-heading">Resumen financiero de todo lo abonado por Paula García, desglose por asignatura y descarga de recibos oficiales.</p>
+        </div>
+      </div>
+
+      <!-- KPIs de lo que ha pagado Paula -->
+      <div class="payments-kpi-grid">
+        <ion-card class="kpi-box highlight-kpi">
+          <ion-card-content>
+            <div class="kpi-top">
+              <span class="kpi-label">TOTAL PAGADO (CURSO 2026)</span>
+              <div class="kpi-icon blue"><ion-icon name="wallet-outline"></ion-icon></div>
+            </div>
+            <div class="kpi-value">{{ paymentKpis.totalPagado }}</div>
+            <div class="kpi-foot success-text">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              <span>100% de tus tutorías al corriente de pago</span>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="kpi-box">
+          <ion-card-content>
+            <div class="kpi-top">
+              <span class="kpi-label">CLASES ABONADAS</span>
+              <div class="kpi-icon indigo"><ion-icon name="school-outline"></ion-icon></div>
+            </div>
+            <div class="kpi-value">{{ paymentKpis.clasesAbonadas }}</div>
+            <div class="kpi-foot">{{ paymentKpis.horasTotales }} de clase impartidas</div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="kpi-box">
+          <ion-card-content>
+            <div class="kpi-top">
+              <span class="kpi-label">ÚLTIMO PAGO REALIZADO</span>
+              <div class="kpi-icon green"><ion-icon name="receipt-outline"></ion-icon></div>
+            </div>
+            <div class="kpi-value">{{ paymentKpis.ultimoPago }}</div>
+            <div class="kpi-foot">{{ paymentKpis.ultimoPagoDetalle }}</div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="kpi-box">
+          <ion-card-content>
+            <div class="kpi-top">
+              <span class="kpi-label">SALDO PENDIENTE</span>
+              <div class="kpi-icon emerald"><ion-icon name="card-outline"></ion-icon></div>
+            </div>
+            <div class="kpi-value">{{ paymentKpis.saldoPendiente }}</div>
+            <div class="kpi-foot">Método activo: {{ paymentKpis.metodoPago }}</div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- Desglose de inversión por asignatura -->
+      <ion-card class="spending-breakdown-card">
+        <ion-card-content>
+          <h3 class="card-section-title">Desglose de Importe Pagado por Asignatura</h3>
+          <div class="breakdown-list">
+            @for (item of subjectSpending; track item.subject) {
+              <div class="breakdown-row">
+                <div class="breakdown-header">
+                  <strong>{{ item.subject }}</strong>
+                  <span>{{ item.amount }},00 € ({{ item.sessions }} sesiones • {{ item.percentage }}%)</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" [style.width.%]="item.percentage" [style.background]="item.color"></div>
+                </div>
+              </div>
+            }
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Historial detallado de pagos y facturas -->
+      <ion-card class="invoices-table-card">
+        <ion-card-content>
+          <h3 class="card-section-title">Historial de Pagos y Recibos Abonados</h3>
+          <div class="table-responsive">
+            <table class="payments-table">
+              <thead>
+                <tr>
+                  <th>Nº Recibo</th>
+                  <th>Fecha</th>
+                  <th>Concepto</th>
+                  <th>Profesor/a</th>
+                  <th>Método</th>
+                  <th>Importe</th>
+                  <th>Estado</th>
+                  <th>Factura</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (pay of paymentsHistory; track pay.id) {
+                  <tr>
+                    <td class="mono-id">{{ pay.id }}</td>
+                    <td>{{ pay.date }}</td>
+                    <td><strong>{{ pay.concept }}</strong></td>
+                    <td>{{ pay.teacher }}</td>
+                    <td>{{ pay.method }}</td>
+                    <td class="amount-cell">{{ pay.amount }},00 €</td>
+                    <td><ion-badge color="success">{{ pay.status }}</ion-badge></td>
+                    <td>
+                      <ion-button size="small" fill="outline" (click)="downloadPaymentReceipt(pay)">
+                        <ion-icon name="download-outline" slot="start"></ion-icon>
+                        PDF
+                      </ion-button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    }
+
+    <!-- =======================================================================
+         SECCIÓN 5: AJUSTES DE CUENTA
+         ======================================================================= -->
+    @if (activeSection === 'ajustes') {
+      <div class="section-banner">
+        <div>
+          <h1 class="main-heading">Ajustes de Cuenta</h1>
+          <p class="sub-heading">Datos académicos y preferencias de notificaciones de Paula García.</p>
+        </div>
+      </div>
+
+      <ion-card class="settings-card">
+        <ion-card-content>
+          <div class="profile-summary-row">
+            <div class="big-avatar">PG</div>
+            <div>
+              <h2>Paula García</h2>
+              <p>paulagarcia&#64;itutor.es • Matrícula: MAT-2026-089</p>
+              <ion-badge color="tertiary">Alumna • Plan Intensivo Ciencias</ion-badge>
+            </div>
+          </div>
+          <div class="settings-grid">
+            <div class="setting-box">
+              <ion-icon name="notifications-outline"></ion-icon>
+              <div>
+                <h4>Recordatorios de Tutoría</h4>
+                <p>Aviso automático 30 minutos antes de cada clase de Ecuaciones Diferenciales y Cálculo.</p>
+              </div>
+              <ion-badge color="success">Activo</ion-badge>
+            </div>
+            <div class="setting-box">
+              <ion-icon name="shield-checkmark-outline"></ion-icon>
+              <div>
+                <h4>Seguridad de la Cuenta</h4>
+                <p>Contraseña protegida mediante hash Bcrypt y sesión activa con token JWT.</p>
+              </div>
+              <ion-badge color="primary">Protegida</ion-badge>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    }
+
+  </div>
 </ion-content>
