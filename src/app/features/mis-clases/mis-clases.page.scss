@@ -2,6 +2,12 @@
 .student-header {
   background: #fff; border-bottom: 1px solid #e2e8f0;
   .student-toolbar { --background: #fff; --min-height: 62px; }
+  .menu-btn {
+    color: #0f172a;
+    --color: #0f172a;
+    display: flex !important;
+    font-size: 1.4rem;
+  }
   .header-title-wrap {
     display: flex; align-items: center; gap: 10px;
     .page-title { font-size: 1.15rem; font-weight: 700; color: #0f172a; padding: 0; }
@@ -10,15 +16,7 @@
       @media (min-width: 768px) { display: inline-block; }
     }
   }
-  .quick-tabs {
-    display: none; align-items: center; gap: 6px;
-    @media (min-width: 900px) { display: flex; }
-    .tab-pill {
-      display: flex; align-items: center; gap: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #475569;
-      padding: 7px 12px; border-radius: 10px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
-      &.active { background: #2563eb; border-color: #2563eb; color: #fff; }
-    }
-  }
+
 }
 .student-content { --background: #f8fafc; }
 .student-container { max-width: 1300px; margin: 0 auto; padding: 24px 16px 56px; }

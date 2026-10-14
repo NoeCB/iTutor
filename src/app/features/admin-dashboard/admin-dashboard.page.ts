@@ -33,10 +33,15 @@ import {
   IonButton,
   IonIcon,
   IonSpinner,
-  IonBadge
+  IonBadge,
+  IonToggle
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { 
+  menuOutline,
+  trendingUpOutline,
+  checkmarkCircleOutline,
+  checkmarkDoneCircleOutline,
   downloadOutline, 
   documentTextOutline, 
   filterOutline, 
@@ -49,10 +54,16 @@ import {
   pieChartOutline,
   sparklesOutline,
   walletOutline,
-  checkmarkCircleOutline,
   alertCircleOutline,
   eyeOutline,
-  cardOutline
+  cardOutline,
+  addCircleOutline,
+  personRemoveOutline,
+  informationCircleOutline,
+  serverOutline,
+  cloudOutline,
+  shieldCheckmarkOutline,
+  settingsOutline
 } from 'ionicons/icons';
 import Chart from 'chart.js/auto';
 import jsPDF from 'jspdf';
@@ -65,6 +76,7 @@ import {
   SqlStudentRate,
   TeacherRecord 
 } from '../../core/services/data.service';
+import { SidebarService } from '../../core/services/sidebar.service';
 import { StatCardComponent } from '../../shared/components/stat-card/stat-card.component';
 import { DataTableComponent, TableColumn } from '../../shared/components/data-table/data-table.component';
 
@@ -82,7 +94,6 @@ import { DataTableComponent, TableColumn } from '../../shared/components/data-ta
     IonTitle, 
     IonToolbar, 
     IonButtons, 
-    IonMenuButton, 
     IonGrid, 
     IonRow, 
     IonCol,
@@ -98,6 +109,7 @@ import { DataTableComponent, TableColumn } from '../../shared/components/data-ta
     IonIcon,
     IonSpinner,
     IonBadge,
+    IonToggle,
     StatCardComponent,
     DataTableComponent
   ],
@@ -108,9 +120,10 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  public sidebarService = inject(SidebarService);
 
   @ViewChild('revenueChartCanvas') revenueChartCanvas!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('classesChartCanvas') classesChartCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('classesChartCanvas') classesChartCanvas?: ElementRef<HTMLCanvasElement>;
 
   // Instancias de gráficos Chart.js
   private revenueChart: Chart | null = null;
@@ -119,8 +132,13 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   // Estado del Dashboard
   isLoading = true;
-  activeTab: 'metricas' | 'profesores' | 'alumnos' = 'metricas';
+  activeTab: 'metricas' | 'profesores' | 'alumnos' | 'ajustes' = 'metricas';
   selectedPeriod: 'todos' | 'septiembre' | 'octubre' | 'noviembre' | 'diciembre' = 'todos';
+
+  // Deslizador interactivo para filtrar clases confirmadas
+  mostrarSoloConfirmadas = true;
+  confirmedSessionsCount = 0;
+  totalPeriodSessionsCount = 0;
 
   // Datos brutos recuperados concurrentemente mediante forkJoin
   rawSqlStudents: SqlStudentRate[] = [];
@@ -142,12 +160,12 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     asistenciaCrecimiento: 2.4
   };
 
-  // KPIs específicos de profesores
+  // KPIs específicos de profesores (sin emojis)
   teacherKpis = {
     totalProfesores: 10,
     totalGanado: '0 €',
     totalHoras: '0 h',
-    valoracionMedia: '4.8 ⭐'
+    valoracionMedia: '4.8 / 5'
   };
 
   // KPIs específicos de alumnos
@@ -158,25 +176,13 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     tarifaMedia: '0 €/h'
   };
 
-  /** Columnas de la tabla de sesiones */
+  /** Columnas de la tabla de sesiones (sin 'estado' ni 'acciones') */
   tableColumns: TableColumn[] = [
     { key: 'estudianteNombre', label: 'Estudiante' },
     { key: 'materia', label: 'Asignatura (Rama)' },
     { key: 'tutor', label: 'Profesor Tutor' },
     { key: 'fecha', label: 'Fecha y Hora' },
-    { key: 'importe', label: 'Tarifa', type: 'currency', align: 'right' },
-    { 
-      key: 'estado', 
-      label: 'Estado', 
-      type: 'badge', 
-      align: 'center',
-      badgeColorMap: {
-        'Confirmada': 'success',
-        'En Curso': 'primary',
-        'Pendiente': 'warning',
-        'Cancelada': 'danger'
-      }
-    }
+    { key: 'importe', label: 'Tarifa', type: 'currency', align: 'right' }
   ];
 
   /** Columnas de la tabla de profesores */
@@ -235,6 +241,10 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   constructor() {
     addIcons({
+      menuOutline,
+      trendingUpOutline,
+      checkmarkCircleOutline,
+      checkmarkDoneCircleOutline,
       downloadOutline,
       documentTextOutline,
       filterOutline,
@@ -247,11 +257,29 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       pieChartOutline,
       sparklesOutline,
       walletOutline,
-      checkmarkCircleOutline,
       alertCircleOutline,
       eyeOutline,
-      cardOutline
+      cardOutline,
+      addCircleOutline,
+      personRemoveOutline,
+      informationCircleOutline,
+      serverOutline,
+      cloudOutline,
+      shieldCheckmarkOutline,
+      settingsOutline
     });
+  }
+
+  /** Alterna la apertura o colapso del menú lateral */
+  toggleMenu(): void {
+    this.sidebarService.toggleMenu();
+  }
+
+  /** Manejador del deslizador para alternar clases confirmadas */
+  onConfirmedToggleChange(checked: boolean): void {
+    this.mostrarSoloConfirmadas = checked;
+    this.applyPeriodFilter();
+    this.cdr.markForCheck();
   }
 
   ngOnInit(): void {
@@ -259,7 +287,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
     // Sincronizar pestaña si entra desde el menú lateral con parámetro
     this.querySub = this.route.queryParams.subscribe(params => {
-      if (params['vista'] && (params['vista'] === 'metricas' || params['vista'] === 'profesores' || params['vista'] === 'alumnos')) {
+      if (params['vista'] && (params['vista'] === 'metricas' || params['vista'] === 'profesores' || params['vista'] === 'alumnos' || params['vista'] === 'ajustes')) {
         this.activeTab = params['vista'];
         this.cdr.markForCheck();
         if (this.activeTab === 'metricas') {
@@ -345,7 +373,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       totalProfesores: this.rawTeachers.length,
       totalGanado: `${totalGanado.toLocaleString('es-ES')} €`,
       totalHoras: `${totalHoras} h`,
-      valoracionMedia: `${avgRating} ⭐`
+      valoracionMedia: `${avgRating} / 5`
     };
 
     // Alumnos
@@ -376,29 +404,34 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   /** Filtrado en memoria y recálculo dinámico de estadísticas KPI */
   private applyPeriodFilter(): void {
-    if (this.selectedPeriod === 'todos') {
-      this.filteredSessions = [...this.rawNoSqlSessions];
+    const periodSessions = this.selectedPeriod === 'todos'
+      ? [...this.rawNoSqlSessions]
+      : this.rawNoSqlSessions.filter(session => session.mes === this.selectedPeriod);
+
+    this.totalPeriodSessionsCount = periodSessions.length;
+    this.confirmedSessionsCount = periodSessions.filter(s => s.estado === 'Confirmada').length;
+
+    if (this.mostrarSoloConfirmadas) {
+      this.filteredSessions = periodSessions.filter(s => s.estado === 'Confirmada');
     } else {
-      this.filteredSessions = this.rawNoSqlSessions.filter(
-        session => session.mes === this.selectedPeriod
-      );
+      this.filteredSessions = periodSessions;
     }
 
-    const totalIngresos = this.filteredSessions
+    const totalIngresos = periodSessions
       .filter(s => s.estado !== 'Cancelada')
       .reduce((sum, s) => sum + s.importe, 0);
 
-    const totalMinutos = this.filteredSessions
+    const totalMinutos = periodSessions
       .filter(s => s.estado !== 'Cancelada')
       .reduce((sum, s) => sum + s.duracionMin, 0);
 
     const alumnosUnicos = new Set(
-      this.filteredSessions.map(s => s.estudianteId)
+      periodSessions.map(s => s.estudianteId)
     ).size;
 
-    const sesionesCompletadas = this.filteredSessions.filter(s => s.asistencia).length;
-    const tasaAsistencia = this.filteredSessions.length > 0
-      ? Math.round((sesionesCompletadas / this.filteredSessions.length) * 100)
+    const sesionesCompletadas = periodSessions.filter(s => s.asistencia).length;
+    const tasaAsistencia = periodSessions.length > 0
+      ? Math.round((sesionesCompletadas / periodSessions.length) * 100)
       : 0;
 
     this.kpis = {
@@ -415,9 +448,9 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   /** Inicialización o actualización condicional de los gráficos de Chart.js */
   private initOrUpdateCharts(): void {
-    if (!this.revenueChartCanvas || !this.classesChartCanvas) return;
+    if (!this.revenueChartCanvas) return;
 
-    if (!this.revenueChart || !this.classesChart) {
+    if (!this.revenueChart) {
       this.initCharts();
     } else {
       this.updateChartsData();
@@ -426,35 +459,27 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   /** Creación de las instancias de Chart.js */
   private initCharts(): void {
-    if (!this.revenueChartCanvas || !this.classesChartCanvas) return;
+    if (!this.revenueChartCanvas) return;
 
-    // 1. Gráfico: "Ingresos por Asignatura" (Bar Chart)
+    // 1. Gráfico: "Ingresos por Asignatura" (Line Chart)
     const revenueData = this.computeRevenueBySubject();
     this.revenueChart = new Chart(this.revenueChartCanvas.nativeElement, {
-      type: 'bar',
+      type: 'line',
       data: {
         labels: revenueData.labels,
         datasets: [{
           label: 'Ingresos (€)',
           data: revenueData.values,
-          backgroundColor: [
-            'rgba(37, 99, 235, 0.85)',
-            'rgba(99, 102, 241, 0.85)',
-            'rgba(14, 165, 233, 0.85)',
-            'rgba(16, 185, 129, 0.85)',
-            'rgba(245, 158, 11, 0.85)',
-            'rgba(168, 85, 247, 0.85)'
-          ],
-          borderColor: [
-            '#1d4ed8',
-            '#4f46e5',
-            '#0284c7',
-            '#059669',
-            '#d97706',
-            '#9333ea'
-          ],
-          borderWidth: 1.5,
-          borderRadius: 8
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37, 99, 235, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.35,
+          pointBackgroundColor: '#2563eb',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 6,
+          pointHoverRadius: 8
         }]
       },
       options: {
@@ -464,6 +489,8 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
           legend: { display: false },
           tooltip: {
             backgroundColor: '#0f172a',
+            padding: 10,
+            cornerRadius: 8,
             callbacks: {
               label: (context) => ` ${context.parsed.y} € facturados`
             }
@@ -479,31 +506,6 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     });
-
-    // 2. Gráfico: "Clases Impartidas por Rama" (Doughnut)
-    const branchData = this.computeClassesByBranch();
-    this.classesChart = new Chart(this.classesChartCanvas.nativeElement, {
-      type: 'doughnut',
-      data: {
-        labels: branchData.labels,
-        datasets: [{
-          data: branchData.values,
-          backgroundColor: ['#2563eb', '#6366f1', '#10b981'],
-          borderWidth: 2,
-          borderColor: '#ffffff'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: { boxWidth: 12, padding: 16, color: '#334155' }
-          }
-        }
-      }
-    });
   }
 
   /** Actualización reactiva de datos en gráficos existentes */
@@ -513,13 +515,6 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       this.revenueChart.data.labels = revenueData.labels;
       this.revenueChart.data.datasets[0].data = revenueData.values;
       this.revenueChart.update('active');
-    }
-
-    if (this.classesChart) {
-      const branchData = this.computeClassesByBranch();
-      this.classesChart.data.labels = branchData.labels;
-      this.classesChart.data.datasets[0].data = branchData.values;
-      this.classesChart.update('active');
     }
   }
 
@@ -627,7 +622,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
         `${t.horasImpartidas} h`,
         `${t.tarifaHora} €/h`,
         `${t.totalGanado} €`,
-        `${t.calificacion} ⭐`,
+        `${t.calificacion} / 5`,
         t.telefono,
         t.estado
       ]);
@@ -651,7 +646,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       doc.setTextColor(...darkColor);
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(14);
-      doc.text('Censo Oficial de Alumnos Matriculados y Tarifas SQL', 14, 34);
+      doc.text('Censo Oficial de Alumnos Matriculados y Tarifas', 14, 34);
 
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);
@@ -719,6 +714,65 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
       doc.save(`iTUTOR_Informe_Sesiones_${this.selectedPeriod}_${new Date().toISOString().slice(0, 10)}.pdf`);
     }
+  }
+
+  /** Dar de alta un nuevo alumno */
+  openAddStudentModal(): void {
+    const nuevoId = Math.max(...this.rawSqlStudents.map(s => s.id), 0) + 1;
+    const nuevoAlumno: SqlStudentRate = {
+      id: nuevoId,
+      nombre: `Nuevo Alumno ${nuevoId}`,
+      email: `alumno${nuevoId}@alumnos.nebrija.es`,
+      matricula: `MAT-2026-${String(nuevoId).padStart(3, '0')}`,
+      tarifaHora: 30,
+      plan: 'Básico',
+      asignaturaPrincipal: 'Sin asignar',
+      profesorAsignado: 'Sin asignar',
+      saldoPendiente: 0,
+      horasTotales: 0,
+      telefono: '+34 600 000 000',
+      estado: 'Al día'
+    };
+    this.rawSqlStudents = [...this.rawSqlStudents, nuevoAlumno];
+    this.calculateTeachersAndStudentsKpis();
+    this.cdr.markForCheck();
+  }
+
+  /** Dar de baja un alumno */
+  darDeBajaAlumno(student: SqlStudentRate): void {
+    this.rawSqlStudents = this.rawSqlStudents.filter(s => s.id !== student.id);
+    this.calculateTeachersAndStudentsKpis();
+    this.cdr.markForCheck();
+  }
+
+  /** Dar de alta un nuevo profesor */
+  openAddTeacherModal(): void {
+    const nuevoId = Math.max(...this.rawTeachers.map(t => t.id), 0) + 1;
+    const nuevoProfesor: TeacherRecord = {
+      id: nuevoId,
+      nombre: `Nuevo Profesor ${nuevoId}`,
+      email: `profesor${nuevoId}@itutor.es`,
+      especialidad: 'Sin asignar',
+      departamento: 'Matemáticas',
+      tarifaHora: 30,
+      alumnosAsignados: [],
+      alumnosCount: 0,
+      horasImpartidas: 0,
+      totalGanado: 0,
+      calificacion: 0,
+      telefono: '+34 600 000 000',
+      estado: 'Disponible'
+    };
+    this.rawTeachers = [...this.rawTeachers, nuevoProfesor];
+    this.calculateTeachersAndStudentsKpis();
+    this.cdr.markForCheck();
+  }
+
+  /** Dar de baja un profesor */
+  darDeBajaProfesor(teacher: TeacherRecord): void {
+    this.rawTeachers = this.rawTeachers.filter(t => t.id !== teacher.id);
+    this.calculateTeachersAndStudentsKpis();
+    this.cdr.markForCheck();
   }
 
   handleEdit(item: any): void {

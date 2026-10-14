@@ -1,5 +1,5 @@
 <ion-app>
-  <ion-split-pane contentId="main-content" [disabled]="isLoginPage()">
+  <ion-split-pane contentId="main-content" [disabled]="isLoginPage() || ((sidebarService.isCollapsed$ | async) === true)">
     
     <!-- SIDE MENU GLOBAL (Responsive: Mobile Drawer & Desktop Sidebar) -->
     <ion-menu 

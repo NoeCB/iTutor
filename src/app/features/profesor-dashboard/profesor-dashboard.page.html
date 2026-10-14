@@ -2,11 +2,13 @@
 <ion-header class="ion-no-border teacher-header" role="banner">
   <ion-toolbar class="teacher-toolbar">
     <ion-buttons slot="start">
-      <ion-menu-button 
-        autoHide="false" 
+      <ion-button 
+        (click)="toggleMenu()"
         aria-label="Abrir menú principal de navegación"
         class="menu-btn"
-      ></ion-menu-button>
+      >
+        <ion-icon slot="icon-only" name="menu-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
 
     <div class="header-content">
@@ -18,40 +20,6 @@
       </span>
     </div>
 
-    <!-- SELECTOR DE PROFESOR Y DESCARGA PDF -->
-    <ion-buttons slot="end" class="header-actions">
-      <!-- Selector para conmutar fácilmente entre los 10 profesores -->
-      @if (allTeachers.length > 0) {
-        <div class="teacher-selector-box">
-          <label for="teacher-select" class="selector-label">Profesor:</label>
-          <select 
-            id="teacher-select" 
-            [ngModel]="selectedTeacherId" 
-            (ngModelChange)="onTeacherSelected($event)"
-            class="custom-select"
-          >
-            @for (t of allTeachers; track t.id) {
-              <option [value]="t.id">
-                {{ t.nombre }} ({{ t.departamento }})
-              </option>
-            }
-          </select>
-        </div>
-      }
-
-      <ion-button 
-        fill="solid" 
-        color="primary" 
-        size="small" 
-        class="export-btn"
-        (click)="exportEarningsPdf()"
-        [disabled]="isLoading || !currentTeacher"
-        aria-label="Descargar liquidación de honorarios en formato PDF"
-      >
-        <ion-icon slot="start" name="document-text-outline" aria-hidden="true"></ion-icon>
-        <span class="btn-text">Descargar Liquidación</span>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

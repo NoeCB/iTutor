@@ -1,14 +1,16 @@
 <!-- ENCABEZADO ACCESIBLE (WCAG Landmark: banner) -->
 <ion-header class="ion-no-border dashboard-header" role="banner">
   <ion-toolbar class="dashboard-toolbar">
-    <!-- Menú Hamburguesa para Móvil -->
+    <!-- Menú Hamburguesa interactivo para Escritorio y Móvil -->
     <ion-buttons slot="start">
-      <ion-menu-button 
-        autoHide="false" 
-        aria-label="Abrir menú principal de navegación"
+      <ion-button 
+        (click)="toggleMenu()" 
+        aria-label="Abrir o colapsar menú principal de navegación"
         class="menu-btn"
         tabindex="0"
-      ></ion-menu-button>
+      >
+        <ion-icon slot="icon-only" name="menu-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
 
     <div class="header-content">
@@ -19,37 +21,6 @@
         Gestión Integral de Alumnos, Profesores & Finanzas
       </span>
     </div>
-
-    <!-- ACCIONES RÁPIDAS DE EXPORTACIÓN (Header Action Group) -->
-    <ion-buttons slot="end" class="export-actions" role="group" aria-label="Opciones de exportación de datos">
-      <ion-button 
-        fill="outline" 
-        color="medium" 
-        size="small" 
-        class="export-btn"
-        (click)="exportToCsv()"
-        [disabled]="isLoading"
-        aria-label="Descargar datos en formato CSV limpio para Excel"
-        tabindex="0"
-      >
-        <ion-icon slot="start" name="download-outline" aria-hidden="true"></ion-icon>
-        <span class="btn-text">CSV</span>
-      </ion-button>
-
-      <ion-button 
-        fill="solid" 
-        color="primary" 
-        size="small" 
-        class="export-btn export-pdf-btn"
-        (click)="exportToPdf()"
-        [disabled]="isLoading"
-        aria-label="Generar y descargar informe corporativo en formato PDF"
-        tabindex="0"
-      >
-        <ion-icon slot="start" name="document-text-outline" aria-hidden="true"></ion-icon>
-        <span class="btn-text">Exportar PDF</span>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -57,40 +28,16 @@
 <ion-content class="dashboard-content" [fullscreen]="true" role="main">
   <div class="dashboard-container">
 
-    <!-- SELECTOR DE VISTAS PRINCIPALES: MÉTRICAS / LISTADO PROFESORES / LISTADO ALUMNOS -->
-    <div class="admin-tabs-wrapper" role="navigation" aria-label="Selector de vistas del administrador">
-      <ion-segment 
-        [value]="activeTab" 
-        (ionChange)="onTabChange($event.detail.value)"
-        class="admin-main-segment"
-      >
-        <ion-segment-button value="metricas">
-          <ion-icon name="bar-chart-outline" aria-hidden="true"></ion-icon>
-          <ion-label>Métricas & Sesiones</ion-label>
-        </ion-segment-button>
-
-        <ion-segment-button value="profesores">
-          <ion-icon name="school-outline" aria-hidden="true"></ion-icon>
-          <ion-label>Listado de Profesores ({{ rawTeachers.length }})</ion-label>
-        </ion-segment-button>
-
-        <ion-segment-button value="alumnos">
-          <ion-icon name="people-outline" aria-hidden="true"></ion-icon>
-          <ion-label>Listado de Alumnos ({{ rawSqlStudents.length }})</ion-label>
-        </ion-segment-button>
-      </ion-segment>
-    </div>
-
     <!-- ESTADO DE CARGA ASÍNCRONO (WCAG Live Region para Screen Readers) -->
     @if (isLoading) {
       <div 
         class="loading-container" 
         role="status" 
         aria-live="polite"
-        aria-label="Cargando datos y sincronizando catálogo SQL y MongoDB"
+        aria-label="Cargando datos de la academia"
       >
         <ion-spinner name="crescent" color="primary"></ion-spinner>
-        <p class="loading-text">Sincronizando 10 alumnos, 10 profesores y sesiones concurrentes...</p>
+        <p class="loading-text">Cargando alumnos, profesores y sesiones...</p>
       </div>
     } @else {
 
@@ -105,7 +52,7 @@
             <div class="banner-title-box">
               <h1 class="page-main-heading">Métricas de la Academia</h1>
               <p class="page-sub-heading">
-                Tutorías especializadas de Física, Matemáticas y Química • Sincronización dual SQL y NoSQL
+                Tutorías especializadas de Física, Matemáticas y Química
               </p>
             </div>
 
@@ -192,17 +139,17 @@
           </ion-grid>
         </section>
 
-        <!-- GRÁFICOS CHART.JS -->
+        <!-- GRÁFICO DE LÍNEAS CHART.JS (INGRESOS POR ASIGNATURA) -->
         <section class="charts-section" role="region" aria-label="Visualización gráfica de datos analíticos">
           <ion-grid class="ion-no-padding">
             <ion-row class="charts-row">
 
-              <ion-col size="12" size-lg="6" class="chart-col">
+              <ion-col size="12" class="chart-col">
                 <ion-card class="chart-card">
                   <ion-card-header class="chart-card-header">
                     <div class="chart-header-left">
                       <ion-card-title class="chart-title">
-                        <ion-icon name="bar-chart-outline" aria-hidden="true" class="chart-icon"></ion-icon>
+                        <ion-icon name="trending-up-outline" aria-hidden="true" class="chart-icon"></ion-icon>
                         Ingresos por Asignatura
                       </ion-card-title>
                       <ion-card-subtitle class="chart-subtitle">
@@ -222,47 +169,80 @@
                 </ion-card>
               </ion-col>
 
-              <ion-col size="12" size-lg="6" class="chart-col">
-                <ion-card class="chart-card">
-                  <ion-card-header class="chart-card-header">
-                    <div class="chart-header-left">
-                      <ion-card-title class="chart-title">
-                        <ion-icon name="pie-chart-outline" aria-hidden="true" class="chart-icon"></ion-icon>
-                        Distribución de Tutorías por Rama
-                      </ion-card-title>
-                      <ion-card-subtitle class="chart-subtitle">
-                        Volumen comparativo de clases impartidas
-                      </ion-card-subtitle>
-                    </div>
-                    <ion-badge color="tertiary" class="chart-badge">Histórico</ion-badge>
-                  </ion-card-header>
-
-                  <ion-card-content class="chart-card-content">
-                    <div class="canvas-wrapper">
-                      <canvas #classesChartCanvas role="img">
-                        Gráfico de ramas no disponible.
-                      </canvas>
-                    </div>
-                  </ion-card-content>
-                </ion-card>
-              </ion-col>
-
             </ion-row>
           </ion-grid>
         </section>
 
-        <!-- TABLA DE SESIONES -->
-        <section class="table-section" role="region" aria-label="Tabla de sesiones de tutoría sincronizadas">
+        <!-- TABLA DE SESIONES CON DESLIZADOR PARA CLASES CONFIRMADAS -->
+        <section class="table-section" role="region" aria-label="Tabla de sesiones de tutoría">
+          <!-- CONTROL DESLIZADOR INTERACTIVO -->
+          <div class="slider-control-card">
+            <div class="slider-info">
+              <ion-icon name="checkmark-done-circle-outline" class="slider-icon"></ion-icon>
+              <div class="slider-texts">
+                <span class="slider-title">Filtro Deslizador: Clases Confirmadas</span>
+                <span class="slider-desc">Activa el deslizador para ver todas las clases confirmadas en el centro</span>
+              </div>
+            </div>
+            <div class="slider-action-wrapper">
+              <ion-toggle 
+                [checked]="mostrarSoloConfirmadas" 
+                (ionChange)="onConfirmedToggleChange($event.detail.checked)"
+                color="primary"
+                class="confirmed-slider-toggle"
+                aria-label="Deslizador para ver todas las clases confirmadas"
+              >
+                <span class="toggle-label-text">
+                  {{ mostrarSoloConfirmadas ? 'Todas las Confirmadas (' + confirmedSessionsCount + ')' : 'Todas las Clases (' + totalPeriodSessionsCount + ')' }}
+                </span>
+              </ion-toggle>
+            </div>
+          </div>
+
           <app-data-table
             [title]="'Registro de Tutorías • Periodo: ' + (selectedPeriod | uppercase)"
-            subtitle="Datos en tiempo real de MongoDB combinados con el catálogo de tarifas SQL"
+            subtitle="Datos en tiempo real de las clases y tutorías académicas"
             [columns]="tableColumns"
             [rows]="filteredSessions"
-            [showActions]="true"
-            (onEdit)="handleEdit($event)"
-            (onDelete)="handleDelete($event)"
-            (onView)="handleView($event)"
+            [showActions]="false"
           ></app-data-table>
+        </section>
+
+        <!-- ACCIONES DE EXPORTACIÓN EN LA PARTE INFERIOR -->
+        <section class="bottom-export-section" role="region" aria-label="Exportación de informes">
+          <div class="bottom-export-card">
+            <div class="export-card-info">
+              <h3 class="export-heading">Exportar Registros e Informes</h3>
+              <p class="export-subheading">Descarga los datos del periodo en formato estructurado para contabilidad y dirección.</p>
+            </div>
+            <div class="export-card-actions">
+              <ion-button 
+                fill="outline" 
+                color="medium" 
+                size="default" 
+                class="export-btn-bottom"
+                (click)="exportToCsv()"
+                [disabled]="isLoading"
+                aria-label="Descargar datos en formato CSV limpio para Excel"
+              >
+                <ion-icon slot="start" name="download-outline" aria-hidden="true"></ion-icon>
+                <span>CSV</span>
+              </ion-button>
+
+              <ion-button 
+                fill="solid" 
+                color="primary" 
+                size="default" 
+                class="export-btn-bottom export-pdf-btn"
+                (click)="exportToPdf()"
+                [disabled]="isLoading"
+                aria-label="Generar y descargar informe corporativo en formato PDF"
+              >
+                <ion-icon slot="start" name="document-text-outline" aria-hidden="true"></ion-icon>
+                <span>Exportar PDF</span>
+              </ion-button>
+            </div>
+          </div>
         </section>
 
       }
@@ -405,6 +385,174 @@
               (onDelete)="handleDelete($event)"
             ></app-data-table>
           </div>
+        </section>
+
+      }
+
+      <!-- ========================================== -->
+      <!-- VISTA 4: AJUSTES DEL SISTEMA               -->
+      <!-- ========================================== -->
+      @if (activeTab === 'ajustes') {
+
+        <section class="system-settings-section" role="region" aria-label="Ajustes del sistema">
+          <div class="settings-header-banner">
+            <h1 class="page-main-heading">Ajustes del Sistema</h1>
+            <p class="page-sub-heading">Gestión de altas y bajas de alumnos y profesores del sistema iTUTOR</p>
+          </div>
+
+          <!-- GESTIÓN DE ALTAS Y BAJAS DE ALUMNOS -->
+          <ion-card class="settings-management-card">
+            <ion-card-header class="mgmt-card-header">
+              <div class="mgmt-title-row">
+                <ion-icon name="people-outline" class="mgmt-icon students-icon"></ion-icon>
+                <div>
+                  <ion-card-title class="mgmt-title">Gestión de Alumnos</ion-card-title>
+                  <ion-card-subtitle class="mgmt-subtitle">Altas, bajas y modificaciones de expedientes de estudiantes</ion-card-subtitle>
+                </div>
+              </div>
+              <ion-button fill="solid" color="primary" size="small" class="add-btn" (click)="openAddStudentModal()">
+                <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+                Dar de Alta Alumno
+              </ion-button>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="mgmt-table-wrap">
+                <table class="mgmt-table">
+                  <thead>
+                    <tr>
+                      <th>Matrícula</th>
+                      <th>Nombre</th>
+                      <th>Email</th>
+                      <th>Asignatura</th>
+                      <th>Plan</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (student of rawSqlStudents; track student.id) {
+                      <tr>
+                        <td class="mono-cell">{{ student.matricula }}</td>
+                        <td><strong>{{ student.nombre }}</strong></td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.asignaturaPrincipal }}</td>
+                        <td>
+                          <ion-badge [color]="student.plan === 'Premium' ? 'secondary' : (student.plan === 'Intensivo' ? 'primary' : 'medium')">
+                            {{ student.plan }}
+                          </ion-badge>
+                        </td>
+                        <td>
+                          <ion-badge [color]="student.estado === 'Al día' ? 'success' : 'warning'">
+                            {{ student.estado }}
+                          </ion-badge>
+                        </td>
+                        <td class="actions-cell">
+                          <ion-button fill="clear" color="danger" size="small" (click)="darDeBajaAlumno(student)" aria-label="Dar de baja alumno">
+                            <ion-icon slot="icon-only" name="person-remove-outline"></ion-icon>
+                          </ion-button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </ion-card-content>
+          </ion-card>
+
+          <!-- GESTIÓN DE ALTAS Y BAJAS DE PROFESORES -->
+          <ion-card class="settings-management-card">
+            <ion-card-header class="mgmt-card-header">
+              <div class="mgmt-title-row">
+                <ion-icon name="school-outline" class="mgmt-icon teachers-icon"></ion-icon>
+                <div>
+                  <ion-card-title class="mgmt-title">Gestión de Profesores</ion-card-title>
+                  <ion-card-subtitle class="mgmt-subtitle">Altas, bajas y modificaciones de los docentes en plantilla</ion-card-subtitle>
+                </div>
+              </div>
+              <ion-button fill="solid" color="primary" size="small" class="add-btn" (click)="openAddTeacherModal()">
+                <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+                Dar de Alta Profesor
+              </ion-button>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="mgmt-table-wrap">
+                <table class="mgmt-table">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Email</th>
+                      <th>Especialidad</th>
+                      <th>Departamento</th>
+                      <th>Alumnos</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (teacher of rawTeachers; track teacher.id) {
+                      <tr>
+                        <td><strong>{{ teacher.nombre }}</strong></td>
+                        <td>{{ teacher.email }}</td>
+                        <td>{{ teacher.especialidad }}</td>
+                        <td>
+                          <ion-badge color="tertiary">{{ teacher.departamento }}</ion-badge>
+                        </td>
+                        <td class="center-cell">{{ teacher.alumnosCount }}</td>
+                        <td>
+                          <ion-badge [color]="teacher.estado === 'Activo' ? 'success' : 'primary'">
+                            {{ teacher.estado }}
+                          </ion-badge>
+                        </td>
+                        <td class="actions-cell">
+                          <ion-button fill="clear" color="danger" size="small" (click)="darDeBajaProfesor(teacher)" aria-label="Dar de baja profesor">
+                            <ion-icon slot="icon-only" name="person-remove-outline"></ion-icon>
+                          </ion-button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </ion-card-content>
+          </ion-card>
+
+          <!-- INFO ADICIONAL DEL SISTEMA -->
+          <ion-card class="settings-management-card system-info-card">
+            <ion-card-header>
+              <ion-card-title class="mgmt-title">
+                <ion-icon name="information-circle-outline" class="mgmt-icon info-icon"></ion-icon>
+                Información del Sistema
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="system-info-grid">
+                <div class="info-box">
+                  <ion-icon name="server-outline"></ion-icon>
+                  <div>
+                    <h4>Base de Datos de Usuarios</h4>
+                    <p>Servidor Principal • Catálogo de {{ rawSqlStudents.length }} alumnos y {{ rawTeachers.length }} profesores</p>
+                  </div>
+                  <ion-badge color="success">Online</ion-badge>
+                </div>
+                <div class="info-box">
+                  <ion-icon name="cloud-outline"></ion-icon>
+                  <div>
+                    <h4>Servicio de Registro de Sesiones</h4>
+                    <p>Servicio en la Nube • {{ rawNoSqlSessions.length }} sesiones registradas</p>
+                  </div>
+                  <ion-badge color="success">Online</ion-badge>
+                </div>
+                <div class="info-box">
+                  <ion-icon name="shield-checkmark-outline"></ion-icon>
+                  <div>
+                    <h4>Seguridad</h4>
+                    <p>Autenticación JWT + Bcrypt • Conexión cifrada TLS</p>
+                  </div>
+                  <ion-badge color="primary">Activa</ion-badge>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
         </section>
 
       }

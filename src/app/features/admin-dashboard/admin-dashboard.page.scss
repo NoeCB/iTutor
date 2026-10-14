@@ -23,6 +23,11 @@
     .menu-btn {
       color: #0f172a;
       --color: #0f172a;
+      display: flex !important;
+      font-size: 1.4rem;
+      cursor: pointer;
+      --padding-start: 4px;
+      --padding-end: 8px;
     }
 
     .header-content {
@@ -50,28 +55,6 @@
 
         @media (min-width: 768px) {
           display: inline;
-        }
-      }
-    }
-
-    .export-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      .export-btn {
-        --border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.8125rem;
-        height: 36px;
-        margin: 0;
-
-        .btn-text {
-          margin-left: 4px;
-        }
-
-        &.export-pdf-btn {
-          --box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
         }
       }
     }
@@ -282,36 +265,130 @@
   }
 }
 
-/* SECCIÓN TABLA */
+/* SECCIÓN TABLA Y DESLIZADOR */
 .table-section {
   margin-top: 8px;
+
+  /* CONTROL DESLIZADOR DE CLASES CONFIRMADAS */
+  .slider-control-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+
+    @media (min-width: 640px) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .slider-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .slider-icon {
+        font-size: 1.6rem;
+        color: #2563eb;
+        flex-shrink: 0;
+      }
+
+      .slider-texts {
+        display: flex;
+        flex-direction: column;
+
+        .slider-title {
+          font-size: 0.9375rem;
+          font-weight: 700;
+          color: #0f172a;
+        }
+
+        .slider-desc {
+          font-size: 0.8125rem;
+          color: #64748b;
+        }
+      }
+    }
+
+    .slider-action-wrapper {
+      display: flex;
+      align-items: center;
+
+      .confirmed-slider-toggle {
+        --background: #e2e8f0;
+        --background-checked: #2563eb;
+        --handle-background: #ffffff;
+        --handle-background-checked: #ffffff;
+        font-weight: 600;
+        font-size: 0.8125rem;
+
+        .toggle-label-text {
+          margin-right: 10px;
+          color: #334155;
+          font-weight: 600;
+        }
+      }
+    }
+  }
 }
 
-/* TABS DEL ADMINISTRADOR (Métricas / Profesores / Alumnos) */
-.admin-tabs-wrapper {
+/* ACCIONES DE EXPORTACIÓN INFERIORES */
+.bottom-export-section {
+  margin-top: 24px;
   margin-bottom: 24px;
 
-  .admin-main-segment {
+  .bottom-export-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     background: #ffffff;
-    border: 1px solid #cbd5e1;
-    border-radius: 12px;
-    padding: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
 
-    ion-segment-button {
-      --color: #64748b;
-      --color-checked: #2563eb;
-      --indicator-color: #eff6ff;
-      --indicator-box-shadow: 0 1px 3px rgba(37, 99, 235, 0.15);
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.875rem;
-      min-height: 42px;
-      transition: all 0.2s ease;
+    @media (min-width: 768px) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-      ion-icon {
-        margin-right: 6px;
-        font-size: 1.1rem;
+    .export-card-info {
+      .export-heading {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .export-subheading {
+        margin: 4px 0 0 0;
+        font-size: 0.8125rem;
+        color: #64748b;
+      }
+    }
+
+    .export-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+
+      .export-btn-bottom {
+        --border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        height: 40px;
+        margin: 0;
+
+        &.export-pdf-btn {
+          --box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
       }
     }
   }
@@ -328,4 +405,195 @@
     margin-top: 8px;
   }
 }
+
+/* SECCIÓN: AJUSTES DEL SISTEMA */
+.system-settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .settings-header-banner {
+    .page-main-heading {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .page-sub-heading {
+      margin: 6px 0 0;
+      font-size: 0.875rem;
+      color: #475569;
+    }
+  }
+}
+
+.settings-management-card {
+  margin: 0;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+
+  .mgmt-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 18px 20px;
+    border-bottom: 1px solid #f1f5f9;
+
+    .mgmt-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .mgmt-icon {
+        font-size: 1.6rem;
+        padding: 10px;
+        border-radius: 12px;
+
+        &.students-icon {
+          background: #eff6ff;
+          color: #2563eb;
+        }
+        &.teachers-icon {
+          background: #f0fdf4;
+          color: #16a34a;
+        }
+        &.info-icon {
+          background: #fefce8;
+          color: #ca8a04;
+        }
+      }
+    }
+
+    .mgmt-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .mgmt-subtitle {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .add-btn {
+      --border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      height: 38px;
+    }
+  }
+
+  .mgmt-table-wrap {
+    overflow-x: auto;
+  }
+
+  .mgmt-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+
+    th, td {
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #334155;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #f8fafc;
+      font-weight: 700;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #64748b;
+      border-bottom-color: #e2e8f0;
+    }
+
+    .mono-cell {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: #2563eb;
+    }
+
+    .center-cell {
+      text-align: center;
+    }
+
+    .actions-cell {
+      text-align: center;
+
+      ion-button {
+        --padding-start: 6px;
+        --padding-end: 6px;
+        margin: 0;
+      }
+    }
+
+    tr:hover {
+      background: #f8fafc;
+    }
+  }
+}
+
+.system-info-card {
+  ion-card-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid #f1f5f9;
+
+    .mgmt-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+  }
+
+  .system-info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .info-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+
+      > ion-icon {
+        font-size: 1.5rem;
+        color: #2563eb;
+        flex-shrink: 0;
+      }
+
+      div {
+        flex: 1;
+
+        h4 {
+          margin: 0;
+          font-size: 0.88rem;
+          font-weight: 700;
+          color: #0f172a;
+        }
+
+        p {
+          margin: 2px 0 0;
+          font-size: 0.78rem;
+          color: #64748b;
+        }
+      }
+    }
+  }
+}
+
 
