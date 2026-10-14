@@ -37,9 +37,11 @@ import {
   notificationsOutline,
   shieldCheckmarkOutline,
   folderOpenOutline,
-  receiptOutline
+  receiptOutline,
+  menuOutline
 } from 'ionicons/icons';
 import jsPDF from 'jspdf';
+import { SidebarService } from '../../core/services/sidebar.service';
 
 export interface TutoriaSession {
   day: number;
@@ -115,7 +117,6 @@ export interface CalendarCell {
     IonTitle, 
     IonToolbar, 
     IonButtons, 
-    IonMenuButton, 
     IonButton, 
     IonIcon, 
     IonBadge, 
@@ -127,6 +128,11 @@ export class MisClasesPage implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  public sidebarService = inject(SidebarService);
+
+  toggleMenu(): void {
+    this.sidebarService.toggleMenu();
+  }
 
   /** Sección activa: 'tutorias' | 'apuntes' | 'mensajes' | 'pagos' | 'ajustes' */
   activeSection: 'tutorias' | 'apuntes' | 'mensajes' | 'pagos' | 'ajustes' = 'tutorias';
@@ -476,7 +482,8 @@ export class MisClasesPage implements OnInit {
       notificationsOutline,
       shieldCheckmarkOutline,
       folderOpenOutline,
-      receiptOutline
+      receiptOutline,
+      menuOutline
     });
     this.buildOctoberCalendar();
   }

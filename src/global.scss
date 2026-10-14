@@ -35,3 +35,35 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 /* @import '@ionic/angular/css/palettes/dark.system.css'; */
+
+/* ======================================= */
+/* HAMBURGER MENU FIX - GLOBAL             */
+/* ======================================= */
+ion-menu-button {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: #0f172a;
+  font-size: 1.5rem;
+  --color: #0f172a;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensure menu button shows cleanly across all breakpoints */
+@media (min-width: 992px) {
+  ion-menu-button {
+    display: flex !important;
+  }
+}
+
+/* Fix for ion-split-pane on mobile Android and desktop */
+ion-split-pane {
+  --side-max-width: 280px;
+  --side-min-width: 260px;
+}
+
+
+

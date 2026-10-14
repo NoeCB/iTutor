@@ -1,7 +1,9 @@
 <ion-header class="ion-no-border student-header">
   <ion-toolbar class="student-toolbar">
     <ion-buttons slot="start">
-      <ion-menu-button class="menu-btn"></ion-menu-button>
+      <ion-button (click)="toggleMenu()" aria-label="Abrir menú principal de navegación" class="menu-btn">
+        <ion-icon slot="icon-only" name="menu-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
 
     <div class="header-title-wrap">
@@ -17,25 +19,6 @@
       <span class="student-pill">Alumna: Paula García</span>
     </div>
 
-    <!-- Pestañas rápidas superiores sincronizadas con el menú lateral -->
-    <div slot="end" class="quick-tabs">
-      <button type="button" class="tab-pill" [class.active]="activeSection === 'tutorias'" (click)="switchSection('tutorias')">
-        <ion-icon name="calendar-outline"></ion-icon>
-        <span>Calendario</span>
-      </button>
-      <button type="button" class="tab-pill" [class.active]="activeSection === 'apuntes'" (click)="switchSection('apuntes')">
-        <ion-icon name="document-text-outline"></ion-icon>
-        <span>Mis Apuntes</span>
-      </button>
-      <button type="button" class="tab-pill" [class.active]="activeSection === 'mensajes'" (click)="switchSection('mensajes')">
-        <ion-icon name="chatbubbles-outline"></ion-icon>
-        <span>Profesores</span>
-      </button>
-      <button type="button" class="tab-pill" [class.active]="activeSection === 'pagos'" (click)="switchSection('pagos')">
-        <ion-icon name="wallet-outline"></ion-icon>
-        <span>Mis Pagos</span>
-      </button>
-    </div>
   </ion-toolbar>
 </ion-header>
 

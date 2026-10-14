@@ -36,9 +36,10 @@ import {
   checkmarkCircle,
   sparklesOutline,
   personCircleOutline,
-  cardOutline,
   checkmarkDoneOutline,
-  chatbubblesOutline
+  chatbubblesOutline,
+  cardOutline,
+  menuOutline
 } from 'ionicons/icons';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -50,6 +51,7 @@ import {
   MongoClassSession 
 } from '../../core/services/data.service';
 import { AuthService } from '../../core/services/auth.service';
+import { SidebarService } from '../../core/services/sidebar.service';
 import { StatCardComponent } from '../../shared/components/stat-card/stat-card.component';
 import { DataTableComponent, TableColumn } from '../../shared/components/data-table/data-table.component';
 
@@ -67,7 +69,6 @@ import { DataTableComponent, TableColumn } from '../../shared/components/data-ta
     IonTitle, 
     IonToolbar, 
     IonButtons, 
-    IonMenuButton, 
     IonGrid, 
     IonRow, 
     IonCol,
@@ -83,6 +84,11 @@ export class ProfesorDashboardPage implements OnInit {
   private dataService = inject(DataService);
   private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
+  public sidebarService = inject(SidebarService);
+
+  toggleMenu(): void {
+    this.sidebarService.toggleMenu();
+  }
 
   isLoading = true;
 
@@ -142,7 +148,8 @@ export class ProfesorDashboardPage implements OnInit {
       personCircleOutline,
       cardOutline,
       checkmarkDoneOutline,
-      chatbubblesOutline
+      chatbubblesOutline,
+      menuOutline
     });
   }
 

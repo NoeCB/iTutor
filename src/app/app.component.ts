@@ -38,6 +38,7 @@ import {
   cardOutline
 } from 'ionicons/icons';
 import { AuthService, User } from './core/services/auth.service';
+import { SidebarService } from './core/services/sidebar.service';
 
 export interface MenuItem {
   title: string;
@@ -75,6 +76,7 @@ export interface MenuItem {
 export class AppComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+  public sidebarService = inject(SidebarService);
 
   /** Flujo reactivo del usuario en sesión */
   currentUser$ = this.authService.currentUser$;
@@ -91,8 +93,7 @@ export class AppComponent {
     { title: 'Portal del Profesor', url: '/portal-profesor', icon: 'wallet-outline' },
     { title: 'Calendario Tutorías', url: '/mis-clases', icon: 'calendar-outline' },
     { title: 'Mensajes Profesores', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: '3' },
-    { title: 'Facturación & Pagos', url: '/mis-pagos', icon: 'wallet-outline' },
-    { title: 'Ajustes del Sistema', url: '/ajustes', icon: 'settings-outline' }
+    { title: 'Facturación & Pagos', url: '/mis-pagos', icon: 'wallet-outline' }
   ];
 
   /** Menú específico para Rol Profesor (Teacher) */
@@ -100,8 +101,7 @@ export class AppComponent {
     { title: 'Mi Portal Docente', url: '/portal-profesor', icon: 'school-outline' },
     { title: 'Mis Alumnos & Honorarios', url: '/portal-profesor', icon: 'wallet-outline' },
     { title: 'Calendario de Clases', url: '/mis-clases', icon: 'calendar-outline' },
-    { title: 'Mensajes con Alumnos', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: '2' },
-    { title: 'Ajustes de Perfil', url: '/ajustes', icon: 'settings-outline' }
+    { title: 'Mensajes con Alumnos', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: '2' }
   ];
 
   /** Menú específico para Alumno (Paula García) */
@@ -109,8 +109,7 @@ export class AppComponent {
     { title: 'Mis Tutorías', url: '/mis-clases', icon: 'calendar-outline' },
     { title: 'Mis Apuntes', url: '/mis-apuntes', icon: 'document-text-outline', badge: '6' },
     { title: 'Mensajes con Profesores', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: '2' },
-    { title: 'Facturación & Pagos', url: '/mis-pagos', icon: 'wallet-outline' },
-    { title: 'Ajustes de Cuenta', url: '/ajustes', icon: 'settings-outline' }
+    { title: 'Facturación & Pagos', url: '/mis-pagos', icon: 'wallet-outline' }
   ];
 
   constructor() {
