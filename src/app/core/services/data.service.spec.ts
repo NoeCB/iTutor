@@ -73,7 +73,7 @@ describe('DataService', () => {
   describe('getTeacherPortalData() - agregación por profesor', () => {
     it('debe devolver los datos del profesor solicitado por email', async () => {
       const portal = await firstValueFrom(
-        service.getTeacherPortalData('elena.ramos@itutor.es')
+        service.getTeacherPortalData('elenaramos@itutor.es')
       );
 
       expect(portal.teacher.nombre).toContain('Elena Ramos');
@@ -81,7 +81,7 @@ describe('DataService', () => {
 
     it('debe excluir las sesiones canceladas del total facturado', async () => {
       const portal = await firstValueFrom(
-        service.getTeacherPortalData('elena.ramos@itutor.es')
+        service.getTeacherPortalData('elenaramos@itutor.es')
       );
 
       const esperado = portal.sessions
@@ -93,7 +93,7 @@ describe('DataService', () => {
 
     it('debe calcular las horas impartidas a partir de los minutos', async () => {
       const portal = await firstValueFrom(
-        service.getTeacherPortalData('elena.ramos@itutor.es')
+        service.getTeacherPortalData('elenaramos@itutor.es')
       );
 
       const minutos = portal.sessions.reduce((suma, s) => suma + s.duracionMin, 0);

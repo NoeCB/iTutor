@@ -70,7 +70,7 @@ export class DataService {
     {
       id: 101,
       nombre: 'Marcos Vega Ortiz',
-      email: 'marcos.vega@alumnos.nebrija.es',
+      email: 'marcosvega@itutor.es',
       matricula: 'MAT-2026-041',
       tarifaHora: 30,
       plan: 'Intensivo',
@@ -84,7 +84,7 @@ export class DataService {
     {
       id: 102,
       nombre: 'Lucía Hernanz Sanz',
-      email: 'lucia.hernanz@alumnos.nebrija.es',
+      email: 'luciahernanz@itutor.es',
       matricula: 'MAT-2026-089',
       tarifaHora: 35,
       plan: 'Premium',
@@ -98,7 +98,7 @@ export class DataService {
     {
       id: 103,
       nombre: 'Alejandro Gómez Soto',
-      email: 'alejandro.gomez@alumnos.nebrija.es',
+      email: 'alejandrogomez@itutor.es',
       matricula: 'MAT-2026-112',
       tarifaHora: 30,
       plan: 'Intensivo',
@@ -112,7 +112,7 @@ export class DataService {
     {
       id: 104,
       nombre: 'Sofía Navarro Cruz',
-      email: 'sofia.navarro@alumnos.nebrija.es',
+      email: 'sofianavarro@itutor.es',
       matricula: 'MAT-2026-135',
       tarifaHora: 25,
       plan: 'Básico',
@@ -126,7 +126,7 @@ export class DataService {
     {
       id: 105,
       nombre: 'Javier Domínguez Rey',
-      email: 'javier.dominguez@alumnos.nebrija.es',
+      email: 'javierdominguez@itutor.es',
       matricula: 'MAT-2026-180',
       tarifaHora: 35,
       plan: 'Premium',
@@ -140,7 +140,7 @@ export class DataService {
     {
       id: 106,
       nombre: 'Clara Morales Ibáñez',
-      email: 'clara.morales@alumnos.nebrija.es',
+      email: 'claramorales@itutor.es',
       matricula: 'MAT-2026-204',
       tarifaHora: 30,
       plan: 'Intensivo',
@@ -154,7 +154,7 @@ export class DataService {
     {
       id: 107,
       nombre: 'David Romero Pascual',
-      email: 'david.romero@alumnos.nebrija.es',
+      email: 'davidromero@itutor.es',
       matricula: 'MAT-2026-228',
       tarifaHora: 28,
       plan: 'Básico',
@@ -168,7 +168,7 @@ export class DataService {
     {
       id: 108,
       nombre: 'Elena Ruiz Gallego',
-      email: 'elena.ruiz@alumnos.nebrija.es',
+      email: 'elenaruiz@itutor.es',
       matricula: 'MAT-2026-253',
       tarifaHora: 32,
       plan: 'Premium',
@@ -182,7 +182,7 @@ export class DataService {
     {
       id: 109,
       nombre: 'Adrián Torres Molina',
-      email: 'adrian.torres@alumnos.nebrija.es',
+      email: 'adriantorres@itutor.es',
       matricula: 'MAT-2026-279',
       tarifaHora: 38,
       plan: 'Intensivo',
@@ -214,7 +214,7 @@ export class DataService {
     {
       id: 201,
       nombre: 'Dra. Elena Ramos',
-      email: 'elena.ramos@itutor.es',
+      email: 'elenaramos@itutor.es',
       especialidad: 'Física Teórica & Mecánica Clásica',
       departamento: 'Física',
       tarifaHora: 35,
@@ -229,7 +229,7 @@ export class DataService {
     {
       id: 202,
       nombre: 'Prof. Carlos Méndez',
-      email: 'carlos.mendez@itutor.es',
+      email: 'carlosmendez@itutor.es',
       especialidad: 'Cálculo Multivariable & Álgebra Lineal',
       departamento: 'Matemáticas',
       tarifaHora: 35,
@@ -244,7 +244,7 @@ export class DataService {
     {
       id: 203,
       nombre: 'Dr. Miguel Ángel Santos',
-      email: 'miguel.santos@itutor.es',
+      email: 'miguelsantos@itutor.es',
       especialidad: 'Termodinámica & Mecánica de Fluidos',
       departamento: 'Física',
       tarifaHora: 30,
@@ -259,7 +259,7 @@ export class DataService {
     {
       id: 204,
       nombre: 'Prof. Laura Vicente',
-      email: 'laura.vicente@itutor.es',
+      email: 'lauravicente@itutor.es',
       especialidad: 'Química Aplicada e Ingeniería de Materiales',
       departamento: 'Química',
       tarifaHora: 28,
@@ -274,7 +274,7 @@ export class DataService {
     {
       id: 205,
       nombre: 'Dr. Fernando Alonso',
-      email: 'fernando.alonso@itutor.es',
+      email: 'fernandoalonso@itutor.es',
       especialidad: 'Electromagnetismo Avanzado & Circuitos',
       departamento: 'Física',
       tarifaHora: 35,
@@ -289,7 +289,7 @@ export class DataService {
     {
       id: 206,
       nombre: 'Dra. Carmen Delgado',
-      email: 'carmen.delgado@itutor.es',
+      email: 'carmendelgado@itutor.es',
       especialidad: 'Estadística Aplicada & Probabilidad Bayesiana',
       departamento: 'Matemáticas',
       tarifaHora: 32,
@@ -304,7 +304,7 @@ export class DataService {
     {
       id: 207,
       nombre: 'Prof. Roberto Gil',
-      email: 'roberto.gil@itutor.es',
+      email: 'robertogil@itutor.es',
       especialidad: 'Ecuaciones Diferenciales & Modelos Físicos',
       departamento: 'Matemáticas',
       tarifaHora: 30,
@@ -319,7 +319,7 @@ export class DataService {
     {
       id: 208,
       nombre: 'Dra. Natalia Molina',
-      email: 'natalia.molina@itutor.es',
+      email: 'nataliamolina@itutor.es',
       especialidad: 'Física Cuántica & Partículas Subatómicas',
       departamento: 'Física',
       tarifaHora: 38,
@@ -334,7 +334,7 @@ export class DataService {
     {
       id: 209,
       nombre: 'Prof. Jorge Herrera',
-      email: 'jorge.herrera@itutor.es',
+      email: 'jorgeherrera@itutor.es',
       especialidad: 'Geometría Diferencial & Topología Espacial',
       departamento: 'Matemáticas',
       tarifaHora: 30,
@@ -349,7 +349,7 @@ export class DataService {
     {
       id: 210,
       nombre: 'Dra. Patricia Serrano',
-      email: 'patricia.serrano@itutor.es',
+      email: 'patriciaserrano@itutor.es',
       especialidad: 'Astrofísica, Óptica & Ondas Gravitacionales',
       departamento: 'Física',
       tarifaHora: 36,

@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { MenuController } from '@ionic/angular';
+import { MenuController } from '@ionic/angular/menu-controller';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({

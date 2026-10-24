@@ -7,18 +7,16 @@ import { of, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 // 1. Importamos los componentes específicos de Ionic Standalone (sin IonSelect ya que el rol se detecta automáticamente)
-import { 
-  IonContent, 
-  IonCard,
-  IonCardHeader,
-  IonCardContent,
-  IonItem, 
-  IonInput, 
-  IonText, 
-  IonButton,
-  IonIcon,
-  IonSpinner
-} from '@ionic/angular';
+import { IonContent } from '@ionic/angular/ion-content';
+import { IonCard } from '@ionic/angular/ion-card';
+import { IonCardHeader } from '@ionic/angular/ion-card-header';
+import { IonCardContent } from '@ionic/angular/ion-card-content';
+import { IonItem } from '@ionic/angular/ion-item';
+import { IonInput } from '@ionic/angular/ion-input';
+import { IonText } from '@ionic/angular/ion-text';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonIcon } from '@ionic/angular/ion-icon';
+import { IonSpinner } from '@ionic/angular/ion-spinner';
 import { addIcons } from 'ionicons';
 import { 
   mailOutline, 
@@ -136,7 +134,7 @@ export class LoginPage {
       });
     } else if (type === 'profesora') {
       this.loginForm.patchValue({
-        email: 'elena.ramos@itutor.es',
+        email: 'elenaramos@itutor.es',
         password: 'elena'
       });
     } else {

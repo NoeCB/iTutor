@@ -86,7 +86,7 @@ describe('authGuard', () => {
     });
 
     it('debe permitir el acceso cuando el rol está en la lista permitida', () => {
-      auth.currentUserValue = { email: 'elena.ramos@itutor.es', role: 'Teacher' };
+      auth.currentUserValue = { email: 'elenaramos@itutor.es', role: 'Teacher' };
 
       expect(ejecutarGuard({ role: ['Standard', 'Teacher'] })).toBe(true);
     });
@@ -108,7 +108,7 @@ describe('authGuard', () => {
     });
 
     it('debe redirigir al profesor denegado a su portal docente', () => {
-      auth.currentUserValue = { email: 'elena.ramos@itutor.es', role: 'Teacher' };
+      auth.currentUserValue = { email: 'elenaramos@itutor.es', role: 'Teacher' };
 
       ejecutarGuard({ role: 'Standard' });
 

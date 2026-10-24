@@ -9,14 +9,16 @@
     <div class="header-title-wrap">
       <ion-title class="page-title">
         @switch (activeSection) {
-          @case ('tutorias') { Mis Tutorías & Calendario }
+          @case ('tutorias') { {{ isCoordinator ? 'Calendario General de Tutorías' : 'Mis Tutorías & Calendario' }} }
           @case ('apuntes') { Mis Apuntes & Material }
-          @case ('mensajes') { Mensajes con Profesores }
+          @case ('mensajes') { {{ isCoordinator ? 'Mensajes de Profesores (Coordinación)' : 'Mensajes con Profesores' }} }
           @case ('pagos') { Facturación & Pagos }
           @case ('ajustes') { Ajustes de Cuenta }
         }
       </ion-title>
-      <span class="student-pill">Alumna: Paula García</span>
+      <span class="student-pill" [class.coordinator-pill]="isCoordinator">
+        {{ isCoordinator ? 'Jefa Coordinadora: Noelia Cantador' : (currentUser?.name ? currentUser?.role + ': ' + currentUser?.name : 'Alumna: Paula García') }}
+      </span>
     </div>
 
   </ion-toolbar>
@@ -31,8 +33,8 @@
     @if (activeSection === 'tutorias') {
       <div class="section-banner">
         <div>
-          <h1 class="main-heading">Calendario de Clases de Paula</h1>
-          <p class="sub-heading">Haz clic sobre cualquier día marcado del calendario (por ejemplo, el <strong>10 de octubre</strong>) para abrir el recuadro de la tutoría y tu profesora.</p>
+          <h1 class="main-heading">{{ isCoordinator ? 'Calendario General de Tutorías' : 'Calendario de Clases de Paula' }}</h1>
+          <p class="sub-heading">{{ isCoordinator ? 'Supervisión de sesiones lectivas y seguimiento de tutorías programadas en iTUTOR.' : 'Haz clic sobre cualquier día marcado del calendario (por ejemplo, el 10 de octubre) para abrir el recuadro de la tutoría y tu profesora.' }}</p>
         </div>
         <div class="month-selector">
           <ion-icon name="calendar-outline"></ion-icon>
@@ -256,8 +258,8 @@
     @if (activeSection === 'mensajes') {
       <div class="section-banner">
         <div>
-          <h1 class="main-heading">Mensajes con mis Profesores</h1>
-          <p class="sub-heading">Canal directo de tutoría y resolución de dudas con tus profesores de iTUTOR.</p>
+          <h1 class="main-heading">{{ isCoordinator ? 'Mensajes con el Claustro de Profesores' : 'Mensajes con mis Profesores' }}</h1>
+          <p class="sub-heading">{{ isCoordinator ? 'Canal oficial de coordinación académica entre la Jefa Coordinadora (Noelia Cantador) y los profesores de iTUTOR.' : 'Canal directo de tutoría y resolución de dudas con tus profesores de iTUTOR.' }}</p>
         </div>
       </div>
 
@@ -265,7 +267,7 @@
         <!-- Lista de profesores -->
         <ion-card class="teachers-list-card">
           <ion-card-content>
-            <h3 class="chat-side-title">Tus Profesores</h3>
+            <h3 class="chat-side-title">{{ isCoordinator ? 'Claustro de Profesores' : 'Tus Profesores' }}</h3>
             @for (conv of conversations; track conv.id) {
               <button
                 type="button"
@@ -295,16 +297,27 @@
         <ion-card class="chat-window-card">
           <div class="chat-window-header">
             <div class="chat-avatar">{{ activeConversation.initials }}</div>
-            <div>
+            <div class="chat-header-info">
               <h3>{{ activeConversation.teacherName }}</h3>
               <span>{{ activeConversation.subject }} • En línea</span>
             </div>
+            @if (isCoordinator) {
+              <div class="coordinator-badge-tag">
+                <ion-icon name="shield-checkmark-outline"></ion-icon>
+                <span>Jefa Coordinadora: Noelia Cantador</span>
+              </div>
+            }
           </div>
 
           <div class="chat-messages-body">
             @for (msg of activeConversation.messages; track $index) {
-              <div class="message-bubble-wrap" [class.mine]="msg.sender === 'student'">
+              <div class="message-bubble-wrap" [class.mine]="isMyMessage(msg)">
                 <div class="message-bubble">
+                  @if (isCoordinator) {
+                    <span class="sender-name-label">
+                      {{ isMyMessage(msg) ? 'Noelia Cantador (Jefa Coordinadora)' : activeConversation.teacherName }}
+                    </span>
+                  }
                   <p>{{ msg.text }}</p>
                   <span class="msg-time">{{ msg.time }}</span>
                 </div>
@@ -315,7 +328,7 @@
           <div class="chat-input-bar">
             <input
               type="text"
-              placeholder="Escribe un mensaje a {{ activeConversation.teacherName }}..."
+              [placeholder]="isCoordinator ? 'Escribe un mensaje como Jefa Coordinadora Noelia a ' + activeConversation.teacherName + '...' : 'Escribe un mensaje a ' + activeConversation.teacherName + '...'"
               [(ngModel)]="newMessageText"
               (keyup.enter)="sendMessage()"
             />

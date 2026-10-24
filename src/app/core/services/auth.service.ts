@@ -29,8 +29,8 @@ export class AuthService {
    * Cuentas registradas en el sistema iTUTOR (Sin contraseñas en texto plano en el código):
    * - Admin: noeliacantador@itutor.es (clave: noelia)
    * - Alumna (Standard): paulagarcia@itutor.es (clave: paula)
-   * - Profesor (Teacher): elena.ramos@itutor.es (clave: elena)
-   * - Profesor (Teacher): carlos.mendez@itutor.es (clave: carlos)
+   * - Profesor (Teacher): elenaramos@itutor.es (clave: elena)
+   * - Profesor (Teacher): carlosmendez@itutor.es (clave: carlos)
    * - Profesor genérico: profesor@itutor.es (clave: profe)
    */
   private readonly ACCOUNTS: StoredAccount[] = [
@@ -49,14 +49,14 @@ export class AuthService {
       passwordHash: '$2b$12$salt_student_2026$3d1b2dc58c0ca993'
     },
     {
-      email: 'elena.ramos@itutor.es',
+      email: 'elenaramos@itutor.es',
       name: 'Dra. Elena Ramos',
       role: 'Teacher',
       salt: 'salt_teacher_2026',
       passwordHash: '$2b$12$salt_teacher_2026$a8be79c5c8293d93'
     },
     {
-      email: 'carlos.mendez@itutor.es',
+      email: 'carlosmendez@itutor.es',
       name: 'Prof. Carlos Méndez',
       role: 'Teacher',
       salt: 'salt_carlos_2026',
