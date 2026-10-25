@@ -17,7 +17,7 @@
         }
       </ion-title>
       <span class="student-pill" [class.coordinator-pill]="isCoordinator">
-        {{ isCoordinator ? 'Jefa Coordinadora: Noelia Cantador' : (currentUser?.name ? currentUser?.role + ': ' + currentUser?.name : 'Alumna: Paula García') }}
+        {{ isCoordinator ? 'Jefa Coordinadora: Noelia Cantador' : (currentUser?.name ? currentUser.role + ': ' + currentUser.name : 'Alumna: Paula García') }}
       </span>
     </div>
 
