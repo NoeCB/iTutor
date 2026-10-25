@@ -12,8 +12,17 @@
       </div>
 
       <div class="table-meta">
+        <div class="search-box">
+          <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
+          <input
+            type="search"
+            [(ngModel)]="searchTerm"
+            placeholder="Buscar en la tabla..."
+            aria-label="Buscar registros en la tabla"
+          />
+        </div>
         <span class="count-pill">
-          {{ rows.length }} {{ rows.length === 1 ? 'registro' : 'registros' }}
+          {{ displayedRows.length }} {{ displayedRows.length === 1 ? 'registro' : 'registros' }}
         </span>
       </div>
     </div>
@@ -46,7 +55,7 @@
       </thead>
 
       <tbody>
-        @if (rows.length === 0) {
+        @if (displayedRows.length === 0) {
           <tr class="empty-row" role="row">
             <td 
               [attr.colspan]="columns.length + (showActions ? 1 : 0)" 
@@ -63,7 +72,7 @@
             </td>
           </tr>
         } @else {
-          @for (row of rows; track trackByIndex($index)) {
+          @for (row of displayedRows; track trackByIndex($index)) {
             <tr role="row" class="data-row">
               @for (col of columns; track col.key) {
                 <td 

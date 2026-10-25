@@ -1,0 +1,380 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>iTUTOR - Documentación Técnica</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+	   <link rel="stylesheet" href="./styles/style.css">
+        <link rel="stylesheet" href="./styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="./" class="navbar-brand">iTUTOR - Documentación Técnica</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search">
+    <input type="text" placeholder="Escribe para buscar">
+    <button type="button"
+        class="search-input-clear"
+        aria-label="Clear search"
+        data-search-input-clear>&times;</button>
+</div>
+            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content readme">
+                   <div class="content-data">
+
+
+<h1>iTUTOR — Sistema de Gestión Multiplataforma de Tutorías (PWA / Híbrida)</h1>
+<p><strong>Módulo Profesional:</strong> Desarrollo de Interfaces (Código: 0488)<br><strong>Ciclo Formativo:</strong> Grado Superior en Desarrollo de Aplicaciones Multiplataforma (DAM)<br><strong>Stack Tecnológico:</strong> Ionic 8/9 + Angular Standalone + RxJS + Chart.js + jsPDF  </p>
+<hr>
+<h2>1. Credenciales de Acceso para Evaluación</h2>
+<p>La aplicación cuenta con control de acceso basado en roles (<code>Admin</code>, <code>Teacher</code> y <code>Standard</code>), validación reactiva/asíncrona de correo en tiempo real, protección de rutas mediante <code>CanActivateFn</code> (<a href="./src/app/core/guards/auth.guard.ts"><code>authGuard</code></a>) e inyección de tokens JWT mediante <a href="./src/app/core/interceptors/auth.interceptor.ts"><code>authInterceptor</code></a>.</p>
+<table class="table table-bordered compodoc-table">
+<thead>
+<tr><th style="text-align: left">Rol en el Sistema</th><th style="text-align: left">Correo Electrónico</th><th style="text-align: left">Contraseña</th><th style="text-align: left">Ruta de Destino</th><th style="text-align: left">Descripción de la Vista</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left"><strong>Administrador (Admin)</strong></td><td style="text-align: left"><code>noeliacantador@itutor.es</code></td><td style="text-align: left"><code>noelia</code></td><td style="text-align: left"><code>/admin-dashboard</code></td><td style="text-align: left">Métricas, <strong>Listado de Profesores (10)</strong> y <strong>Listado de Alumnos (10)</strong>. <em>(Sin sección de apuntes)</em></td></tr>
+<tr><td style="text-align: left"><strong>Profesor Docente (Teacher)</strong></td><td style="text-align: left"><code>elenaramos@itutor.es</code></td><td style="text-align: left"><code>elena</code></td><td style="text-align: left"><code>/portal-profesor</code></td><td style="text-align: left"><strong>Portal Docente</strong>: Expediente, alumnos que tiene a su cargo y <strong>todo el dinero ganado</strong>.</td></tr>
+<tr><td style="text-align: left"><strong>Usuario Estándar (Alumna)</strong></td><td style="text-align: left"><code>paulagarcia@itutor.es</code></td><td style="text-align: left"><code>paula</code></td><td style="text-align: left"><code>/mis-clases</code></td><td style="text-align: left">Portal de Alumna: Calendario interactivo, Mis Apuntes, Mensajería y Justificantes de Pago.</td></tr>
+</tbody>
+</table>
+<hr>
+<h2>2. Cumplimiento de las Fases del Proyecto y Rúbrica (RA 1 a RA 7)</h2>
+<h3>Fase 1: Estructuración y Renderizado Declarativo (RA 1 y RA 2)</h3>
+<ul>
+<li><strong>Paso 1.1 — Sistema de Enrutamiento y Navegación:</strong><ul>
+<li>Menú lateral responsivo (<code>&lt;ion-split-pane&gt;</code> + <code>&lt;ion-menu&gt;</code>) en <a href="./src/app/app.component.html"><code>app.component.html</code></a> que adapta dinámicamente sus enlaces según el rol del usuario conectado.</li>
+<li>Carga diferida (<em>Lazy Loading</em> con <code>loadComponent</code>) configurada en <a href="./src/app/app.routes.ts"><code>app.routes.ts</code></a>.</li>
+<li>Protección de rutas con <a href="./src/app/core/guards/auth.guard.ts"><code>authGuard</code></a> e interceptor funcional HTTP <a href="./src/app/core/interceptors/auth.interceptor.ts"><code>authInterceptor</code></a> registrado en <a href="./src/main.ts"><code>main.ts</code></a>.</li>
+</ul>
+</li>
+<li><strong>Paso 1.2 — Formularios y Validaciones Asíncronas:</strong><ul>
+<li>Pantalla de acceso profesional centrada en tarjeta (<code>&lt;ion-card&gt;</code>) con logotipo <strong>iTUTOR</strong> (<a href="./src/app/features/login/login.page.html"><code>login.page.html</code></a>).</li>
+<li><code>ReactiveFormsModule</code> + validador asíncrono personalizado (<code>emailExistsValidator</code>) contra <a href="./src/app/core/services/auth.service.ts"><code>AuthService</code></a> y renderizado optimizado con <code>ChangeDetectionStrategy.OnPush</code>.</li>
+</ul>
+</li>
+</ul>
+<h3>Fase 2: Componentización Visual y Lógica de Negocio (RA 3)</h3>
+<ul>
+<li><strong>Paso 2.1 y 2.2 — Componentes Personalizados Agnósticos (<code>@Input</code> / <code>@Output</code>):</strong><ol>
+<li><strong><a href="./src/app/shared/components/stat-card/stat-card.component.ts"><code>StatCardComponent</code></a> (<code>&lt;app-stat-card&gt;</code>):</strong> Widget estadístico reutilizable para KPIs con cálculo de variación porcentual.</li>
+<li><strong><a href="./src/app/shared/components/data-table/data-table.component.ts"><code>DataTableComponent</code></a> (<code>&lt;app-data-table&gt;</code>):</strong> Tabla de datos avanzada e instanciable con <strong>buscador en tiempo real integrado</strong> (<code>[(ngModel)]=&quot;searchTerm&quot;</code>), formateo de divisas/estados y emisión de eventos (<code>@Output() onEdit</code>, <code>onDelete</code>, <code>onView</code>) hacia el componente padre.</li>
+</ol>
+<ul>
+<li>Gestión del ciclo de vida (<code>ngOnInit</code>, <code>ngAfterViewInit</code>, <code>ngOnDestroy</code>) destruyendo las instancias de <code>Chart.js</code> al desmontar la vista para evitar fugas de memoria (<em>memory leaks</em>).</li>
+</ul>
+</li>
+</ul>
+<h3>Fase 3: Consumo de Datos y Generación de Informes (RA 5)</h3>
+<ul>
+<li><strong>Paso 3.1 — Concurrencia y Asincronía (SQL + NoSQL):</strong><ul>
+<li><a href="./src/app/core/services/data.service.ts"><code>DataService</code></a> orquesta de manera concurrente mediante <code>forkJoin</code> de RxJS dos fuentes de datos: catálogo relacional (<strong>SQL</strong>) y sesiones documentales en tiempo real (<strong>NoSQL / MongoDB</strong>).</li>
+</ul>
+</li>
+<li><strong>Paso 3.2 — Dashboard Interactivo:</strong><ul>
+<li>Cuadro de mando para el rol Administrador (<a href="./src/app/features/admin-dashboard/admin-dashboard.page.ts"><code>AdminDashboardPage</code></a>) con segmentación temporal en vivo y gráficos interactivos con <strong>Chart.js</strong> (<em>Ingresos por Asignatura</em> y <em>Clases Impartidas</em>).</li>
+<li>Portal interactivo para el rol Alumno (<a href="./src/app/features/mis-clases/mis-clases.page.ts"><code>MisClasesPage</code></a>) con <strong>Calendario de Tutorías</strong> (al pulsar en el <strong>10 de octubre</strong> despliega el recuadro de la tutoría de <strong>Ecuaciones Diferenciales</strong> con la <strong>Dra. Elena Ramos</strong>), <strong>Mis Apuntes</strong>, <strong>Mensajes con Profesores</strong> y <strong>Dashboard de Facturación &amp; Pagos</strong>.</li>
+</ul>
+</li>
+<li><strong>Paso 3.3 — Exportación de Datos (PDF y CSV):</strong><ul>
+<li>Generación y descarga de informes tabulados en <strong>CSV</strong> (con BOM UTF-8 compatible con Excel) y <strong>PDF corporativo</strong> mediante <code>jsPDF</code> y <code>jspdf-autotable</code>.</li>
+</ul>
+</li>
+</ul>
+<h3>Fase 4: Usabilidad, Accesibilidad y Control de Calidad (RA 4)</h3>
+<ul>
+<li><strong>Paso 4.1 y 4.2 — Diseño Adaptativo (Mobile-First) y WCAG 2.1 AA:</strong><ul>
+<li>Uso de <code>ion-grid</code>, CSS Grid y Flexbox adaptativos para móvil, tablet y escritorio.</li>
+<li>Landmarks semánticos WAI-ARIA (<code>role=&quot;banner&quot;</code>, <code>role=&quot;main&quot;</code>, <code>role=&quot;region&quot;</code>, <code>aria-live=&quot;polite&quot;</code>, <code>aria-label</code>), alto contraste cromático y navegación por teclado con <code>:focus-visible</code>.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>3. Manual de Usuario Final</h2>
+<ol>
+<li><strong>Inicio de Sesión (<code>/login</code>):</strong><ul>
+<li>Introduce tu correo y contraseña en la tarjeta central de <strong>iTUTOR</strong>, o pulsa uno de los chips de acceso rápido de prueba (<strong>Admin</strong>, <strong>Profesora</strong> o <strong>Alumna</strong>).</li>
+<li>El sistema verifica asíncronamente si el correo existe en la base de datos antes de habilitar el acceso.</li>
+</ul>
+</li>
+<li><strong>Vista de Administrador (<code>noeliacantador@itutor.es</code> / <code>noelia</code>):</strong><ul>
+<li><strong>Métricas &amp; Sesiones:</strong> Visualiza los 4 KPIs financieros/académicos, filtra por mes (<em>Todos, Sep, Oct, Nov, Dic</em>), consulta los gráficos Chart.js y exporta el informe de sesiones a PDF o CSV.</li>
+<li><strong>Listado de Profesores (10):</strong> Consulta el catálogo completo de los 10 profesores de iTUTOR con sus especialidades, alumnos asignados, horas dadas, total ganado y exportación de nóminas/censo.</li>
+<li><strong>Listado de Alumnos (10):</strong> Consulta el censo de los 10 alumnos matriculados, planes (Básico, Intensivo, Premium), profesor tutor asignado y saldos pendientes.</li>
+<li><em>(Nota: El rol Administrador no cuenta con sección de apuntes, centrando su panel en la gestión de docentes, alumnos y finanzas).</em></li>
+</ul>
+</li>
+<li><strong>Vista de Profesor (<code>elenaramos@itutor.es</code> / <code>elena</code>):</strong><ul>
+<li><strong>Alumnos que tiene:</strong> Tarjetas detalladas de los estudiantes asignados a su cargo, materias, horas cursadas y volumen económico generado.</li>
+<li><strong>Todo el dinero ganado:</strong> Desglose del total ganado en honorarios acumulados, tarifa/hora oficial y métricas de rendimiento.</li>
+<li><strong>Histórico de clases:</strong> Tabla interactiva de sesiones impartidas con buscador integrado.</li>
+<li><strong>Liquidación en PDF:</strong> Botón superior para descargar el certificado oficial de liquidación de honorarios.</li>
+</ul>
+</li>
+<li><strong>Vista de Alumna (<code>paulagarcia@itutor.es</code> / <code>paula</code>):</strong><ul>
+<li><strong>Mis Tutorías:</strong> Explora el calendario de Octubre 2026 y haz clic en cualquier día con clase (ej. <strong>10 de octubre</strong>) para abrir el recuadro de detalle de <strong>Ecuaciones Diferenciales</strong> con la <strong>Dra. Elena Ramos</strong>.</li>
+<li><strong>Mis Apuntes:</strong> Filtra tus temas por asignatura y descarga los apuntes en PDF.</li>
+<li><strong>Mensajes con Profesores:</strong> Chatea en directo con tus profesores tutores.</li>
+<li><strong>Facturación &amp; Pagos:</strong> Consulta el dashboard de todo lo que has pagado y descarga tus recibos en PDF.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>4. Comandos de Ejecución, Documentación (Compodoc) y Despliegue</h2>
+<b>Ejemplo :</b><div><pre class="line-numbers"><code class="language-bash"># 1. Instalar dependencias
+npm install
+
+# 2. Ejecutar servidor de desarrollo
+npm start
+
+# 3. Compilar para producción (genera carpeta www/ lista para Vercel / Netlify / Firebase)
+npm run build
+
+# 4. Ejecutar la batería de pruebas unitarias (una sola pasada, sin modo watch)
+npm run test:ci
+
+# 5. Generar documentación técnica automatizada con Compodoc (carpeta documentation/)
+npm run docs
+
+# 6. Servir la documentación generada en el navegador (http://localhost:8080)
+npm run docs:serve</code></pre></div><blockquote>
+<p><strong>Nota sobre la generación de documentación:</strong> se emplea <code>tsconfig.doc.json</code> en
+lugar de <code>tsconfig.app.json</code>. Este último solo declara <code>src/main.ts</code> en su clave
+<code>files</code>, por lo que Compodoc no descubriría los componentes <em>standalone</em>
+cargados de forma diferida con <code>loadComponent()</code> y generaría una documentación
+vacía.</p>
+</blockquote>
+<hr>
+<h2>5. Control de Calidad: Pruebas Unitarias (Quality Gate)</h2>
+<p>El <em>pipeline</em> de integración continua ejecuta la batería de pruebas y <strong>bloquea
+el flujo si alguna falla</strong>, antes de compilar el artefacto de producción.</p>
+<table class="table table-bordered compodoc-table">
+<thead>
+<tr><th style="text-align: left">Suite de pruebas</th><th style="text-align: left">Qué verifica</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left"><code>auth.spec.ts</code></td><td style="text-align: left">Estado inicial anónimo, verificación de credenciales contra hash, cierre de sesión y resistencia a la manipulación de <code>localStorage</code> (escalada de privilegios).</td></tr>
+<tr><td style="text-align: left"><code>auth-guard.spec.ts</code></td><td style="text-align: left">Las dos capas del guard: autenticación y autorización por rol, incluida la política de supervisión del rol Admin.</td></tr>
+<tr><td style="text-align: left"><code>data.service.spec.ts</code></td><td style="text-align: left">Consumo de las fuentes SQL y NoSQL, orquestación concurrente con <code>forkJoin</code> y cálculos de agregación de honorarios.</td></tr>
+<tr><td style="text-align: left"><code>data-table.component.spec.ts</code></td><td style="text-align: left">El componente reutilizable: entrada por <code>@Input</code>, filtrado del buscador y emisión de eventos por <code>@Output</code>.</td></tr>
+</tbody>
+</table>
+<hr>
+<h2>6. Nota Técnica sobre el Modelo de Seguridad (Alcance Académico)</h2>
+<p>Para que la evaluación sea transparente, se detalla el alcance real de la capa
+de autenticación implementada:</p>
+<ul>
+<li><strong>Sin sesión por defecto.</strong> <code>AuthService</code> arranca con el estado en <code>null</code>. El
+acceso a una ruta protegida escribiendo su URL directamente redirige siempre a
+<code>/login</code>, y la rehidratación de la sesión valida que el rol persistido coincida
+con el rol real de la cuenta, de modo que editar <code>localStorage</code> no permite
+escalar privilegios.</li>
+<li><strong>Contraseñas.</strong> En el código <strong>no</strong> se almacena ninguna contraseña en claro,
+únicamente el hash derivado con <em>salt</em> y 1024 rondas de estiramiento. No
+obstante, se trata de una <strong>simulación didáctica</strong> (variante de FNV-1a): <strong>no
+es bcrypt, Argon2 ni PBKDF2</strong> y no debe considerarse criptográficamente
+segura. El prefijo <code>$2b$12$</code> se conserva solo para imitar el formato de
+almacenamiento típico de bcrypt.</li>
+<li><strong>Token.</strong> El token emitido reproduce la estructura de un JWT
+(<code>header.payload.signature</code>) para poder ejercitar el <code>authInterceptor</code>, pero
+<strong>no está firmado</strong> ni es validado por un backend real.</li>
+<li><strong>Datos.</strong> Todas las cuentas y registros son <strong>sintéticos y anonimizados</strong>: no
+corresponden a personas reales. Las credenciales de prueba se publican en este
+README por exigencia expresa del entregable.</li>
+</ul>
+<p>En un sistema de producción, la verificación de contraseñas y la firma de tokens
+deben residir <strong>siempre en el servidor</strong>; el cliente nunca debe validar
+credenciales.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'readme';
+            var COMPODOC_CURRENT_PAGE_URL = 'index.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var updateDarkModeSwitchOffset = function () {
+                    var content = document.querySelector('.content');
+                    var scrollbarWidth = 0;
+
+                    if (content) {
+                         scrollbarWidth = Math.max(0, content.offsetWidth - content.clientWidth);
+                    }
+
+                    document.documentElement.style.setProperty(
+                         '--content-scrollbar-width',
+                         scrollbarWidth + 'px'
+                    );
+               };
+
+               updateDarkModeSwitchOffset();
+               requestAnimationFrame(updateDarkModeSwitchOffset);
+               window.addEventListener('resize', updateDarkModeSwitchOffset);
+
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="./js/libs/custom-elements.min.js"></script>
+       <script src="./js/libs/lit-html.js"></script>
+
+       <script src="./js/menu-wc.js" defer></script>
+
+       <script src="./js/libs/bootstrap-native.js"></script>
+
+       <script src="./js/libs/es6-shim.min.js"></script>
+       <script src="./js/libs/EventDispatcher.js"></script>
+       <script src="./js/libs/promise.min.js"></script>
+
+       <script src="./js/compodoc.js"></script>
+
+       <script src="./js/tabs.js"></script>
+       <script src="./js/menu.js"></script>
+       <script src="./js/libs/clipboard.min.js"></script>
+       <script src="./js/libs/prism.js"></script>
+       <script src="./js/sourceCode.js"></script>
+          <script src="./js/search/search.js"></script>
+          <script src="./js/search/lunr.min.js"></script>
+          <script src="./js/search/search-lunr.js"></script>
+          <script src="./js/search/search_index.js"></script>
+       <script src="./js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

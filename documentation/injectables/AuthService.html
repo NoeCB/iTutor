@@ -1,0 +1,1286 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>iTUTOR - Documentación Técnica</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">iTUTOR - Documentación Técnica</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search">
+    <input type="text" placeholder="Escribe para buscar">
+    <button type="button"
+        class="search-input-clear"
+        aria-label="Clear search"
+        data-search-input-clear>&times;</button>
+</div>
+            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Inyectables</li>
+  <li class="breadcrumb-item" >AuthService</li>
+</ol>
+
+<div class="io-file io-file-path" data-compodoc="entity-file-path">
+    <span class="icon ion-ios-document" aria-hidden="true"></span>
+    <code>src/app/core/services/auth.service.ts</code>
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#api" 
+                class="nav-link"
+                
+                role="tab" id="api-tab" data-bs-toggle="tab" data-link="api">API</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+
+
+
+        <section data-compodoc="block-metadata">
+            <h3>Meta datos</h3>
+            <table class="table table-sm table-hover metadata">
+                <tbody>
+                    <tr>
+                        <td class="col-md-3">providedIn</td>
+                        <td class="col-md-9"><code>root</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+            </div>
+
+    <div class="tab-pane fade " id="api">
+            <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Propiedades</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#ACCOUNTS" >ACCOUNTS</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#currentUser$" >currentUser$</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#currentUserSubject" >currentUserSubject</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#authenticate" >authenticate</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#checkEmailExists" >checkEmailExists</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#clearSession" >clearSession</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#computeSaltedHash" >computeSaltedHash</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#login" >login</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#logout" >logout</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#restoreSession" >restoreSession</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+
+
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Accesorios</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--accessor" aria-hidden="true">A</span>
+                                <a href="#isAuthenticated" >isAuthenticated</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--accessor" aria-hidden="true">A</span>
+                                <a href="#currentUserValue" >currentUserValue</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor()</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="82" class="link-to-prism">src/app/core/services/auth.service.ts:82</a></div>
+                            </td>
+                        </tr>
+
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authenticate"></a>
+                    <span class="name">
+                        <span ><b>authenticate</b></span>
+                        <a href="#authenticate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>authenticate(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, password: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="161"
+                                    class="link-to-prism">src/app/core/services/auth.service.ts:161</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Autentica al usuario comparando únicamente el hash derivado de su contraseña
+con el passwordHash almacenado, asignando automáticamente su rol.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>password</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="../interfaces/User.html" target="_self" >User | null</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkEmailExists"></a>
+                    <span class="name">
+                        <span ><b>checkEmailExists</b></span>
+                        <a href="#checkEmailExists"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>checkEmailExists(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="204"
+                                    class="link-to-prism">src/app/core/services/auth.service.ts:204</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Simulación de petición asíncrona a API para verificar si el correo está registrado en iTUTOR</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>Observable&lt;boolean&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="clearSession"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>clearSession</b></span>
+                        <a href="#clearSession"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>clearSession()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="127"
+                                    class="link-to-prism">src/app/core/services/auth.service.ts:127</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Limpia por completo el estado de sesión y las credenciales almacenadas.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="computeSaltedHash"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>computeSaltedHash</b></span>
+                        <a href="#computeSaltedHash"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>computeSaltedHash(password: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, salt: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="142"
+                                    class="link-to-prism">src/app/core/services/auth.service.ts:142</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Función de derivación unidireccional con Salt (1024 rondas) para verificar
+credenciales sin almacenar jamás contraseñas en texto plano en el repositorio.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>password</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>salt</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="login"></a>
+                    <span class="name">
+                        <span ><b>login</b></span>
+                        <a href="#login"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>login(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, role: "Admin" | "Standard" | "Teacher", name?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="178"
+                                    class="link-to-prism">src/app/core/services/auth.service.ts:178</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>role</td>
+                                            <td>
+                                                        <code>&quot;Admin&quot; | &quot;Standard&quot; | &quot;Teacher&quot;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>name</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Si
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="logout"></a>
+                    <span class="name">
+                        <span ><b>logout</b></span>
+                        <a href="#logout"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>logout()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="191"
+                                    class="link-to-prism">src/app/core/services/auth.service.ts:191</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="restoreSession"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>restoreSession</b></span>
+                        <a href="#restoreSession"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>restoreSession()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="94"
+                                    class="link-to-prism">src/app/core/services/auth.service.ts:94</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Rehidrata la sesión desde <code>localStorage</code> validando que el usuario
+persistido corresponda a una cuenta real y a un rol conocido.
+Cualquier dato corrupto, manipulado o desconocido provoca el cierre
+inmediato de la sesión en lugar de conceder acceso por defecto.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Propiedades
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ACCOUNTS"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>ACCOUNTS</b></span>
+                        <a href="#ACCOUNTS"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/StoredAccount.html" target="_self" >StoredAccount[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[
+    {
+      email: &#x27;noeliacantador@itutor.es&#x27;,
+      name: &#x27;Noelia Cantador&#x27;,
+      role: &#x27;Admin&#x27;,
+      salt: &#x27;salt_admin_2026&#x27;,
+      passwordHash: &#x27;$2b$12$salt_admin_2026$e7a1a9c54a7ded93&#x27;
+    },
+    {
+      email: &#x27;paulagarcia@itutor.es&#x27;,
+      name: &#x27;Paula García&#x27;,
+      role: &#x27;Standard&#x27;,
+      salt: &#x27;salt_student_2026&#x27;,
+      passwordHash: &#x27;$2b$12$salt_student_2026$3d1b2dc58c0ca993&#x27;
+    },
+    {
+      email: &#x27;elenaramos@itutor.es&#x27;,
+      name: &#x27;Dra. Elena Ramos&#x27;,
+      role: &#x27;Teacher&#x27;,
+      salt: &#x27;salt_teacher_2026&#x27;,
+      passwordHash: &#x27;$2b$12$salt_teacher_2026$a8be79c5c8293d93&#x27;
+    },
+    {
+      email: &#x27;carlosmendez@itutor.es&#x27;,
+      name: &#x27;Prof. Carlos Méndez&#x27;,
+      role: &#x27;Teacher&#x27;,
+      salt: &#x27;salt_carlos_2026&#x27;,
+      passwordHash: &#x27;$2b$12$salt_carlos_2026$d7e605c5c10bc993&#x27;
+    },
+    {
+      email: &#x27;profesor@itutor.es&#x27;,
+      name: &#x27;Dra. Elena Ramos (Demo Profesor)&#x27;,
+      role: &#x27;Teacher&#x27;,
+      salt: &#x27;salt_profe_2026&#x27;,
+      passwordHash: &#x27;$2b$12$salt_profe_2026$77cd5dc5eb524993&#x27;
+    }
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="36" class="link-to-prism">src/app/core/services/auth.service.ts:36</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Cuentas registradas en el sistema iTUTOR (Sin contraseñas en texto plano en el código):</p>
+<ul>
+<li>Admin: <a href="mailto:noeliacantador@itutor.es">noeliacantador@itutor.es</a> (clave: noelia)</li>
+<li>Alumna (Standard): <a href="mailto:paulagarcia@itutor.es">paulagarcia@itutor.es</a> (clave: paula)</li>
+<li>Profesor (Teacher): <a href="mailto:elenaramos@itutor.es">elenaramos@itutor.es</a> (clave: elena)</li>
+<li>Profesor (Teacher): <a href="mailto:carlosmendez@itutor.es">carlosmendez@itutor.es</a> (clave: carlos)</li>
+<li>Profesor genérico: <a href="mailto:profesor@itutor.es">profesor@itutor.es</a> (clave: profe)</li>
+</ul>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentUser$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>currentUser$</b></span>
+                        <a href="#currentUser$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>this.currentUserSubject.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="82" class="link-to-prism">src/app/core/services/auth.service.ts:82</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentUserSubject"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>currentUserSubject</b></span>
+                        <a href="#currentUserSubject"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>new BehaviorSubject&lt;User | null&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="81" class="link-to-prism">src/app/core/services/auth.service.ts:81</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Estado de sesión. Arranca SIEMPRE como <code>null</code> (sesión anónima): ninguna
+credencial se asume por defecto, de forma que el <code>authGuard</code> no pueda
+eludirse navegando directamente por URL a una ruta protegida.
+Solo <code>authenticate()</code> (login explícito) o la rehidratación de una sesión
+previamente validada en <code>localStorage</code> pueden poblar este estado.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accesorios
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="isAuthenticated"></a>
+                        <span class="name"><b>isAuthenticated</b><a href="#isAuthenticated"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>isAuthenticated()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="134" class="link-to-prism">src/app/core/services/auth.service.ts:134</a></div>
+                                </td>
+                            </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description"><p>Indica si existe una sesión autenticada activa.</p>
+</div>
+
+                                <div class="io-description">
+                                    <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                                </div>
+                        </td>
+                    </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="currentUserValue"></a>
+                        <span class="name"><b>currentUserValue</b><a href="#currentUserValue"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>currentUserValue()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="197" class="link-to-prism">src/app/core/services/auth.service.ts:197</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { BehaviorSubject, Observable, of } from &#x27;rxjs&#x27;;
+import { delay } from &#x27;rxjs/operators&#x27;;
+
+export interface User {
+  email: string;
+  name?: string;
+  role: &#x27;Admin&#x27; | &#x27;Standard&#x27; | &#x27;Teacher&#x27;;
+}
+
+interface StoredAccount {
+  email: string;
+  name: string;
+  role: &#x27;Admin&#x27; | &#x27;Standard&#x27; | &#x27;Teacher&#x27;;
+  /** Salt criptográfico único por usuario */
+  salt: string;
+  /**
+   * Hash derivado con 1024 rondas + Salt (Prohibido almacenar contraseñas en texto plano
+   * según criterio de seguridad de la rúbrica).
+   */
+  passwordHash: string;
+}
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class AuthService {
+  /**
+   * Cuentas registradas en el sistema iTUTOR (Sin contraseñas en texto plano en el código):
+   * - Admin: noeliacantador@itutor.es (clave: noelia)
+   * - Alumna (Standard): paulagarcia@itutor.es (clave: paula)
+   * - Profesor (Teacher): elenaramos@itutor.es (clave: elena)
+   * - Profesor (Teacher): carlosmendez@itutor.es (clave: carlos)
+   * - Profesor genérico: profesor@itutor.es (clave: profe)
+   */
+  private readonly ACCOUNTS: StoredAccount[] &#x3D; [
+    {
+      email: &#x27;noeliacantador@itutor.es&#x27;,
+      name: &#x27;Noelia Cantador&#x27;,
+      role: &#x27;Admin&#x27;,
+      salt: &#x27;salt_admin_2026&#x27;,
+      passwordHash: &#x27;$2b$12$salt_admin_2026$e7a1a9c54a7ded93&#x27;
+    },
+    {
+      email: &#x27;paulagarcia@itutor.es&#x27;,
+      name: &#x27;Paula García&#x27;,
+      role: &#x27;Standard&#x27;,
+      salt: &#x27;salt_student_2026&#x27;,
+      passwordHash: &#x27;$2b$12$salt_student_2026$3d1b2dc58c0ca993&#x27;
+    },
+    {
+      email: &#x27;elenaramos@itutor.es&#x27;,
+      name: &#x27;Dra. Elena Ramos&#x27;,
+      role: &#x27;Teacher&#x27;,
+      salt: &#x27;salt_teacher_2026&#x27;,
+      passwordHash: &#x27;$2b$12$salt_teacher_2026$a8be79c5c8293d93&#x27;
+    },
+    {
+      email: &#x27;carlosmendez@itutor.es&#x27;,
+      name: &#x27;Prof. Carlos Méndez&#x27;,
+      role: &#x27;Teacher&#x27;,
+      salt: &#x27;salt_carlos_2026&#x27;,
+      passwordHash: &#x27;$2b$12$salt_carlos_2026$d7e605c5c10bc993&#x27;
+    },
+    {
+      email: &#x27;profesor@itutor.es&#x27;,
+      name: &#x27;Dra. Elena Ramos (Demo Profesor)&#x27;,
+      role: &#x27;Teacher&#x27;,
+      salt: &#x27;salt_profe_2026&#x27;,
+      passwordHash: &#x27;$2b$12$salt_profe_2026$77cd5dc5eb524993&#x27;
+    }
+  ];
+
+  /**
+   * Estado de sesión. Arranca SIEMPRE como &#x60;null&#x60; (sesión anónima): ninguna
+   * credencial se asume por defecto, de forma que el &#x60;authGuard&#x60; no pueda
+   * eludirse navegando directamente por URL a una ruta protegida.
+   * Solo &#x60;authenticate()&#x60; (login explícito) o la rehidratación de una sesión
+   * previamente validada en &#x60;localStorage&#x60; pueden poblar este estado.
+   */
+  private currentUserSubject &#x3D; new BehaviorSubject&lt;User | null&gt;(null);
+  public currentUser$ &#x3D; this.currentUserSubject.asObservable();
+
+  constructor() {
+    this.restoreSession();
+  }
+
+  /**
+   * Rehidrata la sesión desde &#x60;localStorage&#x60; validando que el usuario
+   * persistido corresponda a una cuenta real y a un rol conocido.
+   * Cualquier dato corrupto, manipulado o desconocido provoca el cierre
+   * inmediato de la sesión en lugar de conceder acceso por defecto.
+   */
+  private restoreSession(): void {
+    const savedUser &#x3D; localStorage.getItem(&#x27;user&#x27;);
+    const savedToken &#x3D; localStorage.getItem(&#x27;token&#x27;);
+
+    if (!savedUser || !savedToken) {
+      this.clearSession();
+      return;
+    }
+
+    try {
+      const parsed &#x3D; JSON.parse(savedUser) as Partial&lt;User&gt;;
+      const account &#x3D; this.ACCOUNTS.find(
+        acc &#x3D;&gt; acc.email &#x3D;&#x3D;&#x3D; (parsed.email || &#x27;&#x27;).trim().toLowerCase()
+      );
+
+      // El rol persistido debe coincidir con el rol real de la cuenta en el
+      // sistema: así se evita la escalada de privilegios editando localStorage.
+      if (!account || parsed.role !&#x3D;&#x3D; account.role) {
+        this.clearSession();
+        return;
+      }
+
+      this.currentUserSubject.next({
+        email: account.email,
+        name: account.name,
+        role: account.role
+      });
+    } catch {
+      this.clearSession();
+    }
+  }
+
+  /** Limpia por completo el estado de sesión y las credenciales almacenadas. */
+  private clearSession(): void {
+    localStorage.removeItem(&#x27;user&#x27;);
+    localStorage.removeItem(&#x27;token&#x27;);
+    this.currentUserSubject.next(null);
+  }
+
+  /** Indica si existe una sesión autenticada activa. */
+  get isAuthenticated(): boolean {
+    return this.currentUserSubject.value !&#x3D;&#x3D; null;
+  }
+
+  /**
+   * Función de derivación unidireccional con Salt (1024 rondas) para verificar
+   * credenciales sin almacenar jamás contraseñas en texto plano en el repositorio.
+   */
+  private computeSaltedHash(password: string, salt: string): string {
+    let a &#x3D; 2166136261;
+    let b &#x3D; 16777619;
+    const str &#x3D; &#x60;${salt}:${password}&#x60;;
+    for (let r &#x3D; 0; r &lt; 1024; r++) {
+      for (let i &#x3D; 0; i &lt; str.length; i++) {
+        const c &#x3D; str.charCodeAt(i);
+        a &#x3D; Math.imul(a ^ (c + r), 16777619) &gt;&gt;&gt; 0;
+        b &#x3D; Math.imul(b ^ (c * 31 + r), 2246822507) &gt;&gt;&gt; 0;
+      }
+    }
+    const hexDigest &#x3D; a.toString(16).padStart(8, &#x27;0&#x27;) + b.toString(16).padStart(8, &#x27;0&#x27;);
+    return &#x60;$2b$12$${salt}$${hexDigest}&#x60;;
+  }
+
+  /**
+   * Autentica al usuario comparando únicamente el hash derivado de su contraseña
+   * con el passwordHash almacenado, asignando automáticamente su rol.
+   */
+  authenticate(email: string, password: string): User | null {
+    const normalizedEmail &#x3D; email.trim().toLowerCase();
+    const account &#x3D; this.ACCOUNTS.find(acc &#x3D;&gt; acc.email &#x3D;&#x3D;&#x3D; normalizedEmail);
+
+    if (!account) {
+      return null;
+    }
+
+    const candidateHash &#x3D; this.computeSaltedHash(password, account.salt);
+    if (candidateHash !&#x3D;&#x3D; account.passwordHash) {
+      return null;
+    }
+
+    this.login(account.email, account.role, account.name);
+    return this.currentUserValue;
+  }
+
+  login(email: string, role: &#x27;Admin&#x27; | &#x27;Standard&#x27; | &#x27;Teacher&#x27;, name?: string): void {
+    const normalizedEmail &#x3D; email.trim().toLowerCase();
+    const account &#x3D; this.ACCOUNTS.find(acc &#x3D;&gt; acc.email &#x3D;&#x3D;&#x3D; normalizedEmail);
+    const user: User &#x3D; {
+      email: normalizedEmail,
+      name: name || account?.name || normalizedEmail.split(&#x27;@&#x27;)[0],
+      role: account?.role || role
+    };
+    this.currentUserSubject.next(user);
+    localStorage.setItem(&#x27;user&#x27;, JSON.stringify(user));
+    localStorage.setItem(&#x27;token&#x27;, &#x27;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.iTUTOR.signature&#x27;);
+  }
+
+  logout(): void {
+    this.currentUserSubject.next(null);
+    localStorage.removeItem(&#x27;user&#x27;);
+    localStorage.removeItem(&#x27;token&#x27;);
+  }
+
+  get currentUserValue(): User | null {
+    return this.currentUserSubject.value;
+  }
+
+  /**
+   * Simulación de petición asíncrona a API para verificar si el correo está registrado en iTUTOR
+   */
+  checkEmailExists(email: string): Observable&lt;boolean&gt; {
+    const normalizedEmail &#x3D; (email || &#x27;&#x27;).trim().toLowerCase();
+    const exists &#x3D; this.ACCOUNTS.some(acc &#x3D;&gt; acc.email &#x3D;&#x3D;&#x3D; normalizedEmail);
+    return of(exists).pipe(delay(500));
+  }
+}</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'AuthService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var updateDarkModeSwitchOffset = function () {
+                    var content = document.querySelector('.content');
+                    var scrollbarWidth = 0;
+
+                    if (content) {
+                         scrollbarWidth = Math.max(0, content.offsetWidth - content.clientWidth);
+                    }
+
+                    document.documentElement.style.setProperty(
+                         '--content-scrollbar-width',
+                         scrollbarWidth + 'px'
+                    );
+               };
+
+               updateDarkModeSwitchOffset();
+               requestAnimationFrame(updateDarkModeSwitchOffset);
+               window.addEventListener('resize', updateDarkModeSwitchOffset);
+
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

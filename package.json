@@ -9,7 +9,10 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "test:ci": "ng test --no-watch",
+    "lint": "ng lint",
+    "docs": "compodoc -p tsconfig.doc.json -d documentation --name \"iTUTOR - Documentación Técnica\" --language es-ES --hideGenerator",
+    "docs:serve": "compodoc -s -d documentation"
   },
   "private": true,
   "dependencies": {
@@ -39,6 +42,7 @@
     "@angular/compiler-cli": "22.1.7",
     "@angular/language-service": "22.1.7",
     "@capacitor/cli": "8.5.3",
+    "@compodoc/compodoc": "2.0.0",
     "@ionic/angular-toolkit": "^13.0.0",
     "angular-eslint": "22.5.0",
     "eslint": "^10.10.0",

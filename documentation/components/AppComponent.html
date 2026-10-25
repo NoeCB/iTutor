@@ -1,0 +1,1720 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>iTUTOR - Documentación Técnica</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">iTUTOR - Documentación Técnica</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search">
+    <input type="text" placeholder="Escribe para buscar">
+    <button type="button"
+        class="search-input-clear"
+        aria-label="Clear search"
+        data-search-input-clear>&times;</button>
+</div>
+            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Componentes</li>
+  <li class="breadcrumb-item"
+  >
+  AppComponent</li>
+</ol>
+
+<div class="io-file io-file-path" data-compodoc="entity-file-path">
+    <span class="icon ion-ios-document" aria-hidden="true"></span>
+    <code>src/app/app.component.ts</code>
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#api" class="nav-link"
+                role="tab" id="api-tab" data-bs-toggle="tab" data-link="api">API</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Meta datos</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+            <tr>
+                <td class="col-md-3">changeDetection</td>
+                <td class="col-md-9"><code>ChangeDetectionStrategy.OnPush</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-root</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                        <div>        <code><a href="https://angular.dev/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+</div>
+                        <div>        <code><a href="https://angular.dev/api/router/RouterLink" target="_blank" >RouterLink</a></code>
+</div>
+                        <div>        <code><a href="https://angular.dev/api/router/RouterLinkActive" target="_blank" >RouterLinkActive</a></code>
+</div>
+                        <div>    <code>IonApp</code>
+</div>
+                        <div>    <code>IonSplitPane</code>
+</div>
+                        <div>    <code>IonMenu</code>
+</div>
+                        <div>    <code>IonContent</code>
+</div>
+                        <div>    <code>IonList</code>
+</div>
+                        <div>    <code>IonItem</code>
+</div>
+                        <div>    <code>IonIcon</code>
+</div>
+                        <div>    <code>IonLabel</code>
+</div>
+                        <div>    <code>IonRouterOutlet</code>
+</div>
+                        <div>    <code>IonMenuToggle</code>
+</div>
+                        <div>    <code>IonBadge</code>
+</div>
+                        <div>    <code>IonHeader</code>
+</div>
+                        <div>    <code>IonToolbar</code>
+</div>
+                        <div>    <code>IonFooter</code>
+</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./app.component.scss</code></td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./app.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+        <section data-compodoc="block-relationships">
+            <h3>Relationships</h3>
+
+            <div class="row pt-3">
+                <div class="col-sm-6">
+                    <h4>Used by</h4>
+                        <p class="comment"><i>No hay resultados que coincidan.</i></p>
+                </div>
+
+                <div class="col-sm-6">
+                    <h4>Depends on</h4>
+                        <ul class="list-unstyled relationships-list">
+                                <li>
+                                            <code><a href="https://angular.dev/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="https://angular.dev/api/router/RouterLink" target="_blank" >RouterLink</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="https://angular.dev/api/router/RouterLinkActive" target="_blank" >RouterLinkActive</a></code>
+                                </li>
+                                <li>
+                                        <code>IonApp</code>
+                                </li>
+                                <li>
+                                        <code>IonSplitPane</code>
+                                </li>
+                                <li>
+                                        <code>IonMenu</code>
+                                </li>
+                                <li>
+                                        <code>IonContent</code>
+                                </li>
+                                <li>
+                                        <code>IonList</code>
+                                </li>
+                                <li>
+                                        <code>IonItem</code>
+                                </li>
+                                <li>
+                                        <code>IonIcon</code>
+                                </li>
+                                <li>
+                                        <code>IonLabel</code>
+                                </li>
+                                <li>
+                                        <code>IonRouterOutlet</code>
+                                </li>
+                                <li>
+                                        <code>IonMenuToggle</code>
+                                </li>
+                                <li>
+                                        <code>IonBadge</code>
+                                </li>
+                                <li>
+                                        <code>IonHeader</code>
+                                </li>
+                                <li>
+                                        <code>IonToolbar</code>
+                                </li>
+                                <li>
+                                        <code>IonFooter</code>
+                                </li>
+                        </ul>
+                </div>
+            </div>
+        </section>
+</div>
+
+    <div class="tab-pane fade " id="api">    <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Propiedades</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#adminPages" >adminPages</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#authService" >authService</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#currentUser$" >currentUser$</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#router" >router</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#sidebarService" >sidebarService</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#studentPages" >studentPages</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#teacherPages" >teacherPages</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#getMenuPages" >getMenuPages</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#getUserDisplayName" >getUserDisplayName</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#getUserInitials" >getUserInitials</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#isLoginPage" >isLoginPage</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#logout" >logout</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+
+
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor()</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="109" class="link-to-prism">src/app/app.component.ts:109</a></div>
+                            </td>
+                        </tr>
+
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMenuPages"></a>
+                    <span class="name">
+                        <span ><b>getMenuPages</b></span>
+                        <a href="#getMenuPages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMenuPages(user?: <a href="../interfaces/User.html" target="_self">User | null</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="134"
+                                    class="link-to-prism">src/app/app.component.ts:134</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Devuelve los enlaces del menú según el rol del usuario conectado</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>user</td>
+                                            <td>
+                                                            <code><a href="../interfaces/User.html" target="_self" >User | null</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Si
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="../interfaces/MenuItem.html" target="_self" >MenuItem[]</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getUserDisplayName"></a>
+                    <span class="name">
+                        <span ><b>getUserDisplayName</b></span>
+                        <a href="#getUserDisplayName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getUserDisplayName(email?: string | null)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="162"
+                                    class="link-to-prism">src/app/app.component.ts:162</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Nombre formateado para el perfil</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                        <code>string | null</code>
+                                            </td>
+
+                                            <td>
+                                                    Si
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getUserInitials"></a>
+                    <span class="name">
+                        <span ><b>getUserInitials</b></span>
+                        <a href="#getUserInitials"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getUserInitials(email?: string | null)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="151"
+                                    class="link-to-prism">src/app/app.component.ts:151</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Obtiene las iniciales del usuario para el avatar</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>email</td>
+                                            <td>
+                                                        <code>string | null</code>
+                                            </td>
+
+                                            <td>
+                                                    Si
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isLoginPage"></a>
+                    <span class="name">
+                        <span ><b>isLoginPage</b></span>
+                        <a href="#isLoginPage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isLoginPage()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="145"
+                                    class="link-to-prism">src/app/app.component.ts:145</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Determina si nos encontramos en la pantalla de login para colapsar el menú</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="logout"></a>
+                    <span class="name">
+                        <span ><b>logout</b></span>
+                        <a href="#logout"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>logout()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="172"
+                                    class="link-to-prism">src/app/app.component.ts:172</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Cierre de sesión y redirección</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Propiedades
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="adminPages"></a>
+                    <span class="name">
+                        <span ><b>adminPages</b></span>
+                        <a href="#adminPages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/MenuItem.html" target="_self" >MenuItem[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[
+    { title: &#x27;Dashboard General&#x27;, url: &#x27;/admin-dashboard&#x27;, queryParams: { vista: &#x27;metricas&#x27; }, icon: &#x27;grid-outline&#x27; },
+    { title: &#x27;Listado de Profesores&#x27;, url: &#x27;/admin-dashboard&#x27;, queryParams: { vista: &#x27;profesores&#x27; }, icon: &#x27;school-outline&#x27;, badge: &#x27;10&#x27; },
+    { title: &#x27;Listado de Alumnos&#x27;, url: &#x27;/admin-dashboard&#x27;, queryParams: { vista: &#x27;alumnos&#x27; }, icon: &#x27;people-outline&#x27;, badge: &#x27;10&#x27; },
+    { title: &#x27;Calendario Tutorías&#x27;, url: &#x27;/mis-clases&#x27;, icon: &#x27;calendar-outline&#x27; },
+    { title: &#x27;Mensajes Profesores&#x27;, url: &#x27;/mensajes-profesores&#x27;, icon: &#x27;chatbubbles-outline&#x27;, badge: &#x27;3&#x27; },
+    { title: &#x27;Facturación &amp; Pagos&#x27;, url: &#x27;/mis-pagos&#x27;, icon: &#x27;wallet-outline&#x27; }
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="86" class="link-to-prism">src/app/app.component.ts:86</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Menú para el rol Administrador (Noelia Cantador - Jefa Coordinadora).
+Portal del Profesor eliminado del dashboard de Noelia según especificación.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authService"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>authService</b></span>
+                        <a href="#authService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>inject(AuthService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="75" class="link-to-prism">src/app/app.component.ts:75</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentUser$"></a>
+                    <span class="name">
+                        <span ><b>currentUser$</b></span>
+                        <a href="#currentUser$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>this.authService.currentUser$</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="80" class="link-to-prism">src/app/app.component.ts:80</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Flujo reactivo del usuario en sesión</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="router"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>router</b></span>
+                        <a href="#router"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>inject(Router)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="76" class="link-to-prism">src/app/app.component.ts:76</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sidebarService"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>sidebarService</b></span>
+                        <a href="#sidebarService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>inject(SidebarService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="77" class="link-to-prism">src/app/app.component.ts:77</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="studentPages"></a>
+                    <span class="name">
+                        <span ><b>studentPages</b></span>
+                        <a href="#studentPages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/MenuItem.html" target="_self" >MenuItem[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[
+    { title: &#x27;Mis Tutorías&#x27;, url: &#x27;/mis-clases&#x27;, icon: &#x27;calendar-outline&#x27; },
+    { title: &#x27;Mis Apuntes&#x27;, url: &#x27;/mis-apuntes&#x27;, icon: &#x27;document-text-outline&#x27;, badge: &#x27;6&#x27; },
+    { title: &#x27;Mensajes con Profesores&#x27;, url: &#x27;/mensajes-profesores&#x27;, icon: &#x27;chatbubbles-outline&#x27;, badge: &#x27;2&#x27; },
+    { title: &#x27;Facturación &amp; Pagos&#x27;, url: &#x27;/mis-pagos&#x27;, icon: &#x27;wallet-outline&#x27; }
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="104" class="link-to-prism">src/app/app.component.ts:104</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Menú específico para Alumno (Paula García)</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="teacherPages"></a>
+                    <span class="name">
+                        <span ><b>teacherPages</b></span>
+                        <a href="#teacherPages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/MenuItem.html" target="_self" >MenuItem[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[
+    { title: &#x27;Mi Portal Docente&#x27;, url: &#x27;/portal-profesor&#x27;, icon: &#x27;school-outline&#x27; },
+    { title: &#x27;Mis Alumnos &amp; Honorarios&#x27;, url: &#x27;/portal-profesor&#x27;, icon: &#x27;wallet-outline&#x27; },
+    { title: &#x27;Calendario de Clases&#x27;, url: &#x27;/mis-clases&#x27;, icon: &#x27;calendar-outline&#x27; },
+    { title: &#x27;Mensajes con Alumnos&#x27;, url: &#x27;/mensajes-profesores&#x27;, icon: &#x27;chatbubbles-outline&#x27;, badge: &#x27;2&#x27; }
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="96" class="link-to-prism">src/app/app.component.ts:96</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Menú específico para Rol Profesor (Teacher)</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, inject } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { Router, RouterLink, RouterLinkActive } from &#x27;@angular/router&#x27;;
+import { IonApp } from &#x27;@ionic/angular/ion-app&#x27;;
+import { IonSplitPane } from &#x27;@ionic/angular/ion-split-pane&#x27;;
+import { IonMenu } from &#x27;@ionic/angular/ion-menu&#x27;;
+import { IonContent } from &#x27;@ionic/angular/ion-content&#x27;;
+import { IonList } from &#x27;@ionic/angular/ion-list&#x27;;
+import { IonItem } from &#x27;@ionic/angular/ion-item&#x27;;
+import { IonIcon } from &#x27;@ionic/angular/ion-icon&#x27;;
+import { IonLabel } from &#x27;@ionic/angular/ion-label&#x27;;
+import { IonRouterOutlet } from &#x27;@ionic/angular/ion-router-outlet&#x27;;
+import { IonMenuToggle } from &#x27;@ionic/angular/ion-menu-toggle&#x27;;
+import { IonBadge } from &#x27;@ionic/angular/ion-badge&#x27;;
+import { IonHeader } from &#x27;@ionic/angular/ion-header&#x27;;
+import { IonToolbar } from &#x27;@ionic/angular/ion-toolbar&#x27;;
+import { IonFooter } from &#x27;@ionic/angular/ion-footer&#x27;;
+import { addIcons } from &#x27;ionicons&#x27;;
+import { 
+  gridOutline, 
+  calendarOutline, 
+  peopleOutline, 
+  schoolOutline, 
+  walletOutline, 
+  settingsOutline, 
+  logOutOutline, 
+  sparklesOutline, 
+  calculatorOutline, 
+  flaskOutline, 
+  chevronForwardOutline, 
+  bookOutline, 
+  personCircleOutline,
+  checkmarkCircle,
+  documentTextOutline,
+  chatbubblesOutline,
+  cardOutline
+} from &#x27;ionicons/icons&#x27;;
+import { AuthService, User } from &#x27;./core/services/auth.service&#x27;;
+import { SidebarService } from &#x27;./core/services/sidebar.service&#x27;;
+
+export interface MenuItem {
+  title: string;
+  url: string;
+  queryParams?: Record&lt;string, string&gt;;
+  icon: string;
+  badge?: string;
+}
+
+@Component({
+  selector: &#x27;app-root&#x27;,
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    RouterLinkActive,
+    IonApp,
+    IonSplitPane,
+    IonMenu,
+    IonContent,
+    IonList,
+    IonItem,
+    IonIcon,
+    IonLabel,
+    IonRouterOutlet,
+    IonMenuToggle,
+    IonBadge,
+    IonHeader,
+    IonToolbar,
+    IonFooter
+  ],
+  templateUrl: &#x27;./app.component.html&#x27;,
+  styleUrls: [&#x27;./app.component.scss&#x27;]
+})
+export class AppComponent {
+  private authService &#x3D; inject(AuthService);
+  private router &#x3D; inject(Router);
+  public sidebarService &#x3D; inject(SidebarService);
+
+  /** Flujo reactivo del usuario en sesión */
+  currentUser$ &#x3D; this.authService.currentUser$;
+
+  /** 
+   * Menú para el rol Administrador (Noelia Cantador - Jefa Coordinadora).
+   * Portal del Profesor eliminado del dashboard de Noelia según especificación.
+   */
+  adminPages: MenuItem[] &#x3D; [
+    { title: &#x27;Dashboard General&#x27;, url: &#x27;/admin-dashboard&#x27;, queryParams: { vista: &#x27;metricas&#x27; }, icon: &#x27;grid-outline&#x27; },
+    { title: &#x27;Listado de Profesores&#x27;, url: &#x27;/admin-dashboard&#x27;, queryParams: { vista: &#x27;profesores&#x27; }, icon: &#x27;school-outline&#x27;, badge: &#x27;10&#x27; },
+    { title: &#x27;Listado de Alumnos&#x27;, url: &#x27;/admin-dashboard&#x27;, queryParams: { vista: &#x27;alumnos&#x27; }, icon: &#x27;people-outline&#x27;, badge: &#x27;10&#x27; },
+    { title: &#x27;Calendario Tutorías&#x27;, url: &#x27;/mis-clases&#x27;, icon: &#x27;calendar-outline&#x27; },
+    { title: &#x27;Mensajes Profesores&#x27;, url: &#x27;/mensajes-profesores&#x27;, icon: &#x27;chatbubbles-outline&#x27;, badge: &#x27;3&#x27; },
+    { title: &#x27;Facturación &amp; Pagos&#x27;, url: &#x27;/mis-pagos&#x27;, icon: &#x27;wallet-outline&#x27; }
+  ];
+
+  /** Menú específico para Rol Profesor (Teacher) */
+  teacherPages: MenuItem[] &#x3D; [
+    { title: &#x27;Mi Portal Docente&#x27;, url: &#x27;/portal-profesor&#x27;, icon: &#x27;school-outline&#x27; },
+    { title: &#x27;Mis Alumnos &amp; Honorarios&#x27;, url: &#x27;/portal-profesor&#x27;, icon: &#x27;wallet-outline&#x27; },
+    { title: &#x27;Calendario de Clases&#x27;, url: &#x27;/mis-clases&#x27;, icon: &#x27;calendar-outline&#x27; },
+    { title: &#x27;Mensajes con Alumnos&#x27;, url: &#x27;/mensajes-profesores&#x27;, icon: &#x27;chatbubbles-outline&#x27;, badge: &#x27;2&#x27; }
+  ];
+
+  /** Menú específico para Alumno (Paula García) */
+  studentPages: MenuItem[] &#x3D; [
+    { title: &#x27;Mis Tutorías&#x27;, url: &#x27;/mis-clases&#x27;, icon: &#x27;calendar-outline&#x27; },
+    { title: &#x27;Mis Apuntes&#x27;, url: &#x27;/mis-apuntes&#x27;, icon: &#x27;document-text-outline&#x27;, badge: &#x27;6&#x27; },
+    { title: &#x27;Mensajes con Profesores&#x27;, url: &#x27;/mensajes-profesores&#x27;, icon: &#x27;chatbubbles-outline&#x27;, badge: &#x27;2&#x27; },
+    { title: &#x27;Facturación &amp; Pagos&#x27;, url: &#x27;/mis-pagos&#x27;, icon: &#x27;wallet-outline&#x27; }
+  ];
+
+  constructor() {
+    addIcons({
+      gridOutline,
+      calendarOutline,
+      peopleOutline,
+      schoolOutline,
+      walletOutline,
+      settingsOutline,
+      logOutOutline,
+      sparklesOutline,
+      calculatorOutline,
+      flaskOutline,
+      chevronForwardOutline,
+      bookOutline,
+      personCircleOutline,
+      checkmarkCircle,
+      documentTextOutline,
+      chatbubblesOutline,
+      cardOutline
+    });
+  }
+
+  /** Devuelve los enlaces del menú según el rol del usuario conectado */
+  getMenuPages(user?: User | null): MenuItem[] {
+    if (user?.role &#x3D;&#x3D;&#x3D; &#x27;Teacher&#x27;) {
+      return this.teacherPages;
+    }
+    if (user?.role &#x3D;&#x3D;&#x3D; &#x27;Standard&#x27;) {
+      return this.studentPages;
+    }
+    return this.adminPages;
+  }
+
+  /** Determina si nos encontramos en la pantalla de login para colapsar el menú */
+  isLoginPage(): boolean {
+    const currentUrl &#x3D; this.router.url;
+    return currentUrl &#x3D;&#x3D;&#x3D; &#x27;/login&#x27; || currentUrl &#x3D;&#x3D;&#x3D; &#x27;/&#x27; || currentUrl &#x3D;&#x3D;&#x3D; &#x27;&#x27;;
+  }
+
+  /** Obtiene las iniciales del usuario para el avatar */
+  getUserInitials(email?: string | null): string {
+    if (!email) return &#x27;NC&#x27;;
+    if (email.toLowerCase().includes(&#x27;noelia&#x27;)) return &#x27;NC&#x27;;
+    if (email.toLowerCase().includes(&#x27;paula&#x27;)) return &#x27;PG&#x27;;
+    if (email.toLowerCase().includes(&#x27;elena&#x27;) || email.toLowerCase().includes(&#x27;profesor&#x27;)) return &#x27;ER&#x27;;
+    if (email.toLowerCase().includes(&#x27;carlos&#x27;)) return &#x27;CM&#x27;;
+    const namePart &#x3D; email.split(&#x27;@&#x27;)[0];
+    return namePart.substring(0, 2).toUpperCase();
+  }
+
+  /** Nombre formateado para el perfil */
+  getUserDisplayName(email?: string | null): string {
+    if (!email) return &#x27;Noelia Cantador&#x27;;
+    if (email.toLowerCase().includes(&#x27;noelia&#x27;)) return &#x27;Noelia Cantador&#x27;;
+    if (email.toLowerCase().includes(&#x27;paula&#x27;)) return &#x27;Paula García&#x27;;
+    if (email.toLowerCase().includes(&#x27;elena&#x27;) || email.toLowerCase().includes(&#x27;profesor&#x27;)) return &#x27;Dra. Elena Ramos&#x27;;
+    if (email.toLowerCase().includes(&#x27;carlos&#x27;)) return &#x27;Prof. Carlos Méndez&#x27;;
+    return email.split(&#x27;@&#x27;)[0];
+  }
+
+  /** Cierre de sesión y redirección */
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate([&#x27;/login&#x27;]);
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;ion-app&gt;
+  &lt;ion-split-pane contentId&#x3D;&quot;main-content&quot; [disabled]&#x3D;&quot;isLoginPage() || ((sidebarService.isCollapsed$ | async) &#x3D;&#x3D;&#x3D; true)&quot;&gt;
+    
+    &lt;!-- SIDE MENU GLOBAL (Responsive: Mobile Drawer &amp; Desktop Sidebar) --&gt;
+    &lt;ion-menu 
+      contentId&#x3D;&quot;main-content&quot; 
+      menuId&#x3D;&quot;main-menu&quot; 
+      type&#x3D;&quot;overlay&quot;
+      [disabled]&#x3D;&quot;isLoginPage()&quot;
+      aria-label&#x3D;&quot;Menú principal de navegación&quot;
+    &gt;
+      &lt;!-- HEADER DEL MENÚ: LOGO &quot;iTUTOR&quot; (Sin TutorFlow, sin SAAS y sin Matemáticas &amp; Física) --&gt;
+      &lt;ion-header class&#x3D;&quot;ion-no-border menu-header&quot;&gt;
+        &lt;ion-toolbar class&#x3D;&quot;header-toolbar&quot;&gt;
+          &lt;div class&#x3D;&quot;brand-container&quot;&gt;
+            &lt;div class&#x3D;&quot;brand-logo&quot; aria-hidden&#x3D;&quot;true&quot;&gt;
+              &lt;ion-icon name&#x3D;&quot;school-outline&quot;&gt;&lt;/ion-icon&gt;
+            &lt;/div&gt;
+            &lt;div class&#x3D;&quot;brand-text&quot;&gt;
+              &lt;div class&#x3D;&quot;brand-name-row&quot;&gt;
+                &lt;span class&#x3D;&quot;brand-name&quot;&gt;&lt;span class&#x3D;&quot;brand-prefix&quot;&gt;i&lt;/span&gt;TUTOR&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/ion-toolbar&gt;
+
+        &lt;!-- TARJETA DE PERFIL DEL USUARIO CONECTADO --&gt;
+        @if (currentUser$ | async; as user) {
+          &lt;div class&#x3D;&quot;profile-card&quot;&gt;
+            &lt;div class&#x3D;&quot;avatar-wrapper&quot;&gt;
+              &lt;div class&#x3D;&quot;user-avatar&quot; [attr.aria-label]&#x3D;&quot;&#x27;Avatar de &#x27; + user.email&quot;&gt;
+                {{ getUserInitials(user.email) }}
+              &lt;/div&gt;
+              &lt;span class&#x3D;&quot;status-indicator online&quot; title&#x3D;&quot;En línea&quot; aria-label&#x3D;&quot;Usuario en línea&quot;&gt;&lt;/span&gt;
+            &lt;/div&gt;
+
+            &lt;div class&#x3D;&quot;user-info&quot;&gt;
+              &lt;h3 class&#x3D;&quot;user-name&quot;&gt;{{ getUserDisplayName(user.email) }}&lt;/h3&gt;
+              &lt;p class&#x3D;&quot;user-email&quot;&gt;{{ user.email }}&lt;/p&gt;
+              &lt;div class&#x3D;&quot;user-role-badge&quot;&gt;
+                &lt;ion-badge [color]&#x3D;&quot;user.role &#x3D;&#x3D;&#x3D; &#x27;Admin&#x27; ? &#x27;primary&#x27; : (user.role &#x3D;&#x3D;&#x3D; &#x27;Teacher&#x27; ? &#x27;success&#x27; : &#x27;tertiary&#x27;)&quot;&gt;
+                  {{ user.role &#x3D;&#x3D;&#x3D; &#x27;Admin&#x27; ? &#x27;Administrador&#x27; : (user.role &#x3D;&#x3D;&#x3D; &#x27;Teacher&#x27; ? &#x27;Profesor Docente&#x27; : &#x27;Alumno&#x27;) }}
+                &lt;/ion-badge&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        } @else {
+          &lt;div class&#x3D;&quot;profile-card&quot;&gt;
+            &lt;div class&#x3D;&quot;avatar-wrapper&quot;&gt;
+              &lt;div class&#x3D;&quot;user-avatar&quot;&gt;NC&lt;/div&gt;
+              &lt;span class&#x3D;&quot;status-indicator online&quot;&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class&#x3D;&quot;user-info&quot;&gt;
+              &lt;h3 class&#x3D;&quot;user-name&quot;&gt;Noelia Cantador&lt;/h3&gt;
+              &lt;p class&#x3D;&quot;user-email&quot;&gt;noeliacantador&amp;#64;itutor.es&lt;/p&gt;
+              &lt;div class&#x3D;&quot;user-role-badge&quot;&gt;
+                &lt;ion-badge color&#x3D;&quot;primary&quot;&gt;Administrador&lt;/ion-badge&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        }
+      &lt;/ion-header&gt;
+
+      &lt;!-- CONTENIDO DEL MENÚ: ENLACES CON ROUTER DE ANGULAR --&gt;
+      &lt;ion-content class&#x3D;&quot;menu-content&quot;&gt;
+        &lt;div class&#x3D;&quot;menu-section-label&quot;&gt;
+          &lt;span&gt;NAVEGACIÓN PRINCIPAL&lt;/span&gt;
+        &lt;/div&gt;
+
+        @if (currentUser$ | async; as currentUser) {
+          &lt;ion-list class&#x3D;&quot;menu-nav-list&quot; lines&#x3D;&quot;none&quot;&gt;
+            @for (page of getMenuPages(currentUser); track page.title) {
+              &lt;ion-menu-toggle autoHide&#x3D;&quot;false&quot;&gt;
+                &lt;ion-item 
+                  [routerLink]&#x3D;&quot;page.url&quot; 
+                  [queryParams]&#x3D;&quot;page.queryParams || null&quot;
+                  routerLinkActive&#x3D;&quot;active-item&quot;
+                  [routerLinkActiveOptions]&#x3D;&quot;{ exact: false }&quot;
+                  class&#x3D;&quot;nav-item&quot;
+                  detail&#x3D;&quot;false&quot;
+                  [attr.aria-label]&#x3D;&quot;&#x27;Ir a &#x27; + page.title&quot;
+                &gt;
+                  &lt;div class&#x3D;&quot;icon-slot&quot; slot&#x3D;&quot;start&quot; aria-hidden&#x3D;&quot;true&quot;&gt;
+                    &lt;ion-icon [name]&#x3D;&quot;page.icon&quot;&gt;&lt;/ion-icon&gt;
+                  &lt;/div&gt;
+                  &lt;ion-label class&#x3D;&quot;nav-label&quot;&gt;
+                    {{ page.title }}
+                  &lt;/ion-label&gt;
+                  @if (page.badge) {
+                    &lt;ion-badge 
+                      slot&#x3D;&quot;end&quot; 
+                      color&#x3D;&quot;light&quot; 
+                      class&#x3D;&quot;nav-counter&quot;
+                    &gt;
+                      {{ page.badge }}
+                    &lt;/ion-badge&gt;
+                  }
+                &lt;/ion-item&gt;
+              &lt;/ion-menu-toggle&gt;
+            }
+          &lt;/ion-list&gt;
+        }
+      &lt;/ion-content&gt;
+
+      &lt;!-- PIE DEL MENÚ: CERRAR SESIÓN --&gt;
+      &lt;ion-footer class&#x3D;&quot;ion-no-border menu-footer&quot;&gt;
+        &lt;ion-item 
+          button 
+          (click)&#x3D;&quot;logout()&quot; 
+          lines&#x3D;&quot;none&quot; 
+          class&#x3D;&quot;logout-item&quot;
+          aria-label&#x3D;&quot;Cerrar sesión&quot;
+        &gt;
+          &lt;div class&#x3D;&quot;icon-slot logout-icon&quot; slot&#x3D;&quot;start&quot; aria-hidden&#x3D;&quot;true&quot;&gt;
+            &lt;ion-icon name&#x3D;&quot;log-out-outline&quot;&gt;&lt;/ion-icon&gt;
+          &lt;/div&gt;
+          &lt;ion-label class&#x3D;&quot;logout-label&quot;&gt;Cerrar Sesión&lt;/ion-label&gt;
+        &lt;/ion-item&gt;
+
+        &lt;div class&#x3D;&quot;version-tag&quot;&gt;
+          &lt;span&gt;iTUTOR v2.4 • Plataforma Académica&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/ion-footer&gt;
+    &lt;/ion-menu&gt;
+
+    &lt;!-- OUTLET PRINCIPAL PARA CARGA DE VISTAS LAZY LOADING --&gt;
+    &lt;ion-router-outlet id&#x3D;&quot;main-content&quot;&gt;&lt;/ion-router-outlet&gt;
+
+  &lt;/ion-split-pane&gt;
+&lt;/ion-app&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./app.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">/* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+   TUTORFLOW - SIDE MENU GLOBAL SAAS STYLES
+   &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+
+ion-split-pane {
+  --side-max-width: 280px;
+  --side-min-width: 260px;
+}
+
+ion-menu {
+  --background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+}
+
+/* ENCABEZADO Y BRANDING */
+.menu-header {
+  padding: 16px 16px 0 16px;
+  background: #ffffff;
+
+  .header-toolbar {
+    --background: transparent;
+    --padding-start: 0;
+    --padding-end: 0;
+    --min-height: auto;
+  }
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0 16px 0;
+  border-bottom: 1px solid #f1f5f9;
+
+  .brand-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2563eb 0%, #4338ca 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+
+    .brand-name-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .brand-name {
+        font-family: &#x27;Outfit&#x27;, sans-serif;
+        font-size: 1.55rem;
+        font-weight: 900;
+        color: #0f172a;
+        letter-spacing: -0.03em;
+
+        .brand-prefix {
+          background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: 900;
+          margin-right: 1px;
+        }
+      }
+    }
+  }
+}
+
+/* TARJETA DE PERFIL DE USUARIO */
+.profile-card {
+  margin: 16px 0 8px 0;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .avatar-wrapper {
+    position: relative;
+
+    .user-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .status-indicator {
+      position: absolute;
+      bottom: 1px;
+      right: 1px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+
+      &amp;.online {
+        background-color: #10b981;
+      }
+    }
+  }
+
+  .user-info {
+    flex: 1;
+    min-width: 0;
+
+    .user-name {
+      margin: 0;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #0f172a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-email {
+      margin: 1px 0 4px 0;
+      font-size: 0.725rem;
+      color: #64748b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-role-badge ion-badge {
+      font-size: 0.675rem;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+  }
+}
+
+/* CONTENIDO Y ENLACES DEL MENÚ */
+.menu-content {
+  --background: #ffffff;
+  padding: 0 12px;
+
+  .menu-section-label {
+    padding: 16px 12px 8px 12px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.075em;
+    color: #94a3b8;
+  }
+}
+
+.menu-nav-list {
+  background: transparent;
+  padding: 0;
+
+  .nav-item {
+    --background: transparent;
+    --background-hover: #f1f5f9;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --inner-padding-end: 8px;
+    --min-height: 44px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+    color: #475569;
+    font-weight: 500;
+    transition: all 0.15s ease-in-out;
+
+    .icon-slot {
+      margin-right: 12px;
+      font-size: 1.25rem;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .nav-counter {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #475569;
+      border-radius: 12px;
+      padding: 2px 8px;
+    }
+
+    /* Estado Activo */
+    &amp;.active-item {
+      --background: #eff6ff;
+      --color: #2563eb;
+      font-weight: 600;
+
+      .icon-slot {
+        color: #2563eb;
+      }
+
+      .nav-label {
+        font-weight: 600;
+        color: #1e40af;
+      }
+    }
+  }
+}
+
+/* PIE DEL MENÚ */
+.menu-footer {
+  padding: 12px 16px 16px 16px;
+  background: #ffffff;
+  border-top: 1px solid #f1f5f9;
+
+  .logout-item {
+    --background: transparent;
+    --background-hover: #fef2f2;
+    --padding-start: 12px;
+    --min-height: 42px;
+    border-radius: 10px;
+    color: #64748b;
+    margin-bottom: 12px;
+
+    &amp;:hover {
+      color: #dc2626;
+
+      .logout-icon {
+        color: #dc2626;
+      }
+
+      .logout-label {
+        color: #dc2626;
+      }
+    }
+
+    .logout-icon {
+      font-size: 1.25rem;
+      margin-right: 12px;
+      color: #94a3b8;
+    }
+
+    .logout-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+  }
+
+  .version-tag {
+    text-align: center;
+    font-size: 0.6875rem;
+    color: #94a3b8;
+    font-weight: 500;
+  }
+}
+
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Leyenda</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Elemento Html</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Componente</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Elemento Html con directiva</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><ion-app>  <ion-split-pane contentId="main-content" [disabled]="isLoginPage() || ((sidebarService.isCollapsed$ | async) === true)">        <!-- SIDE MENU GLOBAL (Responsive: Mobile Drawer & Desktop Sidebar) -->    <ion-menu       contentId="main-content"       menuId="main-menu"       type="overlay"      [disabled]="isLoginPage()"      aria-label="Menú principal de navegación"    >      <!-- HEADER DEL MENÚ: LOGO "iTUTOR" (Sin TutorFlow, sin SAAS y sin Matemáticas & Física) -->      <ion-header class="ion-no-border menu-header">        <ion-toolbar class="header-toolbar">          <div class="brand-container">            <div class="brand-logo" aria-hidden="true">              <ion-icon name="school-outline"></ion-icon>            </div>            <div class="brand-text">              <div class="brand-name-row">                <span class="brand-name"><span class="brand-prefix">i</span>TUTOR</span>              </div>            </div>          </div>        </ion-toolbar>        <!-- TARJETA DE PERFIL DEL USUARIO CONECTADO -->        @if (currentUser$ | async; as user) {          <div class="profile-card">            <div class="avatar-wrapper">              <div class="user-avatar" [attr.aria-label]="\'Avatar de \' + user.email">                {{ getUserInitials(user.email) }}              </div>              <span class="status-indicator online" title="En línea" aria-label="Usuario en línea"></span>            </div>            <div class="user-info">              <h3 class="user-name">{{ getUserDisplayName(user.email) }}</h3>              <p class="user-email">{{ user.email }}</p>              <div class="user-role-badge">                <ion-badge [color]="user.role === \'Admin\' ? \'primary\' : (user.role === \'Teacher\' ? \'success\' : \'tertiary\')">                  {{ user.role === \'Admin\' ? \'Administrador\' : (user.role === \'Teacher\' ? \'Profesor Docente\' : \'Alumno\') }}                </ion-badge>              </div>            </div>          </div>        } @else {          <div class="profile-card">            <div class="avatar-wrapper">              <div class="user-avatar">NC</div>              <span class="status-indicator online"></span>            </div>            <div class="user-info">              <h3 class="user-name">Noelia Cantador</h3>              <p class="user-email">noeliacantador&#64;itutor.es</p>              <div class="user-role-badge">                <ion-badge color="primary">Administrador</ion-badge>              </div>            </div>          </div>        }      </ion-header>      <!-- CONTENIDO DEL MENÚ: ENLACES CON ROUTER DE ANGULAR -->      <ion-content class="menu-content">        <div class="menu-section-label">          <span>NAVEGACIÓN PRINCIPAL</span>        </div>        @if (currentUser$ | async; as currentUser) {          <ion-list class="menu-nav-list" lines="none">            @for (page of getMenuPages(currentUser); track page.title) {              <ion-menu-toggle autoHide="false">                <ion-item                   [routerLink]="page.url"                   [queryParams]="page.queryParams || null"                  routerLinkActive="active-item"                  [routerLinkActiveOptions]="{ exact: false }"                  class="nav-item"                  detail="false"                  [attr.aria-label]="\'Ir a \' + page.title"                >                  <div class="icon-slot" slot="start" aria-hidden="true">                    <ion-icon [name]="page.icon"></ion-icon>                  </div>                  <ion-label class="nav-label">                    {{ page.title }}                  </ion-label>                  @if (page.badge) {                    <ion-badge                       slot="end"                       color="light"                       class="nav-counter"                    >                      {{ page.badge }}                    </ion-badge>                  }                </ion-item>              </ion-menu-toggle>            }          </ion-list>        }      </ion-content>      <!-- PIE DEL MENÚ: CERRAR SESIÓN -->      <ion-footer class="ion-no-border menu-footer">        <ion-item           button           (click)="logout()"           lines="none"           class="logout-item"          aria-label="Cerrar sesión"        >          <div class="icon-slot logout-icon" slot="start" aria-hidden="true">            <ion-icon name="log-out-outline"></ion-icon>          </div>          <ion-label class="logout-label">Cerrar Sesión</ion-label>        </ion-item>        <div class="version-tag">          <span>iTUTOR v2.4 • Plataforma Académica</span>        </div>      </ion-footer>    </ion-menu>    <!-- OUTLET PRINCIPAL PARA CARGA DE VISTAS LAZY LOADING -->    <ion-router-outlet id="main-content"></ion-router-outlet>  </ion-split-pane></ion-app></div>'
+    var COMPONENTS = [{'name': 'AdminDashboardPage', 'selector': 'app-admin-dashboard'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'DataTableComponent', 'selector': 'app-data-table'},{'name': 'HomePage', 'selector': 'app-home'},{'name': 'LoginPage', 'selector': 'app-login'},{'name': 'MisClasesPage', 'selector': 'app-mis-clases'},{'name': 'ProfesorDashboardPage', 'selector': 'app-profesor-dashboard'},{'name': 'StatCardComponent', 'selector': 'app-stat-card'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'AppComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'AppComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var updateDarkModeSwitchOffset = function () {
+                    var content = document.querySelector('.content');
+                    var scrollbarWidth = 0;
+
+                    if (content) {
+                         scrollbarWidth = Math.max(0, content.offsetWidth - content.clientWidth);
+                    }
+
+                    document.documentElement.style.setProperty(
+                         '--content-scrollbar-width',
+                         scrollbarWidth + 'px'
+                    );
+               };
+
+               updateDarkModeSwitchOffset();
+               requestAnimationFrame(updateDarkModeSwitchOffset);
+               window.addEventListener('resize', updateDarkModeSwitchOffset);
+
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

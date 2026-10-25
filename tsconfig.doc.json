@@ -1,0 +1,29 @@
+/*
+ * Configuración de TypeScript dedicada EXCLUSIVAMENTE a la generación de la
+ * documentación técnica automatizada con Compodoc (RA 6).
+ *
+ * Motivo: `tsconfig.app.json` declara únicamente `src/main.ts` en su clave
+ * `files` (comportamiento estándar del builder de Angular). Como todos los
+ * componentes de la aplicación son *standalone* y se cargan de forma diferida
+ * mediante `loadComponent()` con `import()` dinámico, Compodoc no puede
+ * descubrirlos a partir de ese punto de entrada y generaría una documentación
+ * vacía.
+ *
+ * Este fichero amplía el ámbito a todo `src/**` y excluye las pruebas
+ * unitarias, de modo que la documentación recoja componentes, servicios,
+ * guards, interceptores e interfaces del proyecto.
+ */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/doc",
+    "types": []
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/test-setup.ts"
+  ]
+}

@@ -1,0 +1,1719 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>iTUTOR - Documentación Técnica</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">iTUTOR - Documentación Técnica</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search">
+    <input type="text" placeholder="Escribe para buscar">
+    <button type="button"
+        class="search-input-clear"
+        aria-label="Clear search"
+        data-search-input-clear>&times;</button>
+</div>
+            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
+  >
+  TutoriaSession</li>
+</ol>
+
+<div class="io-file io-file-path" data-compodoc="entity-file-path">
+    <span class="icon ion-ios-document" aria-hidden="true"></span>
+    <code>src/app/features/mis-clases/mis-clases.page.ts</code>
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#api" 
+                class="nav-link"
+                
+                role="tab" id="api-tab" data-bs-toggle="tab" data-link="api">API</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+
+
+
+            </div>
+
+    <div class="tab-pane fade " id="api"><section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+            <tr>
+                <td class="col-md-3">
+                    <h6><b>Propiedades</b></h6>
+                </td>
+                <td class="col-md-9">
+                    <ul class="index-list">
+                        <li>
+                                <a href="#color" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">color</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#dateLabel" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">dateLabel</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#day" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">day</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#duration" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">duration</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#notes" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">notes</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#price" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">price</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#room" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">room</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#status" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">status</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#subject" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">subject</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#teacher" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">teacher</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#teacherEmail" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">teacherEmail</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#teacherInitials" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">teacherInitials</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#teacherRole" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">teacherRole</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#time" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">time</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#topic" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">topic</span>
+                                </a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+    <section data-compodoc="block-properties">
+        <h3 id="inputs">Propiedades</h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="color"></a>
+                                <span class="name "><b>color</b>
+                                    <a href="#color">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>color:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="60" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:60</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="dateLabel"></a>
+                                <span class="name "><b>dateLabel</b>
+                                    <a href="#dateLabel">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>dateLabel:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="47" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:47</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="day"></a>
+                                <span class="name "><b>day</b>
+                                    <a href="#day">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>day:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="46" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:46</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="duration"></a>
+                                <span class="name "><b>duration</b>
+                                    <a href="#duration">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>duration:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="55" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:55</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="notes"></a>
+                                <span class="name "><b>notes</b>
+                                    <a href="#notes">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>notes:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="59" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:59</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="price"></a>
+                                <span class="name "><b>price</b>
+                                    <a href="#price">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>price:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="58" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:58</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="room"></a>
+                                <span class="name "><b>room</b>
+                                    <a href="#room">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>room:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="56" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:56</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="status"></a>
+                                <span class="name "><b>status</b>
+                                    <a href="#status">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>status:     <code>&quot;Confirmada&quot; | &quot;Completada&quot; | &quot;Próxima&quot;</code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>    <code>&quot;Confirmada&quot; | &quot;Completada&quot; | &quot;Próxima&quot;</code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="57" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:57</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="subject"></a>
+                                <span class="name "><b>subject</b>
+                                    <a href="#subject">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>subject:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="48" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:48</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="teacher"></a>
+                                <span class="name "><b>teacher</b>
+                                    <a href="#teacher">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>teacher:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="50" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:50</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="teacherEmail"></a>
+                                <span class="name "><b>teacherEmail</b>
+                                    <a href="#teacherEmail">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>teacherEmail:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="53" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:53</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="teacherInitials"></a>
+                                <span class="name "><b>teacherInitials</b>
+                                    <a href="#teacherInitials">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>teacherInitials:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="52" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:52</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="teacherRole"></a>
+                                <span class="name "><b>teacherRole</b>
+                                    <a href="#teacherRole">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>teacherRole:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="51" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:51</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="time"></a>
+                                <span class="name "><b>time</b>
+                                    <a href="#time">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>time:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="54" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:54</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="topic"></a>
+                                <span class="name "><b>topic</b>
+                                    <a href="#topic">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>topic:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="49" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:49</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+    </section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+import { ActivatedRoute, Router } from &#x27;@angular/router&#x27;;
+import { IonContent } from &#x27;@ionic/angular/ion-content&#x27;;
+import { IonHeader } from &#x27;@ionic/angular/ion-header&#x27;;
+import { IonTitle } from &#x27;@ionic/angular/ion-title&#x27;;
+import { IonToolbar } from &#x27;@ionic/angular/ion-toolbar&#x27;;
+import { IonButtons } from &#x27;@ionic/angular/ion-buttons&#x27;;
+import { IonMenuButton } from &#x27;@ionic/angular/ion-menu-button&#x27;;
+import { IonButton } from &#x27;@ionic/angular/ion-button&#x27;;
+import { IonIcon } from &#x27;@ionic/angular/ion-icon&#x27;;
+import { IonBadge } from &#x27;@ionic/angular/ion-badge&#x27;;
+import { IonCard } from &#x27;@ionic/angular/ion-card&#x27;;
+import { IonCardContent } from &#x27;@ionic/angular/ion-card-content&#x27;;
+import { addIcons } from &#x27;ionicons&#x27;;
+import { 
+  calendarOutline, 
+  timeOutline, 
+  personOutline, 
+  videocamOutline, 
+  documentTextOutline, 
+  chatbubblesOutline, 
+  walletOutline, 
+  downloadOutline, 
+  sendOutline, 
+  checkmarkCircleOutline, 
+  schoolOutline, 
+  bookOutline, 
+  cardOutline, 
+  sparklesOutline,
+  chevronBackOutline,
+  chevronForwardOutline,
+  settingsOutline,
+  notificationsOutline,
+  shieldCheckmarkOutline,
+  folderOpenOutline,
+  receiptOutline,
+  menuOutline
+} from &#x27;ionicons/icons&#x27;;
+import jsPDF from &#x27;jspdf&#x27;;
+import { SidebarService } from &#x27;../../core/services/sidebar.service&#x27;;
+import { AuthService, User } from &#x27;../../core/services/auth.service&#x27;;
+
+export interface TutoriaSession {
+  day: number;
+  dateLabel: string;
+  subject: string;
+  topic: string;
+  teacher: string;
+  teacherRole: string;
+  teacherInitials: string;
+  teacherEmail: string;
+  time: string;
+  duration: string;
+  room: string;
+  status: &#x27;Confirmada&#x27; | &#x27;Completada&#x27; | &#x27;Próxima&#x27;;
+  price: number;
+  notes: string;
+  color: string;
+}
+
+export interface StudentNoteItem {
+  id: string;
+  title: string;
+  subject: string;
+  teacher: string;
+  date: string;
+  size: string;
+  pages: number;
+  summary: string;
+}
+
+export interface TeacherConversation {
+  id: string;
+  teacherName: string;
+  subject: string;
+  initials: string;
+  online: boolean;
+  unread: number;
+  messages: {
+    sender: &#x27;teacher&#x27; | &#x27;student&#x27; | &#x27;coordinator&#x27;;
+    text: string;
+    time: string;
+  }[];
+}
+
+export interface StudentPaymentRecord {
+  id: string;
+  date: string;
+  concept: string;
+  subject: string;
+  teacher: string;
+  method: string;
+  amount: number;
+  status: &#x27;Pagado&#x27;;
+}
+
+export interface CalendarCell {
+  day: number | null;
+  isCurrentMonth: boolean;
+  session?: TutoriaSession;
+}
+
+@Component({
+  selector: &#x27;app-mis-clases&#x27;,
+  standalone: true,
+  templateUrl: &#x27;./mis-clases.page.html&#x27;,
+  styleUrls: [&#x27;./mis-clases.page.scss&#x27;],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule, 
+    FormsModule,
+    IonContent, 
+    IonHeader, 
+    IonTitle, 
+    IonToolbar, 
+    IonButtons, 
+    IonButton, 
+    IonIcon, 
+    IonBadge, 
+    IonCard, 
+    IonCardContent
+  ]
+})
+export class MisClasesPage implements OnInit {
+  private route &#x3D; inject(ActivatedRoute);
+  private router &#x3D; inject(Router);
+  private cdr &#x3D; inject(ChangeDetectorRef);
+  public sidebarService &#x3D; inject(SidebarService);
+  private authService &#x3D; inject(AuthService);
+
+  get currentUser(): User | null {
+    return this.authService.currentUserValue;
+  }
+
+  get isCoordinator(): boolean {
+    const user &#x3D; this.currentUser;
+    return user?.role &#x3D;&#x3D;&#x3D; &#x27;Admin&#x27; || (user?.email?.toLowerCase().includes(&#x27;noelia&#x27;) ?? false);
+  }
+
+  toggleMenu(): void {
+    this.sidebarService.toggleMenu();
+  }
+
+  /** Sección activa: &#x27;tutorias&#x27; | &#x27;apuntes&#x27; | &#x27;mensajes&#x27; | &#x27;pagos&#x27; | &#x27;ajustes&#x27; */
+  activeSection: &#x27;tutorias&#x27; | &#x27;apuntes&#x27; | &#x27;mensajes&#x27; | &#x27;pagos&#x27; | &#x27;ajustes&#x27; &#x3D; &#x27;tutorias&#x27;;
+
+  /** Día seleccionado en el calendario de Octubre 2026 (Por defecto el día 10 de octubre) */
+  selectedDay &#x3D; 10;
+
+  /** Días de la semana (Lunes a Domingo) */
+  weekDays &#x3D; [&#x27;Lun&#x27;, &#x27;Mar&#x27;, &#x27;Mié&#x27;, &#x27;Jue&#x27;, &#x27;Vie&#x27;, &#x27;Sáb&#x27;, &#x27;Dom&#x27;];
+
+  /** Sesiones programadas de Paula García en Octubre 2026 */
+  sessionsMap: Record&lt;number, TutoriaSession&gt; &#x3D; {
+    3: {
+      day: 3,
+      dateLabel: &#x27;Sábado, 3 de Octubre de 2026&#x27;,
+      subject: &#x27;Ecuaciones Diferenciales&#x27;,
+      topic: &#x27;EDOs de Primer Orden y Variables Separables&#x27;,
+      teacher: &#x27;Dra. Elena Ramos&#x27;,
+      teacherRole: &#x27;Catedrática de Matemáticas Aplicadas&#x27;,
+      teacherInitials: &#x27;ER&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
+      time: &#x27;11:00 - 12:30&#x27;,
+      duration: &#x27;90 min&#x27;,
+      room: &#x27;Aula Virtual iTUTOR • Sala HD #04&#x27;,
+      status: &#x27;Completada&#x27;,
+      price: 35,
+      notes: &#x27;Se resolvieron 6 problemas de ecuaciones exactas y factor integrante. Paula domina el método.&#x27;,
+      color: &#x27;#2563eb&#x27;
+    },
+    6: {
+      day: 6,
+      dateLabel: &#x27;Martes, 6 de Octubre de 2026&#x27;,
+      subject: &#x27;Cálculo Multivariable&#x27;,
+      topic: &#x27;Integrales Dobles en Coordenadas Polares&#x27;,
+      teacher: &#x27;Prof. Carlos Méndez&#x27;,
+      teacherRole: &#x27;Profesor Titular de Análisis Matemático&#x27;,
+      teacherInitials: &#x27;CM&#x27;,
+      teacherEmail: &#x27;carlosmendez@itutor.es&#x27;,
+      time: &#x27;17:30 - 19:00&#x27;,
+      duration: &#x27;90 min&#x27;,
+      room: &#x27;Aula Virtual iTUTOR • Sala HD #02&#x27;,
+      status: &#x27;Completada&#x27;,
+      price: 35,
+      notes: &#x27;Cambio de variables y cálculo del Jacobiano en recintos circulares.&#x27;,
+      color: &#x27;#10b981&#x27;
+    },
+    10: {
+      day: 10,
+      dateLabel: &#x27;Sábado, 10 de Octubre de 2026&#x27;,
+      subject: &#x27;Ecuaciones Diferenciales&#x27;,
+      topic: &#x27;Transformada de Laplace y Sistemas de EDOs de 2º Orden&#x27;,
+      teacher: &#x27;Dra. Elena Ramos&#x27;,
+      teacherRole: &#x27;Profesora Titular de Ecuaciones Diferenciales&#x27;,
+      teacherInitials: &#x27;ER&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
+      time: &#x27;11:00 - 12:30&#x27;,
+      duration: &#x27;90 min&#x27;,
+      room: &#x27;Aula Virtual iTUTOR • Sala Interactiva #04&#x27;,
+      status: &#x27;Confirmada&#x27;,
+      price: 35,
+      notes: &#x27;Resolución paso a paso de problemas de valor inicial (PVI) mediante Transformada de Laplace e inversa por fracciones simples.&#x27;,
+      color: &#x27;#2563eb&#x27;
+    },
+    15: {
+      day: 15,
+      dateLabel: &#x27;Jueves, 15 de Octubre de 2026&#x27;,
+      subject: &#x27;Álgebra Lineal&#x27;,
+      topic: &#x27;Diagonalización Ortogonal y Formas Cuadráticas&#x27;,
+      teacher: &#x27;Prof. Carlos Méndez&#x27;,
+      teacherRole: &#x27;Profesor Titular de Análisis y Álgebra&#x27;,
+      teacherInitials: &#x27;CM&#x27;,
+      teacherEmail: &#x27;carlosmendez@itutor.es&#x27;,
+      time: &#x27;18:00 - 19:30&#x27;,
+      duration: &#x27;90 min&#x27;,
+      room: &#x27;Aula Virtual iTUTOR • Sala HD #02&#x27;,
+      status: &#x27;Confirmada&#x27;,
+      price: 35,
+      notes: &#x27;Cálculo de autovalores, autovectores y matriz de paso ortogonal.&#x27;,
+      color: &#x27;#6366f1&#x27;
+    },
+    20: {
+      day: 20,
+      dateLabel: &#x27;Martes, 20 de Octubre de 2026&#x27;,
+      subject: &#x27;Ecuaciones Diferenciales&#x27;,
+      topic: &#x27;Series de Potencias y Método de Frobenius&#x27;,
+      teacher: &#x27;Dra. Elena Ramos&#x27;,
+      teacherRole: &#x27;Profesora Titular de Ecuaciones Diferenciales&#x27;,
+      teacherInitials: &#x27;ER&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
+      time: &#x27;17:00 - 18:30&#x27;,
+      duration: &#x27;90 min&#x27;,
+      room: &#x27;Aula Virtual iTUTOR • Sala Interactiva #04&#x27;,
+      status: &#x27;Próxima&#x27;,
+      price: 35,
+      notes: &#x27;Preparación del primer control parcial. Revisaremos ecuaciones de Legendre y Bessel.&#x27;,
+      color: &#x27;#2563eb&#x27;
+    },
+    24: {
+      day: 24,
+      dateLabel: &#x27;Sábado, 24 de Octubre de 2026&#x27;,
+      subject: &#x27;Ecuaciones Diferenciales&#x27;,
+      topic: &#x27;Simulacro de Examen Parcial Resuelto&#x27;,
+      teacher: &#x27;Dra. Elena Ramos&#x27;,
+      teacherRole: &#x27;Profesora Titular de Ecuaciones Diferenciales&#x27;,
+      teacherInitials: &#x27;ER&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
+      time: &#x27;11:00 - 12:30&#x27;,
+      duration: &#x27;90 min&#x27;,
+      room: &#x27;Aula Virtual iTUTOR • Sala Interactiva #04&#x27;,
+      status: &#x27;Próxima&#x27;,
+      price: 35,
+      notes: &#x27;Simulacro cronometrado con corrección en pizarra digital compartida.&#x27;,
+      color: &#x27;#2563eb&#x27;
+    },
+    29: {
+      day: 29,
+      dateLabel: &#x27;Jueves, 29 de Octubre de 2026&#x27;,
+      subject: &#x27;Cálculo Multivariable&#x27;,
+      topic: &#x27;Teorema de Green y Campos Conservativos&#x27;,
+      teacher: &#x27;Prof. Carlos Méndez&#x27;,
+      teacherRole: &#x27;Profesor Titular de Análisis Matemático&#x27;,
+      teacherInitials: &#x27;CM&#x27;,
+      teacherEmail: &#x27;carlosmendez@itutor.es&#x27;,
+      time: &#x27;18:00 - 19:30&#x27;,
+      duration: &#x27;90 min&#x27;,
+      room: &#x27;Aula Virtual iTUTOR • Sala HD #02&#x27;,
+      status: &#x27;Próxima&#x27;,
+      price: 35,
+      notes: &#x27;Integrales de línea e independencia del camino.&#x27;,
+      color: &#x27;#10b981&#x27;
+    }
+  };
+
+  /** Celdas del calendario de Octubre 2026 (Octubre 2026 empieza en Jueves -&gt; 3 huecos L, M, X) */
+  calendarCells: CalendarCell[] &#x3D; [];
+
+  /** Apuntes y Recursos de Paula García */
+  selectedNotesFilter &#x3D; &#x27;Todos&#x27;;
+  notesList: StudentNoteItem[] &#x3D; [
+    {
+      id: &#x27;AP-01&#x27;,
+      title: &#x27;Tema 4: Transformada de Laplace y EDOs de 2º Orden&#x27;,
+      subject: &#x27;Ecuaciones Diferenciales&#x27;,
+      teacher: &#x27;Dra. Elena Ramos&#x27;,
+      date: &#x27;10 Oct 2026&#x27;,
+      size: &#x27;2.4 MB&#x27;,
+      pages: 18,
+      summary: &#x27;Apuntes completos de la clase del 10 de octubre: tabla de transformadas, teoremas de traslación y 8 problemas de valor inicial resueltos paso a paso.&#x27;
+    },
+    {
+      id: &#x27;AP-02&#x27;,
+      title: &#x27;Boletín Resuelto: EDOs Exactas y Factor Integrante&#x27;,
+      subject: &#x27;Ecuaciones Diferenciales&#x27;,
+      teacher: &#x27;Dra. Elena Ramos&#x27;,
+      date: &#x27;03 Oct 2026&#x27;,
+      size: &#x27;1.9 MB&#x27;,
+      pages: 14,
+      summary: &#x27;Colección de ejercicios de examen resueltos en pizarra digital durante la sesión de tutoría.&#x27;
+    },
+    {
+      id: &#x27;AP-03&#x27;,
+      title: &#x27;Formulario: Integrales Dobles, Triples y Coordenadas Polares&#x27;,
+      subject: &#x27;Cálculo Multivariable&#x27;,
+      teacher: &#x27;Prof. Carlos Méndez&#x27;,
+      date: &#x27;06 Oct 2026&#x27;,
+      size: &#x27;1.2 MB&#x27;,
+      pages: 9,
+      summary: &#x27;Guía visual de recintos de integración, matriz Jacobiana y cambios de variable.&#x27;
+    },
+    {
+      id: &#x27;AP-04&#x27;,
+      title: &#x27;Guía Práctica: Diagonalización y Autovalores&#x27;,
+      subject: &#x27;Álgebra Lineal&#x27;,
+      teacher: &#x27;Prof. Carlos Méndez&#x27;,
+      date: &#x27;28 Sep 2026&#x27;,
+      size: &#x27;3.1 MB&#x27;,
+      pages: 22,
+      summary: &#x27;Polinomio característico, multiplicidad algebraica y geométrica, y aplicaciones a sistemas dinámicos.&#x27;
+    },
+    {
+      id: &#x27;AP-05&#x27;,
+      title: &#x27;Recopilatorio de Exámenes Finales Resueltos (2023-2025)&#x27;,
+      subject: &#x27;Ecuaciones Diferenciales&#x27;,
+      teacher: &#x27;Dra. Elena Ramos&#x27;,
+      date: &#x27;20 Sep 2026&#x27;,
+      size: &#x27;4.6 MB&#x27;,
+      pages: 34,
+      summary: &#x27;Exámenes oficiales íntegramente comentados con trucos para identificar el método de resolución más rápido.&#x27;
+    },
+    {
+      id: &#x27;AP-06&#x27;,
+      title: &#x27;Planificación Personalizada del Curso — Paula García&#x27;,
+      subject: &#x27;Coordinación&#x27;,
+      teacher: &#x27;Noelia Cantador&#x27;,
+      date: &#x27;12 Sep 2026&#x27;,
+      size: &#x27;0.8 MB&#x27;,
+      pages: 5,
+      summary: &#x27;Hoja de ruta de objetivos académicos y calendario de evaluaciones para el primer cuatrimestre.&#x27;
+    }
+  ];
+
+  /** Conversaciones con los Profesores */
+  selectedTeacherId &#x3D; &#x27;elena&#x27;;
+  newMessageText &#x3D; &#x27;&#x27;;
+
+  /** Conversaciones de coordinación entre la Jefa Coordinadora (Noelia) y los Profesores */
+  coordinatorConversations: TeacherConversation[] &#x3D; [
+    {
+      id: &#x27;elena&#x27;,
+      teacherName: &#x27;Dra. Elena Ramos&#x27;,
+      subject: &#x27;Física Teórica &amp; Mecánica Clásica&#x27;,
+      initials: &#x27;ER&#x27;,
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Estimada Dra. Elena Ramos, ¿cómo avanza el seguimiento de las tutorías de Física y Mecánica este mes?&#x27;,
+          time: &#x27;09:30&#x27;
+        },
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;Buenos días Noelia. Todo marcha según el plan docente. Marcos y Paula están completando las hojas de problemas y las actas de sesiones ya están cargadas en la plataforma.&#x27;,
+          time: &#x27;10:05&#x27;
+        },
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Perfecto Elena, reviso las horas impartidas para validar los honorarios docentes de este ciclo. ¡Muchas gracias por el informe!&#x27;,
+          time: &#x27;10:15&#x27;
+        },
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;A ti, Noelia. Quedo a tu disposición para cualquier ajuste o nueva asignación en el calendario.&#x27;,
+          time: &#x27;10:20&#x27;
+        }
+      ]
+    },
+    {
+      id: &#x27;carlos&#x27;,
+      teacherName: &#x27;Prof. Carlos Méndez&#x27;,
+      subject: &#x27;Cálculo Multivariable &amp; Álgebra Lineal&#x27;,
+      initials: &#x27;CM&#x27;,
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Hola Carlos, confírmame por favor si has recibido la asignación de los nuevos alumnos para Cálculo y Álgebra.&#x27;,
+          time: &#x27;Ayer&#x27;
+        },
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;Hola Noelia, sí, todo recibido y verificado. Ya he fijado los horarios de tutorías en el calendario para el próximo mes.&#x27;,
+          time: &#x27;Ayer&#x27;
+        },
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Excelente gestión. Avisamos a los estudiantes asignados para que confirmen sus reservas.&#x27;,
+          time: &#x27;Ayer&#x27;
+        }
+      ]
+    },
+    {
+      id: &#x27;miguel&#x27;,
+      teacherName: &#x27;Dr. Miguel Ángel Santos&#x27;,
+      subject: &#x27;Termodinámica &amp; Mecánica de Fluidos&#x27;,
+      initials: &#x27;MS&#x27;,
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Hola Miguel Ángel, ¿se ha completado la sesión de Termodinámica de Alejandro Gómez sin incidencias?&#x27;,
+          time: &#x27;08 Oct&#x27;
+        },
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;Buenas tardes Noelia, sí, sesión completada y asistencia registrada. Muy buen aprovechamiento del contenido por parte del alumno.&#x27;,
+          time: &#x27;08 Oct&#x27;
+        },
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Magnífico. Queda validada en el registro oficial de sesiones.&#x27;,
+          time: &#x27;08 Oct&#x27;
+        }
+      ]
+    }
+  ];
+
+  /** Conversaciones de la Alumna (Paula García) */
+  studentConversations: TeacherConversation[] &#x3D; [
+    {
+      id: &#x27;elena&#x27;,
+      teacherName: &#x27;Dra. Elena Ramos&#x27;,
+      subject: &#x27;Profesora de Ecuaciones Diferenciales&#x27;,
+      initials: &#x27;ER&#x27;,
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;¡Hola Paula! Te he dejado subidos en &quot;Mis Apuntes&quot; el PDF con los ejercicios de la clase del sábado 10 de octubre sobre Transformada de Laplace.&#x27;,
+          time: &#x27;10:15&#x27;
+        },
+        {
+          sender: &#x27;student&#x27;,
+          text: &#x27;¡Muchas gracias Elena! Los estoy revisando ahora mismo. ¿En la clase del día 10 veremos también sistemas de ecuaciones diferenciales?&#x27;,
+          time: &#x27;10:18&#x27;
+        },
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;¡Sí! En los últimos 30 minutos de la sesión del 10 de octubre resolveremos un sistema acoplado de 2º orden tipo examen. ¡Nos vemos en la Sala #04!&#x27;,
+          time: &#x27;10:21&#x27;
+        }
+      ]
+    },
+    {
+      id: &#x27;carlos&#x27;,
+      teacherName: &#x27;Prof. Carlos Méndez&#x27;,
+      subject: &#x27;Profesor de Cálculo y Álgebra Lineal&#x27;,
+      initials: &#x27;CM&#x27;,
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;Buenas tardes Paula, recuerda repasar el cálculo del Jacobiano para las integrales dobles en polares.&#x27;,
+          time: &#x27;Ayer&#x27;
+        },
+        {
+          sender: &#x27;student&#x27;,
+          text: &#x27;Perfecto Carlos, ya he terminado los 4 primeros ejercicios del boletín.&#x27;,
+          time: &#x27;Ayer&#x27;
+        }
+      ]
+    },
+    {
+      id: &#x27;noelia&#x27;,
+      teacherName: &#x27;Noelia Cantador&#x27;,
+      subject: &#x27;Coordinadora Académica iTUTOR&#x27;,
+      initials: &#x27;NC&#x27;,
+      online: true,
+      unread: 0,
+      messages: [
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;¡Bienvenida a iTUTOR, Paula! Tu bono de tutorías de Octubre ya está confirmado y todas tus clases aparecen en tu calendario.&#x27;,
+          time: &#x27;01 Oct&#x27;
+        }
+      ]
+    }
+  ];
+
+  /** Devuelve las conversaciones correspondientes al rol en sesión (Jefa Coordinadora vs Alumna) */
+  get conversations(): TeacherConversation[] {
+    return this.isCoordinator ? this.coordinatorConversations : this.studentConversations;
+  }
+
+  /** Dashboard de Facturación &amp; Pagos de Paula García */
+  paymentKpis &#x3D; {
+    totalPagado: &#x27;385,00 €&#x27;,
+    clasesAbonadas: &#x27;11 sesiones&#x27;,
+    horasTotales: &#x27;16,5 horas&#x27;,
+    ultimoPago: &#x27;35,00 €&#x27;,
+    ultimoPagoDetalle: &#x27;10 Oct 2026 • Ecuaciones Diferenciales&#x27;,
+    saldoPendiente: &#x27;0,00 €&#x27;,
+    metodoPago: &#x27;Visa •••• 4821&#x27;
+  };
+
+  subjectSpending &#x3D; [
+    { subject: &#x27;Ecuaciones Diferenciales (Dra. Elena Ramos)&#x27;, amount: 210, sessions: 6, percentage: 55, color: &#x27;#2563eb&#x27; },
+    { subject: &#x27;Cálculo Multivariable (Prof. Carlos Méndez)&#x27;, amount: 105, sessions: 3, percentage: 27, color: &#x27;#10b981&#x27; },
+    { subject: &#x27;Álgebra Lineal (Prof. Carlos Méndez)&#x27;, amount: 70, sessions: 2, percentage: 18, color: &#x27;#6366f1&#x27; }
+  ];
+
+  paymentsHistory: StudentPaymentRecord[] &#x3D; [
+    {
+      id: &#x27;FAC-2026-1010&#x27;,
+      date: &#x27;10 Oct 2026&#x27;,
+      concept: &#x27;Tutoría Ecuaciones Diferenciales (90 min)&#x27;,
+      subject: &#x27;Ecuaciones Diferenciales&#x27;,
+      teacher: &#x27;Dra. Elena Ramos&#x27;,
+      method: &#x27;Visa •••• 4821&#x27;,
+      amount: 35,
+      status: &#x27;Pagado&#x27;
+    },
+    {
+      id: &#x27;FAC-2026-1006&#x27;,
+      date: &#x27;06 Oct 2026&#x27;,
+      concept: &#x27;Tutoría Cálculo Multivariable (90 min)&#x27;,
+      subject: &#x27;Cálculo Multivariable&#x27;,
+      teacher: &#x27;Prof. Carlos Méndez&#x27;,
+      method: &#x27;Visa •••• 4821&#x27;,
+      amount: 35,
+      status: &#x27;Pagado&#x27;
+    },
+    {
+      id: &#x27;FAC-2026-1003&#x27;,
+      date: &#x27;03 Oct 2026&#x27;,
+      concept: &#x27;Tutoría Ecuaciones Diferenciales (90 min)&#x27;,
+      subject: &#x27;Ecuaciones Diferenciales&#x27;,
+      teacher: &#x27;Dra. Elena Ramos&#x27;,
+      method: &#x27;Visa •••• 4821&#x27;,
+      amount: 35,
+      status: &#x27;Pagado&#x27;
+    },
+    {
+      id: &#x27;FAC-2026-0926&#x27;,
+      date: &#x27;26 Sep 2026&#x27;,
+      concept: &#x27;Bono Mensual Septiembre (8 Sesiones Intensivas)&#x27;,
+      subject: &#x27;Ecuaciones Diferenciales &amp; Cálculo&#x27;,
+      teacher: &#x27;Dra. Elena Ramos / Prof. Carlos Méndez&#x27;,
+      method: &#x27;Visa •••• 4821&#x27;,
+      amount: 280,
+      status: &#x27;Pagado&#x27;
+    }
+  ];
+
+  constructor() {
+    addIcons({
+      calendarOutline,
+      timeOutline,
+      personOutline,
+      videocamOutline,
+      documentTextOutline,
+      chatbubblesOutline,
+      walletOutline,
+      downloadOutline,
+      sendOutline,
+      checkmarkCircleOutline,
+      schoolOutline,
+      bookOutline,
+      cardOutline,
+      sparklesOutline,
+      chevronBackOutline,
+      chevronForwardOutline,
+      settingsOutline,
+      notificationsOutline,
+      shieldCheckmarkOutline,
+      folderOpenOutline,
+      receiptOutline,
+      menuOutline
+    });
+    this.buildOctoberCalendar();
+  }
+
+  ngOnInit(): void {
+    this.route.data.subscribe(data &#x3D;&gt; {
+      if (data &amp;&amp; data[&#x27;section&#x27;]) {
+        this.activeSection &#x3D; data[&#x27;section&#x27;];
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  /** Construye la cuadrícula del mes de Octubre de 2026 */
+  private buildOctoberCalendar(): void {
+    // 1 de Octubre de 2026 es Jueves (3 celdas vacías antes: Lun, Mar, Mié)
+    const emptyPrefixDays &#x3D; 3;
+    const totalDaysInOctober &#x3D; 31;
+    const cells: CalendarCell[] &#x3D; [];
+
+    for (let i &#x3D; 0; i &lt; emptyPrefixDays; i++) {
+      cells.push({ day: null, isCurrentMonth: false });
+    }
+
+    for (let day &#x3D; 1; day &lt;&#x3D; totalDaysInOctober; day++) {
+      cells.push({
+        day,
+        isCurrentMonth: true,
+        session: this.sessionsMap[day]
+      });
+    }
+
+    this.calendarCells &#x3D; cells;
+  }
+
+  /** Selecciona un día del calendario cuando el alumno pincha en el número */
+  selectCalendarDay(day: number | null): void {
+    if (!day) return;
+    this.selectedDay &#x3D; day;
+    this.cdr.markForCheck();
+  }
+
+  /** Obtiene la sesión del día seleccionado actualmente */
+  get selectedSession(): TutoriaSession | undefined {
+    return this.sessionsMap[this.selectedDay];
+  }
+
+  /** Lista ordenada de todas las sesiones del mes */
+  get allMonthSessions(): TutoriaSession[] {
+    return Object.values(this.sessionsMap).sort((a, b) &#x3D;&gt; a.day - b.day);
+  }
+
+  /** Cambia de sección y sincroniza la ruta */
+  switchSection(section: &#x27;tutorias&#x27; | &#x27;apuntes&#x27; | &#x27;mensajes&#x27; | &#x27;pagos&#x27; | &#x27;ajustes&#x27;): void {
+    this.activeSection &#x3D; section;
+    const routeMap: Record&lt;string, string&gt; &#x3D; {
+      tutorias: &#x27;/mis-clases&#x27;,
+      apuntes: &#x27;/mis-apuntes&#x27;,
+      mensajes: &#x27;/mensajes-profesores&#x27;,
+      pagos: &#x27;/mis-pagos&#x27;,
+      ajustes: &#x27;/ajustes&#x27;
+    };
+    this.router.navigate([routeMap[section]]);
+  }
+
+  /** Ir directamente a los apuntes de una asignatura desde el recuadro de la clase */
+  openNotesForSubject(subject: string): void {
+    this.selectedNotesFilter &#x3D; subject;
+    this.switchSection(&#x27;apuntes&#x27;);
+  }
+
+  /** Ir directamente al chat con la profesora desde el recuadro de la clase */
+  openChatWithTeacher(teacherName: string): void {
+    if (teacherName.toLowerCase().includes(&#x27;elena&#x27;)) {
+      this.selectedTeacherId &#x3D; &#x27;elena&#x27;;
+    } else if (teacherName.toLowerCase().includes(&#x27;carlos&#x27;)) {
+      this.selectedTeacherId &#x3D; &#x27;carlos&#x27;;
+    } else if (teacherName.toLowerCase().includes(&#x27;miguel&#x27;) || teacherName.toLowerCase().includes(&#x27;santos&#x27;)) {
+      this.selectedTeacherId &#x3D; &#x27;miguel&#x27;;
+    } else {
+      this.selectedTeacherId &#x3D; this.isCoordinator ? &#x27;elena&#x27; : &#x27;noelia&#x27;;
+    }
+    this.switchSection(&#x27;mensajes&#x27;);
+  }
+
+  /** Apuntes filtrados por asignatura */
+  get filteredNotes(): StudentNoteItem[] {
+    if (this.selectedNotesFilter &#x3D;&#x3D;&#x3D; &#x27;Todos&#x27;) {
+      return this.notesList;
+    }
+    return this.notesList.filter(n &#x3D;&gt; n.subject &#x3D;&#x3D;&#x3D; this.selectedNotesFilter);
+  }
+
+  /** Conversación activa seleccionada */
+  get activeConversation(): TeacherConversation {
+    return this.conversations.find(c &#x3D;&gt; c.id &#x3D;&#x3D;&#x3D; this.selectedTeacherId) || this.conversations[0];
+  }
+
+  selectConversation(id: string): void {
+    this.selectedTeacherId &#x3D; id;
+    const conv &#x3D; this.conversations.find(c &#x3D;&gt; c.id &#x3D;&#x3D;&#x3D; id);
+    if (conv) {
+      conv.unread &#x3D; 0;
+    }
+    this.cdr.markForCheck();
+  }
+
+  /** Determina si el mensaje fue enviado por el usuario actual */
+  isMyMessage(msg: { sender: string }): boolean {
+    if (this.isCoordinator) {
+      return msg.sender &#x3D;&#x3D;&#x3D; &#x27;coordinator&#x27;;
+    }
+    return msg.sender &#x3D;&#x3D;&#x3D; &#x27;student&#x27;;
+  }
+
+  /** Envía un mensaje en tiempo real al profesor seleccionado */
+  sendMessage(): void {
+    const text &#x3D; this.newMessageText.trim();
+    if (!text) return;
+
+    this.activeConversation.messages.push({
+      sender: this.isCoordinator ? &#x27;coordinator&#x27; : &#x27;student&#x27;,
+      text,
+      time: &#x27;Ahora&#x27;
+    });
+    this.newMessageText &#x3D; &#x27;&#x27;;
+    this.cdr.markForCheck();
+  }
+
+  /** Descarga en PDF un apunte o recibo usando jsPDF */
+  downloadNotePdf(note: StudentNoteItem): void {
+    const doc &#x3D; new jsPDF();
+    doc.setFillColor(37, 99, 235);
+    doc.rect(0, 0, 210, 26, &#x27;F&#x27;);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont(&#x27;helvetica&#x27;, &#x27;bold&#x27;);
+    doc.setFontSize(18);
+    doc.text(&#x27;iTUTOR • Apuntes Académicos&#x27;, 14, 17);
+
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(14);
+    doc.text(note.title, 14, 42);
+
+    doc.setFont(&#x27;helvetica&#x27;, &#x27;normal&#x27;);
+    doc.setFontSize(10);
+    doc.setTextColor(100, 116, 139);
+    doc.text(&#x60;Asignatura: ${note.subject} | Profesor/a: ${note.teacher} | Fecha: ${note.date}&#x60;, 14, 50);
+
+    doc.setTextColor(30, 41, 59);
+    doc.setFontSize(11);
+    const splitSummary &#x3D; doc.splitTextToSize(note.summary, 180);
+    doc.text(splitSummary, 14, 64);
+
+    doc.save(&#x60;${note.id}_${note.subject.replace(/\s+/g, &#x27;_&#x27;)}.pdf&#x60;);
+  }
+
+  /** Descarga en PDF un justificante de pago */
+  downloadPaymentReceipt(payment: StudentPaymentRecord): void {
+    const doc &#x3D; new jsPDF();
+    doc.setFillColor(37, 99, 235);
+    doc.rect(0, 0, 210, 26, &#x27;F&#x27;);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont(&#x27;helvetica&#x27;, &#x27;bold&#x27;);
+    doc.setFontSize(18);
+    doc.text(&#x27;iTUTOR • Recibo Oficial de Pago&#x27;, 14, 17);
+
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(13);
+    doc.text(&#x60;Factura / Recibo Nº: ${payment.id}&#x60;, 14, 42);
+
+    doc.setFont(&#x27;helvetica&#x27;, &#x27;normal&#x27;);
+    doc.setFontSize(11);
+    doc.text(&#x60;Alumna: Paula García (paulagarcia@itutor.es)&#x60;, 14, 54);
+    doc.text(&#x60;Concepto: ${payment.concept}&#x60;, 14, 62);
+    doc.text(&#x60;Asignatura: ${payment.subject}&#x60;, 14, 70);
+    doc.text(&#x60;Profesor/a: ${payment.teacher}&#x60;, 14, 78);
+    doc.text(&#x60;Fecha de abono: ${payment.date}&#x60;, 14, 86);
+    doc.text(&#x60;Método de pago: ${payment.method}&#x60;, 14, 94);
+
+    doc.setFont(&#x27;helvetica&#x27;, &#x27;bold&#x27;);
+    doc.setFontSize(14);
+    doc.setTextColor(16, 185, 129);
+    doc.text(&#x60;IMPORTE TOTAL PAGADO: ${payment.amount},00 € (${payment.status.toUpperCase()})&#x60;, 14, 112);
+
+    doc.save(&#x60;Recibo_iTUTOR_${payment.id}.pdf&#x60;);
+  }
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'TutoriaSession.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var updateDarkModeSwitchOffset = function () {
+                    var content = document.querySelector('.content');
+                    var scrollbarWidth = 0;
+
+                    if (content) {
+                         scrollbarWidth = Math.max(0, content.offsetWidth - content.clientWidth);
+                    }
+
+                    document.documentElement.style.setProperty(
+                         '--content-scrollbar-width',
+                         scrollbarWidth + 'px'
+                    );
+               };
+
+               updateDarkModeSwitchOffset();
+               requestAnimationFrame(updateDarkModeSwitchOffset);
+               window.addEventListener('resize', updateDarkModeSwitchOffset);
+
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

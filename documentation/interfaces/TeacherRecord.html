@@ -1,0 +1,1656 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>iTUTOR - Documentación Técnica</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">iTUTOR - Documentación Técnica</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search">
+    <input type="text" placeholder="Escribe para buscar">
+    <button type="button"
+        class="search-input-clear"
+        aria-label="Clear search"
+        data-search-input-clear>&times;</button>
+</div>
+            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
+  >
+  TeacherRecord</li>
+</ol>
+
+<div class="io-file io-file-path" data-compodoc="entity-file-path">
+    <span class="icon ion-ios-document" aria-hidden="true"></span>
+    <code>src/app/core/services/data.service.ts</code>
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#api" 
+                class="nav-link"
+                
+                role="tab" id="api-tab" data-bs-toggle="tab" data-link="api">API</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+
+            <p class="comment">
+                <h3>Descripción</h3>
+            </p>
+            <p class="comment">
+                <p>Interfaz representativa de entidad Profesor en el sistema iTUTOR</p>
+
+            </p>
+
+
+            </div>
+
+    <div class="tab-pane fade " id="api"><section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+            <tr>
+                <td class="col-md-3">
+                    <h6><b>Propiedades</b></h6>
+                </td>
+                <td class="col-md-9">
+                    <ul class="index-list">
+                        <li>
+                                <a href="#alumnosAsignados" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">alumnosAsignados</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#alumnosCount" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">alumnosCount</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#calificacion" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">calificacion</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#departamento" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">departamento</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#email" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">email</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#especialidad" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">especialidad</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#estado" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">estado</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#horasImpartidas" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">horasImpartidas</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#id" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">id</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#nombre" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">nombre</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#tarifaHora" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">tarifaHora</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#telefono" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">telefono</span>
+                                </a>
+                        </li>
+                        <li>
+                                <a href="#totalGanado" class="reference-link ">
+                                    <span class="reference-badge reference-badge--property" aria-hidden="true">P</span><span class="reference-link-label">totalGanado</span>
+                                </a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+    <section data-compodoc="block-properties">
+        <h3 id="inputs">Propiedades</h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="alumnosAsignados"></a>
+                                <span class="name "><b>alumnosAsignados</b>
+                                    <a href="#alumnosAsignados">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>alumnosAsignados:     <code>string[]</code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>    <code>string[]</code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="29" class="link-to-prism">src/app/core/services/data.service.ts:29</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="alumnosCount"></a>
+                                <span class="name "><b>alumnosCount</b>
+                                    <a href="#alumnosCount">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>alumnosCount:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="30" class="link-to-prism">src/app/core/services/data.service.ts:30</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="calificacion"></a>
+                                <span class="name "><b>calificacion</b>
+                                    <a href="#calificacion">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>calificacion:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="33" class="link-to-prism">src/app/core/services/data.service.ts:33</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="departamento"></a>
+                                <span class="name "><b>departamento</b>
+                                    <a href="#departamento">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>departamento:     <code>&quot;Física&quot; | &quot;Matemáticas&quot; | &quot;Química&quot;</code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>    <code>&quot;Física&quot; | &quot;Matemáticas&quot; | &quot;Química&quot;</code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="27" class="link-to-prism">src/app/core/services/data.service.ts:27</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="email"></a>
+                                <span class="name "><b>email</b>
+                                    <a href="#email">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>email:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="25" class="link-to-prism">src/app/core/services/data.service.ts:25</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="especialidad"></a>
+                                <span class="name "><b>especialidad</b>
+                                    <a href="#especialidad">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>especialidad:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="26" class="link-to-prism">src/app/core/services/data.service.ts:26</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="estado"></a>
+                                <span class="name "><b>estado</b>
+                                    <a href="#estado">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>estado:     <code>&quot;Activo&quot; | &quot;Disponible&quot;</code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>    <code>&quot;Activo&quot; | &quot;Disponible&quot;</code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="35" class="link-to-prism">src/app/core/services/data.service.ts:35</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="horasImpartidas"></a>
+                                <span class="name "><b>horasImpartidas</b>
+                                    <a href="#horasImpartidas">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>horasImpartidas:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="31" class="link-to-prism">src/app/core/services/data.service.ts:31</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="id"></a>
+                                <span class="name "><b>id</b>
+                                    <a href="#id">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>id:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="23" class="link-to-prism">src/app/core/services/data.service.ts:23</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="nombre"></a>
+                                <span class="name "><b>nombre</b>
+                                    <a href="#nombre">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>nombre:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="24" class="link-to-prism">src/app/core/services/data.service.ts:24</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="tarifaHora"></a>
+                                <span class="name "><b>tarifaHora</b>
+                                    <a href="#tarifaHora">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>tarifaHora:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="28" class="link-to-prism">src/app/core/services/data.service.ts:28</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="telefono"></a>
+                                <span class="name "><b>telefono</b>
+                                    <a href="#telefono">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>telefono:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="34" class="link-to-prism">src/app/core/services/data.service.ts:34</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                        <tr>
+                            <td class="col-md-4">
+                                <a name="totalGanado"></a>
+                                <span class="name "><b>totalGanado</b>
+                                    <a href="#totalGanado">
+                                        <span class="icon ion-ios-link"></span>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <code>totalGanado:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                            </td>
+                        </tr>
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="32" class="link-to-prism">src/app/core/services/data.service.ts:32</a></div>
+                                </td>
+                            </tr>
+
+                </tbody>
+            </table>
+    </section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { Observable, forkJoin, of } from &#x27;rxjs&#x27;;
+import { delay, map } from &#x27;rxjs/operators&#x27;;
+
+/** Interfaz representativa de entidad en base de datos relacional (SQL / PostgreSQL) */
+export interface SqlStudentRate {
+  id: number;
+  nombre: string;
+  email: string;
+  matricula: string;
+  tarifaHora: number;
+  plan: &#x27;Básico&#x27; | &#x27;Intensivo&#x27; | &#x27;Premium&#x27;;
+  asignaturaPrincipal: string;
+  profesorAsignado: string;
+  saldoPendiente: number;
+  horasTotales: number;
+  telefono: string;
+  estado: &#x27;Al día&#x27; | &#x27;Pendiente&#x27; | &#x27;Activo&#x27;;
+}
+
+/** Interfaz representativa de entidad Profesor en el sistema iTUTOR */
+export interface TeacherRecord {
+  id: number;
+  nombre: string;
+  email: string;
+  especialidad: string;
+  departamento: &#x27;Física&#x27; | &#x27;Matemáticas&#x27; | &#x27;Química&#x27;;
+  tarifaHora: number;
+  alumnosAsignados: string[];
+  alumnosCount: number;
+  horasImpartidas: number;
+  totalGanado: number;
+  calificacion: number;
+  telefono: string;
+  estado: &#x27;Activo&#x27; | &#x27;Disponible&#x27;;
+}
+
+/** Interfaz representativa de colección documental en NoSQL (MongoDB) */
+export interface MongoClassSession {
+  _id: string;
+  estudianteId: number;
+  estudianteNombre: string;
+  materia: string;
+  rama: &#x27;Física&#x27; | &#x27;Matemáticas&#x27; | &#x27;Química&#x27;;
+  tutor: string;
+  fecha: string;
+  mes: &#x27;septiembre&#x27; | &#x27;octubre&#x27; | &#x27;noviembre&#x27; | &#x27;diciembre&#x27;;
+  duracionMin: number;
+  importe: number;
+  estado: &#x27;Confirmada&#x27; | &#x27;En Curso&#x27; | &#x27;Pendiente&#x27; | &#x27;Cancelada&#x27;;
+  asistencia: boolean;
+  notasSeguimiento: string;
+}
+
+/** Agregación combinada para el Dashboard */
+export interface CombinedDashboardData {
+  catalogoSql: SqlStudentRate[];
+  profesoresSql: TeacherRecord[];
+  sesionesNoSql: MongoClassSession[];
+  timestamp: string;
+}
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class DataService {
+
+  /** Base de datos: Catálogo oficial de 10 Alumnos registrados */
+  private readonly STUDENTS_CATALOG: SqlStudentRate[] &#x3D; [
+    {
+      id: 101,
+      nombre: &#x27;Marcos Vega Ortiz&#x27;,
+      email: &#x27;marcosvega@itutor.es&#x27;,
+      matricula: &#x27;MAT-2026-041&#x27;,
+      tarifaHora: 30,
+      plan: &#x27;Intensivo&#x27;,
+      asignaturaPrincipal: &#x27;Física Clásica &amp; Mecánica&#x27;,
+      profesorAsignado: &#x27;Dra. Elena Ramos&#x27;,
+      saldoPendiente: 0,
+      horasTotales: 18,
+      telefono: &#x27;+34 600 111 222&#x27;,
+      estado: &#x27;Al día&#x27;
+    },
+    {
+      id: 102,
+      nombre: &#x27;Lucía Hernanz Sanz&#x27;,
+      email: &#x27;luciahernanz@itutor.es&#x27;,
+      matricula: &#x27;MAT-2026-089&#x27;,
+      tarifaHora: 35,
+      plan: &#x27;Premium&#x27;,
+      asignaturaPrincipal: &#x27;Cálculo Multivariable II&#x27;,
+      profesorAsignado: &#x27;Prof. Carlos Méndez&#x27;,
+      saldoPendiente: 70,
+      horasTotales: 22,
+      telefono: &#x27;+34 600 222 333&#x27;,
+      estado: &#x27;Pendiente&#x27;
+    },
+    {
+      id: 103,
+      nombre: &#x27;Alejandro Gómez Soto&#x27;,
+      email: &#x27;alejandrogomez@itutor.es&#x27;,
+      matricula: &#x27;MAT-2026-112&#x27;,
+      tarifaHora: 30,
+      plan: &#x27;Intensivo&#x27;,
+      asignaturaPrincipal: &#x27;Termodinámica &amp; Fluidos&#x27;,
+      profesorAsignado: &#x27;Dr. Miguel Ángel Santos&#x27;,
+      saldoPendiente: 0,
+      horasTotales: 15,
+      telefono: &#x27;+34 600 333 444&#x27;,
+      estado: &#x27;Al día&#x27;
+    },
+    {
+      id: 104,
+      nombre: &#x27;Sofía Navarro Cruz&#x27;,
+      email: &#x27;sofianavarro@itutor.es&#x27;,
+      matricula: &#x27;MAT-2026-135&#x27;,
+      tarifaHora: 25,
+      plan: &#x27;Básico&#x27;,
+      asignaturaPrincipal: &#x27;Álgebra Lineal &amp; Matrices&#x27;,
+      profesorAsignado: &#x27;Prof. Carlos Méndez&#x27;,
+      saldoPendiente: 40,
+      horasTotales: 12,
+      telefono: &#x27;+34 600 444 555&#x27;,
+      estado: &#x27;Pendiente&#x27;
+    },
+    {
+      id: 105,
+      nombre: &#x27;Javier Domínguez Rey&#x27;,
+      email: &#x27;javierdominguez@itutor.es&#x27;,
+      matricula: &#x27;MAT-2026-180&#x27;,
+      tarifaHora: 35,
+      plan: &#x27;Premium&#x27;,
+      asignaturaPrincipal: &#x27;Electromagnetismo Avanzado&#x27;,
+      profesorAsignado: &#x27;Dr. Fernando Alonso&#x27;,
+      saldoPendiente: 110,
+      horasTotales: 20,
+      telefono: &#x27;+34 600 555 666&#x27;,
+      estado: &#x27;Pendiente&#x27;
+    },
+    {
+      id: 106,
+      nombre: &#x27;Clara Morales Ibáñez&#x27;,
+      email: &#x27;claramorales@itutor.es&#x27;,
+      matricula: &#x27;MAT-2026-204&#x27;,
+      tarifaHora: 30,
+      plan: &#x27;Intensivo&#x27;,
+      asignaturaPrincipal: &#x27;Ecuaciones Diferenciales&#x27;,
+      profesorAsignado: &#x27;Prof. Roberto Gil&#x27;,
+      saldoPendiente: 0,
+      horasTotales: 16,
+      telefono: &#x27;+34 600 666 777&#x27;,
+      estado: &#x27;Al día&#x27;
+    },
+    {
+      id: 107,
+      nombre: &#x27;David Romero Pascual&#x27;,
+      email: &#x27;davidromero@itutor.es&#x27;,
+      matricula: &#x27;MAT-2026-228&#x27;,
+      tarifaHora: 28,
+      plan: &#x27;Básico&#x27;,
+      asignaturaPrincipal: &#x27;Química Aplicada e Ingeniería&#x27;,
+      profesorAsignado: &#x27;Prof. Laura Vicente&#x27;,
+      saldoPendiente: 56,
+      horasTotales: 10,
+      telefono: &#x27;+34 600 777 888&#x27;,
+      estado: &#x27;Pendiente&#x27;
+    },
+    {
+      id: 108,
+      nombre: &#x27;Elena Ruiz Gallego&#x27;,
+      email: &#x27;elenaruiz@itutor.es&#x27;,
+      matricula: &#x27;MAT-2026-253&#x27;,
+      tarifaHora: 32,
+      plan: &#x27;Premium&#x27;,
+      asignaturaPrincipal: &#x27;Estadística &amp; Análisis Numérico&#x27;,
+      profesorAsignado: &#x27;Dra. Carmen Delgado&#x27;,
+      saldoPendiente: 0,
+      horasTotales: 24,
+      telefono: &#x27;+34 600 888 999&#x27;,
+      estado: &#x27;Al día&#x27;
+    },
+    {
+      id: 109,
+      nombre: &#x27;Adrián Torres Molina&#x27;,
+      email: &#x27;adriantorres@itutor.es&#x27;,
+      matricula: &#x27;MAT-2026-279&#x27;,
+      tarifaHora: 38,
+      plan: &#x27;Intensivo&#x27;,
+      asignaturaPrincipal: &#x27;Mecánica Cuántica &amp; Partículas&#x27;,
+      profesorAsignado: &#x27;Dra. Natalia Molina&#x27;,
+      saldoPendiente: 76,
+      horasTotales: 14,
+      telefono: &#x27;+34 600 999 000&#x27;,
+      estado: &#x27;Pendiente&#x27;
+    },
+    {
+      id: 110,
+      nombre: &#x27;Paula García Serrano&#x27;,
+      email: &#x27;paulagarcia@itutor.es&#x27;,
+      matricula: &#x27;MAT-2026-301&#x27;,
+      tarifaHora: 35,
+      plan: &#x27;Premium&#x27;,
+      asignaturaPrincipal: &#x27;Astrofísica &amp; Cinemática&#x27;,
+      profesorAsignado: &#x27;Dra. Elena Ramos&#x27;,
+      saldoPendiente: 0,
+      horasTotales: 26,
+      telefono: &#x27;+34 611 000 111&#x27;,
+      estado: &#x27;Al día&#x27;
+    }
+  ];
+
+  /** Base de datos: Catálogo oficial de 10 Profesores registrados */
+  private readonly TEACHERS_CATALOG: TeacherRecord[] &#x3D; [
+    {
+      id: 201,
+      nombre: &#x27;Dra. Elena Ramos&#x27;,
+      email: &#x27;elenaramos@itutor.es&#x27;,
+      especialidad: &#x27;Física Teórica &amp; Mecánica Clásica&#x27;,
+      departamento: &#x27;Física&#x27;,
+      tarifaHora: 35,
+      alumnosAsignados: [&#x27;Marcos Vega Ortiz&#x27;, &#x27;Paula García Serrano&#x27;],
+      alumnosCount: 2,
+      horasImpartidas: 44,
+      totalGanado: 1540,
+      calificacion: 4.9,
+      telefono: &#x27;+34 611 223 344&#x27;,
+      estado: &#x27;Activo&#x27;
+    },
+    {
+      id: 202,
+      nombre: &#x27;Prof. Carlos Méndez&#x27;,
+      email: &#x27;carlosmendez@itutor.es&#x27;,
+      especialidad: &#x27;Cálculo Multivariable &amp; Álgebra Lineal&#x27;,
+      departamento: &#x27;Matemáticas&#x27;,
+      tarifaHora: 35,
+      alumnosAsignados: [&#x27;Lucía Hernanz Sanz&#x27;, &#x27;Sofía Navarro Cruz&#x27;],
+      alumnosCount: 2,
+      horasImpartidas: 34,
+      totalGanado: 1190,
+      calificacion: 4.8,
+      telefono: &#x27;+34 622 334 455&#x27;,
+      estado: &#x27;Activo&#x27;
+    },
+    {
+      id: 203,
+      nombre: &#x27;Dr. Miguel Ángel Santos&#x27;,
+      email: &#x27;miguelsantos@itutor.es&#x27;,
+      especialidad: &#x27;Termodinámica &amp; Mecánica de Fluidos&#x27;,
+      departamento: &#x27;Física&#x27;,
+      tarifaHora: 30,
+      alumnosAsignados: [&#x27;Alejandro Gómez Soto&#x27;],
+      alumnosCount: 1,
+      horasImpartidas: 15,
+      totalGanado: 450,
+      calificacion: 4.9,
+      telefono: &#x27;+34 633 445 566&#x27;,
+      estado: &#x27;Activo&#x27;
+    },
+    {
+      id: 204,
+      nombre: &#x27;Prof. Laura Vicente&#x27;,
+      email: &#x27;lauravicente@itutor.es&#x27;,
+      especialidad: &#x27;Química Aplicada e Ingeniería de Materiales&#x27;,
+      departamento: &#x27;Química&#x27;,
+      tarifaHora: 28,
+      alumnosAsignados: [&#x27;David Romero Pascual&#x27;],
+      alumnosCount: 1,
+      horasImpartidas: 10,
+      totalGanado: 280,
+      calificacion: 4.7,
+      telefono: &#x27;+34 644 556 677&#x27;,
+      estado: &#x27;Activo&#x27;
+    },
+    {
+      id: 205,
+      nombre: &#x27;Dr. Fernando Alonso&#x27;,
+      email: &#x27;fernandoalonso@itutor.es&#x27;,
+      especialidad: &#x27;Electromagnetismo Avanzado &amp; Circuitos&#x27;,
+      departamento: &#x27;Física&#x27;,
+      tarifaHora: 35,
+      alumnosAsignados: [&#x27;Javier Domínguez Rey&#x27;],
+      alumnosCount: 1,
+      horasImpartidas: 20,
+      totalGanado: 700,
+      calificacion: 4.9,
+      telefono: &#x27;+34 655 667 788&#x27;,
+      estado: &#x27;Activo&#x27;
+    },
+    {
+      id: 206,
+      nombre: &#x27;Dra. Carmen Delgado&#x27;,
+      email: &#x27;carmendelgado@itutor.es&#x27;,
+      especialidad: &#x27;Estadística Aplicada &amp; Probabilidad Bayesiana&#x27;,
+      departamento: &#x27;Matemáticas&#x27;,
+      tarifaHora: 32,
+      alumnosAsignados: [&#x27;Elena Ruiz Gallego&#x27;],
+      alumnosCount: 1,
+      horasImpartidas: 24,
+      totalGanado: 768,
+      calificacion: 4.8,
+      telefono: &#x27;+34 666 778 899&#x27;,
+      estado: &#x27;Activo&#x27;
+    },
+    {
+      id: 207,
+      nombre: &#x27;Prof. Roberto Gil&#x27;,
+      email: &#x27;robertogil@itutor.es&#x27;,
+      especialidad: &#x27;Ecuaciones Diferenciales &amp; Modelos Físicos&#x27;,
+      departamento: &#x27;Matemáticas&#x27;,
+      tarifaHora: 30,
+      alumnosAsignados: [&#x27;Clara Morales Ibáñez&#x27;],
+      alumnosCount: 1,
+      horasImpartidas: 16,
+      totalGanado: 480,
+      calificacion: 4.6,
+      telefono: &#x27;+34 677 889 900&#x27;,
+      estado: &#x27;Activo&#x27;
+    },
+    {
+      id: 208,
+      nombre: &#x27;Dra. Natalia Molina&#x27;,
+      email: &#x27;nataliamolina@itutor.es&#x27;,
+      especialidad: &#x27;Física Cuántica &amp; Partículas Subatómicas&#x27;,
+      departamento: &#x27;Física&#x27;,
+      tarifaHora: 38,
+      alumnosAsignados: [&#x27;Adrián Torres Molina&#x27;],
+      alumnosCount: 1,
+      horasImpartidas: 14,
+      totalGanado: 532,
+      calificacion: 5.0,
+      telefono: &#x27;+34 688 990 011&#x27;,
+      estado: &#x27;Activo&#x27;
+    },
+    {
+      id: 209,
+      nombre: &#x27;Prof. Jorge Herrera&#x27;,
+      email: &#x27;jorgeherrera@itutor.es&#x27;,
+      especialidad: &#x27;Geometría Diferencial &amp; Topología Espacial&#x27;,
+      departamento: &#x27;Matemáticas&#x27;,
+      tarifaHora: 30,
+      alumnosAsignados: [&#x27;Lucía Hernanz Sanz&#x27;],
+      alumnosCount: 1,
+      horasImpartidas: 12,
+      totalGanado: 360,
+      calificacion: 4.7,
+      telefono: &#x27;+34 699 001 122&#x27;,
+      estado: &#x27;Disponible&#x27;
+    },
+    {
+      id: 210,
+      nombre: &#x27;Dra. Patricia Serrano&#x27;,
+      email: &#x27;patriciaserrano@itutor.es&#x27;,
+      especialidad: &#x27;Astrofísica, Óptica &amp; Ondas Gravitacionales&#x27;,
+      departamento: &#x27;Física&#x27;,
+      tarifaHora: 36,
+      alumnosAsignados: [&#x27;Paula García Serrano&#x27;],
+      alumnosCount: 1,
+      horasImpartidas: 18,
+      totalGanado: 648,
+      calificacion: 4.9,
+      telefono: &#x27;+34 610 112 233&#x27;,
+      estado: &#x27;Activo&#x27;
+    }
+  ];
+
+  /** Base de datos: Histórico de Sesiones en MongoDB Atlas */
+  private readonly SESSIONS_COLLECTION: MongoClassSession[] &#x3D; [
+    // Septiembre
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111101&#x27;,
+      estudianteId: 101,
+      estudianteNombre: &#x27;Marcos Vega Ortiz&#x27;,
+      materia: &#x27;Física Clásica&#x27;,
+      rama: &#x27;Física&#x27;,
+      tutor: &#x27;Dra. Elena Ramos&#x27;,
+      fecha: &#x27;2026-09-18 16:30&#x27;,
+      mes: &#x27;septiembre&#x27;,
+      duracionMin: 90,
+      importe: 45,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Repaso de leyes de Newton y momento lineal.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111102&#x27;,
+      estudianteId: 102,
+      estudianteNombre: &#x27;Lucía Hernanz Sanz&#x27;,
+      materia: &#x27;Cálculo Multivariable&#x27;,
+      rama: &#x27;Matemáticas&#x27;,
+      tutor: &#x27;Prof. Carlos Méndez&#x27;,
+      fecha: &#x27;2026-09-22 18:00&#x27;,
+      mes: &#x27;septiembre&#x27;,
+      duracionMin: 90,
+      importe: 52.5,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Integrales dobles sobre regiones generales.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111103&#x27;,
+      estudianteId: 104,
+      estudianteNombre: &#x27;Sofía Navarro Cruz&#x27;,
+      materia: &#x27;Álgebra Lineal&#x27;,
+      rama: &#x27;Matemáticas&#x27;,
+      tutor: &#x27;Prof. Carlos Méndez&#x27;,
+      fecha: &#x27;2026-09-25 17:00&#x27;,
+      mes: &#x27;septiembre&#x27;,
+      duracionMin: 60,
+      importe: 25,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Diagonalización y valores propios.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111120&#x27;,
+      estudianteId: 110,
+      estudianteNombre: &#x27;Paula García Serrano&#x27;,
+      materia: &#x27;Astrofísica &amp; Cinemática&#x27;,
+      rama: &#x27;Física&#x27;,
+      tutor: &#x27;Dra. Elena Ramos&#x27;,
+      fecha: &#x27;2026-09-28 17:00&#x27;,
+      mes: &#x27;septiembre&#x27;,
+      duracionMin: 90,
+      importe: 52.5,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Introducción a mecánica celeste y gravedad newtoniana.&#x27;
+    },
+
+    // Octubre
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111104&#x27;,
+      estudianteId: 101,
+      estudianteNombre: &#x27;Marcos Vega Ortiz&#x27;,
+      materia: &#x27;Física Clásica&#x27;,
+      rama: &#x27;Física&#x27;,
+      tutor: &#x27;Dra. Elena Ramos&#x27;,
+      fecha: &#x27;2026-10-02 16:30&#x27;,
+      mes: &#x27;octubre&#x27;,
+      duracionMin: 90,
+      importe: 45,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Oscilaciones armónicas simples y amortiguadas.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111105&#x27;,
+      estudianteId: 102,
+      estudianteNombre: &#x27;Lucía Hernanz Sanz&#x27;,
+      materia: &#x27;Cálculo Multivariable&#x27;,
+      rama: &#x27;Matemáticas&#x27;,
+      tutor: &#x27;Prof. Carlos Méndez&#x27;,
+      fecha: &#x27;2026-10-05 18:00&#x27;,
+      mes: &#x27;octubre&#x27;,
+      duracionMin: 90,
+      importe: 52.5,
+      estado: &#x27;En Curso&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Teorema de Green y campos vectoriales conservativos.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111106&#x27;,
+      estudianteId: 103,
+      estudianteNombre: &#x27;Alejandro Gómez Soto&#x27;,
+      materia: &#x27;Termodinámica&#x27;,
+      rama: &#x27;Física&#x27;,
+      tutor: &#x27;Dr. Miguel Ángel Santos&#x27;,
+      fecha: &#x27;2026-10-06 10:00&#x27;,
+      mes: &#x27;octubre&#x27;,
+      duracionMin: 90,
+      importe: 45,
+      estado: &#x27;Pendiente&#x27;,
+      asistencia: false,
+      notasSeguimiento: &#x27;Ciclos de Carnot y entropía de gases ideales.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111107&#x27;,
+      estudianteId: 105,
+      estudianteNombre: &#x27;Javier Domínguez Rey&#x27;,
+      materia: &#x27;Electromagnetismo&#x27;,
+      rama: &#x27;Física&#x27;,
+      tutor: &#x27;Dr. Fernando Alonso&#x27;,
+      fecha: &#x27;2026-10-08 17:00&#x27;,
+      mes: &#x27;octubre&#x27;,
+      duracionMin: 90,
+      importe: 52.5,
+      estado: &#x27;Cancelada&#x27;,
+      asistencia: false,
+      notasSeguimiento: &#x27;Cancelado por estudiante. Reagendar Ley de Gauss.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111108&#x27;,
+      estudianteId: 106,
+      estudianteNombre: &#x27;Clara Morales Ibáñez&#x27;,
+      materia: &#x27;Ecuaciones Diferenciales&#x27;,
+      rama: &#x27;Matemáticas&#x27;,
+      tutor: &#x27;Prof. Roberto Gil&#x27;,
+      fecha: &#x27;2026-10-09 11:00&#x27;,
+      mes: &#x27;octubre&#x27;,
+      duracionMin: 60,
+      importe: 30,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Transformada de Laplace aplicada a sistemas RLC.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111121&#x27;,
+      estudianteId: 110,
+      estudianteNombre: &#x27;Paula García Serrano&#x27;,
+      materia: &#x27;Ecuaciones Diferenciales&#x27;,
+      rama: &#x27;Matemáticas&#x27;,
+      tutor: &#x27;Dra. Elena Ramos&#x27;,
+      fecha: &#x27;2026-10-10 10:00&#x27;,
+      mes: &#x27;octubre&#x27;,
+      duracionMin: 90,
+      importe: 52.5,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Resolución de ecuaciones de orden superior homogéneas.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111122&#x27;,
+      estudianteId: 107,
+      estudianteNombre: &#x27;David Romero Pascual&#x27;,
+      materia: &#x27;Química Aplicada&#x27;,
+      rama: &#x27;Química&#x27;,
+      tutor: &#x27;Prof. Laura Vicente&#x27;,
+      fecha: &#x27;2026-10-14 16:00&#x27;,
+      mes: &#x27;octubre&#x27;,
+      duracionMin: 60,
+      importe: 28,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Estequiometría de reacciones y rendimientos reales.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111123&#x27;,
+      estudianteId: 108,
+      estudianteNombre: &#x27;Elena Ruiz Gallego&#x27;,
+      materia: &#x27;Estadística &amp; Probabilidad&#x27;,
+      rama: &#x27;Matemáticas&#x27;,
+      tutor: &#x27;Dra. Carmen Delgado&#x27;,
+      fecha: &#x27;2026-10-18 12:00&#x27;,
+      mes: &#x27;octubre&#x27;,
+      duracionMin: 90,
+      importe: 48,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Distribuciones continuas: Normal, Student y Chi-cuadrado.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111124&#x27;,
+      estudianteId: 109,
+      estudianteNombre: &#x27;Adrián Torres Molina&#x27;,
+      materia: &#x27;Mecánica Cuántica&#x27;,
+      rama: &#x27;Física&#x27;,
+      tutor: &#x27;Dra. Natalia Molina&#x27;,
+      fecha: &#x27;2026-10-22 17:30&#x27;,
+      mes: &#x27;octubre&#x27;,
+      duracionMin: 90,
+      importe: 57,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Ecuación de Schrödinger independiente del tiempo.&#x27;
+    },
+
+    // Noviembre
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111109&#x27;,
+      estudianteId: 103,
+      estudianteNombre: &#x27;Alejandro Gómez Soto&#x27;,
+      materia: &#x27;Termodinámica&#x27;,
+      rama: &#x27;Física&#x27;,
+      tutor: &#x27;Dr. Miguel Ángel Santos&#x27;,
+      fecha: &#x27;2026-11-03 10:00&#x27;,
+      mes: &#x27;noviembre&#x27;,
+      duracionMin: 90,
+      importe: 45,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Ecuación de estado de Van der Waals.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111110&#x27;,
+      estudianteId: 104,
+      estudianteNombre: &#x27;Sofía Navarro Cruz&#x27;,
+      materia: &#x27;Álgebra Lineal&#x27;,
+      rama: &#x27;Matemáticas&#x27;,
+      tutor: &#x27;Prof. Carlos Méndez&#x27;,
+      fecha: &#x27;2026-11-05 12:00&#x27;,
+      mes: &#x27;noviembre&#x27;,
+      duracionMin: 60,
+      importe: 25,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Descomposición en valores singulares (SVD).&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111111&#x27;,
+      estudianteId: 105,
+      estudianteNombre: &#x27;Javier Domínguez Rey&#x27;,
+      materia: &#x27;Electromagnetismo&#x27;,
+      rama: &#x27;Física&#x27;,
+      tutor: &#x27;Dr. Fernando Alonso&#x27;,
+      fecha: &#x27;2026-11-12 17:00&#x27;,
+      mes: &#x27;noviembre&#x27;,
+      duracionMin: 90,
+      importe: 52.5,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Ecuaciones de Maxwell en medios dieléctricos.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111125&#x27;,
+      estudianteId: 110,
+      estudianteNombre: &#x27;Paula García Serrano&#x27;,
+      materia: &#x27;Astrofísica &amp; Cinemática&#x27;,
+      rama: &#x27;Física&#x27;,
+      tutor: &#x27;Dra. Elena Ramos&#x27;,
+      fecha: &#x27;2026-11-15 17:00&#x27;,
+      mes: &#x27;noviembre&#x27;,
+      duracionMin: 90,
+      importe: 52.5,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Órbitas elípticas y leyes de Kepler.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111126&#x27;,
+      estudianteId: 102,
+      estudianteNombre: &#x27;Lucía Hernanz Sanz&#x27;,
+      materia: &#x27;Geometría Diferencial&#x27;,
+      rama: &#x27;Matemáticas&#x27;,
+      tutor: &#x27;Prof. Jorge Herrera&#x27;,
+      fecha: &#x27;2026-11-20 18:30&#x27;,
+      mes: &#x27;noviembre&#x27;,
+      duracionMin: 60,
+      importe: 30,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Curvatura gaussiana y geodésicas en superficies.&#x27;
+    },
+
+    // Diciembre
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111112&#x27;,
+      estudianteId: 101,
+      estudianteNombre: &#x27;Marcos Vega Ortiz&#x27;,
+      materia: &#x27;Física Clásica&#x27;,
+      rama: &#x27;Física&#x27;,
+      tutor: &#x27;Dra. Elena Ramos&#x27;,
+      fecha: &#x27;2026-12-02 16:30&#x27;,
+      mes: &#x27;diciembre&#x27;,
+      duracionMin: 90,
+      importe: 45,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Preparación examen final de Mecánica Teórica.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111113&#x27;,
+      estudianteId: 102,
+      estudianteNombre: &#x27;Lucía Hernanz Sanz&#x27;,
+      materia: &#x27;Cálculo Multivariable&#x27;,
+      rama: &#x27;Matemáticas&#x27;,
+      tutor: &#x27;Prof. Carlos Méndez&#x27;,
+      fecha: &#x27;2026-12-04 18:00&#x27;,
+      mes: &#x27;diciembre&#x27;,
+      duracionMin: 90,
+      importe: 52.5,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Teorema de Stokes y cálculo de flujo.&#x27;
+    },
+    {
+      _id: &#x27;654a1f9e2b1c8a001a111127&#x27;,
+      estudianteId: 110,
+      estudianteNombre: &#x27;Paula García Serrano&#x27;,
+      materia: &#x27;Óptica &amp; Ondas&#x27;,
+      rama: &#x27;Física&#x27;,
+      tutor: &#x27;Dra. Patricia Serrano&#x27;,
+      fecha: &#x27;2026-12-10 11:30&#x27;,
+      mes: &#x27;diciembre&#x27;,
+      duracionMin: 90,
+      importe: 54,
+      estado: &#x27;Confirmada&#x27;,
+      asistencia: true,
+      notasSeguimiento: &#x27;Interferencias, difracción y redes ópticas.&#x27;
+    }
+  ];
+
+  constructor() {}
+
+  /**
+   * Simula consulta a API Backend conectada a SQL (PostgreSQL/MySQL).
+   * Recupera catálogo maestro de los 10 alumnos, tarifas horarias y profesores asignados.
+   */
+  getSqlStudentsCatalog(): Observable&lt;SqlStudentRate[]&gt; {
+    return of(this.STUDENTS_CATALOG).pipe(delay(350));
+  }
+
+  /**
+   * Simula consulta a API Backend conectada a SQL.
+   * Recupera catálogo maestro de los 10 profesores de iTUTOR con balance y horas.
+   */
+  getTeachersCatalog(): Observable&lt;TeacherRecord[]&gt; {
+    return of(this.TEACHERS_CATALOG).pipe(delay(350));
+  }
+
+  /**
+   * Simula consulta a API Backend conectada a NoSQL (MongoDB Atlas).
+   * Recupera histórico y sesiones de tutoría en tiempo real con metadatos no estructurados.
+   */
+  getMongoSessionsStream(): Observable&lt;MongoClassSession[]&gt; {
+    return of(this.SESSIONS_COLLECTION).pipe(delay(400));
+  }
+
+  /**
+   * Obtiene la información personalizada para el portal de un profesor específico:
+   * sus alumnos asignados, sesiones impartidas y cálculo exacto del dinero ganado.
+   */
+  getTeacherPortalData(teacherEmailOrName: string): Observable&lt;{
+    teacher: TeacherRecord;
+    students: SqlStudentRate[];
+    sessions: MongoClassSession[];
+    totalEarned: number;
+    hoursCount: number;
+  }&gt; {
+    const query &#x3D; (teacherEmailOrName || &#x27;&#x27;).toLowerCase().trim();
+    
+    // Búsqueda por email o por nombre parcial
+    let teacher &#x3D; this.TEACHERS_CATALOG.find(t &#x3D;&gt; 
+      t.email.toLowerCase() &#x3D;&#x3D;&#x3D; query || 
+      t.nombre.toLowerCase().includes(query)
+    );
+
+    // Fallback al profesor titular principal (Dra. Elena Ramos) si no coincide
+    if (!teacher) {
+      teacher &#x3D; this.TEACHERS_CATALOG[0];
+    }
+
+    // Filtrar sesiones del profesor
+    const sessions &#x3D; this.SESSIONS_COLLECTION.filter(s &#x3D;&gt; 
+      s.tutor.toLowerCase().includes(teacher!.nombre.toLowerCase()) || 
+      teacher!.nombre.toLowerCase().includes(s.tutor.toLowerCase())
+    );
+
+    // Filtrar alumnos que tiene asignados
+    const students &#x3D; this.STUDENTS_CATALOG.filter(st &#x3D;&gt; 
+      teacher!.alumnosAsignados.some(assigned &#x3D;&gt; assigned.toLowerCase() &#x3D;&#x3D;&#x3D; st.nombre.toLowerCase()) ||
+      st.profesorAsignado.toLowerCase().includes(teacher!.nombre.toLowerCase())
+    );
+
+    // Calcular dinero total ganado en sesiones confirmadas / en curso
+    const totalEarned &#x3D; sessions
+      .filter(s &#x3D;&gt; s.estado !&#x3D;&#x3D; &#x27;Cancelada&#x27;)
+      .reduce((sum, s) &#x3D;&gt; sum + s.importe, 0);
+
+    const hoursCount &#x3D; Math.round(
+      sessions.reduce((sum, s) &#x3D;&gt; sum + s.duracionMin, 0) / 60
+    );
+
+    return of({
+      teacher,
+      students,
+      sessions,
+      totalEarned,
+      hoursCount
+    }).pipe(delay(300));
+  }
+
+  /**
+   * ORQUESTACIÓN CONCURRENTE CON RxJS forkJoin:
+   * Dispara en paralelo las fuentes heterogéneas (Alumnos SQL, Profesores SQL y Sesiones NoSQL).
+   * Emite únicamente cuando todas completan su emisión.
+   */
+  getCombinedDashboardData(): Observable&lt;CombinedDashboardData&gt; {
+    return forkJoin({
+      catalogoSql: this.getSqlStudentsCatalog(),
+      profesoresSql: this.getTeachersCatalog(),
+      sesionesNoSql: this.getMongoSessionsStream()
+    }).pipe(
+      map(({ catalogoSql, profesoresSql, sesionesNoSql }) &#x3D;&gt; ({
+        catalogoSql,
+        profesoresSql,
+        sesionesNoSql,
+        timestamp: new Date().toISOString()
+      }))
+    );
+  }
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'TeacherRecord.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var updateDarkModeSwitchOffset = function () {
+                    var content = document.querySelector('.content');
+                    var scrollbarWidth = 0;
+
+                    if (content) {
+                         scrollbarWidth = Math.max(0, content.offsetWidth - content.clientWidth);
+                    }
+
+                    document.documentElement.style.setProperty(
+                         '--content-scrollbar-width',
+                         scrollbarWidth + 'px'
+                    );
+               };
+
+               updateDarkModeSwitchOffset();
+               requestAnimationFrame(updateDarkModeSwitchOffset);
+               window.addEventListener('resize', updateDarkModeSwitchOffset);
+
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
