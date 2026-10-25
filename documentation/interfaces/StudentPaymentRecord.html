@@ -253,7 +253,7 @@
 
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="94" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:94</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="95" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:95</a></div>
                                 </td>
                             </tr>
 
@@ -292,7 +292,7 @@
 
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="90" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:90</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="91" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:91</a></div>
                                 </td>
                             </tr>
 
@@ -331,7 +331,7 @@
 
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="89" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:89</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="90" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:90</a></div>
                                 </td>
                             </tr>
 
@@ -370,7 +370,7 @@
 
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="88" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:88</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="89" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:89</a></div>
                                 </td>
                             </tr>
 
@@ -409,7 +409,7 @@
 
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="93" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:93</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="94" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:94</a></div>
                                 </td>
                             </tr>
 
@@ -448,7 +448,7 @@
 
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="95" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:95</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="96" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:96</a></div>
                                 </td>
                             </tr>
 
@@ -487,7 +487,7 @@
 
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="91" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:91</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="92" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:92</a></div>
                                 </td>
                             </tr>
 
@@ -526,7 +526,7 @@
 
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="92" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:92</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="93" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:93</a></div>
                                 </td>
                             </tr>
 
@@ -541,19 +541,17 @@
 import { CommonModule } from &#x27;@angular/common&#x27;;
 import { FormsModule } from &#x27;@angular/forms&#x27;;
 import { ActivatedRoute, Router } from &#x27;@angular/router&#x27;;
-import { 
-  IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonButtons, 
-  IonMenuButton, 
-  IonButton, 
-  IonIcon, 
-  IonBadge, 
-  IonCard, 
-  IonCardContent
-} from &#x27;@ionic/angular&#x27;;
+import { IonContent } from &#x27;@ionic/angular/ion-content&#x27;;
+import { IonHeader } from &#x27;@ionic/angular/ion-header&#x27;;
+import { IonTitle } from &#x27;@ionic/angular/ion-title&#x27;;
+import { IonToolbar } from &#x27;@ionic/angular/ion-toolbar&#x27;;
+import { IonButtons } from &#x27;@ionic/angular/ion-buttons&#x27;;
+import { IonMenuButton } from &#x27;@ionic/angular/ion-menu-button&#x27;;
+import { IonButton } from &#x27;@ionic/angular/ion-button&#x27;;
+import { IonIcon } from &#x27;@ionic/angular/ion-icon&#x27;;
+import { IonBadge } from &#x27;@ionic/angular/ion-badge&#x27;;
+import { IonCard } from &#x27;@ionic/angular/ion-card&#x27;;
+import { IonCardContent } from &#x27;@ionic/angular/ion-card-content&#x27;;
 import { addIcons } from &#x27;ionicons&#x27;;
 import { 
   calendarOutline, 
@@ -576,9 +574,12 @@ import {
   notificationsOutline,
   shieldCheckmarkOutline,
   folderOpenOutline,
-  receiptOutline
+  receiptOutline,
+  menuOutline
 } from &#x27;ionicons/icons&#x27;;
 import jsPDF from &#x27;jspdf&#x27;;
+import { SidebarService } from &#x27;../../core/services/sidebar.service&#x27;;
+import { AuthService, User } from &#x27;../../core/services/auth.service&#x27;;
 
 export interface TutoriaSession {
   day: number;
@@ -617,7 +618,7 @@ export interface TeacherConversation {
   online: boolean;
   unread: number;
   messages: {
-    sender: &#x27;teacher&#x27; | &#x27;student&#x27;;
+    sender: &#x27;teacher&#x27; | &#x27;student&#x27; | &#x27;coordinator&#x27;;
     text: string;
     time: string;
   }[];
@@ -654,7 +655,6 @@ export interface CalendarCell {
     IonTitle, 
     IonToolbar, 
     IonButtons, 
-    IonMenuButton, 
     IonButton, 
     IonIcon, 
     IonBadge, 
@@ -666,6 +666,21 @@ export class MisClasesPage implements OnInit {
   private route &#x3D; inject(ActivatedRoute);
   private router &#x3D; inject(Router);
   private cdr &#x3D; inject(ChangeDetectorRef);
+  public sidebarService &#x3D; inject(SidebarService);
+  private authService &#x3D; inject(AuthService);
+
+  get currentUser(): User | null {
+    return this.authService.currentUserValue;
+  }
+
+  get isCoordinator(): boolean {
+    const user &#x3D; this.currentUser;
+    return user?.role &#x3D;&#x3D;&#x3D; &#x27;Admin&#x27; || (user?.email?.toLowerCase().includes(&#x27;noelia&#x27;) ?? false);
+  }
+
+  toggleMenu(): void {
+    this.sidebarService.toggleMenu();
+  }
 
   /** Sección activa: &#x27;tutorias&#x27; | &#x27;apuntes&#x27; | &#x27;mensajes&#x27; | &#x27;pagos&#x27; | &#x27;ajustes&#x27; */
   activeSection: &#x27;tutorias&#x27; | &#x27;apuntes&#x27; | &#x27;mensajes&#x27; | &#x27;pagos&#x27; | &#x27;ajustes&#x27; &#x3D; &#x27;tutorias&#x27;;
@@ -686,7 +701,7 @@ export class MisClasesPage implements OnInit {
       teacher: &#x27;Dra. Elena Ramos&#x27;,
       teacherRole: &#x27;Catedrática de Matemáticas Aplicadas&#x27;,
       teacherInitials: &#x27;ER&#x27;,
-      teacherEmail: &#x27;elena.ramos@itutor.es&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
       time: &#x27;11:00 - 12:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala HD #04&#x27;,
@@ -703,7 +718,7 @@ export class MisClasesPage implements OnInit {
       teacher: &#x27;Prof. Carlos Méndez&#x27;,
       teacherRole: &#x27;Profesor Titular de Análisis Matemático&#x27;,
       teacherInitials: &#x27;CM&#x27;,
-      teacherEmail: &#x27;carlos.mendez@itutor.es&#x27;,
+      teacherEmail: &#x27;carlosmendez@itutor.es&#x27;,
       time: &#x27;17:30 - 19:00&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala HD #02&#x27;,
@@ -720,7 +735,7 @@ export class MisClasesPage implements OnInit {
       teacher: &#x27;Dra. Elena Ramos&#x27;,
       teacherRole: &#x27;Profesora Titular de Ecuaciones Diferenciales&#x27;,
       teacherInitials: &#x27;ER&#x27;,
-      teacherEmail: &#x27;elena.ramos@itutor.es&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
       time: &#x27;11:00 - 12:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala Interactiva #04&#x27;,
@@ -737,7 +752,7 @@ export class MisClasesPage implements OnInit {
       teacher: &#x27;Prof. Carlos Méndez&#x27;,
       teacherRole: &#x27;Profesor Titular de Análisis y Álgebra&#x27;,
       teacherInitials: &#x27;CM&#x27;,
-      teacherEmail: &#x27;carlos.mendez@itutor.es&#x27;,
+      teacherEmail: &#x27;carlosmendez@itutor.es&#x27;,
       time: &#x27;18:00 - 19:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala HD #02&#x27;,
@@ -754,7 +769,7 @@ export class MisClasesPage implements OnInit {
       teacher: &#x27;Dra. Elena Ramos&#x27;,
       teacherRole: &#x27;Profesora Titular de Ecuaciones Diferenciales&#x27;,
       teacherInitials: &#x27;ER&#x27;,
-      teacherEmail: &#x27;elena.ramos@itutor.es&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
       time: &#x27;17:00 - 18:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala Interactiva #04&#x27;,
@@ -771,7 +786,7 @@ export class MisClasesPage implements OnInit {
       teacher: &#x27;Dra. Elena Ramos&#x27;,
       teacherRole: &#x27;Profesora Titular de Ecuaciones Diferenciales&#x27;,
       teacherInitials: &#x27;ER&#x27;,
-      teacherEmail: &#x27;elena.ramos@itutor.es&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
       time: &#x27;11:00 - 12:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala Interactiva #04&#x27;,
@@ -788,7 +803,7 @@ export class MisClasesPage implements OnInit {
       teacher: &#x27;Prof. Carlos Méndez&#x27;,
       teacherRole: &#x27;Profesor Titular de Análisis Matemático&#x27;,
       teacherInitials: &#x27;CM&#x27;,
-      teacherEmail: &#x27;carlos.mendez@itutor.es&#x27;,
+      teacherEmail: &#x27;carlosmendez@itutor.es&#x27;,
       time: &#x27;18:00 - 19:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala HD #02&#x27;,
@@ -870,7 +885,93 @@ export class MisClasesPage implements OnInit {
   /** Conversaciones con los Profesores */
   selectedTeacherId &#x3D; &#x27;elena&#x27;;
   newMessageText &#x3D; &#x27;&#x27;;
-  conversations: TeacherConversation[] &#x3D; [
+
+  /** Conversaciones de coordinación entre la Jefa Coordinadora (Noelia) y los Profesores */
+  coordinatorConversations: TeacherConversation[] &#x3D; [
+    {
+      id: &#x27;elena&#x27;,
+      teacherName: &#x27;Dra. Elena Ramos&#x27;,
+      subject: &#x27;Física Teórica &amp; Mecánica Clásica&#x27;,
+      initials: &#x27;ER&#x27;,
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Estimada Dra. Elena Ramos, ¿cómo avanza el seguimiento de las tutorías de Física y Mecánica este mes?&#x27;,
+          time: &#x27;09:30&#x27;
+        },
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;Buenos días Noelia. Todo marcha según el plan docente. Marcos y Paula están completando las hojas de problemas y las actas de sesiones ya están cargadas en la plataforma.&#x27;,
+          time: &#x27;10:05&#x27;
+        },
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Perfecto Elena, reviso las horas impartidas para validar los honorarios docentes de este ciclo. ¡Muchas gracias por el informe!&#x27;,
+          time: &#x27;10:15&#x27;
+        },
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;A ti, Noelia. Quedo a tu disposición para cualquier ajuste o nueva asignación en el calendario.&#x27;,
+          time: &#x27;10:20&#x27;
+        }
+      ]
+    },
+    {
+      id: &#x27;carlos&#x27;,
+      teacherName: &#x27;Prof. Carlos Méndez&#x27;,
+      subject: &#x27;Cálculo Multivariable &amp; Álgebra Lineal&#x27;,
+      initials: &#x27;CM&#x27;,
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Hola Carlos, confírmame por favor si has recibido la asignación de los nuevos alumnos para Cálculo y Álgebra.&#x27;,
+          time: &#x27;Ayer&#x27;
+        },
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;Hola Noelia, sí, todo recibido y verificado. Ya he fijado los horarios de tutorías en el calendario para el próximo mes.&#x27;,
+          time: &#x27;Ayer&#x27;
+        },
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Excelente gestión. Avisamos a los estudiantes asignados para que confirmen sus reservas.&#x27;,
+          time: &#x27;Ayer&#x27;
+        }
+      ]
+    },
+    {
+      id: &#x27;miguel&#x27;,
+      teacherName: &#x27;Dr. Miguel Ángel Santos&#x27;,
+      subject: &#x27;Termodinámica &amp; Mecánica de Fluidos&#x27;,
+      initials: &#x27;MS&#x27;,
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Hola Miguel Ángel, ¿se ha completado la sesión de Termodinámica de Alejandro Gómez sin incidencias?&#x27;,
+          time: &#x27;08 Oct&#x27;
+        },
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;Buenas tardes Noelia, sí, sesión completada y asistencia registrada. Muy buen aprovechamiento del contenido por parte del alumno.&#x27;,
+          time: &#x27;08 Oct&#x27;
+        },
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Magnífico. Queda validada en el registro oficial de sesiones.&#x27;,
+          time: &#x27;08 Oct&#x27;
+        }
+      ]
+    }
+  ];
+
+  /** Conversaciones de la Alumna (Paula García) */
+  studentConversations: TeacherConversation[] &#x3D; [
     {
       id: &#x27;elena&#x27;,
       teacherName: &#x27;Dra. Elena Ramos&#x27;,
@@ -932,6 +1033,11 @@ export class MisClasesPage implements OnInit {
       ]
     }
   ];
+
+  /** Devuelve las conversaciones correspondientes al rol en sesión (Jefa Coordinadora vs Alumna) */
+  get conversations(): TeacherConversation[] {
+    return this.isCoordinator ? this.coordinatorConversations : this.studentConversations;
+  }
 
   /** Dashboard de Facturación &amp; Pagos de Paula García */
   paymentKpis &#x3D; {
@@ -1015,7 +1121,8 @@ export class MisClasesPage implements OnInit {
       notificationsOutline,
       shieldCheckmarkOutline,
       folderOpenOutline,
-      receiptOutline
+      receiptOutline,
+      menuOutline
     });
     this.buildOctoberCalendar();
   }
@@ -1093,8 +1200,10 @@ export class MisClasesPage implements OnInit {
       this.selectedTeacherId &#x3D; &#x27;elena&#x27;;
     } else if (teacherName.toLowerCase().includes(&#x27;carlos&#x27;)) {
       this.selectedTeacherId &#x3D; &#x27;carlos&#x27;;
+    } else if (teacherName.toLowerCase().includes(&#x27;miguel&#x27;) || teacherName.toLowerCase().includes(&#x27;santos&#x27;)) {
+      this.selectedTeacherId &#x3D; &#x27;miguel&#x27;;
     } else {
-      this.selectedTeacherId &#x3D; &#x27;noelia&#x27;;
+      this.selectedTeacherId &#x3D; this.isCoordinator ? &#x27;elena&#x27; : &#x27;noelia&#x27;;
     }
     this.switchSection(&#x27;mensajes&#x27;);
   }
@@ -1121,13 +1230,21 @@ export class MisClasesPage implements OnInit {
     this.cdr.markForCheck();
   }
 
+  /** Determina si el mensaje fue enviado por el usuario actual */
+  isMyMessage(msg: { sender: string }): boolean {
+    if (this.isCoordinator) {
+      return msg.sender &#x3D;&#x3D;&#x3D; &#x27;coordinator&#x27;;
+    }
+    return msg.sender &#x3D;&#x3D;&#x3D; &#x27;student&#x27;;
+  }
+
   /** Envía un mensaje en tiempo real al profesor seleccionado */
   sendMessage(): void {
     const text &#x3D; this.newMessageText.trim();
     if (!text) return;
 
     this.activeConversation.messages.push({
-      sender: &#x27;student&#x27;,
+      sender: this.isCoordinator ? &#x27;coordinator&#x27; : &#x27;student&#x27;,
       text,
       time: &#x27;Ahora&#x27;
     });

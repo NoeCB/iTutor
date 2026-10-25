@@ -245,7 +245,7 @@
 
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="47" class="link-to-prism">src/app/app.component.ts:47</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="46" class="link-to-prism">src/app/app.component.ts:46</a></div>
                                 </td>
                             </tr>
 
@@ -284,7 +284,7 @@
 
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="46" class="link-to-prism">src/app/app.component.ts:46</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="45" class="link-to-prism">src/app/app.component.ts:45</a></div>
                                 </td>
                             </tr>
 
@@ -328,7 +328,7 @@
 
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="45" class="link-to-prism">src/app/app.component.ts:45</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="44" class="link-to-prism">src/app/app.component.ts:44</a></div>
                                 </td>
                             </tr>
 
@@ -367,7 +367,7 @@
 
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="43" class="link-to-prism">src/app/app.component.ts:43</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="42" class="link-to-prism">src/app/app.component.ts:42</a></div>
                                 </td>
                             </tr>
 
@@ -406,7 +406,7 @@
 
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="44" class="link-to-prism">src/app/app.component.ts:44</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="43" class="link-to-prism">src/app/app.component.ts:43</a></div>
                                 </td>
                             </tr>
 
@@ -420,22 +420,20 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, inject } from &#x27;@angular/core&#x27;;
 import { CommonModule } from &#x27;@angular/common&#x27;;
 import { Router, RouterLink, RouterLinkActive } from &#x27;@angular/router&#x27;;
-import { 
-  IonApp, 
-  IonSplitPane, 
-  IonMenu, 
-  IonContent, 
-  IonList, 
-  IonItem, 
-  IonIcon, 
-  IonLabel, 
-  IonRouterOutlet, 
-  IonMenuToggle, 
-  IonBadge, 
-  IonHeader, 
-  IonToolbar, 
-  IonFooter 
-} from &#x27;@ionic/angular&#x27;;
+import { IonApp } from &#x27;@ionic/angular/ion-app&#x27;;
+import { IonSplitPane } from &#x27;@ionic/angular/ion-split-pane&#x27;;
+import { IonMenu } from &#x27;@ionic/angular/ion-menu&#x27;;
+import { IonContent } from &#x27;@ionic/angular/ion-content&#x27;;
+import { IonList } from &#x27;@ionic/angular/ion-list&#x27;;
+import { IonItem } from &#x27;@ionic/angular/ion-item&#x27;;
+import { IonIcon } from &#x27;@ionic/angular/ion-icon&#x27;;
+import { IonLabel } from &#x27;@ionic/angular/ion-label&#x27;;
+import { IonRouterOutlet } from &#x27;@ionic/angular/ion-router-outlet&#x27;;
+import { IonMenuToggle } from &#x27;@ionic/angular/ion-menu-toggle&#x27;;
+import { IonBadge } from &#x27;@ionic/angular/ion-badge&#x27;;
+import { IonHeader } from &#x27;@ionic/angular/ion-header&#x27;;
+import { IonToolbar } from &#x27;@ionic/angular/ion-toolbar&#x27;;
+import { IonFooter } from &#x27;@ionic/angular/ion-footer&#x27;;
 import { addIcons } from &#x27;ionicons&#x27;;
 import { 
   gridOutline, 
@@ -457,6 +455,7 @@ import {
   cardOutline
 } from &#x27;ionicons/icons&#x27;;
 import { AuthService, User } from &#x27;./core/services/auth.service&#x27;;
+import { SidebarService } from &#x27;./core/services/sidebar.service&#x27;;
 
 export interface MenuItem {
   title: string;
@@ -494,24 +493,22 @@ export interface MenuItem {
 export class AppComponent {
   private authService &#x3D; inject(AuthService);
   private router &#x3D; inject(Router);
+  public sidebarService &#x3D; inject(SidebarService);
 
   /** Flujo reactivo del usuario en sesión */
   currentUser$ &#x3D; this.authService.currentUser$;
 
   /** 
-   * Menú para el rol Administrador (Noelia Cantador).
-   * ¡IMPORTANTE!: Apuntes &amp; Recursos ha sido eliminado según requerimiento expreso.
-   * Se añaden Listado de Profesores, Listado de Alumnos y acceso al Portal Docente.
+   * Menú para el rol Administrador (Noelia Cantador - Jefa Coordinadora).
+   * Portal del Profesor eliminado del dashboard de Noelia según especificación.
    */
   adminPages: MenuItem[] &#x3D; [
     { title: &#x27;Dashboard General&#x27;, url: &#x27;/admin-dashboard&#x27;, queryParams: { vista: &#x27;metricas&#x27; }, icon: &#x27;grid-outline&#x27; },
     { title: &#x27;Listado de Profesores&#x27;, url: &#x27;/admin-dashboard&#x27;, queryParams: { vista: &#x27;profesores&#x27; }, icon: &#x27;school-outline&#x27;, badge: &#x27;10&#x27; },
     { title: &#x27;Listado de Alumnos&#x27;, url: &#x27;/admin-dashboard&#x27;, queryParams: { vista: &#x27;alumnos&#x27; }, icon: &#x27;people-outline&#x27;, badge: &#x27;10&#x27; },
-    { title: &#x27;Portal del Profesor&#x27;, url: &#x27;/portal-profesor&#x27;, icon: &#x27;wallet-outline&#x27; },
     { title: &#x27;Calendario Tutorías&#x27;, url: &#x27;/mis-clases&#x27;, icon: &#x27;calendar-outline&#x27; },
     { title: &#x27;Mensajes Profesores&#x27;, url: &#x27;/mensajes-profesores&#x27;, icon: &#x27;chatbubbles-outline&#x27;, badge: &#x27;3&#x27; },
-    { title: &#x27;Facturación &amp; Pagos&#x27;, url: &#x27;/mis-pagos&#x27;, icon: &#x27;wallet-outline&#x27; },
-    { title: &#x27;Ajustes del Sistema&#x27;, url: &#x27;/ajustes&#x27;, icon: &#x27;settings-outline&#x27; }
+    { title: &#x27;Facturación &amp; Pagos&#x27;, url: &#x27;/mis-pagos&#x27;, icon: &#x27;wallet-outline&#x27; }
   ];
 
   /** Menú específico para Rol Profesor (Teacher) */
@@ -519,8 +516,7 @@ export class AppComponent {
     { title: &#x27;Mi Portal Docente&#x27;, url: &#x27;/portal-profesor&#x27;, icon: &#x27;school-outline&#x27; },
     { title: &#x27;Mis Alumnos &amp; Honorarios&#x27;, url: &#x27;/portal-profesor&#x27;, icon: &#x27;wallet-outline&#x27; },
     { title: &#x27;Calendario de Clases&#x27;, url: &#x27;/mis-clases&#x27;, icon: &#x27;calendar-outline&#x27; },
-    { title: &#x27;Mensajes con Alumnos&#x27;, url: &#x27;/mensajes-profesores&#x27;, icon: &#x27;chatbubbles-outline&#x27;, badge: &#x27;2&#x27; },
-    { title: &#x27;Ajustes de Perfil&#x27;, url: &#x27;/ajustes&#x27;, icon: &#x27;settings-outline&#x27; }
+    { title: &#x27;Mensajes con Alumnos&#x27;, url: &#x27;/mensajes-profesores&#x27;, icon: &#x27;chatbubbles-outline&#x27;, badge: &#x27;2&#x27; }
   ];
 
   /** Menú específico para Alumno (Paula García) */
@@ -528,8 +524,7 @@ export class AppComponent {
     { title: &#x27;Mis Tutorías&#x27;, url: &#x27;/mis-clases&#x27;, icon: &#x27;calendar-outline&#x27; },
     { title: &#x27;Mis Apuntes&#x27;, url: &#x27;/mis-apuntes&#x27;, icon: &#x27;document-text-outline&#x27;, badge: &#x27;6&#x27; },
     { title: &#x27;Mensajes con Profesores&#x27;, url: &#x27;/mensajes-profesores&#x27;, icon: &#x27;chatbubbles-outline&#x27;, badge: &#x27;2&#x27; },
-    { title: &#x27;Facturación &amp; Pagos&#x27;, url: &#x27;/mis-pagos&#x27;, icon: &#x27;wallet-outline&#x27; },
-    { title: &#x27;Ajustes de Cuenta&#x27;, url: &#x27;/ajustes&#x27;, icon: &#x27;settings-outline&#x27; }
+    { title: &#x27;Facturación &amp; Pagos&#x27;, url: &#x27;/mis-pagos&#x27;, icon: &#x27;wallet-outline&#x27; }
   ];
 
   constructor() {

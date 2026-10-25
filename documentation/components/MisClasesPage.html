@@ -208,8 +208,6 @@
 </div>
                         <div>    <code>IonButtons</code>
 </div>
-                        <div>    <code>IonMenuButton</code>
-</div>
                         <div>    <code>IonButton</code>
 </div>
                         <div>    <code>IonIcon</code>
@@ -281,9 +279,6 @@
                                         <code>IonButtons</code>
                                 </li>
                                 <li>
-                                        <code>IonMenuButton</code>
-                                </li>
-                                <li>
                                         <code>IonButton</code>
                                 </li>
                                 <li>
@@ -323,6 +318,11 @@
                             </li>
                             <li>
                                 <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#authService" >authService</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                 <a href="#calendarCells" >calendarCells</a>
                             </li>
                             <li>
@@ -332,7 +332,7 @@
                             </li>
                             <li>
                                 <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
-                                <a href="#conversations" >conversations</a>
+                                <a href="#coordinatorConversations" >coordinatorConversations</a>
                             </li>
                             <li>
                                 <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
@@ -378,6 +378,15 @@
                             </li>
                             <li>
                                 <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#sidebarService" >sidebarService</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#studentConversations" >studentConversations</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                 <a href="#subjectSpending" >subjectSpending</a>
                             </li>
                             <li>
@@ -413,6 +422,10 @@
                             </li>
                             <li>
                                 <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#isMyMessage" >isMyMessage</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                 <a href="#ngOnInit" >ngOnInit</a>
                             </li>
                             <li>
@@ -439,6 +452,10 @@
                                 <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                 <a href="#switchSection" >switchSection</a>
                             </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#toggleMenu" >toggleMenu</a>
+                            </li>
                         </ul>
                     </td>
                 </tr>
@@ -457,6 +474,18 @@
                     </td>
                     <td class="col-md-9">
                         <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--accessor" aria-hidden="true">A</span>
+                                <a href="#currentUser" >currentUser</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--accessor" aria-hidden="true">A</span>
+                                <a href="#isCoordinator" >isCoordinator</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--accessor" aria-hidden="true">A</span>
+                                <a href="#conversations" >conversations</a>
+                            </li>
                             <li>
                                 <span class="reference-badge reference-badge--accessor" aria-hidden="true">A</span>
                                 <a href="#selectedSession" >selectedSession</a>
@@ -491,7 +520,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="455" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:455</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="561" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:561</a></div>
                             </td>
                         </tr>
 
@@ -530,8 +559,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="494"
-                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:494</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="601"
+                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:601</a></div>
                         </td>
                     </tr>
 
@@ -569,8 +598,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="600"
-                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:600</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="717"
+                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:717</a></div>
                         </td>
                     </tr>
 
@@ -638,8 +667,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="627"
-                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:627</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="744"
+                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:744</a></div>
                         </td>
                     </tr>
 
@@ -691,6 +720,75 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="isMyMessage"></a>
+                    <span class="name">
+                        <span ><b>isMyMessage</b></span>
+                        <a href="#isMyMessage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isMyMessage(msg: { sender: string })</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="695"
+                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:695</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Determina si el mensaje fue enviado por el usuario actual</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>msg</td>
+                                            <td>
+                                                        <code>{ sender: string }</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="ngOnInit"></a>
                     <span class="name">
                         <span ><b>ngOnInit</b></span>
@@ -707,8 +805,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="484"
-                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:484</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="591"
+                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:591</a></div>
                         </td>
                     </tr>
 
@@ -744,8 +842,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="552"
-                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:552</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="659"
+                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:659</a></div>
                         </td>
                     </tr>
 
@@ -813,8 +911,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="546"
-                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:546</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="653"
+                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:653</a></div>
                         </td>
                     </tr>
 
@@ -882,8 +980,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="516"
-                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:516</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="623"
+                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:623</a></div>
                         </td>
                     </tr>
 
@@ -951,8 +1049,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="576"
-                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:576</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="685"
+                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:685</a></div>
                         </td>
                     </tr>
 
@@ -1018,8 +1116,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="586"
-                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:586</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="703"
+                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:703</a></div>
                         </td>
                     </tr>
 
@@ -1057,8 +1155,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="533"
-                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:533</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="640"
+                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:640</a></div>
                         </td>
                     </tr>
 
@@ -1106,6 +1204,43 @@
             </tr>
         </tbody>
     </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toggleMenu"></a>
+                    <span class="name">
+                        <span ><b>toggleMenu</b></span>
+                        <a href="#toggleMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>toggleMenu()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="142"
+                                    class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:142</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </section>
 
     <section data-compodoc="block-properties">
@@ -1137,7 +1272,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="132" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:132</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="147" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:147</a></div>
                         </td>
                     </tr>
 
@@ -1147,6 +1282,38 @@
 </div>
                 </td>
             </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authService"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>authService</b></span>
+                        <a href="#authService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>inject(AuthService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="131" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:131</a></div>
+                        </td>
+                    </tr>
+
 
         </tbody>
     </table>
@@ -1174,7 +1341,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="264" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:264</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="279" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:279</a></div>
                         </td>
                     </tr>
 
@@ -1223,10 +1390,10 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="conversations"></a>
+                    <a name="coordinatorConversations"></a>
                     <span class="name">
-                        <span ><b>conversations</b></span>
-                        <a href="#conversations"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>coordinatorConversations</b></span>
+                        <a href="#coordinatorConversations"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
@@ -1242,60 +1409,80 @@
     {
       id: &#x27;elena&#x27;,
       teacherName: &#x27;Dra. Elena Ramos&#x27;,
-      subject: &#x27;Profesora de Ecuaciones Diferenciales&#x27;,
+      subject: &#x27;Física Teórica &amp; Mecánica Clásica&#x27;,
       initials: &#x27;ER&#x27;,
       online: true,
       unread: 1,
       messages: [
         {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Estimada Dra. Elena Ramos, ¿cómo avanza el seguimiento de las tutorías de Física y Mecánica este mes?&#x27;,
+          time: &#x27;09:30&#x27;
+        },
+        {
           sender: &#x27;teacher&#x27;,
-          text: &#x27;¡Hola Paula! Te he dejado subidos en &quot;Mis Apuntes&quot; el PDF con los ejercicios de la clase del sábado 10 de octubre sobre Transformada de Laplace.&#x27;,
+          text: &#x27;Buenos días Noelia. Todo marcha según el plan docente. Marcos y Paula están completando las hojas de problemas y las actas de sesiones ya están cargadas en la plataforma.&#x27;,
+          time: &#x27;10:05&#x27;
+        },
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Perfecto Elena, reviso las horas impartidas para validar los honorarios docentes de este ciclo. ¡Muchas gracias por el informe!&#x27;,
           time: &#x27;10:15&#x27;
         },
         {
-          sender: &#x27;student&#x27;,
-          text: &#x27;¡Muchas gracias Elena! Los estoy revisando ahora mismo. ¿En la clase del día 10 veremos también sistemas de ecuaciones diferenciales?&#x27;,
-          time: &#x27;10:18&#x27;
-        },
-        {
           sender: &#x27;teacher&#x27;,
-          text: &#x27;¡Sí! En los últimos 30 minutos de la sesión del 10 de octubre resolveremos un sistema acoplado de 2º orden tipo examen. ¡Nos vemos en la Sala #04!&#x27;,
-          time: &#x27;10:21&#x27;
+          text: &#x27;A ti, Noelia. Quedo a tu disposición para cualquier ajuste o nueva asignación en el calendario.&#x27;,
+          time: &#x27;10:20&#x27;
         }
       ]
     },
     {
       id: &#x27;carlos&#x27;,
       teacherName: &#x27;Prof. Carlos Méndez&#x27;,
-      subject: &#x27;Profesor de Cálculo y Álgebra Lineal&#x27;,
+      subject: &#x27;Cálculo Multivariable &amp; Álgebra Lineal&#x27;,
       initials: &#x27;CM&#x27;,
       online: true,
       unread: 1,
       messages: [
         {
-          sender: &#x27;teacher&#x27;,
-          text: &#x27;Buenas tardes Paula, recuerda repasar el cálculo del Jacobiano para las integrales dobles en polares.&#x27;,
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Hola Carlos, confírmame por favor si has recibido la asignación de los nuevos alumnos para Cálculo y Álgebra.&#x27;,
           time: &#x27;Ayer&#x27;
         },
         {
-          sender: &#x27;student&#x27;,
-          text: &#x27;Perfecto Carlos, ya he terminado los 4 primeros ejercicios del boletín.&#x27;,
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;Hola Noelia, sí, todo recibido y verificado. Ya he fijado los horarios de tutorías en el calendario para el próximo mes.&#x27;,
+          time: &#x27;Ayer&#x27;
+        },
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Excelente gestión. Avisamos a los estudiantes asignados para que confirmen sus reservas.&#x27;,
           time: &#x27;Ayer&#x27;
         }
       ]
     },
     {
-      id: &#x27;noelia&#x27;,
-      teacherName: &#x27;Noelia Cantador&#x27;,
-      subject: &#x27;Coordinadora Académica iTUTOR&#x27;,
-      initials: &#x27;NC&#x27;,
+      id: &#x27;miguel&#x27;,
+      teacherName: &#x27;Dr. Miguel Ángel Santos&#x27;,
+      subject: &#x27;Termodinámica &amp; Mecánica de Fluidos&#x27;,
+      initials: &#x27;MS&#x27;,
       online: true,
-      unread: 0,
+      unread: 1,
       messages: [
         {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Hola Miguel Ángel, ¿se ha completado la sesión de Termodinámica de Alejandro Gómez sin incidencias?&#x27;,
+          time: &#x27;08 Oct&#x27;
+        },
+        {
           sender: &#x27;teacher&#x27;,
-          text: &#x27;¡Bienvenida a iTUTOR, Paula! Tu bono de tutorías de Octubre ya está confirmado y todas tus clases aparecen en tu calendario.&#x27;,
-          time: &#x27;01 Oct&#x27;
+          text: &#x27;Buenas tardes Noelia, sí, sesión completada y asistencia registrada. Muy buen aprovechamiento del contenido por parte del alumno.&#x27;,
+          time: &#x27;08 Oct&#x27;
+        },
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Magnífico. Queda validada en el registro oficial de sesiones.&#x27;,
+          time: &#x27;08 Oct&#x27;
         }
       ]
     }
@@ -1304,10 +1491,16 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="334" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:334</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="351" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:351</a></div>
                         </td>
                     </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Conversaciones de coordinación entre la Jefa Coordinadora (Noelia) y los Profesores</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -1335,7 +1528,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="333" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:333</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="348" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:348</a></div>
                         </td>
                     </tr>
 
@@ -1427,7 +1620,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="268" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:268</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="283" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:283</a></div>
                         </td>
                     </tr>
 
@@ -1466,7 +1659,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="398" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:398</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="504" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:504</a></div>
                         </td>
                     </tr>
 
@@ -1544,7 +1737,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="414" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:414</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="520" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:520</a></div>
                         </td>
                     </tr>
 
@@ -1639,7 +1832,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="135" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:135</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="150" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:150</a></div>
                         </td>
                     </tr>
 
@@ -1676,7 +1869,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="267" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:267</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="282" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:282</a></div>
                         </td>
                     </tr>
 
@@ -1713,7 +1906,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="332" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:332</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="347" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:347</a></div>
                         </td>
                     </tr>
 
@@ -1754,7 +1947,7 @@
       teacher: &#x27;Dra. Elena Ramos&#x27;,
       teacherRole: &#x27;Catedrática de Matemáticas Aplicadas&#x27;,
       teacherInitials: &#x27;ER&#x27;,
-      teacherEmail: &#x27;elena.ramos@itutor.es&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
       time: &#x27;11:00 - 12:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala HD #04&#x27;,
@@ -1771,7 +1964,7 @@
       teacher: &#x27;Prof. Carlos Méndez&#x27;,
       teacherRole: &#x27;Profesor Titular de Análisis Matemático&#x27;,
       teacherInitials: &#x27;CM&#x27;,
-      teacherEmail: &#x27;carlos.mendez@itutor.es&#x27;,
+      teacherEmail: &#x27;carlosmendez@itutor.es&#x27;,
       time: &#x27;17:30 - 19:00&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala HD #02&#x27;,
@@ -1788,7 +1981,7 @@
       teacher: &#x27;Dra. Elena Ramos&#x27;,
       teacherRole: &#x27;Profesora Titular de Ecuaciones Diferenciales&#x27;,
       teacherInitials: &#x27;ER&#x27;,
-      teacherEmail: &#x27;elena.ramos@itutor.es&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
       time: &#x27;11:00 - 12:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala Interactiva #04&#x27;,
@@ -1805,7 +1998,7 @@
       teacher: &#x27;Prof. Carlos Méndez&#x27;,
       teacherRole: &#x27;Profesor Titular de Análisis y Álgebra&#x27;,
       teacherInitials: &#x27;CM&#x27;,
-      teacherEmail: &#x27;carlos.mendez@itutor.es&#x27;,
+      teacherEmail: &#x27;carlosmendez@itutor.es&#x27;,
       time: &#x27;18:00 - 19:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala HD #02&#x27;,
@@ -1822,7 +2015,7 @@
       teacher: &#x27;Dra. Elena Ramos&#x27;,
       teacherRole: &#x27;Profesora Titular de Ecuaciones Diferenciales&#x27;,
       teacherInitials: &#x27;ER&#x27;,
-      teacherEmail: &#x27;elena.ramos@itutor.es&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
       time: &#x27;17:00 - 18:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala Interactiva #04&#x27;,
@@ -1839,7 +2032,7 @@
       teacher: &#x27;Dra. Elena Ramos&#x27;,
       teacherRole: &#x27;Profesora Titular de Ecuaciones Diferenciales&#x27;,
       teacherInitials: &#x27;ER&#x27;,
-      teacherEmail: &#x27;elena.ramos@itutor.es&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
       time: &#x27;11:00 - 12:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala Interactiva #04&#x27;,
@@ -1856,7 +2049,7 @@
       teacher: &#x27;Prof. Carlos Méndez&#x27;,
       teacherRole: &#x27;Profesor Titular de Análisis Matemático&#x27;,
       teacherInitials: &#x27;CM&#x27;,
-      teacherEmail: &#x27;carlos.mendez@itutor.es&#x27;,
+      teacherEmail: &#x27;carlosmendez@itutor.es&#x27;,
       time: &#x27;18:00 - 19:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala HD #02&#x27;,
@@ -1870,13 +2063,143 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="141" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:141</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="156" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:156</a></div>
                         </td>
                     </tr>
 
             <tr>
                 <td class="col-md-4">
                     <div class="io-description"><p>Sesiones programadas de Paula García en Octubre 2026</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sidebarService"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>sidebarService</b></span>
+                        <a href="#sidebarService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>inject(SidebarService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="130" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:130</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="studentConversations"></a>
+                    <span class="name">
+                        <span ><b>studentConversations</b></span>
+                        <a href="#studentConversations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/TeacherConversation.html" target="_self" >TeacherConversation[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[
+    {
+      id: &#x27;elena&#x27;,
+      teacherName: &#x27;Dra. Elena Ramos&#x27;,
+      subject: &#x27;Profesora de Ecuaciones Diferenciales&#x27;,
+      initials: &#x27;ER&#x27;,
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;¡Hola Paula! Te he dejado subidos en &quot;Mis Apuntes&quot; el PDF con los ejercicios de la clase del sábado 10 de octubre sobre Transformada de Laplace.&#x27;,
+          time: &#x27;10:15&#x27;
+        },
+        {
+          sender: &#x27;student&#x27;,
+          text: &#x27;¡Muchas gracias Elena! Los estoy revisando ahora mismo. ¿En la clase del día 10 veremos también sistemas de ecuaciones diferenciales?&#x27;,
+          time: &#x27;10:18&#x27;
+        },
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;¡Sí! En los últimos 30 minutos de la sesión del 10 de octubre resolveremos un sistema acoplado de 2º orden tipo examen. ¡Nos vemos en la Sala #04!&#x27;,
+          time: &#x27;10:21&#x27;
+        }
+      ]
+    },
+    {
+      id: &#x27;carlos&#x27;,
+      teacherName: &#x27;Prof. Carlos Méndez&#x27;,
+      subject: &#x27;Profesor de Cálculo y Álgebra Lineal&#x27;,
+      initials: &#x27;CM&#x27;,
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;Buenas tardes Paula, recuerda repasar el cálculo del Jacobiano para las integrales dobles en polares.&#x27;,
+          time: &#x27;Ayer&#x27;
+        },
+        {
+          sender: &#x27;student&#x27;,
+          text: &#x27;Perfecto Carlos, ya he terminado los 4 primeros ejercicios del boletín.&#x27;,
+          time: &#x27;Ayer&#x27;
+        }
+      ]
+    },
+    {
+      id: &#x27;noelia&#x27;,
+      teacherName: &#x27;Noelia Cantador&#x27;,
+      subject: &#x27;Coordinadora Académica iTUTOR&#x27;,
+      initials: &#x27;NC&#x27;,
+      online: true,
+      unread: 0,
+      messages: [
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;¡Bienvenida a iTUTOR, Paula! Tu bono de tutorías de Octubre ya está confirmado y todas tus clases aparecen en tu calendario.&#x27;,
+          time: &#x27;01 Oct&#x27;
+        }
+      ]
+    }
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="435" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:435</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Conversaciones de la Alumna (Paula García)</p>
 </div>
                 </td>
             </tr>
@@ -1911,7 +2234,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="408" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:408</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="514" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:514</a></div>
                         </td>
                     </tr>
 
@@ -1942,7 +2265,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="138" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:138</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="153" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:153</a></div>
                         </td>
                     </tr>
 
@@ -1965,6 +2288,83 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
+                        <a name="currentUser"></a>
+                        <span class="name"><b>currentUser</b><a href="#currentUser"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>currentUser()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="133" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:133</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="isCoordinator"></a>
+                        <span class="name"><b>isCoordinator</b><a href="#isCoordinator"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>isCoordinator()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="137" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:137</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="conversations"></a>
+                        <span class="name"><b>conversations</b><a href="#conversations"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>conversations()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="499" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:499</a></div>
+                                </td>
+                            </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description"><p>Devuelve las conversaciones correspondientes al rol en sesión (Jefa Coordinadora vs Alumna)</p>
+</div>
+
+                                <div class="io-description">
+                                    <b>Devuelve : </b>        <code><a href="../interfaces/TeacherConversation.html" target="_self" >TeacherConversation[]</a></code>
+
+                                </div>
+                        </td>
+                    </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
                         <a name="selectedSession"></a>
                         <span class="name"><b>selectedSession</b><a href="#selectedSession"><span class="icon ion-ios-link"></span></a></span>
                     </td>
@@ -1977,7 +2377,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="523" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:523</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="630" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:630</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -2010,7 +2410,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="528" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:528</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="635" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:635</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -2043,7 +2443,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="564" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:564</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="673" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:673</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -2076,7 +2476,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Definido en <a href="" data-line="572" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:572</a></div>
+                                    <div class="io-line">Definido en <a href="" data-line="681" class="link-to-prism">src/app/features/mis-clases/mis-clases.page.ts:681</a></div>
                                 </td>
                             </tr>
                     <tr>
@@ -2102,19 +2502,17 @@
 import { CommonModule } from &#x27;@angular/common&#x27;;
 import { FormsModule } from &#x27;@angular/forms&#x27;;
 import { ActivatedRoute, Router } from &#x27;@angular/router&#x27;;
-import { 
-  IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonButtons, 
-  IonMenuButton, 
-  IonButton, 
-  IonIcon, 
-  IonBadge, 
-  IonCard, 
-  IonCardContent
-} from &#x27;@ionic/angular&#x27;;
+import { IonContent } from &#x27;@ionic/angular/ion-content&#x27;;
+import { IonHeader } from &#x27;@ionic/angular/ion-header&#x27;;
+import { IonTitle } from &#x27;@ionic/angular/ion-title&#x27;;
+import { IonToolbar } from &#x27;@ionic/angular/ion-toolbar&#x27;;
+import { IonButtons } from &#x27;@ionic/angular/ion-buttons&#x27;;
+import { IonMenuButton } from &#x27;@ionic/angular/ion-menu-button&#x27;;
+import { IonButton } from &#x27;@ionic/angular/ion-button&#x27;;
+import { IonIcon } from &#x27;@ionic/angular/ion-icon&#x27;;
+import { IonBadge } from &#x27;@ionic/angular/ion-badge&#x27;;
+import { IonCard } from &#x27;@ionic/angular/ion-card&#x27;;
+import { IonCardContent } from &#x27;@ionic/angular/ion-card-content&#x27;;
 import { addIcons } from &#x27;ionicons&#x27;;
 import { 
   calendarOutline, 
@@ -2137,9 +2535,12 @@ import {
   notificationsOutline,
   shieldCheckmarkOutline,
   folderOpenOutline,
-  receiptOutline
+  receiptOutline,
+  menuOutline
 } from &#x27;ionicons/icons&#x27;;
 import jsPDF from &#x27;jspdf&#x27;;
+import { SidebarService } from &#x27;../../core/services/sidebar.service&#x27;;
+import { AuthService, User } from &#x27;../../core/services/auth.service&#x27;;
 
 export interface TutoriaSession {
   day: number;
@@ -2178,7 +2579,7 @@ export interface TeacherConversation {
   online: boolean;
   unread: number;
   messages: {
-    sender: &#x27;teacher&#x27; | &#x27;student&#x27;;
+    sender: &#x27;teacher&#x27; | &#x27;student&#x27; | &#x27;coordinator&#x27;;
     text: string;
     time: string;
   }[];
@@ -2215,7 +2616,6 @@ export interface CalendarCell {
     IonTitle, 
     IonToolbar, 
     IonButtons, 
-    IonMenuButton, 
     IonButton, 
     IonIcon, 
     IonBadge, 
@@ -2227,6 +2627,21 @@ export class MisClasesPage implements OnInit {
   private route &#x3D; inject(ActivatedRoute);
   private router &#x3D; inject(Router);
   private cdr &#x3D; inject(ChangeDetectorRef);
+  public sidebarService &#x3D; inject(SidebarService);
+  private authService &#x3D; inject(AuthService);
+
+  get currentUser(): User | null {
+    return this.authService.currentUserValue;
+  }
+
+  get isCoordinator(): boolean {
+    const user &#x3D; this.currentUser;
+    return user?.role &#x3D;&#x3D;&#x3D; &#x27;Admin&#x27; || (user?.email?.toLowerCase().includes(&#x27;noelia&#x27;) ?? false);
+  }
+
+  toggleMenu(): void {
+    this.sidebarService.toggleMenu();
+  }
 
   /** Sección activa: &#x27;tutorias&#x27; | &#x27;apuntes&#x27; | &#x27;mensajes&#x27; | &#x27;pagos&#x27; | &#x27;ajustes&#x27; */
   activeSection: &#x27;tutorias&#x27; | &#x27;apuntes&#x27; | &#x27;mensajes&#x27; | &#x27;pagos&#x27; | &#x27;ajustes&#x27; &#x3D; &#x27;tutorias&#x27;;
@@ -2247,7 +2662,7 @@ export class MisClasesPage implements OnInit {
       teacher: &#x27;Dra. Elena Ramos&#x27;,
       teacherRole: &#x27;Catedrática de Matemáticas Aplicadas&#x27;,
       teacherInitials: &#x27;ER&#x27;,
-      teacherEmail: &#x27;elena.ramos@itutor.es&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
       time: &#x27;11:00 - 12:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala HD #04&#x27;,
@@ -2264,7 +2679,7 @@ export class MisClasesPage implements OnInit {
       teacher: &#x27;Prof. Carlos Méndez&#x27;,
       teacherRole: &#x27;Profesor Titular de Análisis Matemático&#x27;,
       teacherInitials: &#x27;CM&#x27;,
-      teacherEmail: &#x27;carlos.mendez@itutor.es&#x27;,
+      teacherEmail: &#x27;carlosmendez@itutor.es&#x27;,
       time: &#x27;17:30 - 19:00&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala HD #02&#x27;,
@@ -2281,7 +2696,7 @@ export class MisClasesPage implements OnInit {
       teacher: &#x27;Dra. Elena Ramos&#x27;,
       teacherRole: &#x27;Profesora Titular de Ecuaciones Diferenciales&#x27;,
       teacherInitials: &#x27;ER&#x27;,
-      teacherEmail: &#x27;elena.ramos@itutor.es&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
       time: &#x27;11:00 - 12:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala Interactiva #04&#x27;,
@@ -2298,7 +2713,7 @@ export class MisClasesPage implements OnInit {
       teacher: &#x27;Prof. Carlos Méndez&#x27;,
       teacherRole: &#x27;Profesor Titular de Análisis y Álgebra&#x27;,
       teacherInitials: &#x27;CM&#x27;,
-      teacherEmail: &#x27;carlos.mendez@itutor.es&#x27;,
+      teacherEmail: &#x27;carlosmendez@itutor.es&#x27;,
       time: &#x27;18:00 - 19:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala HD #02&#x27;,
@@ -2315,7 +2730,7 @@ export class MisClasesPage implements OnInit {
       teacher: &#x27;Dra. Elena Ramos&#x27;,
       teacherRole: &#x27;Profesora Titular de Ecuaciones Diferenciales&#x27;,
       teacherInitials: &#x27;ER&#x27;,
-      teacherEmail: &#x27;elena.ramos@itutor.es&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
       time: &#x27;17:00 - 18:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala Interactiva #04&#x27;,
@@ -2332,7 +2747,7 @@ export class MisClasesPage implements OnInit {
       teacher: &#x27;Dra. Elena Ramos&#x27;,
       teacherRole: &#x27;Profesora Titular de Ecuaciones Diferenciales&#x27;,
       teacherInitials: &#x27;ER&#x27;,
-      teacherEmail: &#x27;elena.ramos@itutor.es&#x27;,
+      teacherEmail: &#x27;elenaramos@itutor.es&#x27;,
       time: &#x27;11:00 - 12:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala Interactiva #04&#x27;,
@@ -2349,7 +2764,7 @@ export class MisClasesPage implements OnInit {
       teacher: &#x27;Prof. Carlos Méndez&#x27;,
       teacherRole: &#x27;Profesor Titular de Análisis Matemático&#x27;,
       teacherInitials: &#x27;CM&#x27;,
-      teacherEmail: &#x27;carlos.mendez@itutor.es&#x27;,
+      teacherEmail: &#x27;carlosmendez@itutor.es&#x27;,
       time: &#x27;18:00 - 19:30&#x27;,
       duration: &#x27;90 min&#x27;,
       room: &#x27;Aula Virtual iTUTOR • Sala HD #02&#x27;,
@@ -2431,7 +2846,93 @@ export class MisClasesPage implements OnInit {
   /** Conversaciones con los Profesores */
   selectedTeacherId &#x3D; &#x27;elena&#x27;;
   newMessageText &#x3D; &#x27;&#x27;;
-  conversations: TeacherConversation[] &#x3D; [
+
+  /** Conversaciones de coordinación entre la Jefa Coordinadora (Noelia) y los Profesores */
+  coordinatorConversations: TeacherConversation[] &#x3D; [
+    {
+      id: &#x27;elena&#x27;,
+      teacherName: &#x27;Dra. Elena Ramos&#x27;,
+      subject: &#x27;Física Teórica &amp; Mecánica Clásica&#x27;,
+      initials: &#x27;ER&#x27;,
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Estimada Dra. Elena Ramos, ¿cómo avanza el seguimiento de las tutorías de Física y Mecánica este mes?&#x27;,
+          time: &#x27;09:30&#x27;
+        },
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;Buenos días Noelia. Todo marcha según el plan docente. Marcos y Paula están completando las hojas de problemas y las actas de sesiones ya están cargadas en la plataforma.&#x27;,
+          time: &#x27;10:05&#x27;
+        },
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Perfecto Elena, reviso las horas impartidas para validar los honorarios docentes de este ciclo. ¡Muchas gracias por el informe!&#x27;,
+          time: &#x27;10:15&#x27;
+        },
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;A ti, Noelia. Quedo a tu disposición para cualquier ajuste o nueva asignación en el calendario.&#x27;,
+          time: &#x27;10:20&#x27;
+        }
+      ]
+    },
+    {
+      id: &#x27;carlos&#x27;,
+      teacherName: &#x27;Prof. Carlos Méndez&#x27;,
+      subject: &#x27;Cálculo Multivariable &amp; Álgebra Lineal&#x27;,
+      initials: &#x27;CM&#x27;,
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Hola Carlos, confírmame por favor si has recibido la asignación de los nuevos alumnos para Cálculo y Álgebra.&#x27;,
+          time: &#x27;Ayer&#x27;
+        },
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;Hola Noelia, sí, todo recibido y verificado. Ya he fijado los horarios de tutorías en el calendario para el próximo mes.&#x27;,
+          time: &#x27;Ayer&#x27;
+        },
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Excelente gestión. Avisamos a los estudiantes asignados para que confirmen sus reservas.&#x27;,
+          time: &#x27;Ayer&#x27;
+        }
+      ]
+    },
+    {
+      id: &#x27;miguel&#x27;,
+      teacherName: &#x27;Dr. Miguel Ángel Santos&#x27;,
+      subject: &#x27;Termodinámica &amp; Mecánica de Fluidos&#x27;,
+      initials: &#x27;MS&#x27;,
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Hola Miguel Ángel, ¿se ha completado la sesión de Termodinámica de Alejandro Gómez sin incidencias?&#x27;,
+          time: &#x27;08 Oct&#x27;
+        },
+        {
+          sender: &#x27;teacher&#x27;,
+          text: &#x27;Buenas tardes Noelia, sí, sesión completada y asistencia registrada. Muy buen aprovechamiento del contenido por parte del alumno.&#x27;,
+          time: &#x27;08 Oct&#x27;
+        },
+        {
+          sender: &#x27;coordinator&#x27;,
+          text: &#x27;Magnífico. Queda validada en el registro oficial de sesiones.&#x27;,
+          time: &#x27;08 Oct&#x27;
+        }
+      ]
+    }
+  ];
+
+  /** Conversaciones de la Alumna (Paula García) */
+  studentConversations: TeacherConversation[] &#x3D; [
     {
       id: &#x27;elena&#x27;,
       teacherName: &#x27;Dra. Elena Ramos&#x27;,
@@ -2493,6 +2994,11 @@ export class MisClasesPage implements OnInit {
       ]
     }
   ];
+
+  /** Devuelve las conversaciones correspondientes al rol en sesión (Jefa Coordinadora vs Alumna) */
+  get conversations(): TeacherConversation[] {
+    return this.isCoordinator ? this.coordinatorConversations : this.studentConversations;
+  }
 
   /** Dashboard de Facturación &amp; Pagos de Paula García */
   paymentKpis &#x3D; {
@@ -2576,7 +3082,8 @@ export class MisClasesPage implements OnInit {
       notificationsOutline,
       shieldCheckmarkOutline,
       folderOpenOutline,
-      receiptOutline
+      receiptOutline,
+      menuOutline
     });
     this.buildOctoberCalendar();
   }
@@ -2654,8 +3161,10 @@ export class MisClasesPage implements OnInit {
       this.selectedTeacherId &#x3D; &#x27;elena&#x27;;
     } else if (teacherName.toLowerCase().includes(&#x27;carlos&#x27;)) {
       this.selectedTeacherId &#x3D; &#x27;carlos&#x27;;
+    } else if (teacherName.toLowerCase().includes(&#x27;miguel&#x27;) || teacherName.toLowerCase().includes(&#x27;santos&#x27;)) {
+      this.selectedTeacherId &#x3D; &#x27;miguel&#x27;;
     } else {
-      this.selectedTeacherId &#x3D; &#x27;noelia&#x27;;
+      this.selectedTeacherId &#x3D; this.isCoordinator ? &#x27;elena&#x27; : &#x27;noelia&#x27;;
     }
     this.switchSection(&#x27;mensajes&#x27;);
   }
@@ -2682,13 +3191,21 @@ export class MisClasesPage implements OnInit {
     this.cdr.markForCheck();
   }
 
+  /** Determina si el mensaje fue enviado por el usuario actual */
+  isMyMessage(msg: { sender: string }): boolean {
+    if (this.isCoordinator) {
+      return msg.sender &#x3D;&#x3D;&#x3D; &#x27;coordinator&#x27;;
+    }
+    return msg.sender &#x3D;&#x3D;&#x3D; &#x27;student&#x27;;
+  }
+
   /** Envía un mensaje en tiempo real al profesor seleccionado */
   sendMessage(): void {
     const text &#x3D; this.newMessageText.trim();
     if (!text) return;
 
     this.activeConversation.messages.push({
-      sender: &#x27;student&#x27;,
+      sender: this.isCoordinator ? &#x27;coordinator&#x27; : &#x27;student&#x27;,
       text,
       time: &#x27;Ahora&#x27;
     });
@@ -2761,41 +3278,26 @@ export class MisClasesPage implements OnInit {
         <pre class="line-numbers"><code class="language-html">&lt;ion-header class&#x3D;&quot;ion-no-border student-header&quot;&gt;
   &lt;ion-toolbar class&#x3D;&quot;student-toolbar&quot;&gt;
     &lt;ion-buttons slot&#x3D;&quot;start&quot;&gt;
-      &lt;ion-menu-button class&#x3D;&quot;menu-btn&quot;&gt;&lt;/ion-menu-button&gt;
+      &lt;ion-button (click)&#x3D;&quot;toggleMenu()&quot; aria-label&#x3D;&quot;Abrir menú principal de navegación&quot; class&#x3D;&quot;menu-btn&quot;&gt;
+        &lt;ion-icon slot&#x3D;&quot;icon-only&quot; name&#x3D;&quot;menu-outline&quot;&gt;&lt;/ion-icon&gt;
+      &lt;/ion-button&gt;
     &lt;/ion-buttons&gt;
 
     &lt;div class&#x3D;&quot;header-title-wrap&quot;&gt;
       &lt;ion-title class&#x3D;&quot;page-title&quot;&gt;
         @switch (activeSection) {
-          @case (&#x27;tutorias&#x27;) { Mis Tutorías &amp; Calendario }
+          @case (&#x27;tutorias&#x27;) { {{ isCoordinator ? &#x27;Calendario General de Tutorías&#x27; : &#x27;Mis Tutorías &amp; Calendario&#x27; }} }
           @case (&#x27;apuntes&#x27;) { Mis Apuntes &amp; Material }
-          @case (&#x27;mensajes&#x27;) { Mensajes con Profesores }
+          @case (&#x27;mensajes&#x27;) { {{ isCoordinator ? &#x27;Mensajes de Profesores (Coordinación)&#x27; : &#x27;Mensajes con Profesores&#x27; }} }
           @case (&#x27;pagos&#x27;) { Facturación &amp; Pagos }
           @case (&#x27;ajustes&#x27;) { Ajustes de Cuenta }
         }
       &lt;/ion-title&gt;
-      &lt;span class&#x3D;&quot;student-pill&quot;&gt;Alumna: Paula García&lt;/span&gt;
+      &lt;span class&#x3D;&quot;student-pill&quot; [class.coordinator-pill]&#x3D;&quot;isCoordinator&quot;&gt;
+        {{ isCoordinator ? &#x27;Jefa Coordinadora: Noelia Cantador&#x27; : (currentUser?.name ? currentUser?.role + &#x27;: &#x27; + currentUser?.name : &#x27;Alumna: Paula García&#x27;) }}
+      &lt;/span&gt;
     &lt;/div&gt;
 
-    &lt;!-- Pestañas rápidas superiores sincronizadas con el menú lateral --&gt;
-    &lt;div slot&#x3D;&quot;end&quot; class&#x3D;&quot;quick-tabs&quot;&gt;
-      &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;tab-pill&quot; [class.active]&#x3D;&quot;activeSection &#x3D;&#x3D;&#x3D; &#x27;tutorias&#x27;&quot; (click)&#x3D;&quot;switchSection(&#x27;tutorias&#x27;)&quot;&gt;
-        &lt;ion-icon name&#x3D;&quot;calendar-outline&quot;&gt;&lt;/ion-icon&gt;
-        &lt;span&gt;Calendario&lt;/span&gt;
-      &lt;/button&gt;
-      &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;tab-pill&quot; [class.active]&#x3D;&quot;activeSection &#x3D;&#x3D;&#x3D; &#x27;apuntes&#x27;&quot; (click)&#x3D;&quot;switchSection(&#x27;apuntes&#x27;)&quot;&gt;
-        &lt;ion-icon name&#x3D;&quot;document-text-outline&quot;&gt;&lt;/ion-icon&gt;
-        &lt;span&gt;Mis Apuntes&lt;/span&gt;
-      &lt;/button&gt;
-      &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;tab-pill&quot; [class.active]&#x3D;&quot;activeSection &#x3D;&#x3D;&#x3D; &#x27;mensajes&#x27;&quot; (click)&#x3D;&quot;switchSection(&#x27;mensajes&#x27;)&quot;&gt;
-        &lt;ion-icon name&#x3D;&quot;chatbubbles-outline&quot;&gt;&lt;/ion-icon&gt;
-        &lt;span&gt;Profesores&lt;/span&gt;
-      &lt;/button&gt;
-      &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;tab-pill&quot; [class.active]&#x3D;&quot;activeSection &#x3D;&#x3D;&#x3D; &#x27;pagos&#x27;&quot; (click)&#x3D;&quot;switchSection(&#x27;pagos&#x27;)&quot;&gt;
-        &lt;ion-icon name&#x3D;&quot;wallet-outline&quot;&gt;&lt;/ion-icon&gt;
-        &lt;span&gt;Mis Pagos&lt;/span&gt;
-      &lt;/button&gt;
-    &lt;/div&gt;
   &lt;/ion-toolbar&gt;
 &lt;/ion-header&gt;
 
@@ -2808,8 +3310,8 @@ export class MisClasesPage implements OnInit {
     @if (activeSection &#x3D;&#x3D;&#x3D; &#x27;tutorias&#x27;) {
       &lt;div class&#x3D;&quot;section-banner&quot;&gt;
         &lt;div&gt;
-          &lt;h1 class&#x3D;&quot;main-heading&quot;&gt;Calendario de Clases de Paula&lt;/h1&gt;
-          &lt;p class&#x3D;&quot;sub-heading&quot;&gt;Haz clic sobre cualquier día marcado del calendario (por ejemplo, el &lt;strong&gt;10 de octubre&lt;/strong&gt;) para abrir el recuadro de la tutoría y tu profesora.&lt;/p&gt;
+          &lt;h1 class&#x3D;&quot;main-heading&quot;&gt;{{ isCoordinator ? &#x27;Calendario General de Tutorías&#x27; : &#x27;Calendario de Clases de Paula&#x27; }}&lt;/h1&gt;
+          &lt;p class&#x3D;&quot;sub-heading&quot;&gt;{{ isCoordinator ? &#x27;Supervisión de sesiones lectivas y seguimiento de tutorías programadas en iTUTOR.&#x27; : &#x27;Haz clic sobre cualquier día marcado del calendario (por ejemplo, el 10 de octubre) para abrir el recuadro de la tutoría y tu profesora.&#x27; }}&lt;/p&gt;
         &lt;/div&gt;
         &lt;div class&#x3D;&quot;month-selector&quot;&gt;
           &lt;ion-icon name&#x3D;&quot;calendar-outline&quot;&gt;&lt;/ion-icon&gt;
@@ -3033,8 +3535,8 @@ export class MisClasesPage implements OnInit {
     @if (activeSection &#x3D;&#x3D;&#x3D; &#x27;mensajes&#x27;) {
       &lt;div class&#x3D;&quot;section-banner&quot;&gt;
         &lt;div&gt;
-          &lt;h1 class&#x3D;&quot;main-heading&quot;&gt;Mensajes con mis Profesores&lt;/h1&gt;
-          &lt;p class&#x3D;&quot;sub-heading&quot;&gt;Canal directo de tutoría y resolución de dudas con tus profesores de iTUTOR.&lt;/p&gt;
+          &lt;h1 class&#x3D;&quot;main-heading&quot;&gt;{{ isCoordinator ? &#x27;Mensajes con el Claustro de Profesores&#x27; : &#x27;Mensajes con mis Profesores&#x27; }}&lt;/h1&gt;
+          &lt;p class&#x3D;&quot;sub-heading&quot;&gt;{{ isCoordinator ? &#x27;Canal oficial de coordinación académica entre la Jefa Coordinadora (Noelia Cantador) y los profesores de iTUTOR.&#x27; : &#x27;Canal directo de tutoría y resolución de dudas con tus profesores de iTUTOR.&#x27; }}&lt;/p&gt;
         &lt;/div&gt;
       &lt;/div&gt;
 
@@ -3042,7 +3544,7 @@ export class MisClasesPage implements OnInit {
         &lt;!-- Lista de profesores --&gt;
         &lt;ion-card class&#x3D;&quot;teachers-list-card&quot;&gt;
           &lt;ion-card-content&gt;
-            &lt;h3 class&#x3D;&quot;chat-side-title&quot;&gt;Tus Profesores&lt;/h3&gt;
+            &lt;h3 class&#x3D;&quot;chat-side-title&quot;&gt;{{ isCoordinator ? &#x27;Claustro de Profesores&#x27; : &#x27;Tus Profesores&#x27; }}&lt;/h3&gt;
             @for (conv of conversations; track conv.id) {
               &lt;button
                 type&#x3D;&quot;button&quot;
@@ -3072,16 +3574,27 @@ export class MisClasesPage implements OnInit {
         &lt;ion-card class&#x3D;&quot;chat-window-card&quot;&gt;
           &lt;div class&#x3D;&quot;chat-window-header&quot;&gt;
             &lt;div class&#x3D;&quot;chat-avatar&quot;&gt;{{ activeConversation.initials }}&lt;/div&gt;
-            &lt;div&gt;
+            &lt;div class&#x3D;&quot;chat-header-info&quot;&gt;
               &lt;h3&gt;{{ activeConversation.teacherName }}&lt;/h3&gt;
               &lt;span&gt;{{ activeConversation.subject }} • En línea&lt;/span&gt;
             &lt;/div&gt;
+            @if (isCoordinator) {
+              &lt;div class&#x3D;&quot;coordinator-badge-tag&quot;&gt;
+                &lt;ion-icon name&#x3D;&quot;shield-checkmark-outline&quot;&gt;&lt;/ion-icon&gt;
+                &lt;span&gt;Jefa Coordinadora: Noelia Cantador&lt;/span&gt;
+              &lt;/div&gt;
+            }
           &lt;/div&gt;
 
           &lt;div class&#x3D;&quot;chat-messages-body&quot;&gt;
             @for (msg of activeConversation.messages; track $index) {
-              &lt;div class&#x3D;&quot;message-bubble-wrap&quot; [class.mine]&#x3D;&quot;msg.sender &#x3D;&#x3D;&#x3D; &#x27;student&#x27;&quot;&gt;
+              &lt;div class&#x3D;&quot;message-bubble-wrap&quot; [class.mine]&#x3D;&quot;isMyMessage(msg)&quot;&gt;
                 &lt;div class&#x3D;&quot;message-bubble&quot;&gt;
+                  @if (isCoordinator) {
+                    &lt;span class&#x3D;&quot;sender-name-label&quot;&gt;
+                      {{ isMyMessage(msg) ? &#x27;Noelia Cantador (Jefa Coordinadora)&#x27; : activeConversation.teacherName }}
+                    &lt;/span&gt;
+                  }
                   &lt;p&gt;{{ msg.text }}&lt;/p&gt;
                   &lt;span class&#x3D;&quot;msg-time&quot;&gt;{{ msg.time }}&lt;/span&gt;
                 &lt;/div&gt;
@@ -3092,7 +3605,7 @@ export class MisClasesPage implements OnInit {
           &lt;div class&#x3D;&quot;chat-input-bar&quot;&gt;
             &lt;input
               type&#x3D;&quot;text&quot;
-              placeholder&#x3D;&quot;Escribe un mensaje a {{ activeConversation.teacherName }}...&quot;
+              [placeholder]&#x3D;&quot;isCoordinator ? &#x27;Escribe un mensaje como Jefa Coordinadora Noelia a &#x27; + activeConversation.teacherName + &#x27;...&#x27; : &#x27;Escribe un mensaje a &#x27; + activeConversation.teacherName + &#x27;...&#x27;&quot;
               [(ngModel)]&#x3D;&quot;newMessageText&quot;
               (keyup.enter)&#x3D;&quot;sendMessage()&quot;
             /&gt;
@@ -3285,23 +3798,22 @@ export class MisClasesPage implements OnInit {
 .student-header {
   background: #fff; border-bottom: 1px solid #e2e8f0;
   .student-toolbar { --background: #fff; --min-height: 62px; }
+  .menu-btn {
+    color: #0f172a;
+    --color: #0f172a;
+    display: flex !important;
+    font-size: 1.4rem;
+  }
   .header-title-wrap {
     display: flex; align-items: center; gap: 10px;
     .page-title { font-size: 1.15rem; font-weight: 700; color: #0f172a; padding: 0; }
     .student-pill {
       display: none; background: #eff6ff; color: #2563eb; font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 20px;
+      &amp;.coordinator-pill { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
       @media (min-width: 768px) { display: inline-block; }
     }
   }
-  .quick-tabs {
-    display: none; align-items: center; gap: 6px;
-    @media (min-width: 900px) { display: flex; }
-    .tab-pill {
-      display: flex; align-items: center; gap: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #475569;
-      padding: 7px 12px; border-radius: 10px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
-      &amp;.active { background: #2563eb; border-color: #2563eb; color: #fff; }
-    }
-  }
+
 }
 .student-content { --background: #f8fafc; }
 .student-container { max-width: 1300px; margin: 0 auto; padding: 24px 16px 56px; }
@@ -3440,12 +3952,39 @@ export class MisClasesPage implements OnInit {
 }
 .chat-window-card {
   display: flex; flex-direction: column; min-height: 440px;
-  .chat-window-header { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid #e2e8f0; h3 { margin: 0; font-size: 0.98rem; font-weight: 700; color: #0f172a; } span { font-size: 0.75rem; color: #10b981; font-weight: 600; } }
+  .chat-window-header {
+    display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid #e2e8f0;
+    .chat-header-info {
+      h3 { margin: 0; font-size: 0.98rem; font-weight: 700; color: #0f172a; }
+      span { font-size: 0.75rem; color: #10b981; font-weight: 600; }
+    }
+    .coordinator-badge-tag {
+      margin-left: auto; display: flex; align-items: center; gap: 6px; background: #eff6ff; color: #1d4ed8;
+      font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; border: 1px solid #bfdbfe;
+      ion-icon { font-size: 0.9rem; }
+    }
+  }
   .chat-messages-body {
     flex: 1; padding: 18px; background: #f8fafc; display: flex; flex-direction: column; gap: 10px;
     .message-bubble-wrap {
-      display: flex; &amp;.mine { justify-content: flex-end; .message-bubble { background: #2563eb; color: #fff; .msg-time { color: #dbeafe; } } }
-      .message-bubble { max-width: 75%; background: #fff; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 14px; p { margin: 0 0 4px; font-size: 0.86rem; } .msg-time { font-size: 0.68rem; color: #94a3b8; display: block; text-align: right; } }
+      display: flex;
+      &amp;.mine {
+        justify-content: flex-end;
+        .message-bubble {
+          background: #2563eb; color: #fff;
+          .msg-time { color: #dbeafe; }
+          .sender-name-label { color: #dbeafe; text-align: right; }
+        }
+      }
+      &amp;:not(.mine) {
+        .message-bubble .sender-name-label { color: #2563eb; text-align: left; }
+      }
+      .message-bubble {
+        max-width: 75%; background: #fff; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 14px;
+        .sender-name-label { font-size: 0.68rem; font-weight: 700; display: block; margin-bottom: 3px; opacity: 0.9; }
+        p { margin: 0 0 4px; font-size: 0.86rem; }
+        .msg-time { font-size: 0.68rem; color: #94a3b8; display: block; text-align: right; }
+      }
     }
   }
   .chat-input-bar { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid #e2e8f0; input { flex: 1; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 8px 12px; font-size: 0.86rem; } }
@@ -3505,7 +4044,7 @@ export class MisClasesPage implements OnInit {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><ion-header class="ion-no-border student-header">  <ion-toolbar class="student-toolbar">    <ion-buttons slot="start">      <ion-menu-button class="menu-btn"></ion-menu-button>    </ion-buttons>    <div class="header-title-wrap">      <ion-title class="page-title">        @switch (activeSection) {          @case (\'tutorias\') { Mis Tutorías & Calendario }          @case (\'apuntes\') { Mis Apuntes & Material }          @case (\'mensajes\') { Mensajes con Profesores }          @case (\'pagos\') { Facturación & Pagos }          @case (\'ajustes\') { Ajustes de Cuenta }        }      </ion-title>      <span class="student-pill">Alumna: Paula García</span>    </div>    <!-- Pestañas rápidas superiores sincronizadas con el menú lateral -->    <div slot="end" class="quick-tabs">      <button type="button" class="tab-pill" [class.active]="activeSection === \'tutorias\'" (click)="switchSection(\'tutorias\')">        <ion-icon name="calendar-outline"></ion-icon>        <span>Calendario</span>      </button>      <button type="button" class="tab-pill" [class.active]="activeSection === \'apuntes\'" (click)="switchSection(\'apuntes\')">        <ion-icon name="document-text-outline"></ion-icon>        <span>Mis Apuntes</span>      </button>      <button type="button" class="tab-pill" [class.active]="activeSection === \'mensajes\'" (click)="switchSection(\'mensajes\')">        <ion-icon name="chatbubbles-outline"></ion-icon>        <span>Profesores</span>      </button>      <button type="button" class="tab-pill" [class.active]="activeSection === \'pagos\'" (click)="switchSection(\'pagos\')">        <ion-icon name="wallet-outline"></ion-icon>        <span>Mis Pagos</span>      </button>    </div>  </ion-toolbar></ion-header><ion-content class="student-content">  <div class="student-container">    <!-- =======================================================================         SECCIÓN 1: MIS TUTORÍAS (CALENDARIO DE PAULA + RECUADRO DÍA 10 OCTUBRE)         ======================================================================= -->    @if (activeSection === \'tutorias\') {      <div class="section-banner">        <div>          <h1 class="main-heading">Calendario de Clases de Paula</h1>          <p class="sub-heading">Haz clic sobre cualquier día marcado del calendario (por ejemplo, el <strong>10 de octubre</strong>) para abrir el recuadro de la tutoría y tu profesora.</p>        </div>        <div class="month-selector">          <ion-icon name="calendar-outline"></ion-icon>          <span>Octubre 2026</span>        </div>      </div>      <div class="calendar-layout">        <!-- COLUMNA IZQUIERDA: CALENDARIO INTERACTIVO OCTUBRE 2026 -->        <ion-card class="calendar-card">          <ion-card-content>            <div class="calendar-top-bar">              <div class="month-title">                <h2>Octubre 2026</h2>                <span class="classes-count">7 tutorías programadas</span>              </div>              <div class="legend">                <span class="legend-item"><i class="dot blue"></i> Ecuaciones Diferenciales</span>                <span class="legend-item"><i class="dot green"></i> Cálculo / Álgebra</span>              </div>            </div>            <!-- Cabecera Lunes a Domingo -->            <div class="weekdays-grid">              @for (w of weekDays; track w) {                <div class="weekday-label">{{ w }}</div>              }            </div>            <!-- Cuadrícula de días del mes -->            <div class="days-grid">              @for (cell of calendarCells; track $index) {                <button                  type="button"                  class="day-cell"                  [class.empty-cell]="!cell.day"                  [class.has-session]="!!cell.session"                  [class.selected-day]="cell.day === selectedDay"                  [disabled]="!cell.day"                  (click)="selectCalendarDay(cell.day)"                >                  @if (cell.day) {                    <span class="day-number">{{ cell.day }}</span>                    @if (cell.session) {                      <span class="session-pill" [style.background]="cell.session.color">                        {{ cell.session.subject === \'Ecuaciones Diferenciales\' ? \'Ec. Dif.\' : cell.session.subject.split(\' \')[0] }}                      </span>                      <span class="session-time-mini">{{ cell.session.time.split(\' \')[0] }}</span>                    }                  }                </button>              }            </div>          </ion-card-content>        </ion-card>        <!-- COLUMNA DERECHA: RECUADRO DE LA CLASE AL PINCHAR EN EL DÍA (EJ. 10 DE OCTUBRE) -->        <div class="detail-column">          @if (selectedSession; as sesion) {            <ion-card class="session-detail-box">              <div class="detail-accent-bar" [style.background]="sesion.color"></div>              <ion-card-content class="detail-content">                <div class="detail-badges-row">                  <span class="date-chip">                    <ion-icon name="calendar-outline"></ion-icon>                    {{ sesion.dateLabel }}                  </span>                  <ion-badge [color]="sesion.status === \'Confirmada\' ? \'primary\' : (sesion.status === \'Completada\' ? \'success\' : \'tertiary\')">                    {{ sesion.status }}                  </ion-badge>                </div>                <!-- Título de la asignatura (Ej. Ecuaciones Diferenciales) -->                <h2 class="subject-title">{{ sesion.subject }}</h2>                <p class="topic-subtitle">{{ sesion.topic }}</p>                <!-- Recuadro de la Profesora -->                <div class="teacher-box">                  <div class="teacher-avatar" [style.background]="sesion.color">                    {{ sesion.teacherInitials }}                  </div>                  <div class="teacher-meta">                    <span class="teacher-label">PROFESORA ASIGNADA</span>                    <h3 class="teacher-name">{{ sesion.teacher }}</h3>                    <p class="teacher-role">{{ sesion.teacherRole }}</p>                  </div>                </div>                <!-- Horario y Aula -->                <div class="info-grid">                  <div class="info-item">                    <ion-icon name="time-outline"></ion-icon>                    <div>                      <span class="info-label">Horario</span>                      <strong>{{ sesion.time }} ({{ sesion.duration }})</strong>                    </div>                  </div>                  <div class="info-item">                    <ion-icon name="videocam-outline"></ion-icon>                    <div>                      <span class="info-label">Aula Virtual</span>                      <strong>{{ sesion.room }}</strong>                    </div>                  </div>                </div>                <!-- Notas de la sesión -->                <div class="notes-callout">                  <span class="callout-title">Plan de la sesión con la profesora:</span>                  <p>{{ sesion.notes }}</p>                </div>                <!-- Botones de acción rápida -->                <div class="detail-actions">                  <ion-button expand="block" class="primary-action-btn" (click)="openChatWithTeacher(sesion.teacher)">                    <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>                    Escribir a {{ sesion.teacher }}                  </ion-button>                  <ion-button expand="block" fill="outline" class="secondary-action-btn" (click)="openNotesForSubject(sesion.subject)">                    <ion-icon name="document-text-outline" slot="start"></ion-icon>                    Ver Apuntes de {{ sesion.subject }}                  </ion-button>                </div>              </ion-card-content>            </ion-card>          } @else {            <ion-card class="empty-day-card">              <ion-card-content>                <div class="empty-day-icon">                  <ion-icon name="calendar-outline"></ion-icon>                </div>                <h3>Día {{ selectedDay }} de Octubre sin tutorías</h3>                <p>No tienes ninguna clase programada este día. Haz clic en el <strong>10 de octubre</strong> (o en los días 3, 6, 15, 20, 24, 29) para ver el detalle de tus clases.</p>                <ion-button size="small" (click)="selectCalendarDay(10)">                  Ver clase del 10 de Octubre (Ecuaciones Diferenciales)                </ion-button>              </ion-card-content>            </ion-card>          }          <!-- Resumen rápido de próximas clases del mes -->          <ion-card class="upcoming-mini-card">            <ion-card-content>              <h4 class="mini-heading">Todas las sesiones de Paula en Octubre</h4>              <div class="mini-list">                @for (s of allMonthSessions; track s.day) {                  <button                    type="button"                    class="mini-session-row"                    [class.active-row]="s.day === selectedDay"                    (click)="selectCalendarDay(s.day)"                  >                    <span class="mini-day-badge" [style.background]="s.color">{{ s.day }} Oct</span>                    <div class="mini-info">                      <strong>{{ s.subject }}</strong>                      <span>{{ s.teacher }} • {{ s.time }}</span>                    </div>                  </button>                }              </div>            </ion-card-content>          </ion-card>        </div>      </div>    }    <!-- =======================================================================         SECCIÓN 2: MIS APUNTES (EN LUGAR DE ESTUDIANTES)         ======================================================================= -->    @if (activeSection === \'apuntes\') {      <div class="section-banner">        <div>          <h1 class="main-heading">Mis Apuntes & Material de Clase</h1>          <p class="sub-heading">Repositorio personal de Paula García con apuntes, pizarras digitales y boletines resueltos por tus profesores.</p>        </div>      </div>      <!-- Filtros por asignatura -->      <div class="filter-chips">        @for (subj of [\'Todos\', \'Ecuaciones Diferenciales\', \'Cálculo Multivariable\', \'Álgebra Lineal\']; track subj) {          <button            type="button"            class="chip-btn"            [class.active]="selectedNotesFilter === subj"            (click)="selectedNotesFilter = subj"          >            {{ subj }}          </button>        }      </div>      <div class="notes-grid">        @for (note of filteredNotes; track note.id) {          <ion-card class="note-card">            <ion-card-content>              <div class="note-top">                <div class="doc-icon">                  <ion-icon name="document-text-outline"></ion-icon>                </div>                <ion-badge color="primary">{{ note.subject }}</ion-badge>              </div>              <h3 class="note-title">{{ note.title }}</h3>              <p class="note-summary">{{ note.summary }}</p>              <div class="note-meta">                <span><ion-icon name="person-outline"></ion-icon> {{ note.teacher }}</span>                <span>{{ note.date }} • {{ note.pages }} págs ({{ note.size }})</span>              </div>              <ion-button expand="block" fill="outline" class="download-note-btn" (click)="downloadNotePdf(note)">                <ion-icon name="download-outline" slot="start"></ion-icon>                Descargar Apuntes en PDF              </ion-button>            </ion-card-content>          </ion-card>        }      </div>    }    <!-- =======================================================================         SECCIÓN 3: MENSAJES CON LOS PROFESORES (EN LUGAR DE PROFESORES TUTORES)         ======================================================================= -->    @if (activeSection === \'mensajes\') {      <div class="section-banner">        <div>          <h1 class="main-heading">Mensajes con mis Profesores</h1>          <p class="sub-heading">Canal directo de tutoría y resolución de dudas con tus profesores de iTUTOR.</p>        </div>      </div>      <div class="chat-layout">        <!-- Lista de profesores -->        <ion-card class="teachers-list-card">          <ion-card-content>            <h3 class="chat-side-title">Tus Profesores</h3>            @for (conv of conversations; track conv.id) {              <button                type="button"                class="teacher-chat-item"                [class.active]="conv.id === selectedTeacherId"                (click)="selectConversation(conv.id)"              >                <div class="chat-avatar">                  {{ conv.initials }}                  @if (conv.online) {                    <span class="online-dot"></span>                  }                </div>                <div class="chat-item-info">                  <h4>{{ conv.teacherName }}</h4>                  <p>{{ conv.subject }}</p>                </div>                @if (conv.unread > 0) {                  <ion-badge color="primary">{{ conv.unread }}</ion-badge>                }              </button>            }          </ion-card-content>        </ion-card>        <!-- Ventana de conversación -->        <ion-card class="chat-window-card">          <div class="chat-window-header">            <div class="chat-avatar">{{ activeConversation.initials }}</div>            <div>              <h3>{{ activeConversation.teacherName }}</h3>              <span>{{ activeConversation.subject }} • En línea</span>            </div>          </div>          <div class="chat-messages-body">            @for (msg of activeConversation.messages; track $index) {              <div class="message-bubble-wrap" [class.mine]="msg.sender === \'student\'">                <div class="message-bubble">                  <p>{{ msg.text }}</p>                  <span class="msg-time">{{ msg.time }}</span>                </div>              </div>            }          </div>          <div class="chat-input-bar">            <input              type="text"              placeholder="Escribe un mensaje a {{ activeConversation.teacherName }}..."              [(ngModel)]="newMessageText"              (keyup.enter)="sendMessage()"            />            <ion-button (click)="sendMessage()" class="send-btn">              <ion-icon name="send-outline" slot="start"></ion-icon>              Enviar            </ion-button>          </div>        </ion-card>      </div>    }    <!-- =======================================================================         SECCIÓN 4: FACTURACIÓN & PAGOS (DASHBOARD DE TODO LO QUE HA PAGADO PAULA)         ======================================================================= -->    @if (activeSection === \'pagos\') {      <div class="section-banner">        <div>          <h1 class="main-heading">Dashboard de Facturación & Pagos</h1>          <p class="sub-heading">Resumen financiero de todo lo abonado por Paula García, desglose por asignatura y descarga de recibos oficiales.</p>        </div>      </div>      <!-- KPIs de lo que ha pagado Paula -->      <div class="payments-kpi-grid">        <ion-card class="kpi-box highlight-kpi">          <ion-card-content>            <div class="kpi-top">              <span class="kpi-label">TOTAL PAGADO (CURSO 2026)</span>              <div class="kpi-icon blue"><ion-icon name="wallet-outline"></ion-icon></div>            </div>            <div class="kpi-value">{{ paymentKpis.totalPagado }}</div>            <div class="kpi-foot success-text">              <ion-icon name="checkmark-circle-outline"></ion-icon>              <span>100% de tus tutorías al corriente de pago</span>            </div>          </ion-card-content>        </ion-card>        <ion-card class="kpi-box">          <ion-card-content>            <div class="kpi-top">              <span class="kpi-label">CLASES ABONADAS</span>              <div class="kpi-icon indigo"><ion-icon name="school-outline"></ion-icon></div>            </div>            <div class="kpi-value">{{ paymentKpis.clasesAbonadas }}</div>            <div class="kpi-foot">{{ paymentKpis.horasTotales }} de clase impartidas</div>          </ion-card-content>        </ion-card>        <ion-card class="kpi-box">          <ion-card-content>            <div class="kpi-top">              <span class="kpi-label">ÚLTIMO PAGO REALIZADO</span>              <div class="kpi-icon green"><ion-icon name="receipt-outline"></ion-icon></div>            </div>            <div class="kpi-value">{{ paymentKpis.ultimoPago }}</div>            <div class="kpi-foot">{{ paymentKpis.ultimoPagoDetalle }}</div>          </ion-card-content>        </ion-card>        <ion-card class="kpi-box">          <ion-card-content>            <div class="kpi-top">              <span class="kpi-label">SALDO PENDIENTE</span>              <div class="kpi-icon emerald"><ion-icon name="card-outline"></ion-icon></div>            </div>            <div class="kpi-value">{{ paymentKpis.saldoPendiente }}</div>            <div class="kpi-foot">Método activo: {{ paymentKpis.metodoPago }}</div>          </ion-card-content>        </ion-card>      </div>      <!-- Desglose de inversión por asignatura -->      <ion-card class="spending-breakdown-card">        <ion-card-content>          <h3 class="card-section-title">Desglose de Importe Pagado por Asignatura</h3>          <div class="breakdown-list">            @for (item of subjectSpending; track item.subject) {              <div class="breakdown-row">                <div class="breakdown-header">                  <strong>{{ item.subject }}</strong>                  <span>{{ item.amount }},00 € ({{ item.sessions }} sesiones • {{ item.percentage }}%)</span>                </div>                <div class="progress-track">                  <div class="progress-fill" [style.width.%]="item.percentage" [style.background]="item.color"></div>                </div>              </div>            }          </div>        </ion-card-content>      </ion-card>      <!-- Historial detallado de pagos y facturas -->      <ion-card class="invoices-table-card">        <ion-card-content>          <h3 class="card-section-title">Historial de Pagos y Recibos Abonados</h3>          <div class="table-responsive">            <table class="payments-table">              <thead>                <tr>                  <th>Nº Recibo</th>                  <th>Fecha</th>                  <th>Concepto</th>                  <th>Profesor/a</th>                  <th>Método</th>                  <th>Importe</th>                  <th>Estado</th>                  <th>Factura</th>                </tr>              </thead>              <tbody>                @for (pay of paymentsHistory; track pay.id) {                  <tr>                    <td class="mono-id">{{ pay.id }}</td>                    <td>{{ pay.date }}</td>                    <td><strong>{{ pay.concept }}</strong></td>                    <td>{{ pay.teacher }}</td>                    <td>{{ pay.method }}</td>                    <td class="amount-cell">{{ pay.amount }},00 €</td>                    <td><ion-badge color="success">{{ pay.status }}</ion-badge></td>                    <td>                      <ion-button size="small" fill="outline" (click)="downloadPaymentReceipt(pay)">                        <ion-icon name="download-outline" slot="start"></ion-icon>                        PDF                      </ion-button>                    </td>                  </tr>                }              </tbody>            </table>          </div>        </ion-card-content>      </ion-card>    }    <!-- =======================================================================         SECCIÓN 5: AJUSTES DE CUENTA         ======================================================================= -->    @if (activeSection === \'ajustes\') {      <div class="section-banner">        <div>          <h1 class="main-heading">Ajustes de Cuenta</h1>          <p class="sub-heading">Datos académicos y preferencias de notificaciones de Paula García.</p>        </div>      </div>      <ion-card class="settings-card">        <ion-card-content>          <div class="profile-summary-row">            <div class="big-avatar">PG</div>            <div>              <h2>Paula García</h2>              <p>paulagarcia&#64;itutor.es • Matrícula: MAT-2026-089</p>              <ion-badge color="tertiary">Alumna • Plan Intensivo Ciencias</ion-badge>            </div>          </div>          <div class="settings-grid">            <div class="setting-box">              <ion-icon name="notifications-outline"></ion-icon>              <div>                <h4>Recordatorios de Tutoría</h4>                <p>Aviso automático 30 minutos antes de cada clase de Ecuaciones Diferenciales y Cálculo.</p>              </div>              <ion-badge color="success">Activo</ion-badge>            </div>            <div class="setting-box">              <ion-icon name="shield-checkmark-outline"></ion-icon>              <div>                <h4>Seguridad de la Cuenta</h4>                <p>Contraseña protegida mediante hash Bcrypt y sesión activa con token JWT.</p>              </div>              <ion-badge color="primary">Protegida</ion-badge>            </div>          </div>        </ion-card-content>      </ion-card>    }  </div></ion-content></div>'
+        var COMPONENT_TEMPLATE = '<div><ion-header class="ion-no-border student-header">  <ion-toolbar class="student-toolbar">    <ion-buttons slot="start">      <ion-button (click)="toggleMenu()" aria-label="Abrir menú principal de navegación" class="menu-btn">        <ion-icon slot="icon-only" name="menu-outline"></ion-icon>      </ion-button>    </ion-buttons>    <div class="header-title-wrap">      <ion-title class="page-title">        @switch (activeSection) {          @case (\'tutorias\') { {{ isCoordinator ? \'Calendario General de Tutorías\' : \'Mis Tutorías & Calendario\' }} }          @case (\'apuntes\') { Mis Apuntes & Material }          @case (\'mensajes\') { {{ isCoordinator ? \'Mensajes de Profesores (Coordinación)\' : \'Mensajes con Profesores\' }} }          @case (\'pagos\') { Facturación & Pagos }          @case (\'ajustes\') { Ajustes de Cuenta }        }      </ion-title>      <span class="student-pill" [class.coordinator-pill]="isCoordinator">        {{ isCoordinator ? \'Jefa Coordinadora: Noelia Cantador\' : (currentUser?.name ? currentUser?.role + \': \' + currentUser?.name : \'Alumna: Paula García\') }}      </span>    </div>  </ion-toolbar></ion-header><ion-content class="student-content">  <div class="student-container">    <!-- =======================================================================         SECCIÓN 1: MIS TUTORÍAS (CALENDARIO DE PAULA + RECUADRO DÍA 10 OCTUBRE)         ======================================================================= -->    @if (activeSection === \'tutorias\') {      <div class="section-banner">        <div>          <h1 class="main-heading">{{ isCoordinator ? \'Calendario General de Tutorías\' : \'Calendario de Clases de Paula\' }}</h1>          <p class="sub-heading">{{ isCoordinator ? \'Supervisión de sesiones lectivas y seguimiento de tutorías programadas en iTUTOR.\' : \'Haz clic sobre cualquier día marcado del calendario (por ejemplo, el 10 de octubre) para abrir el recuadro de la tutoría y tu profesora.\' }}</p>        </div>        <div class="month-selector">          <ion-icon name="calendar-outline"></ion-icon>          <span>Octubre 2026</span>        </div>      </div>      <div class="calendar-layout">        <!-- COLUMNA IZQUIERDA: CALENDARIO INTERACTIVO OCTUBRE 2026 -->        <ion-card class="calendar-card">          <ion-card-content>            <div class="calendar-top-bar">              <div class="month-title">                <h2>Octubre 2026</h2>                <span class="classes-count">7 tutorías programadas</span>              </div>              <div class="legend">                <span class="legend-item"><i class="dot blue"></i> Ecuaciones Diferenciales</span>                <span class="legend-item"><i class="dot green"></i> Cálculo / Álgebra</span>              </div>            </div>            <!-- Cabecera Lunes a Domingo -->            <div class="weekdays-grid">              @for (w of weekDays; track w) {                <div class="weekday-label">{{ w }}</div>              }            </div>            <!-- Cuadrícula de días del mes -->            <div class="days-grid">              @for (cell of calendarCells; track $index) {                <button                  type="button"                  class="day-cell"                  [class.empty-cell]="!cell.day"                  [class.has-session]="!!cell.session"                  [class.selected-day]="cell.day === selectedDay"                  [disabled]="!cell.day"                  (click)="selectCalendarDay(cell.day)"                >                  @if (cell.day) {                    <span class="day-number">{{ cell.day }}</span>                    @if (cell.session) {                      <span class="session-pill" [style.background]="cell.session.color">                        {{ cell.session.subject === \'Ecuaciones Diferenciales\' ? \'Ec. Dif.\' : cell.session.subject.split(\' \')[0] }}                      </span>                      <span class="session-time-mini">{{ cell.session.time.split(\' \')[0] }}</span>                    }                  }                </button>              }            </div>          </ion-card-content>        </ion-card>        <!-- COLUMNA DERECHA: RECUADRO DE LA CLASE AL PINCHAR EN EL DÍA (EJ. 10 DE OCTUBRE) -->        <div class="detail-column">          @if (selectedSession; as sesion) {            <ion-card class="session-detail-box">              <div class="detail-accent-bar" [style.background]="sesion.color"></div>              <ion-card-content class="detail-content">                <div class="detail-badges-row">                  <span class="date-chip">                    <ion-icon name="calendar-outline"></ion-icon>                    {{ sesion.dateLabel }}                  </span>                  <ion-badge [color]="sesion.status === \'Confirmada\' ? \'primary\' : (sesion.status === \'Completada\' ? \'success\' : \'tertiary\')">                    {{ sesion.status }}                  </ion-badge>                </div>                <!-- Título de la asignatura (Ej. Ecuaciones Diferenciales) -->                <h2 class="subject-title">{{ sesion.subject }}</h2>                <p class="topic-subtitle">{{ sesion.topic }}</p>                <!-- Recuadro de la Profesora -->                <div class="teacher-box">                  <div class="teacher-avatar" [style.background]="sesion.color">                    {{ sesion.teacherInitials }}                  </div>                  <div class="teacher-meta">                    <span class="teacher-label">PROFESORA ASIGNADA</span>                    <h3 class="teacher-name">{{ sesion.teacher }}</h3>                    <p class="teacher-role">{{ sesion.teacherRole }}</p>                  </div>                </div>                <!-- Horario y Aula -->                <div class="info-grid">                  <div class="info-item">                    <ion-icon name="time-outline"></ion-icon>                    <div>                      <span class="info-label">Horario</span>                      <strong>{{ sesion.time }} ({{ sesion.duration }})</strong>                    </div>                  </div>                  <div class="info-item">                    <ion-icon name="videocam-outline"></ion-icon>                    <div>                      <span class="info-label">Aula Virtual</span>                      <strong>{{ sesion.room }}</strong>                    </div>                  </div>                </div>                <!-- Notas de la sesión -->                <div class="notes-callout">                  <span class="callout-title">Plan de la sesión con la profesora:</span>                  <p>{{ sesion.notes }}</p>                </div>                <!-- Botones de acción rápida -->                <div class="detail-actions">                  <ion-button expand="block" class="primary-action-btn" (click)="openChatWithTeacher(sesion.teacher)">                    <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>                    Escribir a {{ sesion.teacher }}                  </ion-button>                  <ion-button expand="block" fill="outline" class="secondary-action-btn" (click)="openNotesForSubject(sesion.subject)">                    <ion-icon name="document-text-outline" slot="start"></ion-icon>                    Ver Apuntes de {{ sesion.subject }}                  </ion-button>                </div>              </ion-card-content>            </ion-card>          } @else {            <ion-card class="empty-day-card">              <ion-card-content>                <div class="empty-day-icon">                  <ion-icon name="calendar-outline"></ion-icon>                </div>                <h3>Día {{ selectedDay }} de Octubre sin tutorías</h3>                <p>No tienes ninguna clase programada este día. Haz clic en el <strong>10 de octubre</strong> (o en los días 3, 6, 15, 20, 24, 29) para ver el detalle de tus clases.</p>                <ion-button size="small" (click)="selectCalendarDay(10)">                  Ver clase del 10 de Octubre (Ecuaciones Diferenciales)                </ion-button>              </ion-card-content>            </ion-card>          }          <!-- Resumen rápido de próximas clases del mes -->          <ion-card class="upcoming-mini-card">            <ion-card-content>              <h4 class="mini-heading">Todas las sesiones de Paula en Octubre</h4>              <div class="mini-list">                @for (s of allMonthSessions; track s.day) {                  <button                    type="button"                    class="mini-session-row"                    [class.active-row]="s.day === selectedDay"                    (click)="selectCalendarDay(s.day)"                  >                    <span class="mini-day-badge" [style.background]="s.color">{{ s.day }} Oct</span>                    <div class="mini-info">                      <strong>{{ s.subject }}</strong>                      <span>{{ s.teacher }} • {{ s.time }}</span>                    </div>                  </button>                }              </div>            </ion-card-content>          </ion-card>        </div>      </div>    }    <!-- =======================================================================         SECCIÓN 2: MIS APUNTES (EN LUGAR DE ESTUDIANTES)         ======================================================================= -->    @if (activeSection === \'apuntes\') {      <div class="section-banner">        <div>          <h1 class="main-heading">Mis Apuntes & Material de Clase</h1>          <p class="sub-heading">Repositorio personal de Paula García con apuntes, pizarras digitales y boletines resueltos por tus profesores.</p>        </div>      </div>      <!-- Filtros por asignatura -->      <div class="filter-chips">        @for (subj of [\'Todos\', \'Ecuaciones Diferenciales\', \'Cálculo Multivariable\', \'Álgebra Lineal\']; track subj) {          <button            type="button"            class="chip-btn"            [class.active]="selectedNotesFilter === subj"            (click)="selectedNotesFilter = subj"          >            {{ subj }}          </button>        }      </div>      <div class="notes-grid">        @for (note of filteredNotes; track note.id) {          <ion-card class="note-card">            <ion-card-content>              <div class="note-top">                <div class="doc-icon">                  <ion-icon name="document-text-outline"></ion-icon>                </div>                <ion-badge color="primary">{{ note.subject }}</ion-badge>              </div>              <h3 class="note-title">{{ note.title }}</h3>              <p class="note-summary">{{ note.summary }}</p>              <div class="note-meta">                <span><ion-icon name="person-outline"></ion-icon> {{ note.teacher }}</span>                <span>{{ note.date }} • {{ note.pages }} págs ({{ note.size }})</span>              </div>              <ion-button expand="block" fill="outline" class="download-note-btn" (click)="downloadNotePdf(note)">                <ion-icon name="download-outline" slot="start"></ion-icon>                Descargar Apuntes en PDF              </ion-button>            </ion-card-content>          </ion-card>        }      </div>    }    <!-- =======================================================================         SECCIÓN 3: MENSAJES CON LOS PROFESORES (EN LUGAR DE PROFESORES TUTORES)         ======================================================================= -->    @if (activeSection === \'mensajes\') {      <div class="section-banner">        <div>          <h1 class="main-heading">{{ isCoordinator ? \'Mensajes con el Claustro de Profesores\' : \'Mensajes con mis Profesores\' }}</h1>          <p class="sub-heading">{{ isCoordinator ? \'Canal oficial de coordinación académica entre la Jefa Coordinadora (Noelia Cantador) y los profesores de iTUTOR.\' : \'Canal directo de tutoría y resolución de dudas con tus profesores de iTUTOR.\' }}</p>        </div>      </div>      <div class="chat-layout">        <!-- Lista de profesores -->        <ion-card class="teachers-list-card">          <ion-card-content>            <h3 class="chat-side-title">{{ isCoordinator ? \'Claustro de Profesores\' : \'Tus Profesores\' }}</h3>            @for (conv of conversations; track conv.id) {              <button                type="button"                class="teacher-chat-item"                [class.active]="conv.id === selectedTeacherId"                (click)="selectConversation(conv.id)"              >                <div class="chat-avatar">                  {{ conv.initials }}                  @if (conv.online) {                    <span class="online-dot"></span>                  }                </div>                <div class="chat-item-info">                  <h4>{{ conv.teacherName }}</h4>                  <p>{{ conv.subject }}</p>                </div>                @if (conv.unread > 0) {                  <ion-badge color="primary">{{ conv.unread }}</ion-badge>                }              </button>            }          </ion-card-content>        </ion-card>        <!-- Ventana de conversación -->        <ion-card class="chat-window-card">          <div class="chat-window-header">            <div class="chat-avatar">{{ activeConversation.initials }}</div>            <div class="chat-header-info">              <h3>{{ activeConversation.teacherName }}</h3>              <span>{{ activeConversation.subject }} • En línea</span>            </div>            @if (isCoordinator) {              <div class="coordinator-badge-tag">                <ion-icon name="shield-checkmark-outline"></ion-icon>                <span>Jefa Coordinadora: Noelia Cantador</span>              </div>            }          </div>          <div class="chat-messages-body">            @for (msg of activeConversation.messages; track $index) {              <div class="message-bubble-wrap" [class.mine]="isMyMessage(msg)">                <div class="message-bubble">                  @if (isCoordinator) {                    <span class="sender-name-label">                      {{ isMyMessage(msg) ? \'Noelia Cantador (Jefa Coordinadora)\' : activeConversation.teacherName }}                    </span>                  }                  <p>{{ msg.text }}</p>                  <span class="msg-time">{{ msg.time }}</span>                </div>              </div>            }          </div>          <div class="chat-input-bar">            <input              type="text"              [placeholder]="isCoordinator ? \'Escribe un mensaje como Jefa Coordinadora Noelia a \' + activeConversation.teacherName + \'...\' : \'Escribe un mensaje a \' + activeConversation.teacherName + \'...\'"              [(ngModel)]="newMessageText"              (keyup.enter)="sendMessage()"            />            <ion-button (click)="sendMessage()" class="send-btn">              <ion-icon name="send-outline" slot="start"></ion-icon>              Enviar            </ion-button>          </div>        </ion-card>      </div>    }    <!-- =======================================================================         SECCIÓN 4: FACTURACIÓN & PAGOS (DASHBOARD DE TODO LO QUE HA PAGADO PAULA)         ======================================================================= -->    @if (activeSection === \'pagos\') {      <div class="section-banner">        <div>          <h1 class="main-heading">Dashboard de Facturación & Pagos</h1>          <p class="sub-heading">Resumen financiero de todo lo abonado por Paula García, desglose por asignatura y descarga de recibos oficiales.</p>        </div>      </div>      <!-- KPIs de lo que ha pagado Paula -->      <div class="payments-kpi-grid">        <ion-card class="kpi-box highlight-kpi">          <ion-card-content>            <div class="kpi-top">              <span class="kpi-label">TOTAL PAGADO (CURSO 2026)</span>              <div class="kpi-icon blue"><ion-icon name="wallet-outline"></ion-icon></div>            </div>            <div class="kpi-value">{{ paymentKpis.totalPagado }}</div>            <div class="kpi-foot success-text">              <ion-icon name="checkmark-circle-outline"></ion-icon>              <span>100% de tus tutorías al corriente de pago</span>            </div>          </ion-card-content>        </ion-card>        <ion-card class="kpi-box">          <ion-card-content>            <div class="kpi-top">              <span class="kpi-label">CLASES ABONADAS</span>              <div class="kpi-icon indigo"><ion-icon name="school-outline"></ion-icon></div>            </div>            <div class="kpi-value">{{ paymentKpis.clasesAbonadas }}</div>            <div class="kpi-foot">{{ paymentKpis.horasTotales }} de clase impartidas</div>          </ion-card-content>        </ion-card>        <ion-card class="kpi-box">          <ion-card-content>            <div class="kpi-top">              <span class="kpi-label">ÚLTIMO PAGO REALIZADO</span>              <div class="kpi-icon green"><ion-icon name="receipt-outline"></ion-icon></div>            </div>            <div class="kpi-value">{{ paymentKpis.ultimoPago }}</div>            <div class="kpi-foot">{{ paymentKpis.ultimoPagoDetalle }}</div>          </ion-card-content>        </ion-card>        <ion-card class="kpi-box">          <ion-card-content>            <div class="kpi-top">              <span class="kpi-label">SALDO PENDIENTE</span>              <div class="kpi-icon emerald"><ion-icon name="card-outline"></ion-icon></div>            </div>            <div class="kpi-value">{{ paymentKpis.saldoPendiente }}</div>            <div class="kpi-foot">Método activo: {{ paymentKpis.metodoPago }}</div>          </ion-card-content>        </ion-card>      </div>      <!-- Desglose de inversión por asignatura -->      <ion-card class="spending-breakdown-card">        <ion-card-content>          <h3 class="card-section-title">Desglose de Importe Pagado por Asignatura</h3>          <div class="breakdown-list">            @for (item of subjectSpending; track item.subject) {              <div class="breakdown-row">                <div class="breakdown-header">                  <strong>{{ item.subject }}</strong>                  <span>{{ item.amount }},00 € ({{ item.sessions }} sesiones • {{ item.percentage }}%)</span>                </div>                <div class="progress-track">                  <div class="progress-fill" [style.width.%]="item.percentage" [style.background]="item.color"></div>                </div>              </div>            }          </div>        </ion-card-content>      </ion-card>      <!-- Historial detallado de pagos y facturas -->      <ion-card class="invoices-table-card">        <ion-card-content>          <h3 class="card-section-title">Historial de Pagos y Recibos Abonados</h3>          <div class="table-responsive">            <table class="payments-table">              <thead>                <tr>                  <th>Nº Recibo</th>                  <th>Fecha</th>                  <th>Concepto</th>                  <th>Profesor/a</th>                  <th>Método</th>                  <th>Importe</th>                  <th>Estado</th>                  <th>Factura</th>                </tr>              </thead>              <tbody>                @for (pay of paymentsHistory; track pay.id) {                  <tr>                    <td class="mono-id">{{ pay.id }}</td>                    <td>{{ pay.date }}</td>                    <td><strong>{{ pay.concept }}</strong></td>                    <td>{{ pay.teacher }}</td>                    <td>{{ pay.method }}</td>                    <td class="amount-cell">{{ pay.amount }},00 €</td>                    <td><ion-badge color="success">{{ pay.status }}</ion-badge></td>                    <td>                      <ion-button size="small" fill="outline" (click)="downloadPaymentReceipt(pay)">                        <ion-icon name="download-outline" slot="start"></ion-icon>                        PDF                      </ion-button>                    </td>                  </tr>                }              </tbody>            </table>          </div>        </ion-card-content>      </ion-card>    }    <!-- =======================================================================         SECCIÓN 5: AJUSTES DE CUENTA         ======================================================================= -->    @if (activeSection === \'ajustes\') {      <div class="section-banner">        <div>          <h1 class="main-heading">Ajustes de Cuenta</h1>          <p class="sub-heading">Datos académicos y preferencias de notificaciones de Paula García.</p>        </div>      </div>      <ion-card class="settings-card">        <ion-card-content>          <div class="profile-summary-row">            <div class="big-avatar">PG</div>            <div>              <h2>Paula García</h2>              <p>paulagarcia&#64;itutor.es • Matrícula: MAT-2026-089</p>              <ion-badge color="tertiary">Alumna • Plan Intensivo Ciencias</ion-badge>            </div>          </div>          <div class="settings-grid">            <div class="setting-box">              <ion-icon name="notifications-outline"></ion-icon>              <div>                <h4>Recordatorios de Tutoría</h4>                <p>Aviso automático 30 minutos antes de cada clase de Ecuaciones Diferenciales y Cálculo.</p>              </div>              <ion-badge color="success">Activo</ion-badge>            </div>            <div class="setting-box">              <ion-icon name="shield-checkmark-outline"></ion-icon>              <div>                <h4>Seguridad de la Cuenta</h4>                <p>Contraseña protegida mediante hash Bcrypt y sesión activa con token JWT.</p>              </div>              <ion-badge color="primary">Protegida</ion-badge>            </div>          </div>        </ion-card-content>      </ion-card>    }  </div></ion-content></div>'
     var COMPONENTS = [{'name': 'AdminDashboardPage', 'selector': 'app-admin-dashboard'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'DataTableComponent', 'selector': 'app-data-table'},{'name': 'HomePage', 'selector': 'app-home'},{'name': 'LoginPage', 'selector': 'app-login'},{'name': 'MisClasesPage', 'selector': 'app-mis-clases'},{'name': 'ProfesorDashboardPage', 'selector': 'app-profesor-dashboard'},{'name': 'StatCardComponent', 'selector': 'app-stat-card'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'MisClasesPage'};

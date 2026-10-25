@@ -217,8 +217,6 @@
 </div>
                         <div>    <code>IonButtons</code>
 </div>
-                        <div>    <code>IonMenuButton</code>
-</div>
                         <div>    <code>IonGrid</code>
 </div>
                         <div>    <code>IonRow</code>
@@ -248,6 +246,8 @@
                         <div>    <code>IonSpinner</code>
 </div>
                         <div>    <code>IonBadge</code>
+</div>
+                        <div>    <code>IonToggle</code>
 </div>
                         <div>        <code><a href="../components/StatCardComponent.html" target="_self" >StatCardComponent</a></code>
 </div>
@@ -314,9 +314,6 @@
                                         <code>IonButtons</code>
                                 </li>
                                 <li>
-                                        <code>IonMenuButton</code>
-                                </li>
-                                <li>
                                         <code>IonGrid</code>
                                 </li>
                                 <li>
@@ -360,6 +357,9 @@
                                 </li>
                                 <li>
                                         <code>IonBadge</code>
+                                </li>
+                                <li>
+                                        <code>IonToggle</code>
                                 </li>
                                 <li>
                                             <code><a href="../components/StatCardComponent.html" target="_self" >StatCardComponent</a></code>
@@ -415,7 +415,12 @@
                             <li>
                                 <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                     <span class="modifier"></span>
+                                    <span class="modifier">Opcional</span>
                                 <a href="#classesChartCanvas" >classesChartCanvas</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#confirmedSessionsCount" >confirmedSessionsCount</a>
                             </li>
                             <li>
                                 <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
@@ -433,6 +438,10 @@
                             <li>
                                 <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                 <a href="#kpis" >kpis</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#mostrarSoloConfirmadas" >mostrarSoloConfirmadas</a>
                             </li>
                             <li>
                                 <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
@@ -478,6 +487,11 @@
                             </li>
                             <li>
                                 <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#sidebarService" >sidebarService</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                 <a href="#studentKpis" >studentKpis</a>
                             </li>
                             <li>
@@ -495,6 +509,10 @@
                             <li>
                                 <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                 <a href="#teacherTableColumns" >teacherTableColumns</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                <a href="#totalPeriodSessionsCount" >totalPeriodSessionsCount</a>
                             </li>
                         </ul>
                     </td>
@@ -529,6 +547,14 @@
                                 <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Private</span>
                                 <a href="#computeRevenueBySubject" >computeRevenueBySubject</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#darDeBajaAlumno" >darDeBajaAlumno</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#darDeBajaProfesor" >darDeBajaProfesor</a>
                             </li>
                             <li>
                                 <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
@@ -578,11 +604,27 @@
                             </li>
                             <li>
                                 <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#onConfirmedToggleChange" >onConfirmedToggleChange</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                 <a href="#onFilterChange" >onFilterChange</a>
                             </li>
                             <li>
                                 <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                 <a href="#onTabChange" >onTabChange</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#openAddStudentModal" >openAddStudentModal</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#openAddTeacherModal" >openAddTeacherModal</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#toggleMenu" >toggleMenu</a>
                             </li>
                             <li>
                                 <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
@@ -616,7 +658,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="234" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:234</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="238" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:238</a></div>
                             </td>
                         </tr>
 
@@ -655,8 +697,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="378"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:378</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="404"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:404</a></div>
                         </td>
                     </tr>
 
@@ -696,8 +738,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="338"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:338</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="364"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:364</a></div>
                         </td>
                     </tr>
 
@@ -737,8 +779,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="540"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:540</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="533"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:533</a></div>
                         </td>
                     </tr>
 
@@ -776,8 +818,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="526"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:526</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="519"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:519</a></div>
                         </td>
                     </tr>
 
@@ -789,6 +831,144 @@
                             <b>Devuelve : </b>    <code>{ labels: string[]; values: number[] }</code>
 
                         </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="darDeBajaAlumno"></a>
+                    <span class="name">
+                        <span ><b>darDeBajaAlumno</b></span>
+                        <a href="#darDeBajaAlumno"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>darDeBajaAlumno(student: <a href="../interfaces/SqlStudentRate.html" target="_self">SqlStudentRate</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="740"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:740</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Dar de baja un alumno</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>student</td>
+                                            <td>
+                                                            <code><a href="../interfaces/SqlStudentRate.html" target="_self" >SqlStudentRate</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="darDeBajaProfesor"></a>
+                    <span class="name">
+                        <span ><b>darDeBajaProfesor</b></span>
+                        <a href="#darDeBajaProfesor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>darDeBajaProfesor(teacher: <a href="../interfaces/TeacherRecord.html" target="_self">TeacherRecord</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="770"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:770</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Dar de baja un profesor</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>teacher</td>
+                                            <td>
+                                                            <code><a href="../interfaces/TeacherRecord.html" target="_self" >TeacherRecord</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -813,8 +993,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="553"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:553</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="546"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:546</a></div>
                         </td>
                     </tr>
 
@@ -852,8 +1032,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="589"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:589</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="582"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:582</a></div>
                         </td>
                     </tr>
 
@@ -891,8 +1071,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="295"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:295</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="321"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:321</a></div>
                         </td>
                     </tr>
 
@@ -930,8 +1110,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="728"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:728</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="780"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:780</a></div>
                         </td>
                     </tr>
 
@@ -997,8 +1177,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="724"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:724</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="776"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:776</a></div>
                         </td>
                     </tr>
 
@@ -1064,8 +1244,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="743"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:743</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="795"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:795</a></div>
                         </td>
                     </tr>
 
@@ -1133,8 +1313,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="428"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:428</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="459"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:459</a></div>
                         </td>
                     </tr>
 
@@ -1174,8 +1354,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="417"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:417</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="448"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:448</a></div>
                         </td>
                     </tr>
 
@@ -1213,8 +1393,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="272"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:272</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="298"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:298</a></div>
                         </td>
                     </tr>
 
@@ -1250,8 +1430,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="278"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:278</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="304"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:304</a></div>
                         </td>
                     </tr>
 
@@ -1287,8 +1467,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="257"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:257</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="283"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:283</a></div>
                         </td>
                     </tr>
 
@@ -1300,6 +1480,75 @@
                             <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
                         </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onConfirmedToggleChange"></a>
+                    <span class="name">
+                        <span ><b>onConfirmedToggleChange</b></span>
+                        <a href="#onConfirmedToggleChange"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onConfirmedToggleChange(checked: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="277"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:277</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Manejador del deslizador para alternar clases confirmadas</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>checked</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -1324,8 +1573,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="370"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:370</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="396"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:396</a></div>
                         </td>
                     </tr>
 
@@ -1393,8 +1642,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="326"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:326</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="352"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:352</a></div>
                         </td>
                     </tr>
 
@@ -1438,6 +1687,123 @@
                             <div class="io-description">
                                 
                             </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openAddStudentModal"></a>
+                    <span class="name">
+                        <span ><b>openAddStudentModal</b></span>
+                        <a href="#openAddStudentModal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openAddStudentModal()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="718"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:718</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Dar de alta un nuevo alumno</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openAddTeacherModal"></a>
+                    <span class="name">
+                        <span ><b>openAddTeacherModal</b></span>
+                        <a href="#openAddTeacherModal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openAddTeacherModal()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="747"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:747</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Dar de alta un nuevo profesor</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toggleMenu"></a>
+                    <span class="name">
+                        <span ><b>toggleMenu</b></span>
+                        <a href="#toggleMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>toggleMenu()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="272"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:272</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Alterna la apertura o colapso del menú lateral</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
                 </td>
             </tr>
         </tbody>
@@ -1503,8 +1869,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Definido en <a href="" data-line="365"
-                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:365</a></div>
+                            <div class="io-line">Definido en <a href="" data-line="391"
+                                    class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:391</a></div>
                         </td>
                     </tr>
 
@@ -1572,7 +1938,7 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Tipo : </i>    <code>&quot;metricas&quot; | &quot;profesores&quot; | &quot;alumnos&quot;</code>
+                        <i>Tipo : </i>    <code>&quot;metricas&quot; | &quot;profesores&quot; | &quot;alumnos&quot; | &quot;ajustes&quot;</code>
 
                     </td>
                 </tr>
@@ -1583,7 +1949,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="122" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:122</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="133" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:133</a></div>
                         </td>
                     </tr>
 
@@ -1615,7 +1981,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="110" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:110</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="120" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:120</a></div>
                         </td>
                     </tr>
 
@@ -1647,7 +2013,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="117" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:117</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="128" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:128</a></div>
                         </td>
                     </tr>
 
@@ -1661,6 +2027,7 @@
                     <a name="classesChartCanvas"></a>
                     <span class="name">
                             <span class="modifier"></span>
+                            <span class="modifier">Opcional</span>
                         <span ><b>classesChartCanvas</b></span>
                         <a href="#classesChartCanvas"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -1683,7 +2050,38 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="113" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:113</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="124" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:124</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="confirmedSessionsCount"></a>
+                    <span class="name">
+                        <span ><b>confirmedSessionsCount</b></span>
+                        <a href="#confirmedSessionsCount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="138" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:138</a></div>
                         </td>
                     </tr>
 
@@ -1715,7 +2113,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="107" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:107</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="117" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:117</a></div>
                         </td>
                     </tr>
 
@@ -1746,7 +2144,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="131" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:131</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="147" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:147</a></div>
                         </td>
                     </tr>
 
@@ -1777,7 +2175,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="121" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:121</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="132" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:132</a></div>
                         </td>
                     </tr>
 
@@ -1817,7 +2215,38 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="134" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:134</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="150" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:150</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mostrarSoloConfirmadas"></a>
+                    <span class="name">
+                        <span ><b>mostrarSoloConfirmadas</b></span>
+                        <a href="#mostrarSoloConfirmadas"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>true</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="137" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:137</a></div>
                         </td>
                     </tr>
 
@@ -1845,7 +2274,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="118" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:118</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="129" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:129</a></div>
                         </td>
                     </tr>
 
@@ -1876,7 +2305,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="128" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:128</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="144" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:144</a></div>
                         </td>
                     </tr>
 
@@ -1907,7 +2336,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="126" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:126</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="142" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:142</a></div>
                         </td>
                     </tr>
 
@@ -1938,7 +2367,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="127" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:127</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="143" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:143</a></div>
                         </td>
                     </tr>
 
@@ -1970,7 +2399,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="116" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:116</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="127" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:127</a></div>
                         </td>
                     </tr>
 
@@ -2006,7 +2435,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="112" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:112</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="123" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:123</a></div>
                         </td>
                     </tr>
 
@@ -2038,7 +2467,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="108" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:108</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="118" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:118</a></div>
                         </td>
                     </tr>
 
@@ -2070,7 +2499,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="109" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:109</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="119" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:119</a></div>
                         </td>
                     </tr>
 
@@ -2101,7 +2530,39 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="123" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:123</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="134" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:134</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sidebarService"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>sidebarService</b></span>
+                        <a href="#sidebarService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>inject(SidebarService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="121" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:121</a></div>
                         </td>
                     </tr>
 
@@ -2137,7 +2598,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="154" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:154</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="170" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:170</a></div>
                         </td>
                     </tr>
 
@@ -2197,7 +2658,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="205" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:205</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="209" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:209</a></div>
                         </td>
                     </tr>
 
@@ -2234,31 +2695,19 @@
     { key: &#x27;materia&#x27;, label: &#x27;Asignatura (Rama)&#x27; },
     { key: &#x27;tutor&#x27;, label: &#x27;Profesor Tutor&#x27; },
     { key: &#x27;fecha&#x27;, label: &#x27;Fecha y Hora&#x27; },
-    { key: &#x27;importe&#x27;, label: &#x27;Tarifa&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; },
-    { 
-      key: &#x27;estado&#x27;, 
-      label: &#x27;Estado&#x27;, 
-      type: &#x27;badge&#x27;, 
-      align: &#x27;center&#x27;,
-      badgeColorMap: {
-        &#x27;Confirmada&#x27;: &#x27;success&#x27;,
-        &#x27;En Curso&#x27;: &#x27;primary&#x27;,
-        &#x27;Pendiente&#x27;: &#x27;warning&#x27;,
-        &#x27;Cancelada&#x27;: &#x27;danger&#x27;
-      }
-    }
+    { key: &#x27;importe&#x27;, label: &#x27;Tarifa&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; }
   ]</code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="162" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:162</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="178" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:178</a></div>
                         </td>
                     </tr>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>Columnas de la tabla de sesiones</p>
+                    <div class="io-description"><p>Columnas de la tabla de sesiones (sin &#39;estado&#39; ni &#39;acciones&#39;)</p>
 </div>
                 </td>
             </tr>
@@ -2288,13 +2737,13 @@
     totalProfesores: 10,
     totalGanado: &#x27;0 €&#x27;,
     totalHoras: &#x27;0 h&#x27;,
-    valoracionMedia: &#x27;4.8 ⭐&#x27;
+    valoracionMedia: &#x27;4.8 / 5&#x27;
   }</code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="146" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:146</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="162" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:162</a></div>
                         </td>
                     </tr>
 
@@ -2344,7 +2793,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Definido en <a href="" data-line="183" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:183</a></div>
+                                <div class="io-line">Definido en <a href="" data-line="187" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:187</a></div>
                         </td>
                     </tr>
 
@@ -2354,6 +2803,37 @@
 </div>
                 </td>
             </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="totalPeriodSessionsCount"></a>
+                    <span class="name">
+                        <span ><b>totalPeriodSessionsCount</b></span>
+                        <a href="#totalPeriodSessionsCount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="139" class="link-to-prism">src/app/features/admin-dashboard/admin-dashboard.page.ts:139</a></div>
+                        </td>
+                    </tr>
+
 
         </tbody>
     </table>
@@ -2377,31 +2857,34 @@
 import { CommonModule, CurrencyPipe, DatePipe } from &#x27;@angular/common&#x27;;
 import { FormsModule } from &#x27;@angular/forms&#x27;;
 import { ActivatedRoute, Router } from &#x27;@angular/router&#x27;;
-import { 
-  IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonButtons, 
-  IonMenuButton, 
-  IonGrid, 
-  IonRow, 
-  IonCol,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardSubtitle,
-  IonCardContent,
-  IonSegment,
-  IonSegmentButton,
-  IonLabel,
-  IonButton,
-  IonIcon,
-  IonSpinner,
-  IonBadge
-} from &#x27;@ionic/angular&#x27;;
+import { IonContent } from &#x27;@ionic/angular/ion-content&#x27;;
+import { IonHeader } from &#x27;@ionic/angular/ion-header&#x27;;
+import { IonTitle } from &#x27;@ionic/angular/ion-title&#x27;;
+import { IonToolbar } from &#x27;@ionic/angular/ion-toolbar&#x27;;
+import { IonButtons } from &#x27;@ionic/angular/ion-buttons&#x27;;
+import { IonMenuButton } from &#x27;@ionic/angular/ion-menu-button&#x27;;
+import { IonGrid } from &#x27;@ionic/angular/ion-grid&#x27;;
+import { IonRow } from &#x27;@ionic/angular/ion-row&#x27;;
+import { IonCol } from &#x27;@ionic/angular/ion-col&#x27;;
+import { IonCard } from &#x27;@ionic/angular/ion-card&#x27;;
+import { IonCardHeader } from &#x27;@ionic/angular/ion-card-header&#x27;;
+import { IonCardTitle } from &#x27;@ionic/angular/ion-card-title&#x27;;
+import { IonCardSubtitle } from &#x27;@ionic/angular/ion-card-subtitle&#x27;;
+import { IonCardContent } from &#x27;@ionic/angular/ion-card-content&#x27;;
+import { IonSegment } from &#x27;@ionic/angular/ion-segment&#x27;;
+import { IonSegmentButton } from &#x27;@ionic/angular/ion-segment-button&#x27;;
+import { IonLabel } from &#x27;@ionic/angular/ion-label&#x27;;
+import { IonButton } from &#x27;@ionic/angular/ion-button&#x27;;
+import { IonIcon } from &#x27;@ionic/angular/ion-icon&#x27;;
+import { IonSpinner } from &#x27;@ionic/angular/ion-spinner&#x27;;
+import { IonBadge } from &#x27;@ionic/angular/ion-badge&#x27;;
+import { IonToggle } from &#x27;@ionic/angular/ion-toggle&#x27;;
 import { addIcons } from &#x27;ionicons&#x27;;
 import { 
+  menuOutline,
+  trendingUpOutline,
+  checkmarkCircleOutline,
+  checkmarkDoneCircleOutline,
   downloadOutline, 
   documentTextOutline, 
   filterOutline, 
@@ -2414,10 +2897,16 @@ import {
   pieChartOutline,
   sparklesOutline,
   walletOutline,
-  checkmarkCircleOutline,
   alertCircleOutline,
   eyeOutline,
-  cardOutline
+  cardOutline,
+  addCircleOutline,
+  personRemoveOutline,
+  informationCircleOutline,
+  serverOutline,
+  cloudOutline,
+  shieldCheckmarkOutline,
+  settingsOutline
 } from &#x27;ionicons/icons&#x27;;
 import Chart from &#x27;chart.js/auto&#x27;;
 import jsPDF from &#x27;jspdf&#x27;;
@@ -2430,6 +2919,7 @@ import {
   SqlStudentRate,
   TeacherRecord 
 } from &#x27;../../core/services/data.service&#x27;;
+import { SidebarService } from &#x27;../../core/services/sidebar.service&#x27;;
 import { StatCardComponent } from &#x27;../../shared/components/stat-card/stat-card.component&#x27;;
 import { DataTableComponent, TableColumn } from &#x27;../../shared/components/data-table/data-table.component&#x27;;
 
@@ -2447,7 +2937,6 @@ import { DataTableComponent, TableColumn } from &#x27;../../shared/components/da
     IonTitle, 
     IonToolbar, 
     IonButtons, 
-    IonMenuButton, 
     IonGrid, 
     IonRow, 
     IonCol,
@@ -2463,6 +2952,7 @@ import { DataTableComponent, TableColumn } from &#x27;../../shared/components/da
     IonIcon,
     IonSpinner,
     IonBadge,
+    IonToggle,
     StatCardComponent,
     DataTableComponent
   ],
@@ -2473,9 +2963,10 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   private route &#x3D; inject(ActivatedRoute);
   private router &#x3D; inject(Router);
   private cdr &#x3D; inject(ChangeDetectorRef);
+  public sidebarService &#x3D; inject(SidebarService);
 
   @ViewChild(&#x27;revenueChartCanvas&#x27;) revenueChartCanvas!: ElementRef&lt;HTMLCanvasElement&gt;;
-  @ViewChild(&#x27;classesChartCanvas&#x27;) classesChartCanvas!: ElementRef&lt;HTMLCanvasElement&gt;;
+  @ViewChild(&#x27;classesChartCanvas&#x27;) classesChartCanvas?: ElementRef&lt;HTMLCanvasElement&gt;;
 
   // Instancias de gráficos Chart.js
   private revenueChart: Chart | null &#x3D; null;
@@ -2484,8 +2975,13 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   // Estado del Dashboard
   isLoading &#x3D; true;
-  activeTab: &#x27;metricas&#x27; | &#x27;profesores&#x27; | &#x27;alumnos&#x27; &#x3D; &#x27;metricas&#x27;;
+  activeTab: &#x27;metricas&#x27; | &#x27;profesores&#x27; | &#x27;alumnos&#x27; | &#x27;ajustes&#x27; &#x3D; &#x27;metricas&#x27;;
   selectedPeriod: &#x27;todos&#x27; | &#x27;septiembre&#x27; | &#x27;octubre&#x27; | &#x27;noviembre&#x27; | &#x27;diciembre&#x27; &#x3D; &#x27;todos&#x27;;
+
+  // Deslizador interactivo para filtrar clases confirmadas
+  mostrarSoloConfirmadas &#x3D; true;
+  confirmedSessionsCount &#x3D; 0;
+  totalPeriodSessionsCount &#x3D; 0;
 
   // Datos brutos recuperados concurrentemente mediante forkJoin
   rawSqlStudents: SqlStudentRate[] &#x3D; [];
@@ -2507,12 +3003,12 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     asistenciaCrecimiento: 2.4
   };
 
-  // KPIs específicos de profesores
+  // KPIs específicos de profesores (sin emojis)
   teacherKpis &#x3D; {
     totalProfesores: 10,
     totalGanado: &#x27;0 €&#x27;,
     totalHoras: &#x27;0 h&#x27;,
-    valoracionMedia: &#x27;4.8 ⭐&#x27;
+    valoracionMedia: &#x27;4.8 / 5&#x27;
   };
 
   // KPIs específicos de alumnos
@@ -2523,25 +3019,13 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     tarifaMedia: &#x27;0 €/h&#x27;
   };
 
-  /** Columnas de la tabla de sesiones */
+  /** Columnas de la tabla de sesiones (sin &#x27;estado&#x27; ni &#x27;acciones&#x27;) */
   tableColumns: TableColumn[] &#x3D; [
     { key: &#x27;estudianteNombre&#x27;, label: &#x27;Estudiante&#x27; },
     { key: &#x27;materia&#x27;, label: &#x27;Asignatura (Rama)&#x27; },
     { key: &#x27;tutor&#x27;, label: &#x27;Profesor Tutor&#x27; },
     { key: &#x27;fecha&#x27;, label: &#x27;Fecha y Hora&#x27; },
-    { key: &#x27;importe&#x27;, label: &#x27;Tarifa&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; },
-    { 
-      key: &#x27;estado&#x27;, 
-      label: &#x27;Estado&#x27;, 
-      type: &#x27;badge&#x27;, 
-      align: &#x27;center&#x27;,
-      badgeColorMap: {
-        &#x27;Confirmada&#x27;: &#x27;success&#x27;,
-        &#x27;En Curso&#x27;: &#x27;primary&#x27;,
-        &#x27;Pendiente&#x27;: &#x27;warning&#x27;,
-        &#x27;Cancelada&#x27;: &#x27;danger&#x27;
-      }
-    }
+    { key: &#x27;importe&#x27;, label: &#x27;Tarifa&#x27;, type: &#x27;currency&#x27;, align: &#x27;right&#x27; }
   ];
 
   /** Columnas de la tabla de profesores */
@@ -2600,6 +3084,10 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   constructor() {
     addIcons({
+      menuOutline,
+      trendingUpOutline,
+      checkmarkCircleOutline,
+      checkmarkDoneCircleOutline,
       downloadOutline,
       documentTextOutline,
       filterOutline,
@@ -2612,11 +3100,29 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       pieChartOutline,
       sparklesOutline,
       walletOutline,
-      checkmarkCircleOutline,
       alertCircleOutline,
       eyeOutline,
-      cardOutline
+      cardOutline,
+      addCircleOutline,
+      personRemoveOutline,
+      informationCircleOutline,
+      serverOutline,
+      cloudOutline,
+      shieldCheckmarkOutline,
+      settingsOutline
     });
+  }
+
+  /** Alterna la apertura o colapso del menú lateral */
+  toggleMenu(): void {
+    this.sidebarService.toggleMenu();
+  }
+
+  /** Manejador del deslizador para alternar clases confirmadas */
+  onConfirmedToggleChange(checked: boolean): void {
+    this.mostrarSoloConfirmadas &#x3D; checked;
+    this.applyPeriodFilter();
+    this.cdr.markForCheck();
   }
 
   ngOnInit(): void {
@@ -2624,7 +3130,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
     // Sincronizar pestaña si entra desde el menú lateral con parámetro
     this.querySub &#x3D; this.route.queryParams.subscribe(params &#x3D;&gt; {
-      if (params[&#x27;vista&#x27;] &amp;&amp; (params[&#x27;vista&#x27;] &#x3D;&#x3D;&#x3D; &#x27;metricas&#x27; || params[&#x27;vista&#x27;] &#x3D;&#x3D;&#x3D; &#x27;profesores&#x27; || params[&#x27;vista&#x27;] &#x3D;&#x3D;&#x3D; &#x27;alumnos&#x27;)) {
+      if (params[&#x27;vista&#x27;] &amp;&amp; (params[&#x27;vista&#x27;] &#x3D;&#x3D;&#x3D; &#x27;metricas&#x27; || params[&#x27;vista&#x27;] &#x3D;&#x3D;&#x3D; &#x27;profesores&#x27; || params[&#x27;vista&#x27;] &#x3D;&#x3D;&#x3D; &#x27;alumnos&#x27; || params[&#x27;vista&#x27;] &#x3D;&#x3D;&#x3D; &#x27;ajustes&#x27;)) {
         this.activeTab &#x3D; params[&#x27;vista&#x27;];
         this.cdr.markForCheck();
         if (this.activeTab &#x3D;&#x3D;&#x3D; &#x27;metricas&#x27;) {
@@ -2710,7 +3216,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       totalProfesores: this.rawTeachers.length,
       totalGanado: &#x60;${totalGanado.toLocaleString(&#x27;es-ES&#x27;)} €&#x60;,
       totalHoras: &#x60;${totalHoras} h&#x60;,
-      valoracionMedia: &#x60;${avgRating} ⭐&#x60;
+      valoracionMedia: &#x60;${avgRating} / 5&#x60;
     };
 
     // Alumnos
@@ -2741,29 +3247,34 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   /** Filtrado en memoria y recálculo dinámico de estadísticas KPI */
   private applyPeriodFilter(): void {
-    if (this.selectedPeriod &#x3D;&#x3D;&#x3D; &#x27;todos&#x27;) {
-      this.filteredSessions &#x3D; [...this.rawNoSqlSessions];
+    const periodSessions &#x3D; this.selectedPeriod &#x3D;&#x3D;&#x3D; &#x27;todos&#x27;
+      ? [...this.rawNoSqlSessions]
+      : this.rawNoSqlSessions.filter(session &#x3D;&gt; session.mes &#x3D;&#x3D;&#x3D; this.selectedPeriod);
+
+    this.totalPeriodSessionsCount &#x3D; periodSessions.length;
+    this.confirmedSessionsCount &#x3D; periodSessions.filter(s &#x3D;&gt; s.estado &#x3D;&#x3D;&#x3D; &#x27;Confirmada&#x27;).length;
+
+    if (this.mostrarSoloConfirmadas) {
+      this.filteredSessions &#x3D; periodSessions.filter(s &#x3D;&gt; s.estado &#x3D;&#x3D;&#x3D; &#x27;Confirmada&#x27;);
     } else {
-      this.filteredSessions &#x3D; this.rawNoSqlSessions.filter(
-        session &#x3D;&gt; session.mes &#x3D;&#x3D;&#x3D; this.selectedPeriod
-      );
+      this.filteredSessions &#x3D; periodSessions;
     }
 
-    const totalIngresos &#x3D; this.filteredSessions
+    const totalIngresos &#x3D; periodSessions
       .filter(s &#x3D;&gt; s.estado !&#x3D;&#x3D; &#x27;Cancelada&#x27;)
       .reduce((sum, s) &#x3D;&gt; sum + s.importe, 0);
 
-    const totalMinutos &#x3D; this.filteredSessions
+    const totalMinutos &#x3D; periodSessions
       .filter(s &#x3D;&gt; s.estado !&#x3D;&#x3D; &#x27;Cancelada&#x27;)
       .reduce((sum, s) &#x3D;&gt; sum + s.duracionMin, 0);
 
     const alumnosUnicos &#x3D; new Set(
-      this.filteredSessions.map(s &#x3D;&gt; s.estudianteId)
+      periodSessions.map(s &#x3D;&gt; s.estudianteId)
     ).size;
 
-    const sesionesCompletadas &#x3D; this.filteredSessions.filter(s &#x3D;&gt; s.asistencia).length;
-    const tasaAsistencia &#x3D; this.filteredSessions.length &gt; 0
-      ? Math.round((sesionesCompletadas / this.filteredSessions.length) * 100)
+    const sesionesCompletadas &#x3D; periodSessions.filter(s &#x3D;&gt; s.asistencia).length;
+    const tasaAsistencia &#x3D; periodSessions.length &gt; 0
+      ? Math.round((sesionesCompletadas / periodSessions.length) * 100)
       : 0;
 
     this.kpis &#x3D; {
@@ -2780,9 +3291,9 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   /** Inicialización o actualización condicional de los gráficos de Chart.js */
   private initOrUpdateCharts(): void {
-    if (!this.revenueChartCanvas || !this.classesChartCanvas) return;
+    if (!this.revenueChartCanvas) return;
 
-    if (!this.revenueChart || !this.classesChart) {
+    if (!this.revenueChart) {
       this.initCharts();
     } else {
       this.updateChartsData();
@@ -2791,35 +3302,27 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   /** Creación de las instancias de Chart.js */
   private initCharts(): void {
-    if (!this.revenueChartCanvas || !this.classesChartCanvas) return;
+    if (!this.revenueChartCanvas) return;
 
-    // 1. Gráfico: &quot;Ingresos por Asignatura&quot; (Bar Chart)
+    // 1. Gráfico: &quot;Ingresos por Asignatura&quot; (Line Chart)
     const revenueData &#x3D; this.computeRevenueBySubject();
     this.revenueChart &#x3D; new Chart(this.revenueChartCanvas.nativeElement, {
-      type: &#x27;bar&#x27;,
+      type: &#x27;line&#x27;,
       data: {
         labels: revenueData.labels,
         datasets: [{
           label: &#x27;Ingresos (€)&#x27;,
           data: revenueData.values,
-          backgroundColor: [
-            &#x27;rgba(37, 99, 235, 0.85)&#x27;,
-            &#x27;rgba(99, 102, 241, 0.85)&#x27;,
-            &#x27;rgba(14, 165, 233, 0.85)&#x27;,
-            &#x27;rgba(16, 185, 129, 0.85)&#x27;,
-            &#x27;rgba(245, 158, 11, 0.85)&#x27;,
-            &#x27;rgba(168, 85, 247, 0.85)&#x27;
-          ],
-          borderColor: [
-            &#x27;#1d4ed8&#x27;,
-            &#x27;#4f46e5&#x27;,
-            &#x27;#0284c7&#x27;,
-            &#x27;#059669&#x27;,
-            &#x27;#d97706&#x27;,
-            &#x27;#9333ea&#x27;
-          ],
-          borderWidth: 1.5,
-          borderRadius: 8
+          borderColor: &#x27;#2563eb&#x27;,
+          backgroundColor: &#x27;rgba(37, 99, 235, 0.1)&#x27;,
+          borderWidth: 3,
+          fill: true,
+          tension: 0.35,
+          pointBackgroundColor: &#x27;#2563eb&#x27;,
+          pointBorderColor: &#x27;#ffffff&#x27;,
+          pointBorderWidth: 2,
+          pointRadius: 6,
+          pointHoverRadius: 8
         }]
       },
       options: {
@@ -2829,6 +3332,8 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
           legend: { display: false },
           tooltip: {
             backgroundColor: &#x27;#0f172a&#x27;,
+            padding: 10,
+            cornerRadius: 8,
             callbacks: {
               label: (context) &#x3D;&gt; &#x60; ${context.parsed.y} € facturados&#x60;
             }
@@ -2844,31 +3349,6 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     });
-
-    // 2. Gráfico: &quot;Clases Impartidas por Rama&quot; (Doughnut)
-    const branchData &#x3D; this.computeClassesByBranch();
-    this.classesChart &#x3D; new Chart(this.classesChartCanvas.nativeElement, {
-      type: &#x27;doughnut&#x27;,
-      data: {
-        labels: branchData.labels,
-        datasets: [{
-          data: branchData.values,
-          backgroundColor: [&#x27;#2563eb&#x27;, &#x27;#6366f1&#x27;, &#x27;#10b981&#x27;],
-          borderWidth: 2,
-          borderColor: &#x27;#ffffff&#x27;
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: &#x27;bottom&#x27;,
-            labels: { boxWidth: 12, padding: 16, color: &#x27;#334155&#x27; }
-          }
-        }
-      }
-    });
   }
 
   /** Actualización reactiva de datos en gráficos existentes */
@@ -2878,13 +3358,6 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       this.revenueChart.data.labels &#x3D; revenueData.labels;
       this.revenueChart.data.datasets[0].data &#x3D; revenueData.values;
       this.revenueChart.update(&#x27;active&#x27;);
-    }
-
-    if (this.classesChart) {
-      const branchData &#x3D; this.computeClassesByBranch();
-      this.classesChart.data.labels &#x3D; branchData.labels;
-      this.classesChart.data.datasets[0].data &#x3D; branchData.values;
-      this.classesChart.update(&#x27;active&#x27;);
     }
   }
 
@@ -2992,7 +3465,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
         &#x60;${t.horasImpartidas} h&#x60;,
         &#x60;${t.tarifaHora} €/h&#x60;,
         &#x60;${t.totalGanado} €&#x60;,
-        &#x60;${t.calificacion} ⭐&#x60;,
+        &#x60;${t.calificacion} / 5&#x60;,
         t.telefono,
         t.estado
       ]);
@@ -3016,7 +3489,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       doc.setTextColor(...darkColor);
       doc.setFont(&#x27;helvetica&#x27;, &#x27;bold&#x27;);
       doc.setFontSize(14);
-      doc.text(&#x27;Censo Oficial de Alumnos Matriculados y Tarifas SQL&#x27;, 14, 34);
+      doc.text(&#x27;Censo Oficial de Alumnos Matriculados y Tarifas&#x27;, 14, 34);
 
       doc.setFont(&#x27;helvetica&#x27;, &#x27;normal&#x27;);
       doc.setFontSize(9);
@@ -3086,6 +3559,65 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  /** Dar de alta un nuevo alumno */
+  openAddStudentModal(): void {
+    const nuevoId &#x3D; Math.max(...this.rawSqlStudents.map(s &#x3D;&gt; s.id), 0) + 1;
+    const nuevoAlumno: SqlStudentRate &#x3D; {
+      id: nuevoId,
+      nombre: &#x60;Nuevo Alumno ${nuevoId}&#x60;,
+      email: &#x60;alumno${nuevoId}@itutor.es&#x60;,
+      matricula: &#x60;MAT-2026-${String(nuevoId).padStart(3, &#x27;0&#x27;)}&#x60;,
+      tarifaHora: 30,
+      plan: &#x27;Básico&#x27;,
+      asignaturaPrincipal: &#x27;Sin asignar&#x27;,
+      profesorAsignado: &#x27;Sin asignar&#x27;,
+      saldoPendiente: 0,
+      horasTotales: 0,
+      telefono: &#x27;+34 600 000 000&#x27;,
+      estado: &#x27;Al día&#x27;
+    };
+    this.rawSqlStudents &#x3D; [...this.rawSqlStudents, nuevoAlumno];
+    this.calculateTeachersAndStudentsKpis();
+    this.cdr.markForCheck();
+  }
+
+  /** Dar de baja un alumno */
+  darDeBajaAlumno(student: SqlStudentRate): void {
+    this.rawSqlStudents &#x3D; this.rawSqlStudents.filter(s &#x3D;&gt; s.id !&#x3D;&#x3D; student.id);
+    this.calculateTeachersAndStudentsKpis();
+    this.cdr.markForCheck();
+  }
+
+  /** Dar de alta un nuevo profesor */
+  openAddTeacherModal(): void {
+    const nuevoId &#x3D; Math.max(...this.rawTeachers.map(t &#x3D;&gt; t.id), 0) + 1;
+    const nuevoProfesor: TeacherRecord &#x3D; {
+      id: nuevoId,
+      nombre: &#x60;Nuevo Profesor ${nuevoId}&#x60;,
+      email: &#x60;profesor${nuevoId}@itutor.es&#x60;,
+      especialidad: &#x27;Sin asignar&#x27;,
+      departamento: &#x27;Matemáticas&#x27;,
+      tarifaHora: 30,
+      alumnosAsignados: [],
+      alumnosCount: 0,
+      horasImpartidas: 0,
+      totalGanado: 0,
+      calificacion: 0,
+      telefono: &#x27;+34 600 000 000&#x27;,
+      estado: &#x27;Disponible&#x27;
+    };
+    this.rawTeachers &#x3D; [...this.rawTeachers, nuevoProfesor];
+    this.calculateTeachersAndStudentsKpis();
+    this.cdr.markForCheck();
+  }
+
+  /** Dar de baja un profesor */
+  darDeBajaProfesor(teacher: TeacherRecord): void {
+    this.rawTeachers &#x3D; this.rawTeachers.filter(t &#x3D;&gt; t.id !&#x3D;&#x3D; teacher.id);
+    this.calculateTeachersAndStudentsKpis();
+    this.cdr.markForCheck();
+  }
+
   handleEdit(item: any): void {
     console.log(&#x27;Editar registro:&#x27;, item);
   }
@@ -3119,14 +3651,16 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
         <pre class="line-numbers"><code class="language-html">&lt;!-- ENCABEZADO ACCESIBLE (WCAG Landmark: banner) --&gt;
 &lt;ion-header class&#x3D;&quot;ion-no-border dashboard-header&quot; role&#x3D;&quot;banner&quot;&gt;
   &lt;ion-toolbar class&#x3D;&quot;dashboard-toolbar&quot;&gt;
-    &lt;!-- Menú Hamburguesa para Móvil --&gt;
+    &lt;!-- Menú Hamburguesa interactivo para Escritorio y Móvil --&gt;
     &lt;ion-buttons slot&#x3D;&quot;start&quot;&gt;
-      &lt;ion-menu-button 
-        autoHide&#x3D;&quot;false&quot; 
-        aria-label&#x3D;&quot;Abrir menú principal de navegación&quot;
+      &lt;ion-button 
+        (click)&#x3D;&quot;toggleMenu()&quot; 
+        aria-label&#x3D;&quot;Abrir o colapsar menú principal de navegación&quot;
         class&#x3D;&quot;menu-btn&quot;
         tabindex&#x3D;&quot;0&quot;
-      &gt;&lt;/ion-menu-button&gt;
+      &gt;
+        &lt;ion-icon slot&#x3D;&quot;icon-only&quot; name&#x3D;&quot;menu-outline&quot;&gt;&lt;/ion-icon&gt;
+      &lt;/ion-button&gt;
     &lt;/ion-buttons&gt;
 
     &lt;div class&#x3D;&quot;header-content&quot;&gt;
@@ -3137,37 +3671,6 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
         Gestión Integral de Alumnos, Profesores &amp; Finanzas
       &lt;/span&gt;
     &lt;/div&gt;
-
-    &lt;!-- ACCIONES RÁPIDAS DE EXPORTACIÓN (Header Action Group) --&gt;
-    &lt;ion-buttons slot&#x3D;&quot;end&quot; class&#x3D;&quot;export-actions&quot; role&#x3D;&quot;group&quot; aria-label&#x3D;&quot;Opciones de exportación de datos&quot;&gt;
-      &lt;ion-button 
-        fill&#x3D;&quot;outline&quot; 
-        color&#x3D;&quot;medium&quot; 
-        size&#x3D;&quot;small&quot; 
-        class&#x3D;&quot;export-btn&quot;
-        (click)&#x3D;&quot;exportToCsv()&quot;
-        [disabled]&#x3D;&quot;isLoading&quot;
-        aria-label&#x3D;&quot;Descargar datos en formato CSV limpio para Excel&quot;
-        tabindex&#x3D;&quot;0&quot;
-      &gt;
-        &lt;ion-icon slot&#x3D;&quot;start&quot; name&#x3D;&quot;download-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
-        &lt;span class&#x3D;&quot;btn-text&quot;&gt;CSV&lt;/span&gt;
-      &lt;/ion-button&gt;
-
-      &lt;ion-button 
-        fill&#x3D;&quot;solid&quot; 
-        color&#x3D;&quot;primary&quot; 
-        size&#x3D;&quot;small&quot; 
-        class&#x3D;&quot;export-btn export-pdf-btn&quot;
-        (click)&#x3D;&quot;exportToPdf()&quot;
-        [disabled]&#x3D;&quot;isLoading&quot;
-        aria-label&#x3D;&quot;Generar y descargar informe corporativo en formato PDF&quot;
-        tabindex&#x3D;&quot;0&quot;
-      &gt;
-        &lt;ion-icon slot&#x3D;&quot;start&quot; name&#x3D;&quot;document-text-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
-        &lt;span class&#x3D;&quot;btn-text&quot;&gt;Exportar PDF&lt;/span&gt;
-      &lt;/ion-button&gt;
-    &lt;/ion-buttons&gt;
   &lt;/ion-toolbar&gt;
 &lt;/ion-header&gt;
 
@@ -3175,40 +3678,16 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 &lt;ion-content class&#x3D;&quot;dashboard-content&quot; [fullscreen]&#x3D;&quot;true&quot; role&#x3D;&quot;main&quot;&gt;
   &lt;div class&#x3D;&quot;dashboard-container&quot;&gt;
 
-    &lt;!-- SELECTOR DE VISTAS PRINCIPALES: MÉTRICAS / LISTADO PROFESORES / LISTADO ALUMNOS --&gt;
-    &lt;div class&#x3D;&quot;admin-tabs-wrapper&quot; role&#x3D;&quot;navigation&quot; aria-label&#x3D;&quot;Selector de vistas del administrador&quot;&gt;
-      &lt;ion-segment 
-        [value]&#x3D;&quot;activeTab&quot; 
-        (ionChange)&#x3D;&quot;onTabChange($event.detail.value)&quot;
-        class&#x3D;&quot;admin-main-segment&quot;
-      &gt;
-        &lt;ion-segment-button value&#x3D;&quot;metricas&quot;&gt;
-          &lt;ion-icon name&#x3D;&quot;bar-chart-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
-          &lt;ion-label&gt;Métricas &amp; Sesiones&lt;/ion-label&gt;
-        &lt;/ion-segment-button&gt;
-
-        &lt;ion-segment-button value&#x3D;&quot;profesores&quot;&gt;
-          &lt;ion-icon name&#x3D;&quot;school-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
-          &lt;ion-label&gt;Listado de Profesores ({{ rawTeachers.length }})&lt;/ion-label&gt;
-        &lt;/ion-segment-button&gt;
-
-        &lt;ion-segment-button value&#x3D;&quot;alumnos&quot;&gt;
-          &lt;ion-icon name&#x3D;&quot;people-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
-          &lt;ion-label&gt;Listado de Alumnos ({{ rawSqlStudents.length }})&lt;/ion-label&gt;
-        &lt;/ion-segment-button&gt;
-      &lt;/ion-segment&gt;
-    &lt;/div&gt;
-
     &lt;!-- ESTADO DE CARGA ASÍNCRONO (WCAG Live Region para Screen Readers) --&gt;
     @if (isLoading) {
       &lt;div 
         class&#x3D;&quot;loading-container&quot; 
         role&#x3D;&quot;status&quot; 
         aria-live&#x3D;&quot;polite&quot;
-        aria-label&#x3D;&quot;Cargando datos y sincronizando catálogo SQL y MongoDB&quot;
+        aria-label&#x3D;&quot;Cargando datos de la academia&quot;
       &gt;
         &lt;ion-spinner name&#x3D;&quot;crescent&quot; color&#x3D;&quot;primary&quot;&gt;&lt;/ion-spinner&gt;
-        &lt;p class&#x3D;&quot;loading-text&quot;&gt;Sincronizando 10 alumnos, 10 profesores y sesiones concurrentes...&lt;/p&gt;
+        &lt;p class&#x3D;&quot;loading-text&quot;&gt;Cargando alumnos, profesores y sesiones...&lt;/p&gt;
       &lt;/div&gt;
     } @else {
 
@@ -3223,7 +3702,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
             &lt;div class&#x3D;&quot;banner-title-box&quot;&gt;
               &lt;h1 class&#x3D;&quot;page-main-heading&quot;&gt;Métricas de la Academia&lt;/h1&gt;
               &lt;p class&#x3D;&quot;page-sub-heading&quot;&gt;
-                Tutorías especializadas de Física, Matemáticas y Química • Sincronización dual SQL y NoSQL
+                Tutorías especializadas de Física, Matemáticas y Química
               &lt;/p&gt;
             &lt;/div&gt;
 
@@ -3310,17 +3789,17 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
           &lt;/ion-grid&gt;
         &lt;/section&gt;
 
-        &lt;!-- GRÁFICOS CHART.JS --&gt;
+        &lt;!-- GRÁFICO DE LÍNEAS CHART.JS (INGRESOS POR ASIGNATURA) --&gt;
         &lt;section class&#x3D;&quot;charts-section&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Visualización gráfica de datos analíticos&quot;&gt;
           &lt;ion-grid class&#x3D;&quot;ion-no-padding&quot;&gt;
             &lt;ion-row class&#x3D;&quot;charts-row&quot;&gt;
 
-              &lt;ion-col size&#x3D;&quot;12&quot; size-lg&#x3D;&quot;6&quot; class&#x3D;&quot;chart-col&quot;&gt;
+              &lt;ion-col size&#x3D;&quot;12&quot; class&#x3D;&quot;chart-col&quot;&gt;
                 &lt;ion-card class&#x3D;&quot;chart-card&quot;&gt;
                   &lt;ion-card-header class&#x3D;&quot;chart-card-header&quot;&gt;
                     &lt;div class&#x3D;&quot;chart-header-left&quot;&gt;
                       &lt;ion-card-title class&#x3D;&quot;chart-title&quot;&gt;
-                        &lt;ion-icon name&#x3D;&quot;bar-chart-outline&quot; aria-hidden&#x3D;&quot;true&quot; class&#x3D;&quot;chart-icon&quot;&gt;&lt;/ion-icon&gt;
+                        &lt;ion-icon name&#x3D;&quot;trending-up-outline&quot; aria-hidden&#x3D;&quot;true&quot; class&#x3D;&quot;chart-icon&quot;&gt;&lt;/ion-icon&gt;
                         Ingresos por Asignatura
                       &lt;/ion-card-title&gt;
                       &lt;ion-card-subtitle class&#x3D;&quot;chart-subtitle&quot;&gt;
@@ -3340,47 +3819,80 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
                 &lt;/ion-card&gt;
               &lt;/ion-col&gt;
 
-              &lt;ion-col size&#x3D;&quot;12&quot; size-lg&#x3D;&quot;6&quot; class&#x3D;&quot;chart-col&quot;&gt;
-                &lt;ion-card class&#x3D;&quot;chart-card&quot;&gt;
-                  &lt;ion-card-header class&#x3D;&quot;chart-card-header&quot;&gt;
-                    &lt;div class&#x3D;&quot;chart-header-left&quot;&gt;
-                      &lt;ion-card-title class&#x3D;&quot;chart-title&quot;&gt;
-                        &lt;ion-icon name&#x3D;&quot;pie-chart-outline&quot; aria-hidden&#x3D;&quot;true&quot; class&#x3D;&quot;chart-icon&quot;&gt;&lt;/ion-icon&gt;
-                        Distribución de Tutorías por Rama
-                      &lt;/ion-card-title&gt;
-                      &lt;ion-card-subtitle class&#x3D;&quot;chart-subtitle&quot;&gt;
-                        Volumen comparativo de clases impartidas
-                      &lt;/ion-card-subtitle&gt;
-                    &lt;/div&gt;
-                    &lt;ion-badge color&#x3D;&quot;tertiary&quot; class&#x3D;&quot;chart-badge&quot;&gt;Histórico&lt;/ion-badge&gt;
-                  &lt;/ion-card-header&gt;
-
-                  &lt;ion-card-content class&#x3D;&quot;chart-card-content&quot;&gt;
-                    &lt;div class&#x3D;&quot;canvas-wrapper&quot;&gt;
-                      &lt;canvas #classesChartCanvas role&#x3D;&quot;img&quot;&gt;
-                        Gráfico de ramas no disponible.
-                      &lt;/canvas&gt;
-                    &lt;/div&gt;
-                  &lt;/ion-card-content&gt;
-                &lt;/ion-card&gt;
-              &lt;/ion-col&gt;
-
             &lt;/ion-row&gt;
           &lt;/ion-grid&gt;
         &lt;/section&gt;
 
-        &lt;!-- TABLA DE SESIONES --&gt;
-        &lt;section class&#x3D;&quot;table-section&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Tabla de sesiones de tutoría sincronizadas&quot;&gt;
+        &lt;!-- TABLA DE SESIONES CON DESLIZADOR PARA CLASES CONFIRMADAS --&gt;
+        &lt;section class&#x3D;&quot;table-section&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Tabla de sesiones de tutoría&quot;&gt;
+          &lt;!-- CONTROL DESLIZADOR INTERACTIVO --&gt;
+          &lt;div class&#x3D;&quot;slider-control-card&quot;&gt;
+            &lt;div class&#x3D;&quot;slider-info&quot;&gt;
+              &lt;ion-icon name&#x3D;&quot;checkmark-done-circle-outline&quot; class&#x3D;&quot;slider-icon&quot;&gt;&lt;/ion-icon&gt;
+              &lt;div class&#x3D;&quot;slider-texts&quot;&gt;
+                &lt;span class&#x3D;&quot;slider-title&quot;&gt;Filtro Deslizador: Clases Confirmadas&lt;/span&gt;
+                &lt;span class&#x3D;&quot;slider-desc&quot;&gt;Activa el deslizador para ver todas las clases confirmadas en el centro&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class&#x3D;&quot;slider-action-wrapper&quot;&gt;
+              &lt;ion-toggle 
+                [checked]&#x3D;&quot;mostrarSoloConfirmadas&quot; 
+                (ionChange)&#x3D;&quot;onConfirmedToggleChange($event.detail.checked)&quot;
+                color&#x3D;&quot;primary&quot;
+                class&#x3D;&quot;confirmed-slider-toggle&quot;
+                aria-label&#x3D;&quot;Deslizador para ver todas las clases confirmadas&quot;
+              &gt;
+                &lt;span class&#x3D;&quot;toggle-label-text&quot;&gt;
+                  {{ mostrarSoloConfirmadas ? &#x27;Todas las Confirmadas (&#x27; + confirmedSessionsCount + &#x27;)&#x27; : &#x27;Todas las Clases (&#x27; + totalPeriodSessionsCount + &#x27;)&#x27; }}
+                &lt;/span&gt;
+              &lt;/ion-toggle&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
           &lt;app-data-table
             [title]&#x3D;&quot;&#x27;Registro de Tutorías • Periodo: &#x27; + (selectedPeriod | uppercase)&quot;
-            subtitle&#x3D;&quot;Datos en tiempo real de MongoDB combinados con el catálogo de tarifas SQL&quot;
+            subtitle&#x3D;&quot;Datos en tiempo real de las clases y tutorías académicas&quot;
             [columns]&#x3D;&quot;tableColumns&quot;
             [rows]&#x3D;&quot;filteredSessions&quot;
-            [showActions]&#x3D;&quot;true&quot;
-            (onEdit)&#x3D;&quot;handleEdit($event)&quot;
-            (onDelete)&#x3D;&quot;handleDelete($event)&quot;
-            (onView)&#x3D;&quot;handleView($event)&quot;
+            [showActions]&#x3D;&quot;false&quot;
           &gt;&lt;/app-data-table&gt;
+        &lt;/section&gt;
+
+        &lt;!-- ACCIONES DE EXPORTACIÓN EN LA PARTE INFERIOR --&gt;
+        &lt;section class&#x3D;&quot;bottom-export-section&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Exportación de informes&quot;&gt;
+          &lt;div class&#x3D;&quot;bottom-export-card&quot;&gt;
+            &lt;div class&#x3D;&quot;export-card-info&quot;&gt;
+              &lt;h3 class&#x3D;&quot;export-heading&quot;&gt;Exportar Registros e Informes&lt;/h3&gt;
+              &lt;p class&#x3D;&quot;export-subheading&quot;&gt;Descarga los datos del periodo en formato estructurado para contabilidad y dirección.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class&#x3D;&quot;export-card-actions&quot;&gt;
+              &lt;ion-button 
+                fill&#x3D;&quot;outline&quot; 
+                color&#x3D;&quot;medium&quot; 
+                size&#x3D;&quot;default&quot; 
+                class&#x3D;&quot;export-btn-bottom&quot;
+                (click)&#x3D;&quot;exportToCsv()&quot;
+                [disabled]&#x3D;&quot;isLoading&quot;
+                aria-label&#x3D;&quot;Descargar datos en formato CSV limpio para Excel&quot;
+              &gt;
+                &lt;ion-icon slot&#x3D;&quot;start&quot; name&#x3D;&quot;download-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
+                &lt;span&gt;CSV&lt;/span&gt;
+              &lt;/ion-button&gt;
+
+              &lt;ion-button 
+                fill&#x3D;&quot;solid&quot; 
+                color&#x3D;&quot;primary&quot; 
+                size&#x3D;&quot;default&quot; 
+                class&#x3D;&quot;export-btn-bottom export-pdf-btn&quot;
+                (click)&#x3D;&quot;exportToPdf()&quot;
+                [disabled]&#x3D;&quot;isLoading&quot;
+                aria-label&#x3D;&quot;Generar y descargar informe corporativo en formato PDF&quot;
+              &gt;
+                &lt;ion-icon slot&#x3D;&quot;start&quot; name&#x3D;&quot;document-text-outline&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;/ion-icon&gt;
+                &lt;span&gt;Exportar PDF&lt;/span&gt;
+              &lt;/ion-button&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
         &lt;/section&gt;
 
       }
@@ -3527,6 +4039,174 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
       }
 
+      &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+      &lt;!-- VISTA 4: AJUSTES DEL SISTEMA               --&gt;
+      &lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+      @if (activeTab &#x3D;&#x3D;&#x3D; &#x27;ajustes&#x27;) {
+
+        &lt;section class&#x3D;&quot;system-settings-section&quot; role&#x3D;&quot;region&quot; aria-label&#x3D;&quot;Ajustes del sistema&quot;&gt;
+          &lt;div class&#x3D;&quot;settings-header-banner&quot;&gt;
+            &lt;h1 class&#x3D;&quot;page-main-heading&quot;&gt;Ajustes del Sistema&lt;/h1&gt;
+            &lt;p class&#x3D;&quot;page-sub-heading&quot;&gt;Gestión de altas y bajas de alumnos y profesores del sistema iTUTOR&lt;/p&gt;
+          &lt;/div&gt;
+
+          &lt;!-- GESTIÓN DE ALTAS Y BAJAS DE ALUMNOS --&gt;
+          &lt;ion-card class&#x3D;&quot;settings-management-card&quot;&gt;
+            &lt;ion-card-header class&#x3D;&quot;mgmt-card-header&quot;&gt;
+              &lt;div class&#x3D;&quot;mgmt-title-row&quot;&gt;
+                &lt;ion-icon name&#x3D;&quot;people-outline&quot; class&#x3D;&quot;mgmt-icon students-icon&quot;&gt;&lt;/ion-icon&gt;
+                &lt;div&gt;
+                  &lt;ion-card-title class&#x3D;&quot;mgmt-title&quot;&gt;Gestión de Alumnos&lt;/ion-card-title&gt;
+                  &lt;ion-card-subtitle class&#x3D;&quot;mgmt-subtitle&quot;&gt;Altas, bajas y modificaciones de expedientes de estudiantes&lt;/ion-card-subtitle&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+              &lt;ion-button fill&#x3D;&quot;solid&quot; color&#x3D;&quot;primary&quot; size&#x3D;&quot;small&quot; class&#x3D;&quot;add-btn&quot; (click)&#x3D;&quot;openAddStudentModal()&quot;&gt;
+                &lt;ion-icon slot&#x3D;&quot;start&quot; name&#x3D;&quot;add-circle-outline&quot;&gt;&lt;/ion-icon&gt;
+                Dar de Alta Alumno
+              &lt;/ion-button&gt;
+            &lt;/ion-card-header&gt;
+            &lt;ion-card-content&gt;
+              &lt;div class&#x3D;&quot;mgmt-table-wrap&quot;&gt;
+                &lt;table class&#x3D;&quot;mgmt-table&quot;&gt;
+                  &lt;thead&gt;
+                    &lt;tr&gt;
+                      &lt;th&gt;Matrícula&lt;/th&gt;
+                      &lt;th&gt;Nombre&lt;/th&gt;
+                      &lt;th&gt;Email&lt;/th&gt;
+                      &lt;th&gt;Asignatura&lt;/th&gt;
+                      &lt;th&gt;Plan&lt;/th&gt;
+                      &lt;th&gt;Estado&lt;/th&gt;
+                      &lt;th&gt;Acciones&lt;/th&gt;
+                    &lt;/tr&gt;
+                  &lt;/thead&gt;
+                  &lt;tbody&gt;
+                    @for (student of rawSqlStudents; track student.id) {
+                      &lt;tr&gt;
+                        &lt;td class&#x3D;&quot;mono-cell&quot;&gt;{{ student.matricula }}&lt;/td&gt;
+                        &lt;td&gt;&lt;strong&gt;{{ student.nombre }}&lt;/strong&gt;&lt;/td&gt;
+                        &lt;td&gt;{{ student.email }}&lt;/td&gt;
+                        &lt;td&gt;{{ student.asignaturaPrincipal }}&lt;/td&gt;
+                        &lt;td&gt;
+                          &lt;ion-badge [color]&#x3D;&quot;student.plan &#x3D;&#x3D;&#x3D; &#x27;Premium&#x27; ? &#x27;secondary&#x27; : (student.plan &#x3D;&#x3D;&#x3D; &#x27;Intensivo&#x27; ? &#x27;primary&#x27; : &#x27;medium&#x27;)&quot;&gt;
+                            {{ student.plan }}
+                          &lt;/ion-badge&gt;
+                        &lt;/td&gt;
+                        &lt;td&gt;
+                          &lt;ion-badge [color]&#x3D;&quot;student.estado &#x3D;&#x3D;&#x3D; &#x27;Al día&#x27; ? &#x27;success&#x27; : &#x27;warning&#x27;&quot;&gt;
+                            {{ student.estado }}
+                          &lt;/ion-badge&gt;
+                        &lt;/td&gt;
+                        &lt;td class&#x3D;&quot;actions-cell&quot;&gt;
+                          &lt;ion-button fill&#x3D;&quot;clear&quot; color&#x3D;&quot;danger&quot; size&#x3D;&quot;small&quot; (click)&#x3D;&quot;darDeBajaAlumno(student)&quot; aria-label&#x3D;&quot;Dar de baja alumno&quot;&gt;
+                            &lt;ion-icon slot&#x3D;&quot;icon-only&quot; name&#x3D;&quot;person-remove-outline&quot;&gt;&lt;/ion-icon&gt;
+                          &lt;/ion-button&gt;
+                        &lt;/td&gt;
+                      &lt;/tr&gt;
+                    }
+                  &lt;/tbody&gt;
+                &lt;/table&gt;
+              &lt;/div&gt;
+            &lt;/ion-card-content&gt;
+          &lt;/ion-card&gt;
+
+          &lt;!-- GESTIÓN DE ALTAS Y BAJAS DE PROFESORES --&gt;
+          &lt;ion-card class&#x3D;&quot;settings-management-card&quot;&gt;
+            &lt;ion-card-header class&#x3D;&quot;mgmt-card-header&quot;&gt;
+              &lt;div class&#x3D;&quot;mgmt-title-row&quot;&gt;
+                &lt;ion-icon name&#x3D;&quot;school-outline&quot; class&#x3D;&quot;mgmt-icon teachers-icon&quot;&gt;&lt;/ion-icon&gt;
+                &lt;div&gt;
+                  &lt;ion-card-title class&#x3D;&quot;mgmt-title&quot;&gt;Gestión de Profesores&lt;/ion-card-title&gt;
+                  &lt;ion-card-subtitle class&#x3D;&quot;mgmt-subtitle&quot;&gt;Altas, bajas y modificaciones de los docentes en plantilla&lt;/ion-card-subtitle&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+              &lt;ion-button fill&#x3D;&quot;solid&quot; color&#x3D;&quot;primary&quot; size&#x3D;&quot;small&quot; class&#x3D;&quot;add-btn&quot; (click)&#x3D;&quot;openAddTeacherModal()&quot;&gt;
+                &lt;ion-icon slot&#x3D;&quot;start&quot; name&#x3D;&quot;add-circle-outline&quot;&gt;&lt;/ion-icon&gt;
+                Dar de Alta Profesor
+              &lt;/ion-button&gt;
+            &lt;/ion-card-header&gt;
+            &lt;ion-card-content&gt;
+              &lt;div class&#x3D;&quot;mgmt-table-wrap&quot;&gt;
+                &lt;table class&#x3D;&quot;mgmt-table&quot;&gt;
+                  &lt;thead&gt;
+                    &lt;tr&gt;
+                      &lt;th&gt;Nombre&lt;/th&gt;
+                      &lt;th&gt;Email&lt;/th&gt;
+                      &lt;th&gt;Especialidad&lt;/th&gt;
+                      &lt;th&gt;Departamento&lt;/th&gt;
+                      &lt;th&gt;Alumnos&lt;/th&gt;
+                      &lt;th&gt;Estado&lt;/th&gt;
+                      &lt;th&gt;Acciones&lt;/th&gt;
+                    &lt;/tr&gt;
+                  &lt;/thead&gt;
+                  &lt;tbody&gt;
+                    @for (teacher of rawTeachers; track teacher.id) {
+                      &lt;tr&gt;
+                        &lt;td&gt;&lt;strong&gt;{{ teacher.nombre }}&lt;/strong&gt;&lt;/td&gt;
+                        &lt;td&gt;{{ teacher.email }}&lt;/td&gt;
+                        &lt;td&gt;{{ teacher.especialidad }}&lt;/td&gt;
+                        &lt;td&gt;
+                          &lt;ion-badge color&#x3D;&quot;tertiary&quot;&gt;{{ teacher.departamento }}&lt;/ion-badge&gt;
+                        &lt;/td&gt;
+                        &lt;td class&#x3D;&quot;center-cell&quot;&gt;{{ teacher.alumnosCount }}&lt;/td&gt;
+                        &lt;td&gt;
+                          &lt;ion-badge [color]&#x3D;&quot;teacher.estado &#x3D;&#x3D;&#x3D; &#x27;Activo&#x27; ? &#x27;success&#x27; : &#x27;primary&#x27;&quot;&gt;
+                            {{ teacher.estado }}
+                          &lt;/ion-badge&gt;
+                        &lt;/td&gt;
+                        &lt;td class&#x3D;&quot;actions-cell&quot;&gt;
+                          &lt;ion-button fill&#x3D;&quot;clear&quot; color&#x3D;&quot;danger&quot; size&#x3D;&quot;small&quot; (click)&#x3D;&quot;darDeBajaProfesor(teacher)&quot; aria-label&#x3D;&quot;Dar de baja profesor&quot;&gt;
+                            &lt;ion-icon slot&#x3D;&quot;icon-only&quot; name&#x3D;&quot;person-remove-outline&quot;&gt;&lt;/ion-icon&gt;
+                          &lt;/ion-button&gt;
+                        &lt;/td&gt;
+                      &lt;/tr&gt;
+                    }
+                  &lt;/tbody&gt;
+                &lt;/table&gt;
+              &lt;/div&gt;
+            &lt;/ion-card-content&gt;
+          &lt;/ion-card&gt;
+
+          &lt;!-- INFO ADICIONAL DEL SISTEMA --&gt;
+          &lt;ion-card class&#x3D;&quot;settings-management-card system-info-card&quot;&gt;
+            &lt;ion-card-header&gt;
+              &lt;ion-card-title class&#x3D;&quot;mgmt-title&quot;&gt;
+                &lt;ion-icon name&#x3D;&quot;information-circle-outline&quot; class&#x3D;&quot;mgmt-icon info-icon&quot;&gt;&lt;/ion-icon&gt;
+                Información del Sistema
+              &lt;/ion-card-title&gt;
+            &lt;/ion-card-header&gt;
+            &lt;ion-card-content&gt;
+              &lt;div class&#x3D;&quot;system-info-grid&quot;&gt;
+                &lt;div class&#x3D;&quot;info-box&quot;&gt;
+                  &lt;ion-icon name&#x3D;&quot;server-outline&quot;&gt;&lt;/ion-icon&gt;
+                  &lt;div&gt;
+                    &lt;h4&gt;Base de Datos de Usuarios&lt;/h4&gt;
+                    &lt;p&gt;Servidor Principal • Catálogo de {{ rawSqlStudents.length }} alumnos y {{ rawTeachers.length }} profesores&lt;/p&gt;
+                  &lt;/div&gt;
+                  &lt;ion-badge color&#x3D;&quot;success&quot;&gt;Online&lt;/ion-badge&gt;
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;info-box&quot;&gt;
+                  &lt;ion-icon name&#x3D;&quot;cloud-outline&quot;&gt;&lt;/ion-icon&gt;
+                  &lt;div&gt;
+                    &lt;h4&gt;Servicio de Registro de Sesiones&lt;/h4&gt;
+                    &lt;p&gt;Servicio en la Nube • {{ rawNoSqlSessions.length }} sesiones registradas&lt;/p&gt;
+                  &lt;/div&gt;
+                  &lt;ion-badge color&#x3D;&quot;success&quot;&gt;Online&lt;/ion-badge&gt;
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;info-box&quot;&gt;
+                  &lt;ion-icon name&#x3D;&quot;shield-checkmark-outline&quot;&gt;&lt;/ion-icon&gt;
+                  &lt;div&gt;
+                    &lt;h4&gt;Seguridad&lt;/h4&gt;
+                    &lt;p&gt;Autenticación JWT + Bcrypt • Conexión cifrada TLS&lt;/p&gt;
+                  &lt;/div&gt;
+                  &lt;ion-badge color&#x3D;&quot;primary&quot;&gt;Activa&lt;/ion-badge&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/ion-card-content&gt;
+          &lt;/ion-card&gt;
+        &lt;/section&gt;
+
+      }
+
     }
 
   &lt;/div&gt;
@@ -3563,6 +4243,11 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     .menu-btn {
       color: #0f172a;
       --color: #0f172a;
+      display: flex !important;
+      font-size: 1.4rem;
+      cursor: pointer;
+      --padding-start: 4px;
+      --padding-end: 8px;
     }
 
     .header-content {
@@ -3590,28 +4275,6 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
         @media (min-width: 768px) {
           display: inline;
-        }
-      }
-    }
-
-    .export-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      .export-btn {
-        --border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.8125rem;
-        height: 36px;
-        margin: 0;
-
-        .btn-text {
-          margin-left: 4px;
-        }
-
-        &amp;.export-pdf-btn {
-          --box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
         }
       }
     }
@@ -3822,36 +4485,130 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   }
 }
 
-/* SECCIÓN TABLA */
+/* SECCIÓN TABLA Y DESLIZADOR */
 .table-section {
   margin-top: 8px;
+
+  /* CONTROL DESLIZADOR DE CLASES CONFIRMADAS */
+  .slider-control-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+
+    @media (min-width: 640px) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .slider-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .slider-icon {
+        font-size: 1.6rem;
+        color: #2563eb;
+        flex-shrink: 0;
+      }
+
+      .slider-texts {
+        display: flex;
+        flex-direction: column;
+
+        .slider-title {
+          font-size: 0.9375rem;
+          font-weight: 700;
+          color: #0f172a;
+        }
+
+        .slider-desc {
+          font-size: 0.8125rem;
+          color: #64748b;
+        }
+      }
+    }
+
+    .slider-action-wrapper {
+      display: flex;
+      align-items: center;
+
+      .confirmed-slider-toggle {
+        --background: #e2e8f0;
+        --background-checked: #2563eb;
+        --handle-background: #ffffff;
+        --handle-background-checked: #ffffff;
+        font-weight: 600;
+        font-size: 0.8125rem;
+
+        .toggle-label-text {
+          margin-right: 10px;
+          color: #334155;
+          font-weight: 600;
+        }
+      }
+    }
+  }
 }
 
-/* TABS DEL ADMINISTRADOR (Métricas / Profesores / Alumnos) */
-.admin-tabs-wrapper {
+/* ACCIONES DE EXPORTACIÓN INFERIORES */
+.bottom-export-section {
+  margin-top: 24px;
   margin-bottom: 24px;
 
-  .admin-main-segment {
+  .bottom-export-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     background: #ffffff;
-    border: 1px solid #cbd5e1;
-    border-radius: 12px;
-    padding: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
 
-    ion-segment-button {
-      --color: #64748b;
-      --color-checked: #2563eb;
-      --indicator-color: #eff6ff;
-      --indicator-box-shadow: 0 1px 3px rgba(37, 99, 235, 0.15);
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.875rem;
-      min-height: 42px;
-      transition: all 0.2s ease;
+    @media (min-width: 768px) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-      ion-icon {
-        margin-right: 6px;
-        font-size: 1.1rem;
+    .export-card-info {
+      .export-heading {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .export-subheading {
+        margin: 4px 0 0 0;
+        font-size: 0.8125rem;
+        color: #64748b;
+      }
+    }
+
+    .export-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+
+      .export-btn-bottom {
+        --border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        height: 40px;
+        margin: 0;
+
+        &amp;.export-pdf-btn {
+          --box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
       }
     }
   }
@@ -3868,6 +4625,197 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     margin-top: 8px;
   }
 }
+
+/* SECCIÓN: AJUSTES DEL SISTEMA */
+.system-settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .settings-header-banner {
+    .page-main-heading {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .page-sub-heading {
+      margin: 6px 0 0;
+      font-size: 0.875rem;
+      color: #475569;
+    }
+  }
+}
+
+.settings-management-card {
+  margin: 0;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+
+  .mgmt-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 18px 20px;
+    border-bottom: 1px solid #f1f5f9;
+
+    .mgmt-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .mgmt-icon {
+        font-size: 1.6rem;
+        padding: 10px;
+        border-radius: 12px;
+
+        &amp;.students-icon {
+          background: #eff6ff;
+          color: #2563eb;
+        }
+        &amp;.teachers-icon {
+          background: #f0fdf4;
+          color: #16a34a;
+        }
+        &amp;.info-icon {
+          background: #fefce8;
+          color: #ca8a04;
+        }
+      }
+    }
+
+    .mgmt-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .mgmt-subtitle {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .add-btn {
+      --border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      height: 38px;
+    }
+  }
+
+  .mgmt-table-wrap {
+    overflow-x: auto;
+  }
+
+  .mgmt-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+
+    th, td {
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #334155;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #f8fafc;
+      font-weight: 700;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #64748b;
+      border-bottom-color: #e2e8f0;
+    }
+
+    .mono-cell {
+      font-family: &#x27;JetBrains Mono&#x27;, monospace;
+      font-weight: 600;
+      color: #2563eb;
+    }
+
+    .center-cell {
+      text-align: center;
+    }
+
+    .actions-cell {
+      text-align: center;
+
+      ion-button {
+        --padding-start: 6px;
+        --padding-end: 6px;
+        margin: 0;
+      }
+    }
+
+    tr:hover {
+      background: #f8fafc;
+    }
+  }
+}
+
+.system-info-card {
+  ion-card-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid #f1f5f9;
+
+    .mgmt-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+  }
+
+  .system-info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .info-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+
+      &gt; ion-icon {
+        font-size: 1.5rem;
+        color: #2563eb;
+        flex-shrink: 0;
+      }
+
+      div {
+        flex: 1;
+
+        h4 {
+          margin: 0;
+          font-size: 0.88rem;
+          font-weight: 700;
+          color: #0f172a;
+        }
+
+        p {
+          margin: 2px 0 0;
+          font-size: 0.78rem;
+          color: #64748b;
+        }
+      }
+    }
+  }
+}
+
 
 </code></pre>
     </div>
@@ -3897,7 +4845,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><!-- ENCABEZADO ACCESIBLE (WCAG Landmark: banner) --><ion-header class="ion-no-border dashboard-header" role="banner">  <ion-toolbar class="dashboard-toolbar">    <!-- Menú Hamburguesa para Móvil -->    <ion-buttons slot="start">      <ion-menu-button         autoHide="false"         aria-label="Abrir menú principal de navegación"        class="menu-btn"        tabindex="0"      ></ion-menu-button>    </ion-buttons>    <div class="header-content">      <ion-title class="dashboard-title">        Panel de Administración      </ion-title>      <span class="header-period" aria-label="Periodo académico en curso">        Gestión Integral de Alumnos, Profesores & Finanzas      </span>    </div>    <!-- ACCIONES RÁPIDAS DE EXPORTACIÓN (Header Action Group) -->    <ion-buttons slot="end" class="export-actions" role="group" aria-label="Opciones de exportación de datos">      <ion-button         fill="outline"         color="medium"         size="small"         class="export-btn"        (click)="exportToCsv()"        [disabled]="isLoading"        aria-label="Descargar datos en formato CSV limpio para Excel"        tabindex="0"      >        <ion-icon slot="start" name="download-outline" aria-hidden="true"></ion-icon>        <span class="btn-text">CSV</span>      </ion-button>      <ion-button         fill="solid"         color="primary"         size="small"         class="export-btn export-pdf-btn"        (click)="exportToPdf()"        [disabled]="isLoading"        aria-label="Generar y descargar informe corporativo en formato PDF"        tabindex="0"      >        <ion-icon slot="start" name="document-text-outline" aria-hidden="true"></ion-icon>        <span class="btn-text">Exportar PDF</span>      </ion-button>    </ion-buttons>  </ion-toolbar></ion-header><!-- CONTENIDO PRINCIPAL (WCAG Landmark: main) --><ion-content class="dashboard-content" [fullscreen]="true" role="main">  <div class="dashboard-container">    <!-- SELECTOR DE VISTAS PRINCIPALES: MÉTRICAS / LISTADO PROFESORES / LISTADO ALUMNOS -->    <div class="admin-tabs-wrapper" role="navigation" aria-label="Selector de vistas del administrador">      <ion-segment         [value]="activeTab"         (ionChange)="onTabChange($event.detail.value)"        class="admin-main-segment"      >        <ion-segment-button value="metricas">          <ion-icon name="bar-chart-outline" aria-hidden="true"></ion-icon>          <ion-label>Métricas & Sesiones</ion-label>        </ion-segment-button>        <ion-segment-button value="profesores">          <ion-icon name="school-outline" aria-hidden="true"></ion-icon>          <ion-label>Listado de Profesores ({{ rawTeachers.length }})</ion-label>        </ion-segment-button>        <ion-segment-button value="alumnos">          <ion-icon name="people-outline" aria-hidden="true"></ion-icon>          <ion-label>Listado de Alumnos ({{ rawSqlStudents.length }})</ion-label>        </ion-segment-button>      </ion-segment>    </div>    <!-- ESTADO DE CARGA ASÍNCRONO (WCAG Live Region para Screen Readers) -->    @if (isLoading) {      <div         class="loading-container"         role="status"         aria-live="polite"        aria-label="Cargando datos y sincronizando catálogo SQL y MongoDB"      >        <ion-spinner name="crescent" color="primary"></ion-spinner>        <p class="loading-text">Sincronizando 10 alumnos, 10 profesores y sesiones concurrentes...</p>      </div>    } @else {      <!-- ========================================== -->      <!-- VISTA 1: MÉTRICAS Y SESIONES               -->      <!-- ========================================== -->      @if (activeTab === \'metricas\') {        <!-- BARRA SUPERIOR DE BIENVENIDA Y FILTRADO EN TIEMPO REAL -->        <section class="control-panel-section" role="region" aria-label="Controles del panel y filtros de tiempo">          <div class="banner-content">            <div class="banner-title-box">              <h1 class="page-main-heading">Métricas de la Academia</h1>              <p class="page-sub-heading">                Tutorías especializadas de Física, Matemáticas y Química • Sincronización dual SQL y NoSQL              </p>            </div>            <!-- FILTRO DINÁMICO EN TIEMPO REAL (Segmentación por Mes) -->            <div class="filter-wrapper" role="region" aria-label="Filtro temporal de datos">              <label id="period-filter-label" class="filter-label">                <ion-icon name="filter-outline" aria-hidden="true"></ion-icon>                Filtrar Periodo:              </label>              <ion-segment                 [value]="selectedPeriod"                 (ionChange)="onFilterChange($event.detail.value)"                class="time-segment"                aria-labelledby="period-filter-label"              >                <ion-segment-button value="todos" aria-label="Mostrar todos los meses">                  <ion-label>Todos</ion-label>                </ion-segment-button>                <ion-segment-button value="septiembre" aria-label="Filtrar mes de septiembre">                  <ion-label>Sep</ion-label>                </ion-segment-button>                <ion-segment-button value="octubre" aria-label="Filtrar mes de octubre">                  <ion-label>Oct</ion-label>                </ion-segment-button>                <ion-segment-button value="noviembre" aria-label="Filtrar mes de noviembre">                  <ion-label>Nov</ion-label>                </ion-segment-button>                <ion-segment-button value="diciembre" aria-label="Filtrar mes de diciembre">                  <ion-label>Dic</ion-label>                </ion-segment-button>              </ion-segment>            </div>          </div>        </section>        <!-- KPI STAT CARDS (Métricas) -->        <section class="stats-section" role="region" aria-label="Indicadores clave de rendimiento">          <ion-grid class="ion-no-padding">            <ion-row class="stats-row">              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Ingresos del Periodo"                  [value]="kpis.ingresosTotales"                  icon="cash-outline"                  [growthPercentage]="kpis.ingresosCrecimiento"                  period="vs. periodo previo"                  iconVariant="primary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Alumnos con Sesiones"                  [value]="kpis.estudiantesActivos"                  icon="people-outline"                  [growthPercentage]="kpis.estudiantesCrecimiento"                  period="estudiantes únicos"                  iconVariant="secondary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Horas Académicas"                  [value]="kpis.horasImpartidas"                  icon="time-outline"                  [growthPercentage]="kpis.horasCrecimiento"                  period="en el aula virtual"                  iconVariant="tertiary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Tasa de Asistencia"                  [value]="kpis.tasaAsistencia"                  icon="school-outline"                  [growthPercentage]="kpis.asistenciaCrecimiento"                  period="efectividad sesiones"                  iconVariant="warning"                ></app-stat-card>              </ion-col>            </ion-row>          </ion-grid>        </section>        <!-- GRÁFICOS CHART.JS -->        <section class="charts-section" role="region" aria-label="Visualización gráfica de datos analíticos">          <ion-grid class="ion-no-padding">            <ion-row class="charts-row">              <ion-col size="12" size-lg="6" class="chart-col">                <ion-card class="chart-card">                  <ion-card-header class="chart-card-header">                    <div class="chart-header-left">                      <ion-card-title class="chart-title">                        <ion-icon name="bar-chart-outline" aria-hidden="true" class="chart-icon"></ion-icon>                        Ingresos por Asignatura                      </ion-card-title>                      <ion-card-subtitle class="chart-subtitle">                        Facturación en euros agrupada por materia en {{ selectedPeriod }}                      </ion-card-subtitle>                    </div>                    <ion-badge color="primary" class="chart-badge">Física, Mates & Química</ion-badge>                  </ion-card-header>                  <ion-card-content class="chart-card-content">                    <div class="canvas-wrapper">                      <canvas #revenueChartCanvas role="img">                        Gráfico de ingresos no disponible.                      </canvas>                    </div>                  </ion-card-content>                </ion-card>              </ion-col>              <ion-col size="12" size-lg="6" class="chart-col">                <ion-card class="chart-card">                  <ion-card-header class="chart-card-header">                    <div class="chart-header-left">                      <ion-card-title class="chart-title">                        <ion-icon name="pie-chart-outline" aria-hidden="true" class="chart-icon"></ion-icon>                        Distribución de Tutorías por Rama                      </ion-card-title>                      <ion-card-subtitle class="chart-subtitle">                        Volumen comparativo de clases impartidas                      </ion-card-subtitle>                    </div>                    <ion-badge color="tertiary" class="chart-badge">Histórico</ion-badge>                  </ion-card-header>                  <ion-card-content class="chart-card-content">                    <div class="canvas-wrapper">                      <canvas #classesChartCanvas role="img">                        Gráfico de ramas no disponible.                      </canvas>                    </div>                  </ion-card-content>                </ion-card>              </ion-col>            </ion-row>          </ion-grid>        </section>        <!-- TABLA DE SESIONES -->        <section class="table-section" role="region" aria-label="Tabla de sesiones de tutoría sincronizadas">          <app-data-table            [title]="\'Registro de Tutorías • Periodo: \' + (selectedPeriod | uppercase)"            subtitle="Datos en tiempo real de MongoDB combinados con el catálogo de tarifas SQL"            [columns]="tableColumns"            [rows]="filteredSessions"            [showActions]="true"            (onEdit)="handleEdit($event)"            (onDelete)="handleDelete($event)"            (onView)="handleView($event)"          ></app-data-table>        </section>      }      <!-- ========================================== -->      <!-- VISTA 2: LISTADO DE PROFESORES (10)         -->      <!-- ========================================== -->      @if (activeTab === \'profesores\') {        <section class="teachers-overview-section" role="region" aria-label="Censo de profesores">          <!-- KPIs RÁPIDOS PROFESORES -->          <ion-grid class="ion-no-padding">            <ion-row class="stats-row">              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Docentes en Plantilla"                  [value]="teacherKpis.totalProfesores"                  icon="school-outline"                  [growthPercentage]="10.0"                  period="profesores oficiales"                  iconVariant="primary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Total Honorarios Generados"                  [value]="teacherKpis.totalGanado"                  icon="cash-outline"                  [growthPercentage]="14.8"                  period="acumulado total"                  iconVariant="secondary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Horas Impartidas Globales"                  [value]="teacherKpis.totalHoras"                  icon="time-outline"                  [growthPercentage]="12.0"                  period="tutorías completadas"                  iconVariant="tertiary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Valoración Promedio"                  [value]="teacherKpis.valoracionMedia"                  icon="school-outline"                  [growthPercentage]="3.2"                  period="satisfacción alumnos"                  iconVariant="warning"                ></app-stat-card>              </ion-col>            </ion-row>          </ion-grid>          <!-- TABLA COMPLETA DE LOS 10 PROFESORES -->          <div class="teachers-table-box">            <app-data-table              title="Listado Oficial de Profesores y Docentes iTUTOR (10)"              subtitle="Catálogo de profesores homologados con especialidades, asignaciones lectivas y honorarios"              [columns]="teacherTableColumns"              [rows]="rawTeachers"              [showActions]="true"              (onView)="handleView($event)"              (onDelete)="handleDelete($event)"            ></app-data-table>          </div>        </section>      }      <!-- ========================================== -->      <!-- VISTA 3: LISTADO DE ALUMNOS (10)            -->      <!-- ========================================== -->      @if (activeTab === \'alumnos\') {        <section class="students-overview-section" role="region" aria-label="Censo de alumnos">          <!-- KPIs RÁPIDOS ALUMNOS -->          <ion-grid class="ion-no-padding">            <ion-row class="stats-row">              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Alumnos Matriculados"                  [value]="studentKpis.totalAlumnos"                  icon="people-outline"                  [growthPercentage]="15.0"                  period="estudiantes activos"                  iconVariant="primary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Saldo Pendiente Global"                  [value]="studentKpis.saldoPendienteTotal"                  icon="wallet-outline"                  [growthPercentage]="-5.4"                  period="cobros pendientes"                  iconVariant="warning"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Horas Totales Cursadas"                  [value]="studentKpis.horasTotalesAlumnos"                  icon="time-outline"                  [growthPercentage]="18.2"                  period="horas de aprendizaje"                  iconVariant="tertiary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Tarifa Media Aplicada"                  [value]="studentKpis.tarifaMedia"                  icon="cash-outline"                  [growthPercentage]="4.1"                  period="precio hora medio"                  iconVariant="secondary"                ></app-stat-card>              </ion-col>            </ion-row>          </ion-grid>          <!-- TABLA COMPLETA DE LOS 10 ALUMNOS -->          <div class="students-table-box">            <app-data-table              title="Listado Oficial de Alumnos Matriculados iTUTOR (10)"              subtitle="Expediente académico de estudiantes, matrículas, asignaturas contratadas y profesor tutor"              [columns]="studentTableColumns"              [rows]="rawSqlStudents"              [showActions]="true"              (onView)="handleView($event)"              (onDelete)="handleDelete($event)"            ></app-data-table>          </div>        </section>      }    }  </div></ion-content></div>'
+        var COMPONENT_TEMPLATE = '<div><!-- ENCABEZADO ACCESIBLE (WCAG Landmark: banner) --><ion-header class="ion-no-border dashboard-header" role="banner">  <ion-toolbar class="dashboard-toolbar">    <!-- Menú Hamburguesa interactivo para Escritorio y Móvil -->    <ion-buttons slot="start">      <ion-button         (click)="toggleMenu()"         aria-label="Abrir o colapsar menú principal de navegación"        class="menu-btn"        tabindex="0"      >        <ion-icon slot="icon-only" name="menu-outline"></ion-icon>      </ion-button>    </ion-buttons>    <div class="header-content">      <ion-title class="dashboard-title">        Panel de Administración      </ion-title>      <span class="header-period" aria-label="Periodo académico en curso">        Gestión Integral de Alumnos, Profesores & Finanzas      </span>    </div>  </ion-toolbar></ion-header><!-- CONTENIDO PRINCIPAL (WCAG Landmark: main) --><ion-content class="dashboard-content" [fullscreen]="true" role="main">  <div class="dashboard-container">    <!-- ESTADO DE CARGA ASÍNCRONO (WCAG Live Region para Screen Readers) -->    @if (isLoading) {      <div         class="loading-container"         role="status"         aria-live="polite"        aria-label="Cargando datos de la academia"      >        <ion-spinner name="crescent" color="primary"></ion-spinner>        <p class="loading-text">Cargando alumnos, profesores y sesiones...</p>      </div>    } @else {      <!-- ========================================== -->      <!-- VISTA 1: MÉTRICAS Y SESIONES               -->      <!-- ========================================== -->      @if (activeTab === \'metricas\') {        <!-- BARRA SUPERIOR DE BIENVENIDA Y FILTRADO EN TIEMPO REAL -->        <section class="control-panel-section" role="region" aria-label="Controles del panel y filtros de tiempo">          <div class="banner-content">            <div class="banner-title-box">              <h1 class="page-main-heading">Métricas de la Academia</h1>              <p class="page-sub-heading">                Tutorías especializadas de Física, Matemáticas y Química              </p>            </div>            <!-- FILTRO DINÁMICO EN TIEMPO REAL (Segmentación por Mes) -->            <div class="filter-wrapper" role="region" aria-label="Filtro temporal de datos">              <label id="period-filter-label" class="filter-label">                <ion-icon name="filter-outline" aria-hidden="true"></ion-icon>                Filtrar Periodo:              </label>              <ion-segment                 [value]="selectedPeriod"                 (ionChange)="onFilterChange($event.detail.value)"                class="time-segment"                aria-labelledby="period-filter-label"              >                <ion-segment-button value="todos" aria-label="Mostrar todos los meses">                  <ion-label>Todos</ion-label>                </ion-segment-button>                <ion-segment-button value="septiembre" aria-label="Filtrar mes de septiembre">                  <ion-label>Sep</ion-label>                </ion-segment-button>                <ion-segment-button value="octubre" aria-label="Filtrar mes de octubre">                  <ion-label>Oct</ion-label>                </ion-segment-button>                <ion-segment-button value="noviembre" aria-label="Filtrar mes de noviembre">                  <ion-label>Nov</ion-label>                </ion-segment-button>                <ion-segment-button value="diciembre" aria-label="Filtrar mes de diciembre">                  <ion-label>Dic</ion-label>                </ion-segment-button>              </ion-segment>            </div>          </div>        </section>        <!-- KPI STAT CARDS (Métricas) -->        <section class="stats-section" role="region" aria-label="Indicadores clave de rendimiento">          <ion-grid class="ion-no-padding">            <ion-row class="stats-row">              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Ingresos del Periodo"                  [value]="kpis.ingresosTotales"                  icon="cash-outline"                  [growthPercentage]="kpis.ingresosCrecimiento"                  period="vs. periodo previo"                  iconVariant="primary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Alumnos con Sesiones"                  [value]="kpis.estudiantesActivos"                  icon="people-outline"                  [growthPercentage]="kpis.estudiantesCrecimiento"                  period="estudiantes únicos"                  iconVariant="secondary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Horas Académicas"                  [value]="kpis.horasImpartidas"                  icon="time-outline"                  [growthPercentage]="kpis.horasCrecimiento"                  period="en el aula virtual"                  iconVariant="tertiary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Tasa de Asistencia"                  [value]="kpis.tasaAsistencia"                  icon="school-outline"                  [growthPercentage]="kpis.asistenciaCrecimiento"                  period="efectividad sesiones"                  iconVariant="warning"                ></app-stat-card>              </ion-col>            </ion-row>          </ion-grid>        </section>        <!-- GRÁFICO DE LÍNEAS CHART.JS (INGRESOS POR ASIGNATURA) -->        <section class="charts-section" role="region" aria-label="Visualización gráfica de datos analíticos">          <ion-grid class="ion-no-padding">            <ion-row class="charts-row">              <ion-col size="12" class="chart-col">                <ion-card class="chart-card">                  <ion-card-header class="chart-card-header">                    <div class="chart-header-left">                      <ion-card-title class="chart-title">                        <ion-icon name="trending-up-outline" aria-hidden="true" class="chart-icon"></ion-icon>                        Ingresos por Asignatura                      </ion-card-title>                      <ion-card-subtitle class="chart-subtitle">                        Facturación en euros agrupada por materia en {{ selectedPeriod }}                      </ion-card-subtitle>                    </div>                    <ion-badge color="primary" class="chart-badge">Física, Mates & Química</ion-badge>                  </ion-card-header>                  <ion-card-content class="chart-card-content">                    <div class="canvas-wrapper">                      <canvas #revenueChartCanvas role="img">                        Gráfico de ingresos no disponible.                      </canvas>                    </div>                  </ion-card-content>                </ion-card>              </ion-col>            </ion-row>          </ion-grid>        </section>        <!-- TABLA DE SESIONES CON DESLIZADOR PARA CLASES CONFIRMADAS -->        <section class="table-section" role="region" aria-label="Tabla de sesiones de tutoría">          <!-- CONTROL DESLIZADOR INTERACTIVO -->          <div class="slider-control-card">            <div class="slider-info">              <ion-icon name="checkmark-done-circle-outline" class="slider-icon"></ion-icon>              <div class="slider-texts">                <span class="slider-title">Filtro Deslizador: Clases Confirmadas</span>                <span class="slider-desc">Activa el deslizador para ver todas las clases confirmadas en el centro</span>              </div>            </div>            <div class="slider-action-wrapper">              <ion-toggle                 [checked]="mostrarSoloConfirmadas"                 (ionChange)="onConfirmedToggleChange($event.detail.checked)"                color="primary"                class="confirmed-slider-toggle"                aria-label="Deslizador para ver todas las clases confirmadas"              >                <span class="toggle-label-text">                  {{ mostrarSoloConfirmadas ? \'Todas las Confirmadas (\' + confirmedSessionsCount + \')\' : \'Todas las Clases (\' + totalPeriodSessionsCount + \')\' }}                </span>              </ion-toggle>            </div>          </div>          <app-data-table            [title]="\'Registro de Tutorías • Periodo: \' + (selectedPeriod | uppercase)"            subtitle="Datos en tiempo real de las clases y tutorías académicas"            [columns]="tableColumns"            [rows]="filteredSessions"            [showActions]="false"          ></app-data-table>        </section>        <!-- ACCIONES DE EXPORTACIÓN EN LA PARTE INFERIOR -->        <section class="bottom-export-section" role="region" aria-label="Exportación de informes">          <div class="bottom-export-card">            <div class="export-card-info">              <h3 class="export-heading">Exportar Registros e Informes</h3>              <p class="export-subheading">Descarga los datos del periodo en formato estructurado para contabilidad y dirección.</p>            </div>            <div class="export-card-actions">              <ion-button                 fill="outline"                 color="medium"                 size="default"                 class="export-btn-bottom"                (click)="exportToCsv()"                [disabled]="isLoading"                aria-label="Descargar datos en formato CSV limpio para Excel"              >                <ion-icon slot="start" name="download-outline" aria-hidden="true"></ion-icon>                <span>CSV</span>              </ion-button>              <ion-button                 fill="solid"                 color="primary"                 size="default"                 class="export-btn-bottom export-pdf-btn"                (click)="exportToPdf()"                [disabled]="isLoading"                aria-label="Generar y descargar informe corporativo en formato PDF"              >                <ion-icon slot="start" name="document-text-outline" aria-hidden="true"></ion-icon>                <span>Exportar PDF</span>              </ion-button>            </div>          </div>        </section>      }      <!-- ========================================== -->      <!-- VISTA 2: LISTADO DE PROFESORES (10)         -->      <!-- ========================================== -->      @if (activeTab === \'profesores\') {        <section class="teachers-overview-section" role="region" aria-label="Censo de profesores">          <!-- KPIs RÁPIDOS PROFESORES -->          <ion-grid class="ion-no-padding">            <ion-row class="stats-row">              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Docentes en Plantilla"                  [value]="teacherKpis.totalProfesores"                  icon="school-outline"                  [growthPercentage]="10.0"                  period="profesores oficiales"                  iconVariant="primary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Total Honorarios Generados"                  [value]="teacherKpis.totalGanado"                  icon="cash-outline"                  [growthPercentage]="14.8"                  period="acumulado total"                  iconVariant="secondary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Horas Impartidas Globales"                  [value]="teacherKpis.totalHoras"                  icon="time-outline"                  [growthPercentage]="12.0"                  period="tutorías completadas"                  iconVariant="tertiary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Valoración Promedio"                  [value]="teacherKpis.valoracionMedia"                  icon="school-outline"                  [growthPercentage]="3.2"                  period="satisfacción alumnos"                  iconVariant="warning"                ></app-stat-card>              </ion-col>            </ion-row>          </ion-grid>          <!-- TABLA COMPLETA DE LOS 10 PROFESORES -->          <div class="teachers-table-box">            <app-data-table              title="Listado Oficial de Profesores y Docentes iTUTOR (10)"              subtitle="Catálogo de profesores homologados con especialidades, asignaciones lectivas y honorarios"              [columns]="teacherTableColumns"              [rows]="rawTeachers"              [showActions]="true"              (onView)="handleView($event)"              (onDelete)="handleDelete($event)"            ></app-data-table>          </div>        </section>      }      <!-- ========================================== -->      <!-- VISTA 3: LISTADO DE ALUMNOS (10)            -->      <!-- ========================================== -->      @if (activeTab === \'alumnos\') {        <section class="students-overview-section" role="region" aria-label="Censo de alumnos">          <!-- KPIs RÁPIDOS ALUMNOS -->          <ion-grid class="ion-no-padding">            <ion-row class="stats-row">              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Alumnos Matriculados"                  [value]="studentKpis.totalAlumnos"                  icon="people-outline"                  [growthPercentage]="15.0"                  period="estudiantes activos"                  iconVariant="primary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Saldo Pendiente Global"                  [value]="studentKpis.saldoPendienteTotal"                  icon="wallet-outline"                  [growthPercentage]="-5.4"                  period="cobros pendientes"                  iconVariant="warning"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Horas Totales Cursadas"                  [value]="studentKpis.horasTotalesAlumnos"                  icon="time-outline"                  [growthPercentage]="18.2"                  period="horas de aprendizaje"                  iconVariant="tertiary"                ></app-stat-card>              </ion-col>              <ion-col size="12" size-sm="6" size-xl="3">                <app-stat-card                  title="Tarifa Media Aplicada"                  [value]="studentKpis.tarifaMedia"                  icon="cash-outline"                  [growthPercentage]="4.1"                  period="precio hora medio"                  iconVariant="secondary"                ></app-stat-card>              </ion-col>            </ion-row>          </ion-grid>          <!-- TABLA COMPLETA DE LOS 10 ALUMNOS -->          <div class="students-table-box">            <app-data-table              title="Listado Oficial de Alumnos Matriculados iTUTOR (10)"              subtitle="Expediente académico de estudiantes, matrículas, asignaturas contratadas y profesor tutor"              [columns]="studentTableColumns"              [rows]="rawSqlStudents"              [showActions]="true"              (onView)="handleView($event)"              (onDelete)="handleDelete($event)"            ></app-data-table>          </div>        </section>      }      <!-- ========================================== -->      <!-- VISTA 4: AJUSTES DEL SISTEMA               -->      <!-- ========================================== -->      @if (activeTab === \'ajustes\') {        <section class="system-settings-section" role="region" aria-label="Ajustes del sistema">          <div class="settings-header-banner">            <h1 class="page-main-heading">Ajustes del Sistema</h1>            <p class="page-sub-heading">Gestión de altas y bajas de alumnos y profesores del sistema iTUTOR</p>          </div>          <!-- GESTIÓN DE ALTAS Y BAJAS DE ALUMNOS -->          <ion-card class="settings-management-card">            <ion-card-header class="mgmt-card-header">              <div class="mgmt-title-row">                <ion-icon name="people-outline" class="mgmt-icon students-icon"></ion-icon>                <div>                  <ion-card-title class="mgmt-title">Gestión de Alumnos</ion-card-title>                  <ion-card-subtitle class="mgmt-subtitle">Altas, bajas y modificaciones de expedientes de estudiantes</ion-card-subtitle>                </div>              </div>              <ion-button fill="solid" color="primary" size="small" class="add-btn" (click)="openAddStudentModal()">                <ion-icon slot="start" name="add-circle-outline"></ion-icon>                Dar de Alta Alumno              </ion-button>            </ion-card-header>            <ion-card-content>              <div class="mgmt-table-wrap">                <table class="mgmt-table">                  <thead>                    <tr>                      <th>Matrícula</th>                      <th>Nombre</th>                      <th>Email</th>                      <th>Asignatura</th>                      <th>Plan</th>                      <th>Estado</th>                      <th>Acciones</th>                    </tr>                  </thead>                  <tbody>                    @for (student of rawSqlStudents; track student.id) {                      <tr>                        <td class="mono-cell">{{ student.matricula }}</td>                        <td><strong>{{ student.nombre }}</strong></td>                        <td>{{ student.email }}</td>                        <td>{{ student.asignaturaPrincipal }}</td>                        <td>                          <ion-badge [color]="student.plan === \'Premium\' ? \'secondary\' : (student.plan === \'Intensivo\' ? \'primary\' : \'medium\')">                            {{ student.plan }}                          </ion-badge>                        </td>                        <td>                          <ion-badge [color]="student.estado === \'Al día\' ? \'success\' : \'warning\'">                            {{ student.estado }}                          </ion-badge>                        </td>                        <td class="actions-cell">                          <ion-button fill="clear" color="danger" size="small" (click)="darDeBajaAlumno(student)" aria-label="Dar de baja alumno">                            <ion-icon slot="icon-only" name="person-remove-outline"></ion-icon>                          </ion-button>                        </td>                      </tr>                    }                  </tbody>                </table>              </div>            </ion-card-content>          </ion-card>          <!-- GESTIÓN DE ALTAS Y BAJAS DE PROFESORES -->          <ion-card class="settings-management-card">            <ion-card-header class="mgmt-card-header">              <div class="mgmt-title-row">                <ion-icon name="school-outline" class="mgmt-icon teachers-icon"></ion-icon>                <div>                  <ion-card-title class="mgmt-title">Gestión de Profesores</ion-card-title>                  <ion-card-subtitle class="mgmt-subtitle">Altas, bajas y modificaciones de los docentes en plantilla</ion-card-subtitle>                </div>              </div>              <ion-button fill="solid" color="primary" size="small" class="add-btn" (click)="openAddTeacherModal()">                <ion-icon slot="start" name="add-circle-outline"></ion-icon>                Dar de Alta Profesor              </ion-button>            </ion-card-header>            <ion-card-content>              <div class="mgmt-table-wrap">                <table class="mgmt-table">                  <thead>                    <tr>                      <th>Nombre</th>                      <th>Email</th>                      <th>Especialidad</th>                      <th>Departamento</th>                      <th>Alumnos</th>                      <th>Estado</th>                      <th>Acciones</th>                    </tr>                  </thead>                  <tbody>                    @for (teacher of rawTeachers; track teacher.id) {                      <tr>                        <td><strong>{{ teacher.nombre }}</strong></td>                        <td>{{ teacher.email }}</td>                        <td>{{ teacher.especialidad }}</td>                        <td>                          <ion-badge color="tertiary">{{ teacher.departamento }}</ion-badge>                        </td>                        <td class="center-cell">{{ teacher.alumnosCount }}</td>                        <td>                          <ion-badge [color]="teacher.estado === \'Activo\' ? \'success\' : \'primary\'">                            {{ teacher.estado }}                          </ion-badge>                        </td>                        <td class="actions-cell">                          <ion-button fill="clear" color="danger" size="small" (click)="darDeBajaProfesor(teacher)" aria-label="Dar de baja profesor">                            <ion-icon slot="icon-only" name="person-remove-outline"></ion-icon>                          </ion-button>                        </td>                      </tr>                    }                  </tbody>                </table>              </div>            </ion-card-content>          </ion-card>          <!-- INFO ADICIONAL DEL SISTEMA -->          <ion-card class="settings-management-card system-info-card">            <ion-card-header>              <ion-card-title class="mgmt-title">                <ion-icon name="information-circle-outline" class="mgmt-icon info-icon"></ion-icon>                Información del Sistema              </ion-card-title>            </ion-card-header>            <ion-card-content>              <div class="system-info-grid">                <div class="info-box">                  <ion-icon name="server-outline"></ion-icon>                  <div>                    <h4>Base de Datos de Usuarios</h4>                    <p>Servidor Principal • Catálogo de {{ rawSqlStudents.length }} alumnos y {{ rawTeachers.length }} profesores</p>                  </div>                  <ion-badge color="success">Online</ion-badge>                </div>                <div class="info-box">                  <ion-icon name="cloud-outline"></ion-icon>                  <div>                    <h4>Servicio de Registro de Sesiones</h4>                    <p>Servicio en la Nube • {{ rawNoSqlSessions.length }} sesiones registradas</p>                  </div>                  <ion-badge color="success">Online</ion-badge>                </div>                <div class="info-box">                  <ion-icon name="shield-checkmark-outline"></ion-icon>                  <div>                    <h4>Seguridad</h4>                    <p>Autenticación JWT + Bcrypt • Conexión cifrada TLS</p>                  </div>                  <ion-badge color="primary">Activa</ion-badge>                </div>              </div>            </ion-card-content>          </ion-card>        </section>      }    }  </div></ion-content></div>'
     var COMPONENTS = [{'name': 'AdminDashboardPage', 'selector': 'app-admin-dashboard'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'DataTableComponent', 'selector': 'app-data-table'},{'name': 'HomePage', 'selector': 'app-home'},{'name': 'LoginPage', 'selector': 'app-login'},{'name': 'MisClasesPage', 'selector': 'app-mis-clases'},{'name': 'ProfesorDashboardPage', 'selector': 'app-profesor-dashboard'},{'name': 'StatCardComponent', 'selector': 'app-stat-card'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'AdminDashboardPage'};

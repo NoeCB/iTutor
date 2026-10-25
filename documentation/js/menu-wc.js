@@ -108,6 +108,12 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <li class="link">
                                     <a href="injectables/DataService.html" data-type="entity-link" >DataService</a>
                                 </li>
+                                <li class="link">
+                                    <a href="injectables/IdlePreloadingStrategy.html" data-type="entity-link" >IdlePreloadingStrategy</a>
+                                </li>
+                                <li class="link">
+                                    <a href="injectables/SidebarService.html" data-type="entity-link" >SidebarService</a>
+                                </li>
                             </ul>
                         </li>
                     <li class="chapter">
@@ -142,6 +148,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                             <li class="link">
                                 <a href="interfaces/MongoClassSession.html" data-type="entity-link" >MongoClassSession</a>
+                            </li>
+                            <li class="link">
+                                <a href="interfaces/NetworkInformationLike.html" data-type="entity-link" >NetworkInformationLike</a>
                             </li>
                             <li class="link">
                                 <a href="interfaces/SqlStudentRate.html" data-type="entity-link" >SqlStudentRate</a>
