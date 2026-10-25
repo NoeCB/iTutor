@@ -2,19 +2,17 @@ import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef }
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { 
-  IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonButtons, 
-  IonMenuButton, 
-  IonButton, 
-  IonIcon, 
-  IonBadge, 
-  IonCard, 
-  IonCardContent
-} from '@ionic/angular';
+import { IonContent } from '@ionic/angular/ion-content';
+import { IonHeader } from '@ionic/angular/ion-header';
+import { IonTitle } from '@ionic/angular/ion-title';
+import { IonToolbar } from '@ionic/angular/ion-toolbar';
+import { IonButtons } from '@ionic/angular/ion-buttons';
+import { IonMenuButton } from '@ionic/angular/ion-menu-button';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonIcon } from '@ionic/angular/ion-icon';
+import { IonBadge } from '@ionic/angular/ion-badge';
+import { IonCard } from '@ionic/angular/ion-card';
+import { IonCardContent } from '@ionic/angular/ion-card-content';
 import { addIcons } from 'ionicons';
 import { 
   calendarOutline, 
@@ -42,6 +40,7 @@ import {
 } from 'ionicons/icons';
 import jsPDF from 'jspdf';
 import { SidebarService } from '../../core/services/sidebar.service';
+import { AuthService, User } from '../../core/services/auth.service';
 
 export interface TutoriaSession {
   day: number;
@@ -80,7 +79,7 @@ export interface TeacherConversation {
   online: boolean;
   unread: number;
   messages: {
-    sender: 'teacher' | 'student';
+    sender: 'teacher' | 'student' | 'coordinator';
     text: string;
     time: string;
   }[];
@@ -129,6 +128,16 @@ export class MisClasesPage implements OnInit {
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   public sidebarService = inject(SidebarService);
+  private authService = inject(AuthService);
+
+  get currentUser(): User | null {
+    return this.authService.currentUserValue;
+  }
+
+  get isCoordinator(): boolean {
+    const user = this.currentUser;
+    return user?.role === 'Admin' || (user?.email?.toLowerCase().includes('noelia') ?? false);
+  }
 
   toggleMenu(): void {
     this.sidebarService.toggleMenu();
@@ -153,7 +162,7 @@ export class MisClasesPage implements OnInit {
       teacher: 'Dra. Elena Ramos',
       teacherRole: 'Catedrática de Matemáticas Aplicadas',
       teacherInitials: 'ER',
-      teacherEmail: 'elena.ramos@itutor.es',
+      teacherEmail: 'elenaramos@itutor.es',
       time: '11:00 - 12:30',
       duration: '90 min',
       room: 'Aula Virtual iTUTOR • Sala HD #04',
@@ -170,7 +179,7 @@ export class MisClasesPage implements OnInit {
       teacher: 'Prof. Carlos Méndez',
       teacherRole: 'Profesor Titular de Análisis Matemático',
       teacherInitials: 'CM',
-      teacherEmail: 'carlos.mendez@itutor.es',
+      teacherEmail: 'carlosmendez@itutor.es',
       time: '17:30 - 19:00',
       duration: '90 min',
       room: 'Aula Virtual iTUTOR • Sala HD #02',
@@ -187,7 +196,7 @@ export class MisClasesPage implements OnInit {
       teacher: 'Dra. Elena Ramos',
       teacherRole: 'Profesora Titular de Ecuaciones Diferenciales',
       teacherInitials: 'ER',
-      teacherEmail: 'elena.ramos@itutor.es',
+      teacherEmail: 'elenaramos@itutor.es',
       time: '11:00 - 12:30',
       duration: '90 min',
       room: 'Aula Virtual iTUTOR • Sala Interactiva #04',
@@ -204,7 +213,7 @@ export class MisClasesPage implements OnInit {
       teacher: 'Prof. Carlos Méndez',
       teacherRole: 'Profesor Titular de Análisis y Álgebra',
       teacherInitials: 'CM',
-      teacherEmail: 'carlos.mendez@itutor.es',
+      teacherEmail: 'carlosmendez@itutor.es',
       time: '18:00 - 19:30',
       duration: '90 min',
       room: 'Aula Virtual iTUTOR • Sala HD #02',
@@ -221,7 +230,7 @@ export class MisClasesPage implements OnInit {
       teacher: 'Dra. Elena Ramos',
       teacherRole: 'Profesora Titular de Ecuaciones Diferenciales',
       teacherInitials: 'ER',
-      teacherEmail: 'elena.ramos@itutor.es',
+      teacherEmail: 'elenaramos@itutor.es',
       time: '17:00 - 18:30',
       duration: '90 min',
       room: 'Aula Virtual iTUTOR • Sala Interactiva #04',
@@ -238,7 +247,7 @@ export class MisClasesPage implements OnInit {
       teacher: 'Dra. Elena Ramos',
       teacherRole: 'Profesora Titular de Ecuaciones Diferenciales',
       teacherInitials: 'ER',
-      teacherEmail: 'elena.ramos@itutor.es',
+      teacherEmail: 'elenaramos@itutor.es',
       time: '11:00 - 12:30',
       duration: '90 min',
       room: 'Aula Virtual iTUTOR • Sala Interactiva #04',
@@ -255,7 +264,7 @@ export class MisClasesPage implements OnInit {
       teacher: 'Prof. Carlos Méndez',
       teacherRole: 'Profesor Titular de Análisis Matemático',
       teacherInitials: 'CM',
-      teacherEmail: 'carlos.mendez@itutor.es',
+      teacherEmail: 'carlosmendez@itutor.es',
       time: '18:00 - 19:30',
       duration: '90 min',
       room: 'Aula Virtual iTUTOR • Sala HD #02',
@@ -337,7 +346,93 @@ export class MisClasesPage implements OnInit {
   /** Conversaciones con los Profesores */
   selectedTeacherId = 'elena';
   newMessageText = '';
-  conversations: TeacherConversation[] = [
+
+  /** Conversaciones de coordinación entre la Jefa Coordinadora (Noelia) y los Profesores */
+  coordinatorConversations: TeacherConversation[] = [
+    {
+      id: 'elena',
+      teacherName: 'Dra. Elena Ramos',
+      subject: 'Física Teórica & Mecánica Clásica',
+      initials: 'ER',
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: 'coordinator',
+          text: 'Estimada Dra. Elena Ramos, ¿cómo avanza el seguimiento de las tutorías de Física y Mecánica este mes?',
+          time: '09:30'
+        },
+        {
+          sender: 'teacher',
+          text: 'Buenos días Noelia. Todo marcha según el plan docente. Marcos y Paula están completando las hojas de problemas y las actas de sesiones ya están cargadas en la plataforma.',
+          time: '10:05'
+        },
+        {
+          sender: 'coordinator',
+          text: 'Perfecto Elena, reviso las horas impartidas para validar los honorarios docentes de este ciclo. ¡Muchas gracias por el informe!',
+          time: '10:15'
+        },
+        {
+          sender: 'teacher',
+          text: 'A ti, Noelia. Quedo a tu disposición para cualquier ajuste o nueva asignación en el calendario.',
+          time: '10:20'
+        }
+      ]
+    },
+    {
+      id: 'carlos',
+      teacherName: 'Prof. Carlos Méndez',
+      subject: 'Cálculo Multivariable & Álgebra Lineal',
+      initials: 'CM',
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: 'coordinator',
+          text: 'Hola Carlos, confírmame por favor si has recibido la asignación de los nuevos alumnos para Cálculo y Álgebra.',
+          time: 'Ayer'
+        },
+        {
+          sender: 'teacher',
+          text: 'Hola Noelia, sí, todo recibido y verificado. Ya he fijado los horarios de tutorías en el calendario para el próximo mes.',
+          time: 'Ayer'
+        },
+        {
+          sender: 'coordinator',
+          text: 'Excelente gestión. Avisamos a los estudiantes asignados para que confirmen sus reservas.',
+          time: 'Ayer'
+        }
+      ]
+    },
+    {
+      id: 'miguel',
+      teacherName: 'Dr. Miguel Ángel Santos',
+      subject: 'Termodinámica & Mecánica de Fluidos',
+      initials: 'MS',
+      online: true,
+      unread: 1,
+      messages: [
+        {
+          sender: 'coordinator',
+          text: 'Hola Miguel Ángel, ¿se ha completado la sesión de Termodinámica de Alejandro Gómez sin incidencias?',
+          time: '08 Oct'
+        },
+        {
+          sender: 'teacher',
+          text: 'Buenas tardes Noelia, sí, sesión completada y asistencia registrada. Muy buen aprovechamiento del contenido por parte del alumno.',
+          time: '08 Oct'
+        },
+        {
+          sender: 'coordinator',
+          text: 'Magnífico. Queda validada en el registro oficial de sesiones.',
+          time: '08 Oct'
+        }
+      ]
+    }
+  ];
+
+  /** Conversaciones de la Alumna (Paula García) */
+  studentConversations: TeacherConversation[] = [
     {
       id: 'elena',
       teacherName: 'Dra. Elena Ramos',
@@ -399,6 +494,11 @@ export class MisClasesPage implements OnInit {
       ]
     }
   ];
+
+  /** Devuelve las conversaciones correspondientes al rol en sesión (Jefa Coordinadora vs Alumna) */
+  get conversations(): TeacherConversation[] {
+    return this.isCoordinator ? this.coordinatorConversations : this.studentConversations;
+  }
 
   /** Dashboard de Facturación & Pagos de Paula García */
   paymentKpis = {
@@ -561,8 +661,10 @@ export class MisClasesPage implements OnInit {
       this.selectedTeacherId = 'elena';
     } else if (teacherName.toLowerCase().includes('carlos')) {
       this.selectedTeacherId = 'carlos';
+    } else if (teacherName.toLowerCase().includes('miguel') || teacherName.toLowerCase().includes('santos')) {
+      this.selectedTeacherId = 'miguel';
     } else {
-      this.selectedTeacherId = 'noelia';
+      this.selectedTeacherId = this.isCoordinator ? 'elena' : 'noelia';
     }
     this.switchSection('mensajes');
   }
@@ -589,13 +691,21 @@ export class MisClasesPage implements OnInit {
     this.cdr.markForCheck();
   }
 
+  /** Determina si el mensaje fue enviado por el usuario actual */
+  isMyMessage(msg: { sender: string }): boolean {
+    if (this.isCoordinator) {
+      return msg.sender === 'coordinator';
+    }
+    return msg.sender === 'student';
+  }
+
   /** Envía un mensaje en tiempo real al profesor seleccionado */
   sendMessage(): void {
     const text = this.newMessageText.trim();
     if (!text) return;
 
     this.activeConversation.messages.push({
-      sender: 'student',
+      sender: this.isCoordinator ? 'coordinator' : 'student',
       text,
       time: 'Ahora'
     });

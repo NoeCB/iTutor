@@ -7,12 +7,10 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { 
-  IonCard, 
-  IonBadge, 
-  IonButton, 
-  IonIcon 
-} from '@ionic/angular';
+import { IonCard } from '@ionic/angular/ion-card';
+import { IonBadge } from '@ionic/angular/ion-badge';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonIcon } from '@ionic/angular/ion-icon';
 import { addIcons } from 'ionicons';
 import { 
   createOutline, 

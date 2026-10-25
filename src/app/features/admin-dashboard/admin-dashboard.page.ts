@@ -12,30 +12,28 @@ import {
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { 
-  IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonButtons, 
-  IonMenuButton, 
-  IonGrid, 
-  IonRow, 
-  IonCol,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardSubtitle,
-  IonCardContent,
-  IonSegment,
-  IonSegmentButton,
-  IonLabel,
-  IonButton,
-  IonIcon,
-  IonSpinner,
-  IonBadge,
-  IonToggle
-} from '@ionic/angular';
+import { IonContent } from '@ionic/angular/ion-content';
+import { IonHeader } from '@ionic/angular/ion-header';
+import { IonTitle } from '@ionic/angular/ion-title';
+import { IonToolbar } from '@ionic/angular/ion-toolbar';
+import { IonButtons } from '@ionic/angular/ion-buttons';
+import { IonMenuButton } from '@ionic/angular/ion-menu-button';
+import { IonGrid } from '@ionic/angular/ion-grid';
+import { IonRow } from '@ionic/angular/ion-row';
+import { IonCol } from '@ionic/angular/ion-col';
+import { IonCard } from '@ionic/angular/ion-card';
+import { IonCardHeader } from '@ionic/angular/ion-card-header';
+import { IonCardTitle } from '@ionic/angular/ion-card-title';
+import { IonCardSubtitle } from '@ionic/angular/ion-card-subtitle';
+import { IonCardContent } from '@ionic/angular/ion-card-content';
+import { IonSegment } from '@ionic/angular/ion-segment';
+import { IonSegmentButton } from '@ionic/angular/ion-segment-button';
+import { IonLabel } from '@ionic/angular/ion-label';
+import { IonButton } from '@ionic/angular/ion-button';
+import { IonIcon } from '@ionic/angular/ion-icon';
+import { IonSpinner } from '@ionic/angular/ion-spinner';
+import { IonBadge } from '@ionic/angular/ion-badge';
+import { IonToggle } from '@ionic/angular/ion-toggle';
 import { addIcons } from 'ionicons';
 import { 
   menuOutline,
@@ -722,7 +720,7 @@ export class AdminDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     const nuevoAlumno: SqlStudentRate = {
       id: nuevoId,
       nombre: `Nuevo Alumno ${nuevoId}`,
-      email: `alumno${nuevoId}@alumnos.nebrija.es`,
+      email: `alumno${nuevoId}@itutor.es`,
       matricula: `MAT-2026-${String(nuevoId).padStart(3, '0')}`,
       tarifaHora: 30,
       plan: 'Básico',

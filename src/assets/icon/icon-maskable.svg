@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="iTUTOR">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
+  <!-- Versión "maskable": fondo a sangre y motivo dentro de la zona segura (80 %) -->
+  <rect width="512" height="512" fill="url(#g)"/>
+  <g transform="translate(256 256) scale(0.72) translate(-256 -259)" fill="none" stroke="#ffffff" stroke-width="26" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M256 132 L428 212 L256 292 L84 212 Z"/>
+    <path d="M160 248 V330 C160 362 204 386 256 386 C308 386 352 362 352 330 V248"/>
+    <path d="M428 212 V300"/>
+  </g>
+</svg>

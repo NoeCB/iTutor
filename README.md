@@ -13,7 +13,7 @@ La aplicación cuenta con control de acceso basado en roles (`Admin`, `Teacher` 
 | Rol en el Sistema | Correo Electrónico | Contraseña | Ruta de Destino | Descripción de la Vista |
 | :--- | :--- | :--- | :--- | :--- |
 | **Administrador (Admin)** | `noeliacantador@itutor.es` | `noelia` | `/admin-dashboard` | Métricas, **Listado de Profesores (10)** y **Listado de Alumnos (10)**. *(Sin sección de apuntes)* |
-| **Profesor Docente (Teacher)** | `elena.ramos@itutor.es` | `elena` | `/portal-profesor` | **Portal Docente**: Expediente, alumnos que tiene a su cargo y **todo el dinero ganado**. |
+| **Profesor Docente (Teacher)** | `elenaramos@itutor.es` | `elena` | `/portal-profesor` | **Portal Docente**: Expediente, alumnos que tiene a su cargo y **todo el dinero ganado**. |
 | **Usuario Estándar (Alumna)** | `paulagarcia@itutor.es` | `paula` | `/mis-clases` | Portal de Alumna: Calendario interactivo, Mis Apuntes, Mensajería y Justificantes de Pago. |
 
 ---
@@ -61,7 +61,7 @@ La aplicación cuenta con control de acceso basado en roles (`Admin`, `Teacher` 
    * **Listado de Profesores (10):** Consulta el catálogo completo de los 10 profesores de iTUTOR con sus especialidades, alumnos asignados, horas dadas, total ganado y exportación de nóminas/censo.
    * **Listado de Alumnos (10):** Consulta el censo de los 10 alumnos matriculados, planes (Básico, Intensivo, Premium), profesor tutor asignado y saldos pendientes.
    * *(Nota: El rol Administrador no cuenta con sección de apuntes, centrando su panel en la gestión de docentes, alumnos y finanzas).*
-3. **Vista de Profesor (`elena.ramos@itutor.es` / `elena`):**
+3. **Vista de Profesor (`elenaramos@itutor.es` / `elena`):**
    * **Alumnos que tiene:** Tarjetas detalladas de los estudiantes asignados a su cargo, materias, horas cursadas y volumen económico generado.
    * **Todo el dinero ganado:** Desglose del total ganado en honorarios acumulados, tarifa/hora oficial y métricas de rendimiento.
    * **Histórico de clases:** Tabla interactiva de sesiones impartidas con buscador integrado.

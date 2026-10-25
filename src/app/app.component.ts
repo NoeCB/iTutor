@@ -1,22 +1,20 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { 
-  IonApp, 
-  IonSplitPane, 
-  IonMenu, 
-  IonContent, 
-  IonList, 
-  IonItem, 
-  IonIcon, 
-  IonLabel, 
-  IonRouterOutlet, 
-  IonMenuToggle, 
-  IonBadge, 
-  IonHeader, 
-  IonToolbar, 
-  IonFooter 
-} from '@ionic/angular';
+import { IonApp } from '@ionic/angular/ion-app';
+import { IonSplitPane } from '@ionic/angular/ion-split-pane';
+import { IonMenu } from '@ionic/angular/ion-menu';
+import { IonContent } from '@ionic/angular/ion-content';
+import { IonList } from '@ionic/angular/ion-list';
+import { IonItem } from '@ionic/angular/ion-item';
+import { IonIcon } from '@ionic/angular/ion-icon';
+import { IonLabel } from '@ionic/angular/ion-label';
+import { IonRouterOutlet } from '@ionic/angular/ion-router-outlet';
+import { IonMenuToggle } from '@ionic/angular/ion-menu-toggle';
+import { IonBadge } from '@ionic/angular/ion-badge';
+import { IonHeader } from '@ionic/angular/ion-header';
+import { IonToolbar } from '@ionic/angular/ion-toolbar';
+import { IonFooter } from '@ionic/angular/ion-footer';
 import { addIcons } from 'ionicons';
 import { 
   gridOutline, 
@@ -82,15 +80,13 @@ export class AppComponent {
   currentUser$ = this.authService.currentUser$;
 
   /** 
-   * Menú para el rol Administrador (Noelia Cantador).
-   * ¡IMPORTANTE!: Apuntes & Recursos ha sido eliminado según requerimiento expreso.
-   * Se añaden Listado de Profesores, Listado de Alumnos y acceso al Portal Docente.
+   * Menú para el rol Administrador (Noelia Cantador - Jefa Coordinadora).
+   * Portal del Profesor eliminado del dashboard de Noelia según especificación.
    */
   adminPages: MenuItem[] = [
     { title: 'Dashboard General', url: '/admin-dashboard', queryParams: { vista: 'metricas' }, icon: 'grid-outline' },
     { title: 'Listado de Profesores', url: '/admin-dashboard', queryParams: { vista: 'profesores' }, icon: 'school-outline', badge: '10' },
     { title: 'Listado de Alumnos', url: '/admin-dashboard', queryParams: { vista: 'alumnos' }, icon: 'people-outline', badge: '10' },
-    { title: 'Portal del Profesor', url: '/portal-profesor', icon: 'wallet-outline' },
     { title: 'Calendario Tutorías', url: '/mis-clases', icon: 'calendar-outline' },
     { title: 'Mensajes Profesores', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: '3' },
     { title: 'Facturación & Pagos', url: '/mis-pagos', icon: 'wallet-outline' }

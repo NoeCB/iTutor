@@ -13,6 +13,7 @@
     .page-title { font-size: 1.15rem; font-weight: 700; color: #0f172a; padding: 0; }
     .student-pill {
       display: none; background: #eff6ff; color: #2563eb; font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 20px;
+      &.coordinator-pill { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
       @media (min-width: 768px) { display: inline-block; }
     }
   }
@@ -155,12 +156,39 @@
 }
 .chat-window-card {
   display: flex; flex-direction: column; min-height: 440px;
-  .chat-window-header { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid #e2e8f0; h3 { margin: 0; font-size: 0.98rem; font-weight: 700; color: #0f172a; } span { font-size: 0.75rem; color: #10b981; font-weight: 600; } }
+  .chat-window-header {
+    display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid #e2e8f0;
+    .chat-header-info {
+      h3 { margin: 0; font-size: 0.98rem; font-weight: 700; color: #0f172a; }
+      span { font-size: 0.75rem; color: #10b981; font-weight: 600; }
+    }
+    .coordinator-badge-tag {
+      margin-left: auto; display: flex; align-items: center; gap: 6px; background: #eff6ff; color: #1d4ed8;
+      font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; border: 1px solid #bfdbfe;
+      ion-icon { font-size: 0.9rem; }
+    }
+  }
   .chat-messages-body {
     flex: 1; padding: 18px; background: #f8fafc; display: flex; flex-direction: column; gap: 10px;
     .message-bubble-wrap {
-      display: flex; &.mine { justify-content: flex-end; .message-bubble { background: #2563eb; color: #fff; .msg-time { color: #dbeafe; } } }
-      .message-bubble { max-width: 75%; background: #fff; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 14px; p { margin: 0 0 4px; font-size: 0.86rem; } .msg-time { font-size: 0.68rem; color: #94a3b8; display: block; text-align: right; } }
+      display: flex;
+      &.mine {
+        justify-content: flex-end;
+        .message-bubble {
+          background: #2563eb; color: #fff;
+          .msg-time { color: #dbeafe; }
+          .sender-name-label { color: #dbeafe; text-align: right; }
+        }
+      }
+      &:not(.mine) {
+        .message-bubble .sender-name-label { color: #2563eb; text-align: left; }
+      }
+      .message-bubble {
+        max-width: 75%; background: #fff; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 14px;
+        .sender-name-label { font-size: 0.68rem; font-weight: 700; display: block; margin-bottom: 3px; opacity: 0.9; }
+        p { margin: 0 0 4px; font-size: 0.86rem; }
+        .msg-time { font-size: 0.68rem; color: #94a3b8; display: block; text-align: right; }
+      }
     }
   }
   .chat-input-bar { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid #e2e8f0; input { flex: 1; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 8px 12px; font-size: 0.86rem; } }

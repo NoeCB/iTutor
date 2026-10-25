@@ -72,7 +72,7 @@ describe('AuthService', () => {
     it('debe autenticar a un profesor con el rol Teacher', () => {
       const service = crearServicio();
 
-      const user = service.authenticate('elena.ramos@itutor.es', 'elena');
+      const user = service.authenticate('elenaramos@itutor.es', 'elena');
 
       expect(user?.role).toBe('Teacher');
     });
