@@ -78,3 +78,13 @@ school-supplies-*.jpg
 ENTREGABLE_ACTIVIDAD_1_DI.tex
 *ENTREGABLE*
 *.tex
+
+MEMORIA_CASOS_DE_USO_Y_DESARROLLO.tex
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+*.toc

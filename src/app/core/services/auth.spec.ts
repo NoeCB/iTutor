@@ -10,7 +10,7 @@ import { AuthService } from './auth.service';
  */
 describe('AuthService', () => {
   /**
-   * El servicio lee `localStorage` en su constructor, por lo que cada prueba
+   * El servicio lee `sessionStorage` en su constructor, por lo que cada prueba
    * debe limpiar el almacenamiento ANTES de solicitar la instancia.
    */
   function crearServicio(): AuthService {
@@ -19,11 +19,13 @@ describe('AuthService', () => {
   }
 
   beforeEach(() => {
+    sessionStorage.clear();
     localStorage.clear();
     TestBed.resetTestingModule();
   });
 
   afterEach(() => {
+    sessionStorage.clear();
     localStorage.clear();
   });
 
@@ -93,7 +95,7 @@ describe('AuthService', () => {
 
       expect(user).toBeNull();
       expect(service.currentUserValue).toBeNull();
-      expect(localStorage.getItem('token')).toBeNull();
+      expect(sessionStorage.getItem('token')).toBeNull();
     });
 
     it('debe rechazar un correo que no existe en el sistema', () => {
@@ -110,8 +112,8 @@ describe('AuthService', () => {
 
       service.authenticate('paulagarcia@itutor.es', 'paula');
 
-      expect(localStorage.getItem('user')).not.toBeNull();
-      expect(localStorage.getItem('token')).not.toBeNull();
+      expect(sessionStorage.getItem('user')).not.toBeNull();
+      expect(sessionStorage.getItem('token')).not.toBeNull();
     });
   });
 
@@ -123,18 +125,18 @@ describe('AuthService', () => {
       service.logout();
 
       expect(service.currentUserValue).toBeNull();
-      expect(localStorage.getItem('user')).toBeNull();
-      expect(localStorage.getItem('token')).toBeNull();
+      expect(sessionStorage.getItem('user')).toBeNull();
+      expect(sessionStorage.getItem('token')).toBeNull();
     });
   });
 
-  describe('Rehidratación de sesión desde localStorage', () => {
+  describe('Rehidratación de sesión desde sessionStorage', () => {
     it('debe restaurar una sesión válida previamente guardada', () => {
-      localStorage.setItem(
+      sessionStorage.setItem(
         'user',
         JSON.stringify({ email: 'paulagarcia@itutor.es', name: 'Paula García', role: 'Standard' })
       );
-      localStorage.setItem('token', 'token-simulado');
+      sessionStorage.setItem('token', 'token-simulado');
 
       const service = crearServicio();
 
@@ -143,12 +145,12 @@ describe('AuthService', () => {
     });
 
     it('debe impedir la escalada de privilegios si se manipula el rol', () => {
-      // Un atacante edita localStorage para auto-asignarse el rol Admin.
-      localStorage.setItem(
+      // Un atacante edita sessionStorage para auto-asignarse el rol Admin.
+      sessionStorage.setItem(
         'user',
         JSON.stringify({ email: 'paulagarcia@itutor.es', name: 'Paula García', role: 'Admin' })
       );
-      localStorage.setItem('token', 'token-simulado');
+      sessionStorage.setItem('token', 'token-simulado');
 
       const service = crearServicio();
 
@@ -157,11 +159,11 @@ describe('AuthService', () => {
     });
 
     it('debe descartar una sesión de un correo inexistente', () => {
-      localStorage.setItem(
+      sessionStorage.setItem(
         'user',
         JSON.stringify({ email: 'fantasma@itutor.es', role: 'Admin' })
       );
-      localStorage.setItem('token', 'token-simulado');
+      sessionStorage.setItem('token', 'token-simulado');
 
       const service = crearServicio();
 
@@ -169,15 +171,15 @@ describe('AuthService', () => {
     });
 
     it('debe descartar un JSON corrupto sin lanzar excepciones', () => {
-      localStorage.setItem('user', '{{{no-es-json');
-      localStorage.setItem('token', 'token-simulado');
+      sessionStorage.setItem('user', '{{{no-es-json');
+      sessionStorage.setItem('token', 'token-simulado');
 
       expect(() => crearServicio()).not.toThrow();
       expect(TestBed.inject(AuthService).currentUserValue).toBeNull();
     });
 
     it('debe exigir token además de usuario para restaurar la sesión', () => {
-      localStorage.setItem(
+      sessionStorage.setItem(
         'user',
         JSON.stringify({ email: 'paulagarcia@itutor.es', role: 'Standard' })
       );
@@ -186,6 +188,32 @@ describe('AuthService', () => {
       const service = crearServicio();
 
       expect(service.currentUserValue).toBeNull();
+    });
+  });
+
+  describe('register() (formulario de registro de Profesor / Alumno)', () => {
+    it('debe registrar una alumna, iniciar sesión y permitir login posterior', () => {
+      const service = crearServicio();
+
+      const user = service.register('Ana López', 'AnaLopez@itutor.es', 'secreto1', 'Standard');
+
+      expect(user.role).toBe('Standard');
+      expect(user.email).toBe('analopez@itutor.es');
+      service.logout();
+      expect(service.authenticate('analopez@itutor.es', 'secreto1')?.role).toBe('Standard');
+    });
+
+    it('no debe guardar la contraseña en texto plano', () => {
+      const service = crearServicio();
+      service.register('Luis Profe', 'luisprofe@itutor.es', 'clave-super', 'Teacher');
+
+      expect(localStorage.getItem('itutor_registered_accounts')).not.toContain('clave-super');
+    });
+
+    it('debe rechazar un correo ya existente', () => {
+      const service = crearServicio();
+
+      expect(() => service.register('Otra', 'paulagarcia@itutor.es', 'abcdef', 'Standard')).toThrow();
     });
   });
 

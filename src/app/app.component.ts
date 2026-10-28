@@ -89,7 +89,8 @@ export class AppComponent {
     { title: 'Listado de Alumnos', url: '/admin-dashboard', queryParams: { vista: 'alumnos' }, icon: 'people-outline', badge: '10' },
     { title: 'Calendario Tutorías', url: '/mis-clases', icon: 'calendar-outline' },
     { title: 'Mensajes Profesores', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: '3' },
-    { title: 'Facturación & Pagos', url: '/mis-pagos', icon: 'wallet-outline' }
+    { title: 'Facturación & Pagos', url: '/mis-pagos', icon: 'wallet-outline' },
+    { title: 'Ajustes de Cuenta', url: '/ajustes', icon: 'settings-outline' }
   ];
 
   /** Menú específico para Rol Profesor (Teacher) */
@@ -97,7 +98,9 @@ export class AppComponent {
     { title: 'Mi Portal Docente', url: '/portal-profesor', icon: 'school-outline' },
     { title: 'Mis Alumnos & Honorarios', url: '/portal-profesor', icon: 'wallet-outline' },
     { title: 'Calendario de Clases', url: '/mis-clases', icon: 'calendar-outline' },
-    { title: 'Mensajes con Alumnos', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: '2' }
+    { title: 'Subir Apuntes & PDFs', url: '/mis-apuntes', icon: 'document-text-outline' },
+    { title: 'Mensajes con Alumnos', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: '2' },
+    { title: 'Ajustes de Cuenta', url: '/ajustes', icon: 'settings-outline' }
   ];
 
   /** Menú específico para Alumno (Paula García) */
@@ -105,7 +108,8 @@ export class AppComponent {
     { title: 'Mis Tutorías', url: '/mis-clases', icon: 'calendar-outline' },
     { title: 'Mis Apuntes', url: '/mis-apuntes', icon: 'document-text-outline', badge: '6' },
     { title: 'Mensajes con Profesores', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: '2' },
-    { title: 'Facturación & Pagos', url: '/mis-pagos', icon: 'wallet-outline' }
+    { title: 'Facturación & Pagos', url: '/mis-pagos', icon: 'wallet-outline' },
+    { title: 'Ajustes de Cuenta', url: '/ajustes', icon: 'settings-outline' }
   ];
 
   constructor() {
@@ -163,9 +167,14 @@ export class AppComponent {
     if (!email) return 'Noelia Cantador';
     if (email.toLowerCase().includes('noelia')) return 'Noelia Cantador';
     if (email.toLowerCase().includes('paula')) return 'Paula García';
-    if (email.toLowerCase().includes('elena') || email.toLowerCase().includes('profesor')) return 'Dra. Elena Ramos';
+    if (email.toLowerCase().includes('elena') || email.toLowerCase().includes('profesor')) return 'Elena Ramos';
     if (email.toLowerCase().includes('carlos')) return 'Prof. Carlos Méndez';
-    return email.split('@')[0];
+    return this.authService.currentUserValue?.name || email.split('@')[0];
+  }
+
+  /** Foto de perfil subida por el usuario (null si no ha subido ninguna) */
+  getUserAvatar(email?: string | null): string | null {
+    return this.authService.getUserAvatar(email);
   }
 
   /** Cierre de sesión y redirección */
