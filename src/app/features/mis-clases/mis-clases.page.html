@@ -9,15 +9,15 @@
     <div class="header-title-wrap">
       <ion-title class="page-title">
         @switch (activeSection) {
-          @case ('tutorias') { {{ isCoordinator ? 'Calendario General de Tutorías' : 'Mis Tutorías & Calendario' }} }
+          @case ('tutorias') { {{ isCoordinator ? 'Calendario General de Tutorías' : (isTeacher ? 'Agenda Docente & Clases Confirmadas' : 'Mis Tutorías & Calendario') }} }
           @case ('apuntes') { Mis Apuntes & Material }
-          @case ('mensajes') { {{ isCoordinator ? 'Mensajes de Profesores (Coordinación)' : 'Mensajes con Profesores' }} }
+          @case ('mensajes') { {{ isCoordinator ? 'Mensajes de Profesores (Coordinación)' : (isTeacher ? 'Mensajes con mis Alumnos' : 'Mensajes con Profesores') }} }
           @case ('pagos') { Facturación & Pagos }
           @case ('ajustes') { Ajustes de Cuenta }
         }
       </ion-title>
       <span class="student-pill" [class.coordinator-pill]="isCoordinator">
-        {{ isCoordinator ? 'Jefa Coordinadora: Noelia Cantador' : (currentUser?.name ? currentUser.role + ': ' + currentUser.name : 'Alumna: Paula García') }}
+        {{ isCoordinator ? 'Jefa Coordinadora: Noelia Cantador' : (isTeacher ? 'Profesora: ' + (currentUser?.name || 'Elena Ramos') : 'Alumna: ' + (currentUser?.name || 'Paula García')) }}
       </span>
     </div>
 
@@ -175,10 +175,21 @@
             </ion-card>
           }
 
-          <!-- Resumen rápido de próximas clases del mes -->
+          <!-- Resumen rápido de próximas clases confirmadas del mes -->
           <ion-card class="upcoming-mini-card">
             <ion-card-content>
-              <h4 class="mini-heading">Todas las sesiones de Paula en Octubre</h4>
+              <div class="mini-header-row">
+                <h4 class="mini-heading">{{ isTeacher ? 'Zona de Clases Confirmadas (Octubre)' : 'Clases Confirmadas de Paula en Octubre' }}</h4>
+                @if (isTeacher) {
+                  <ion-button size="small" class="schedule-inline-btn" (click)="openScheduleModal()">
+                    <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+                    Agendar Clase
+                  </ion-button>
+                }
+              </div>
+              @if (scheduleSuccessMsg) {
+                <div class="schedule-inline-success">{{ scheduleSuccessMsg }}</div>
+              }
               <div class="mini-list">
                 @for (s of allMonthSessions; track s.day) {
                   <button
@@ -199,6 +210,58 @@
           </ion-card>
         </div>
       </div>
+
+      <!-- VENTANA EMERGENTE (MODAL) PARA AGENDAR CLASE DESDE CALENDARIO DOCENTE -->
+      @if (showScheduleModal) {
+        <div class="modal-backdrop" (click)="closeScheduleModal()" role="dialog" aria-modal="true">
+          <div class="schedule-modal-card" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+              <div>
+                <h3>Agendar Nueva Clase</h3>
+                <p>Selecciona uno de tus alumnos asignados y la fecha/hora en el calendario</p>
+              </div>
+              <button type="button" class="modal-close-btn" (click)="closeScheduleModal()">
+                <ion-icon name="close-outline"></ion-icon>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="modal-field">
+                <label>¿A qué alumno quieres darle la clase? (Solo alumnos asignados)</label>
+                <select class="modal-select" [(ngModel)]="scheduleForm.studentEmail" (ngModelChange)="onScheduleStudentChange()">
+                  @for (st of teacherAssignedStudents; track st.email) {
+                    <option [value]="st.email">{{ st.nombre }} — {{ st.asignaturaPrincipal }}</option>
+                  }
+                </select>
+              </div>
+              <div class="modal-field">
+                <label>Asignatura</label>
+                <input type="text" class="modal-input" [(ngModel)]="scheduleForm.subject" />
+              </div>
+              <div class="modal-row-2col">
+                <div class="modal-field">
+                  <label>Fecha (Calendario)</label>
+                  <input type="date" class="modal-input" [(ngModel)]="scheduleForm.date" />
+                </div>
+                <div class="modal-field">
+                  <label>Hora</label>
+                  <input type="time" class="modal-input" [(ngModel)]="scheduleForm.time" />
+                </div>
+              </div>
+              <div class="modal-field">
+                <label>Tema / Notas</label>
+                <input type="text" class="modal-input" [(ngModel)]="scheduleForm.topic" />
+              </div>
+              @if (scheduleErrorMsg) {
+                <p class="modal-error">{{ scheduleErrorMsg }}</p>
+              }
+            </div>
+            <div class="modal-footer">
+              <ion-button fill="outline" color="medium" (click)="closeScheduleModal()">Cancelar</ion-button>
+              <ion-button color="primary" (click)="confirmScheduleClass()">Confirmar Clase</ion-button>
+            </div>
+          </div>
+        </div>
+      }
     }
 
     <!-- =======================================================================
@@ -207,10 +270,51 @@
     @if (activeSection === 'apuntes') {
       <div class="section-banner">
         <div>
-          <h1 class="main-heading">Mis Apuntes & Material de Clase</h1>
-          <p class="sub-heading">Repositorio personal de Paula García con apuntes, pizarras digitales y boletines resueltos por tus profesores.</p>
+          <h1 class="main-heading">
+            {{ isTeacher ? 'Gestión de Apuntes y Archivos de la Profesora' : 'Mis Apuntes & Material de Clase' }}
+          </h1>
+          <p class="sub-heading">
+            {{ isTeacher ? 'Sube cualquier PDF o documento desde tu ordenador para compartirlo al instante con tu alumna Paula García.' : 'Repositorio personal de Paula García con apuntes, PDFs y documentos subidos por tu profesora Elena Ramos.' }}
+          </p>
+        </div>
+
+        <div class="notes-header-actions">
+          @if (!isCoordinator) {
+            <div class="chat-role-switcher">
+              <span class="switcher-label">Modo:</span>
+              <button
+                type="button"
+                class="role-switch-btn"
+                [class.active]="isTeacher"
+                (click)="switchChatRole('elena')"
+              >
+                Profesora Elena
+              </button>
+              <button
+                type="button"
+                class="role-switch-btn"
+                [class.active]="!isTeacher"
+                (click)="switchChatRole('paula')"
+              >
+                Alumna Paula
+              </button>
+            </div>
+          }
+
+          @if (isTeacher || isCoordinator) {
+            <ion-button class="upload-pdf-btn" (click)="openUploadNoteModal()">
+              <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+              Subir PDF / Archivo
+            </ion-button>
+          }
         </div>
       </div>
+
+      @if (uploadNoteSuccess) {
+        <div class="schedule-inline-success" role="status">
+          {{ uploadNoteSuccess }}
+        </div>
+      }
 
       <!-- Filtros por asignatura -->
       <div class="filter-chips">
@@ -234,22 +338,117 @@
                 <div class="doc-icon">
                   <ion-icon name="document-text-outline"></ion-icon>
                 </div>
-                <ion-badge color="primary">{{ note.subject }}</ion-badge>
+                <div class="note-badges">
+                  @if (note.fileDataUrl) {
+                    <ion-badge color="success">Archivo subido</ion-badge>
+                  }
+                  <ion-badge color="primary">{{ note.subject }}</ion-badge>
+                </div>
               </div>
               <h3 class="note-title">{{ note.title }}</h3>
               <p class="note-summary">{{ note.summary }}</p>
               <div class="note-meta">
                 <span><ion-icon name="person-outline"></ion-icon> {{ note.teacher }}</span>
-                <span>{{ note.date }} • {{ note.pages }} págs ({{ note.size }})</span>
+                <span>{{ note.date }} • {{ note.fileName ? note.fileName + ' (' + note.size + ')' : note.pages + ' págs (' + note.size + ')' }}</span>
               </div>
-              <ion-button expand="block" fill="outline" class="download-note-btn" (click)="downloadNotePdf(note)">
-                <ion-icon name="download-outline" slot="start"></ion-icon>
-                Descargar Apuntes en PDF
-              </ion-button>
+              @if (note.fileDataUrl) {
+                <div class="note-actions-row">
+                  <ion-button expand="block" class="download-note-btn" (click)="viewUploadedNote(note)">
+                    <ion-icon name="eye-outline" slot="start"></ion-icon>
+                    Ver PDF / Archivo
+                  </ion-button>
+                  <ion-button expand="block" fill="outline" class="download-note-btn" (click)="downloadNotePdf(note)">
+                    <ion-icon name="download-outline" slot="start"></ion-icon>
+                    Descargar
+                  </ion-button>
+                </div>
+              } @else {
+                <ion-button expand="block" fill="outline" class="download-note-btn" (click)="downloadNotePdf(note)">
+                  <ion-icon name="download-outline" slot="start"></ion-icon>
+                  Descargar Apuntes en PDF
+                </ion-button>
+              }
             </ion-card-content>
           </ion-card>
         }
       </div>
+
+      <!-- VENTANA EMERGENTE PARA QUE LA PROFESORA SUBA CUALQUIER PDF O ARCHIVO -->
+      @if (showUploadNoteModal) {
+        <div class="modal-backdrop" (click)="closeUploadNoteModal()" role="dialog" aria-modal="true">
+          <div class="schedule-modal-card" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+              <div>
+                <h3>Subir PDF o Archivo para Alumnos</h3>
+                <p>Profesora: <strong>{{ currentUser?.name || 'Elena Ramos' }}</strong> • Visible al instante para Paula</p>
+              </div>
+              <button type="button" class="modal-close-btn" (click)="closeUploadNoteModal()">
+                <ion-icon name="close-outline"></ion-icon>
+              </button>
+            </div>
+
+            <div class="modal-body">
+              <div class="modal-field">
+                <label>Selecciona cualquier archivo PDF o documento de tu ordenador</label>
+                <input
+                  type="file"
+                  accept=".pdf,application/pdf,*/*"
+                  class="modal-input"
+                  (change)="onNoteFileSelected($event)"
+                />
+                @if (uploadNoteForm.fileName) {
+                  <small style="color:#16a34a; font-weight:600;">
+                    Archivo cargado: {{ uploadNoteForm.fileName }} ({{ uploadNoteForm.fileSize }})
+                  </small>
+                }
+              </div>
+
+              <div class="modal-field">
+                <label>Título del material</label>
+                <input
+                  type="text"
+                  class="modal-input"
+                  placeholder="Ej. Ejercicios Resueltos Tema 5"
+                  [(ngModel)]="uploadNoteForm.title"
+                />
+              </div>
+
+              <div class="modal-field">
+                <label>Asignatura</label>
+                <select class="modal-select" [(ngModel)]="uploadNoteForm.subject">
+                  <option value="Ecuaciones Diferenciales">Ecuaciones Diferenciales</option>
+                  <option value="Cálculo Multivariable">Cálculo Multivariable</option>
+                  <option value="Álgebra Lineal">Álgebra Lineal</option>
+                </select>
+              </div>
+
+              <div class="modal-field">
+                <label>Descripción o comentario para Paula</label>
+                <input
+                  type="text"
+                  class="modal-input"
+                  placeholder="Ej. Repasar antes de la próxima tutoría"
+                  [(ngModel)]="uploadNoteForm.summary"
+                />
+              </div>
+
+              @if (uploadNoteError) {
+                <p class="modal-error">{{ uploadNoteError }}</p>
+              }
+            </div>
+
+            <div class="modal-footer">
+              <ion-button fill="outline" color="medium" (click)="closeUploadNoteModal()">
+                Cancelar
+              </ion-button>
+              <ion-button color="primary" (click)="confirmUploadNote()">
+                <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+                Subir y Compartir con Paula
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      }
     }
 
     <!-- =======================================================================
@@ -258,16 +457,41 @@
     @if (activeSection === 'mensajes') {
       <div class="section-banner">
         <div>
-          <h1 class="main-heading">{{ isCoordinator ? 'Mensajes con el Claustro de Profesores' : 'Mensajes con mis Profesores' }}</h1>
-          <p class="sub-heading">{{ isCoordinator ? 'Canal oficial de coordinación académica entre la Jefa Coordinadora (Noelia Cantador) y los profesores de iTUTOR.' : 'Canal directo de tutoría y resolución de dudas con tus profesores de iTUTOR.' }}</p>
+          <h1 class="main-heading">
+            {{ isCoordinator ? 'Mensajes con el Claustro de Profesores' : (isTeacher ? 'Mensajes de la Profesora Elena con sus Alumnos' : 'Mensajes de Paula con sus Profesores') }}
+          </h1>
+          <p class="sub-heading">
+            {{ isCoordinator ? 'Canal oficial de coordinación académica entre la Jefa Coordinadora (Noelia Cantador) y los profesores de iTUTOR.' : (isTeacher ? 'Estás en el perfil de profesora de Elena Ramos. Escribe a tu alumna Paula García o a tus alumnos asignados en tiempo real.' : 'Estás en el perfil de alumna de Paula García. Chatea en directo con tu profesora Elena Ramos.') }}
+          </p>
         </div>
+        @if (!isCoordinator) {
+          <div class="chat-role-switcher">
+            <span class="switcher-label">Probar chat como:</span>
+            <button
+              type="button"
+              class="role-switch-btn"
+              [class.active]="isTeacher"
+              (click)="switchChatRole('elena')"
+            >
+              Profesora Elena
+            </button>
+            <button
+              type="button"
+              class="role-switch-btn"
+              [class.active]="!isTeacher"
+              (click)="switchChatRole('paula')"
+            >
+              Alumna Paula
+            </button>
+          </div>
+        }
       </div>
 
       <div class="chat-layout">
-        <!-- Lista de profesores -->
+        <!-- Lista de contactos según el rol -->
         <ion-card class="teachers-list-card">
           <ion-card-content>
-            <h3 class="chat-side-title">{{ isCoordinator ? 'Claustro de Profesores' : 'Tus Profesores' }}</h3>
+            <h3 class="chat-side-title">{{ isCoordinator ? 'Claustro de Profesores' : (isTeacher ? 'Mis Alumnos Asignados' : 'Tus Profesores') }}</h3>
             @for (conv of conversations; track conv.id) {
               <button
                 type="button"
@@ -306,6 +530,16 @@
                 <ion-icon name="shield-checkmark-outline"></ion-icon>
                 <span>Jefa Coordinadora: Noelia Cantador</span>
               </div>
+            } @else if (isTeacher) {
+              <div class="coordinator-badge-tag teacher-tag">
+                <ion-icon name="school-outline"></ion-icon>
+                <span>Conectada como: Elena Ramos (Profesora)</span>
+              </div>
+            } @else {
+              <div class="coordinator-badge-tag student-tag">
+                <ion-icon name="person-outline"></ion-icon>
+                <span>Conectada como: Paula García (Alumna)</span>
+              </div>
             }
           </div>
 
@@ -313,11 +547,15 @@
             @for (msg of activeConversation.messages; track $index) {
               <div class="message-bubble-wrap" [class.mine]="isMyMessage(msg)">
                 <div class="message-bubble">
-                  @if (isCoordinator) {
-                    <span class="sender-name-label">
+                  <span class="sender-name-label">
+                    @if (isCoordinator) {
                       {{ isMyMessage(msg) ? 'Noelia Cantador (Jefa Coordinadora)' : activeConversation.teacherName }}
-                    </span>
-                  }
+                    } @else if (isTeacher) {
+                      {{ isMyMessage(msg) ? 'Elena Ramos (Profesora - Tú)' : activeConversation.teacherName + ' (Alumna)' }}
+                    } @else {
+                      {{ isMyMessage(msg) ? 'Paula García (Alumna - Tú)' : activeConversation.teacherName + ' (Profesora)' }}
+                    }
+                  </span>
                   <p>{{ msg.text }}</p>
                   <span class="msg-time">{{ msg.time }}</span>
                 </div>
@@ -328,7 +566,7 @@
           <div class="chat-input-bar">
             <input
               type="text"
-              [placeholder]="isCoordinator ? 'Escribe un mensaje como Jefa Coordinadora Noelia a ' + activeConversation.teacherName + '...' : 'Escribe un mensaje a ' + activeConversation.teacherName + '...'"
+              [placeholder]="isCoordinator ? 'Escribe un mensaje como Noelia a ' + activeConversation.teacherName + '...' : (isTeacher ? 'Escribe como Elena (Profesora) a ' + activeConversation.teacherName + '...' : 'Escribe como Paula (Alumna) a ' + activeConversation.teacherName + '...')"
               [(ngModel)]="newMessageText"
               (keyup.enter)="sendMessage()"
             />
@@ -466,46 +704,221 @@
     }
 
     <!-- =======================================================================
-         SECCIÓN 5: AJUSTES DE CUENTA
+         SECCIÓN 5: AJUSTES DE CUENTA (FOTO SUBIDA POR EL USUARIO, DATOS BLOQUEADOS Y ELIMINAR CUENTA)
          ======================================================================= -->
     @if (activeSection === 'ajustes') {
       <div class="section-banner">
         <div>
           <h1 class="main-heading">Ajustes de Cuenta</h1>
-          <p class="sub-heading">Datos académicos y preferencias de notificaciones de Paula García.</p>
+          <p class="sub-heading">
+            Sube tu propia foto de perfil, consulta tus datos personales verificados (no modificables) o gestiona la baja de tu cuenta.
+          </p>
         </div>
+        @if (!isCoordinator) {
+          <div class="chat-role-switcher">
+            <span class="switcher-label">Ver ajustes de:</span>
+            <button
+              type="button"
+              class="role-switch-btn"
+              [class.active]="isTeacher"
+              (click)="switchChatRole('elena')"
+            >
+              Profesora Elena
+            </button>
+            <button
+              type="button"
+              class="role-switch-btn"
+              [class.active]="!isTeacher"
+              (click)="switchChatRole('paula')"
+            >
+              Alumna Paula
+            </button>
+          </div>
+        }
       </div>
 
+      @if (settingsSavedMsg) {
+        <div class="schedule-inline-success" role="status">
+          {{ settingsSavedMsg }}
+        </div>
+      }
+
+      <!-- 1. TARJETA DE FOTO DE PERFIL SUBIDA POR EL USUARIO -->
       <ion-card class="settings-card">
         <ion-card-content>
           <div class="profile-summary-row">
-            <div class="big-avatar">PG</div>
-            <div>
-              <h2>Paula García</h2>
-              <p>paulagarcia&#64;itutor.es • Matrícula: MAT-2026-089</p>
-              <ion-badge color="tertiary">Alumna • Plan Intensivo Ciencias</ion-badge>
+            <div class="big-avatar" style="overflow:hidden; position:relative;">
+              @if (userUploadedAvatar; as avatar) {
+                <img [src]="avatar" alt="Foto de perfil subida por el usuario" style="width:100%; height:100%; object-fit:cover; border-radius:50%;" />
+              } @else {
+                {{ userInitialsForSettings }}
+              }
             </div>
-          </div>
-          <div class="settings-grid">
-            <div class="setting-box">
-              <ion-icon name="notifications-outline"></ion-icon>
-              <div>
-                <h4>Recordatorios de Tutoría</h4>
-                <p>Aviso automático 30 minutos antes de cada clase de Ecuaciones Diferenciales y Cálculo.</p>
+            <div class="profile-photo-controls">
+              <h2>{{ lockedProfileData.firstName }} {{ lockedProfileData.lastName }}</h2>
+              <p>{{ lockedProfileData.email }} • {{ lockedProfileData.roleLabel }}</p>
+              <div class="photo-upload-actions">
+                <label class="upload-photo-label">
+                  <ion-icon name="camera-outline"></ion-icon>
+                  <span>Subir mi foto de perfil</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style="display:none;"
+                    (change)="onUserPhotoSelected($event)"
+                  />
+                </label>
+                @if (userUploadedAvatar) {
+                  <button type="button" class="remove-photo-btn" (click)="removeUserPhoto()">
+                    Quitar foto
+                  </button>
+                }
               </div>
-              <ion-badge color="success">Activo</ion-badge>
-            </div>
-            <div class="setting-box">
-              <ion-icon name="shield-checkmark-outline"></ion-icon>
-              <div>
-                <h4>Seguridad de la Cuenta</h4>
-                <p>Contraseña protegida mediante hash Bcrypt y sesión activa con token JWT.</p>
-              </div>
-              <ion-badge color="primary">Protegida</ion-badge>
+              <small class="photo-helper-text">
+                Cada persona sube su propia foto desde su dispositivo (formatos JPG, PNG o WebP).
+              </small>
             </div>
           </div>
         </ion-card-content>
       </ion-card>
+
+      <!-- 2. FORMULARIO DE DATOS PERSONALES (NOMBRE, APELLIDOS Y FECHA DE NACIMIENTO NO MODIFICABLES) -->
+      <ion-card class="settings-card">
+        <ion-card-content>
+          <div class="locked-header-box">
+            <h3 class="card-section-title">Datos Personales del Expediente</h3>
+            <span class="locked-pill">
+              <ion-icon name="lock-closed-outline"></ion-icon>
+              Datos verificados • No modificables
+            </span>
+          </div>
+          <p class="locked-notice-text">
+            El <strong>nombre</strong>, los <strong>apellidos</strong> y la <strong>fecha de nacimiento</strong> están protegidos por registro académico y <strong>no se pueden modificar</strong>.
+          </p>
+
+          <div class="locked-fields-grid">
+            <div class="locked-field-item">
+              <label>
+                Nombre
+                <span class="field-lock-tag"><ion-icon name="lock-closed-outline"></ion-icon> Bloqueado</span>
+              </label>
+              <input
+                type="text"
+                class="locked-input"
+                [value]="lockedProfileData.firstName"
+                readonly
+                disabled
+              />
+            </div>
+
+            <div class="locked-field-item">
+              <label>
+                Apellidos
+                <span class="field-lock-tag"><ion-icon name="lock-closed-outline"></ion-icon> Bloqueado</span>
+              </label>
+              <input
+                type="text"
+                class="locked-input"
+                [value]="lockedProfileData.lastName"
+                readonly
+                disabled
+              />
+            </div>
+
+            <div class="locked-field-item">
+              <label>
+                Fecha de Nacimiento
+                <span class="field-lock-tag"><ion-icon name="lock-closed-outline"></ion-icon> Bloqueado</span>
+              </label>
+              <input
+                type="text"
+                class="locked-input"
+                [value]="lockedProfileData.birthDate"
+                readonly
+                disabled
+              />
+            </div>
+
+            <div class="locked-field-item">
+              <label>
+                Correo Electrónico
+                <span class="field-lock-tag"><ion-icon name="lock-closed-outline"></ion-icon> Bloqueado</span>
+              </label>
+              <input
+                type="text"
+                class="locked-input"
+                [value]="lockedProfileData.email"
+                readonly
+                disabled
+              />
+            </div>
+
+            <div class="locked-field-item">
+              <label>Teléfono de Contacto (Editable)</label>
+              <input
+                type="text"
+                class="editable-input"
+                [(ngModel)]="settingsPhone"
+              />
+            </div>
+          </div>
+
+          <div style="margin-top:14px; display:flex; justify-content:flex-end;">
+            <ion-button size="small" (click)="saveContactPreferences()">
+              Guardar preferencias de contacto
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- 3. ZONA DE PELIGRO: ELIMINAR LA CUENTA -->
+      <ion-card class="settings-card danger-zone-card">
+        <ion-card-content>
+          <div class="danger-zone-row">
+            <div>
+              <h3 class="danger-title">Eliminar Cuenta de iTUTOR</h3>
+              <p class="danger-desc">
+                Si ya no deseas continuar en la plataforma, puedes eliminar tu cuenta definitivamente. Se cerrará tu sesión y tus credenciales dejarán de estar activas.
+              </p>
+            </div>
+            <ion-button color="danger" (click)="openDeleteAccountModal()">
+              <ion-icon name="trash-outline" slot="start"></ion-icon>
+              Eliminar mi cuenta
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- MODAL DE CONFIRMACIÓN PARA ELIMINAR LA CUENTA -->
+      @if (showDeleteAccountModal) {
+        <div class="modal-backdrop" (click)="closeDeleteAccountModal()" role="dialog" aria-modal="true">
+          <div class="schedule-modal-card" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+              <div>
+                <h3 style="color:#dc2626;">¿Eliminar tu cuenta definitivamente?</h3>
+                <p>Usuario: <strong>{{ lockedProfileData.firstName }} {{ lockedProfileData.lastName }}</strong> ({{ lockedProfileData.email }})</p>
+              </div>
+              <button type="button" class="modal-close-btn" (click)="closeDeleteAccountModal()">
+                <ion-icon name="close-outline"></ion-icon>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p style="margin:0; font-size:0.9rem; color:#334155; line-height:1.5;">
+                Esta acción eliminará tu cuenta de <strong>iTUTOR</strong>, borrará tu foto de perfil y cerrará tu sesión inmediatamente, redirigiéndote a la pantalla de acceso.
+              </p>
+            </div>
+            <div class="modal-footer">
+              <ion-button fill="outline" color="medium" (click)="closeDeleteAccountModal()">
+                Cancelar
+              </ion-button>
+              <ion-button color="danger" (click)="confirmDeleteAccount()">
+                <ion-icon name="trash-outline" slot="start"></ion-icon>
+                Sí, eliminar mi cuenta
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      }
     }
 
   </div>

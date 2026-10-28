@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { ScheduleService, ScheduledClass } from './schedule.service';
 import { Observable, forkJoin, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 
@@ -16,6 +17,8 @@ export interface SqlStudentRate {
   horasTotales: number;
   telefono: string;
   estado: 'Al día' | 'Pendiente' | 'Activo';
+  /** Email del profesor asignado (presente en los alumnos dados de alta por registro) */
+  profesorEmail?: string;
 }
 
 /** Interfaz representativa de entidad Profesor en el sistema iTUTOR */
@@ -75,7 +78,7 @@ export class DataService {
       tarifaHora: 30,
       plan: 'Intensivo',
       asignaturaPrincipal: 'Física Clásica & Mecánica',
-      profesorAsignado: 'Dra. Elena Ramos',
+      profesorAsignado: 'Elena Ramos',
       saldoPendiente: 0,
       horasTotales: 18,
       telefono: '+34 600 111 222',
@@ -103,7 +106,7 @@ export class DataService {
       tarifaHora: 30,
       plan: 'Intensivo',
       asignaturaPrincipal: 'Termodinámica & Fluidos',
-      profesorAsignado: 'Dr. Miguel Ángel Santos',
+      profesorAsignado: 'Miguel Ángel Santos',
       saldoPendiente: 0,
       horasTotales: 15,
       telefono: '+34 600 333 444',
@@ -131,7 +134,7 @@ export class DataService {
       tarifaHora: 35,
       plan: 'Premium',
       asignaturaPrincipal: 'Electromagnetismo Avanzado',
-      profesorAsignado: 'Dr. Fernando Alonso',
+      profesorAsignado: 'Fernando Alonso',
       saldoPendiente: 110,
       horasTotales: 20,
       telefono: '+34 600 555 666',
@@ -173,7 +176,7 @@ export class DataService {
       tarifaHora: 32,
       plan: 'Premium',
       asignaturaPrincipal: 'Estadística & Análisis Numérico',
-      profesorAsignado: 'Dra. Carmen Delgado',
+      profesorAsignado: 'Carmen Delgado',
       saldoPendiente: 0,
       horasTotales: 24,
       telefono: '+34 600 888 999',
@@ -187,7 +190,7 @@ export class DataService {
       tarifaHora: 38,
       plan: 'Intensivo',
       asignaturaPrincipal: 'Mecánica Cuántica & Partículas',
-      profesorAsignado: 'Dra. Natalia Molina',
+      profesorAsignado: 'Natalia Molina',
       saldoPendiente: 76,
       horasTotales: 14,
       telefono: '+34 600 999 000',
@@ -201,7 +204,7 @@ export class DataService {
       tarifaHora: 35,
       plan: 'Premium',
       asignaturaPrincipal: 'Astrofísica & Cinemática',
-      profesorAsignado: 'Dra. Elena Ramos',
+      profesorAsignado: 'Elena Ramos',
       saldoPendiente: 0,
       horasTotales: 26,
       telefono: '+34 611 000 111',
@@ -213,7 +216,7 @@ export class DataService {
   private readonly TEACHERS_CATALOG: TeacherRecord[] = [
     {
       id: 201,
-      nombre: 'Dra. Elena Ramos',
+      nombre: 'Elena Ramos',
       email: 'elenaramos@itutor.es',
       especialidad: 'Física Teórica & Mecánica Clásica',
       departamento: 'Física',
@@ -243,7 +246,7 @@ export class DataService {
     },
     {
       id: 203,
-      nombre: 'Dr. Miguel Ángel Santos',
+      nombre: 'Miguel Ángel Santos',
       email: 'miguelsantos@itutor.es',
       especialidad: 'Termodinámica & Mecánica de Fluidos',
       departamento: 'Física',
@@ -273,7 +276,7 @@ export class DataService {
     },
     {
       id: 205,
-      nombre: 'Dr. Fernando Alonso',
+      nombre: 'Fernando Alonso',
       email: 'fernandoalonso@itutor.es',
       especialidad: 'Electromagnetismo Avanzado & Circuitos',
       departamento: 'Física',
@@ -288,7 +291,7 @@ export class DataService {
     },
     {
       id: 206,
-      nombre: 'Dra. Carmen Delgado',
+      nombre: 'Carmen Delgado',
       email: 'carmendelgado@itutor.es',
       especialidad: 'Estadística Aplicada & Probabilidad Bayesiana',
       departamento: 'Matemáticas',
@@ -318,7 +321,7 @@ export class DataService {
     },
     {
       id: 208,
-      nombre: 'Dra. Natalia Molina',
+      nombre: 'Natalia Molina',
       email: 'nataliamolina@itutor.es',
       especialidad: 'Física Cuántica & Partículas Subatómicas',
       departamento: 'Física',
@@ -348,7 +351,7 @@ export class DataService {
     },
     {
       id: 210,
-      nombre: 'Dra. Patricia Serrano',
+      nombre: 'Patricia Serrano',
       email: 'patriciaserrano@itutor.es',
       especialidad: 'Astrofísica, Óptica & Ondas Gravitacionales',
       departamento: 'Física',
@@ -372,7 +375,7 @@ export class DataService {
       estudianteNombre: 'Marcos Vega Ortiz',
       materia: 'Física Clásica',
       rama: 'Física',
-      tutor: 'Dra. Elena Ramos',
+      tutor: 'Elena Ramos',
       fecha: '2026-09-18 16:30',
       mes: 'septiembre',
       duracionMin: 90,
@@ -417,7 +420,7 @@ export class DataService {
       estudianteNombre: 'Paula García Serrano',
       materia: 'Astrofísica & Cinemática',
       rama: 'Física',
-      tutor: 'Dra. Elena Ramos',
+      tutor: 'Elena Ramos',
       fecha: '2026-09-28 17:00',
       mes: 'septiembre',
       duracionMin: 90,
@@ -434,7 +437,7 @@ export class DataService {
       estudianteNombre: 'Marcos Vega Ortiz',
       materia: 'Física Clásica',
       rama: 'Física',
-      tutor: 'Dra. Elena Ramos',
+      tutor: 'Elena Ramos',
       fecha: '2026-10-02 16:30',
       mes: 'octubre',
       duracionMin: 90,
@@ -464,7 +467,7 @@ export class DataService {
       estudianteNombre: 'Alejandro Gómez Soto',
       materia: 'Termodinámica',
       rama: 'Física',
-      tutor: 'Dr. Miguel Ángel Santos',
+      tutor: 'Miguel Ángel Santos',
       fecha: '2026-10-06 10:00',
       mes: 'octubre',
       duracionMin: 90,
@@ -479,7 +482,7 @@ export class DataService {
       estudianteNombre: 'Javier Domínguez Rey',
       materia: 'Electromagnetismo',
       rama: 'Física',
-      tutor: 'Dr. Fernando Alonso',
+      tutor: 'Fernando Alonso',
       fecha: '2026-10-08 17:00',
       mes: 'octubre',
       duracionMin: 90,
@@ -509,7 +512,7 @@ export class DataService {
       estudianteNombre: 'Paula García Serrano',
       materia: 'Ecuaciones Diferenciales',
       rama: 'Matemáticas',
-      tutor: 'Dra. Elena Ramos',
+      tutor: 'Elena Ramos',
       fecha: '2026-10-10 10:00',
       mes: 'octubre',
       duracionMin: 90,
@@ -539,7 +542,7 @@ export class DataService {
       estudianteNombre: 'Elena Ruiz Gallego',
       materia: 'Estadística & Probabilidad',
       rama: 'Matemáticas',
-      tutor: 'Dra. Carmen Delgado',
+      tutor: 'Carmen Delgado',
       fecha: '2026-10-18 12:00',
       mes: 'octubre',
       duracionMin: 90,
@@ -554,7 +557,7 @@ export class DataService {
       estudianteNombre: 'Adrián Torres Molina',
       materia: 'Mecánica Cuántica',
       rama: 'Física',
-      tutor: 'Dra. Natalia Molina',
+      tutor: 'Natalia Molina',
       fecha: '2026-10-22 17:30',
       mes: 'octubre',
       duracionMin: 90,
@@ -571,7 +574,7 @@ export class DataService {
       estudianteNombre: 'Alejandro Gómez Soto',
       materia: 'Termodinámica',
       rama: 'Física',
-      tutor: 'Dr. Miguel Ángel Santos',
+      tutor: 'Miguel Ángel Santos',
       fecha: '2026-11-03 10:00',
       mes: 'noviembre',
       duracionMin: 90,
@@ -601,7 +604,7 @@ export class DataService {
       estudianteNombre: 'Javier Domínguez Rey',
       materia: 'Electromagnetismo',
       rama: 'Física',
-      tutor: 'Dr. Fernando Alonso',
+      tutor: 'Fernando Alonso',
       fecha: '2026-11-12 17:00',
       mes: 'noviembre',
       duracionMin: 90,
@@ -616,7 +619,7 @@ export class DataService {
       estudianteNombre: 'Paula García Serrano',
       materia: 'Astrofísica & Cinemática',
       rama: 'Física',
-      tutor: 'Dra. Elena Ramos',
+      tutor: 'Elena Ramos',
       fecha: '2026-11-15 17:00',
       mes: 'noviembre',
       duracionMin: 90,
@@ -648,7 +651,7 @@ export class DataService {
       estudianteNombre: 'Marcos Vega Ortiz',
       materia: 'Física Clásica',
       rama: 'Física',
-      tutor: 'Dra. Elena Ramos',
+      tutor: 'Elena Ramos',
       fecha: '2026-12-02 16:30',
       mes: 'diciembre',
       duracionMin: 90,
@@ -678,7 +681,7 @@ export class DataService {
       estudianteNombre: 'Paula García Serrano',
       materia: 'Óptica & Ondas',
       rama: 'Física',
-      tutor: 'Dra. Patricia Serrano',
+      tutor: 'Patricia Serrano',
       fecha: '2026-12-10 11:30',
       mes: 'diciembre',
       duracionMin: 90,
@@ -689,14 +692,155 @@ export class DataService {
     }
   ];
 
+  private scheduleService = inject(ScheduleService);
+
+  /** Claves de `localStorage` para las altas realizadas desde el formulario de registro */
+  private static readonly REGISTERED_TEACHERS_KEY = 'itutor_registered_teachers';
+  private static readonly REGISTERED_STUDENTS_KEY = 'itutor_registered_students';
+
   constructor() {}
+
+  private readList<T>(key: string): T[] {
+    try {
+      const raw = localStorage.getItem(key);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  /** Catálogo completo de alumnos (base + registrados) */
+  get allStudents(): SqlStudentRate[] {
+    return [...this.STUDENTS_CATALOG, ...this.readList<SqlStudentRate>(DataService.REGISTERED_STUDENTS_KEY)];
+  }
+
+  /** Catálogo completo de profesores (base + registrados) */
+  get allTeachers(): TeacherRecord[] {
+    return [...this.TEACHERS_CATALOG, ...this.readList<TeacherRecord>(DataService.REGISTERED_TEACHERS_KEY)];
+  }
+
+  findTeacherByEmail(email: string): TeacherRecord | undefined {
+    const e = (email || '').trim().toLowerCase();
+    return this.allTeachers.find(t => t.email.toLowerCase() === e);
+  }
+
+  findStudentByEmail(email: string): SqlStudentRate | undefined {
+    const e = (email || '').trim().toLowerCase();
+    return this.allStudents.find(s => s.email.toLowerCase() === e);
+  }
+
+  /** Indica si un alumno está asignado a un profesor */
+  private isAssigned(teacher: TeacherRecord, st: SqlStudentRate): boolean {
+    if (st.profesorEmail) {
+      return st.profesorEmail.toLowerCase() === teacher.email.toLowerCase();
+    }
+    return (
+      teacher.alumnosAsignados.some(a => a.toLowerCase() === st.nombre.toLowerCase()) ||
+      st.profesorAsignado.toLowerCase() === teacher.nombre.toLowerCase()
+    );
+  }
+
+  /** Alumnos asignados a un profesor (consulta síncrona) */
+  getStudentsForTeacher(teacherEmail: string): SqlStudentRate[] {
+    const teacher = this.findTeacherByEmail(teacherEmail);
+    return teacher ? this.allStudents.filter(st => this.isAssigned(teacher, st)) : [];
+  }
+
+  /** Profesores que tienen asignado a un alumno (consulta síncrona) */
+  getTeachersForStudent(studentEmail: string): TeacherRecord[] {
+    const student = this.findStudentByEmail(studentEmail);
+    return student ? this.allTeachers.filter(t => this.isAssigned(t, student)) : [];
+  }
+
+  /** Alta de un nuevo profesor desde el formulario de registro */
+  registerTeacher(data: {
+    nombre: string;
+    email: string;
+    departamento: TeacherRecord['departamento'];
+    especialidad: string;
+    tarifaHora: number;
+  }): TeacherRecord {
+    const list = this.readList<TeacherRecord>(DataService.REGISTERED_TEACHERS_KEY);
+    const teacher: TeacherRecord = {
+      id: Math.max(...this.allTeachers.map(t => t.id), 200) + 1,
+      nombre: data.nombre.trim(),
+      email: data.email.trim().toLowerCase(),
+      especialidad: data.especialidad.trim() || `Profesor/a de ${data.departamento}`,
+      departamento: data.departamento,
+      tarifaHora: data.tarifaHora || 30,
+      alumnosAsignados: [],
+      alumnosCount: 0,
+      horasImpartidas: 0,
+      totalGanado: 0,
+      calificacion: 5,
+      telefono: '-',
+      estado: 'Disponible'
+    };
+    list.push(teacher);
+    localStorage.setItem(DataService.REGISTERED_TEACHERS_KEY, JSON.stringify(list));
+    return teacher;
+  }
+
+  /** Alta de un nuevo alumno desde el formulario de registro, asignado a un profesor */
+  registerStudent(data: {
+    nombre: string;
+    email: string;
+    profesorEmail: string;
+    asignatura: string;
+  }): SqlStudentRate {
+    const teacher = this.findTeacherByEmail(data.profesorEmail);
+    const list = this.readList<SqlStudentRate>(DataService.REGISTERED_STUDENTS_KEY);
+    const id = Math.max(...this.allStudents.map(s => s.id), 100) + 1;
+    const student: SqlStudentRate = {
+      id,
+      nombre: data.nombre.trim(),
+      email: data.email.trim().toLowerCase(),
+      matricula: `MAT-2026-${String(id).padStart(3, '0')}`,
+      tarifaHora: teacher?.tarifaHora ?? 30,
+      plan: 'Básico',
+      asignaturaPrincipal: data.asignatura.trim() || teacher?.especialidad || 'Sin asignar',
+      profesorAsignado: teacher?.nombre ?? 'Sin asignar',
+      profesorEmail: teacher?.email,
+      saldoPendiente: 0,
+      horasTotales: 0,
+      telefono: '-',
+      estado: 'Activo'
+    };
+    list.push(student);
+    localStorage.setItem(DataService.REGISTERED_STUDENTS_KEY, JSON.stringify(list));
+    return student;
+  }
+
+  /** Convierte una clase agendada en un documento de sesión compatible con el histórico */
+  private scheduledToSession(c: ScheduledClass, teacher: TeacherRecord): MongoClassSession {
+    const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto',
+      'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    const [datePart, timePart = '00:00'] = c.start.split('T');
+    const monthIdx = Number(datePart.split('-')[1]) - 1;
+    return {
+      _id: c.id,
+      estudianteId: this.findStudentByEmail(c.studentEmail)?.id ?? 0,
+      estudianteNombre: c.studentName,
+      materia: c.subject,
+      rama: teacher.departamento,
+      tutor: teacher.nombre,
+      fecha: `${datePart} ${timePart.slice(0, 5)}`,
+      mes: months[monthIdx] as MongoClassSession['mes'],
+      duracionMin: c.durationMin,
+      importe: c.price,
+      estado: 'Confirmada',
+      asistencia: false,
+      notasSeguimiento: c.notes || c.topic
+    };
+  }
 
   /**
    * Simula consulta a API Backend conectada a SQL (PostgreSQL/MySQL).
    * Recupera catálogo maestro de los 10 alumnos, tarifas horarias y profesores asignados.
    */
   getSqlStudentsCatalog(): Observable<SqlStudentRate[]> {
-    return of(this.STUDENTS_CATALOG).pipe(delay(350));
+    return of(this.allStudents).pipe(delay(350));
   }
 
   /**
@@ -704,7 +848,7 @@ export class DataService {
    * Recupera catálogo maestro de los 10 profesores de iTUTOR con balance y horas.
    */
   getTeachersCatalog(): Observable<TeacherRecord[]> {
-    return of(this.TEACHERS_CATALOG).pipe(delay(350));
+    return of(this.allTeachers).pipe(delay(350));
   }
 
   /**
@@ -712,7 +856,11 @@ export class DataService {
    * Recupera histórico y sesiones de tutoría en tiempo real con metadatos no estructurados.
    */
   getMongoSessionsStream(): Observable<MongoClassSession[]> {
-    return of(this.SESSIONS_COLLECTION).pipe(delay(400));
+    const extra = this.scheduleService.classes.map(c => {
+      const t = this.findTeacherByEmail(c.teacherEmail) || this.TEACHERS_CATALOG[0];
+      return this.scheduledToSession(c, t);
+    });
+    return of([...extra, ...this.SESSIONS_COLLECTION]).pipe(delay(400));
   }
 
   /**
@@ -729,27 +877,29 @@ export class DataService {
     const query = (teacherEmailOrName || '').toLowerCase().trim();
     
     // Búsqueda por email o por nombre parcial
-    let teacher = this.TEACHERS_CATALOG.find(t => 
+    let teacher = this.allTeachers.find(t => 
       t.email.toLowerCase() === query || 
       t.nombre.toLowerCase().includes(query)
     );
 
-    // Fallback al profesor titular principal (Dra. Elena Ramos) si no coincide
+    // Fallback al profesor titular principal (Elena Ramos) si no coincide
     if (!teacher) {
       teacher = this.TEACHERS_CATALOG[0];
     }
 
-    // Filtrar sesiones del profesor
-    const sessions = this.SESSIONS_COLLECTION.filter(s => 
+    // Filtrar sesiones del profesor (incluyendo las agendadas en tiempo real)
+    const scheduledSessions = this.scheduleService
+      .getForTeacher(teacher.email)
+      .map(c => this.scheduledToSession(c, teacher!));
+
+    const baseSessions = this.SESSIONS_COLLECTION.filter(s => 
       s.tutor.toLowerCase().includes(teacher!.nombre.toLowerCase()) || 
       teacher!.nombre.toLowerCase().includes(s.tutor.toLowerCase())
     );
+    const sessions = [...scheduledSessions, ...baseSessions];
 
     // Filtrar alumnos que tiene asignados
-    const students = this.STUDENTS_CATALOG.filter(st => 
-      teacher!.alumnosAsignados.some(assigned => assigned.toLowerCase() === st.nombre.toLowerCase()) ||
-      st.profesorAsignado.toLowerCase().includes(teacher!.nombre.toLowerCase())
-    );
+    const students = this.allStudents.filter(st => this.isAssigned(teacher!, st));
 
     // Calcular dinero total ganado en sesiones confirmadas / en curso
     const totalEarned = sessions

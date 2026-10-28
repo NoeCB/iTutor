@@ -38,8 +38,12 @@
       <!-- HERO BANNER DEL PROFESOR -->
       <section class="teacher-hero-card" role="region" aria-label="Ficha del docente">
         <div class="hero-left">
-          <div class="teacher-avatar">
-            {{ getTeacherInitials(currentTeacher.nombre) }}
+          <div class="teacher-avatar" style="overflow:hidden;">
+            @if (getTeacherAvatar(currentTeacher.email); as avatar) {
+              <img [src]="avatar" alt="Foto de {{ currentTeacher.nombre }}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;" />
+            } @else {
+              {{ getTeacherInitials(currentTeacher.nombre) }}
+            }
           </div>
           <div class="teacher-info">
             <div class="teacher-name-row">
@@ -199,16 +203,167 @@
         }
       </section>
 
-      <!-- SECCIÓN 2: HISTÓRICO DE CLASES Y HONORARIOS (Dumb Component Integrado) -->
-      <section class="sessions-section" role="region" aria-label="Sesiones y honorarios del profesor">
+      <!-- SECCIÓN 2: ZONA DE CLASES CONFIRMADAS E HISTÓRICO DE HONORARIOS -->
+      <section class="sessions-section" role="region" aria-label="Clases confirmadas y honorarios del profesor">
+        <div class="confirmed-classes-toolbar">
+          <div class="toolbar-info">
+            <h2 class="section-title">
+              <ion-icon name="calendar-outline"></ion-icon>
+              Zona de Clases Confirmadas • {{ currentTeacher.nombre }}
+            </h2>
+            <p class="section-subtitle">
+              Gestiona tus tutorías confirmadas o agenda una nueva clase para tus alumnos asignados
+            </p>
+          </div>
+          <ion-button class="schedule-class-btn" (click)="openScheduleModal()">
+            <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+            Agendar Clase
+          </ion-button>
+        </div>
+
+        @if (scheduleSuccessMsg) {
+          <div class="schedule-success-banner" role="status">
+            <ion-icon name="checkmark-circle"></ion-icon>
+            <span>{{ scheduleSuccessMsg }}</span>
+          </div>
+        }
+
         <app-data-table
-          [title]="'Histórico de Sesiones y Honorarios • ' + currentTeacher.nombre"
+          [title]="'Clases Confirmadas e Histórico de Sesiones • ' + currentTeacher.nombre"
           subtitle="Desglose detallado de clases impartidas, horas lectivas y cobros correspondientes"
           [columns]="sessionColumns"
           [rows]="teacherSessions"
           [showActions]="false"
         ></app-data-table>
       </section>
+
+      <!-- VENTANA EMERGENTE (MODAL) PARA AGENDAR CLASE A ALUMNOS ASIGNADOS -->
+      @if (showScheduleModal) {
+        <div class="modal-backdrop" (click)="closeScheduleModal()" role="dialog" aria-modal="true" aria-labelledby="modal-schedule-title">
+          <div class="schedule-modal-card" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+              <div class="modal-title-group">
+                <div class="modal-icon-badge">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                </div>
+                <div>
+                  <h3 id="modal-schedule-title">Agendar Nueva Clase</h3>
+                  <p>Profesor/a: <strong>{{ currentTeacher.nombre }}</strong></p>
+                </div>
+              </div>
+              <button type="button" class="modal-close-btn" (click)="closeScheduleModal()" aria-label="Cerrar ventana">
+                <ion-icon name="close-outline"></ion-icon>
+              </button>
+            </div>
+
+            <div class="modal-body">
+              <!-- Selección de alumno (SOLO alumnos asignados al profesor) -->
+              <div class="modal-field">
+                <label for="student-select">¿A qué alumno quieres darle la clase? (Solo alumnos asignados)</label>
+                <select
+                  id="student-select"
+                  class="modal-select"
+                  [(ngModel)]="scheduleForm.studentEmail"
+                  (ngModelChange)="onScheduleStudentChange()"
+                >
+                  @for (st of assignedStudents; track st.email) {
+                    <option [value]="st.email">
+                      {{ st.nombre }} — {{ st.asignaturaPrincipal }} ({{ st.plan }})
+                    </option>
+                  }
+                </select>
+              </div>
+
+              <!-- Asignatura -->
+              <div class="modal-field">
+                <label for="subject-input">Asignatura a impartir</label>
+                <input
+                  id="subject-input"
+                  type="text"
+                  class="modal-input"
+                  [(ngModel)]="scheduleForm.subject"
+                  placeholder="Ej. Ecuaciones Diferenciales"
+                />
+              </div>
+
+              <!-- Fecha y Hora con Calendario y Selector de Hora -->
+              <div class="modal-row-2col">
+                <div class="modal-field">
+                  <label for="date-input">Fecha (Calendario)</label>
+                  <input
+                    id="date-input"
+                    type="date"
+                    class="modal-input"
+                    [(ngModel)]="scheduleForm.date"
+                  />
+                </div>
+                <div class="modal-field">
+                  <label for="time-input">Hora de la clase</label>
+                  <input
+                    id="time-input"
+                    type="time"
+                    class="modal-input"
+                    [(ngModel)]="scheduleForm.time"
+                  />
+                </div>
+              </div>
+
+              <!-- Chips rápidos de hora -->
+              <div class="modal-field">
+                <label>Selección rápida de horario</label>
+                <div class="hours-chips">
+                  @for (h of availableHours; track h) {
+                    <button
+                      type="button"
+                      class="hour-chip"
+                      [class.active]="scheduleForm.time === h"
+                      (click)="scheduleForm.time = h"
+                    >
+                      {{ h }}
+                    </button>
+                  }
+                </div>
+              </div>
+
+              <!-- Duración y tema -->
+              <div class="modal-row-2col">
+                <div class="modal-field">
+                  <label for="duration-select">Duración</label>
+                  <select id="duration-select" class="modal-select" [(ngModel)]="scheduleForm.durationMin">
+                    <option [ngValue]="60">60 minutos (1 h)</option>
+                    <option [ngValue]="90">90 minutos (1,5 h)</option>
+                    <option [ngValue]="120">120 minutos (2 h)</option>
+                  </select>
+                </div>
+                <div class="modal-field">
+                  <label for="topic-input">Tema / Notas de la sesión</label>
+                  <input
+                    id="topic-input"
+                    type="text"
+                    class="modal-input"
+                    [(ngModel)]="scheduleForm.topic"
+                    placeholder="Ej. Práctica de examen"
+                  />
+                </div>
+              </div>
+
+              @if (scheduleErrorMsg) {
+                <p class="modal-error">{{ scheduleErrorMsg }}</p>
+              }
+            </div>
+
+            <div class="modal-footer">
+              <ion-button fill="outline" color="medium" (click)="closeScheduleModal()">
+                Cancelar
+              </ion-button>
+              <ion-button color="primary" (click)="confirmScheduleClass()">
+                <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+                Confirmar y Agendar Clase
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      }
 
     }
 
