@@ -17,6 +17,28 @@
 
       <!-- Cuerpo del Formulario Reactivo -->
       <ion-card-content class="card-body">
+
+        <!-- Conmutador entre Iniciar Sesión y Formulario de Registro -->
+        <div class="auth-mode-tabs" role="tablist">
+          <button
+            type="button"
+            class="mode-tab"
+            [class.active]="mode === 'login'"
+            (click)="switchMode('login')"
+          >
+            Iniciar Sesión
+          </button>
+          <button
+            type="button"
+            class="mode-tab"
+            [class.active]="mode === 'register'"
+            (click)="switchMode('register')"
+          >
+            Registrarse (Profesor / Alumna)
+          </button>
+        </div>
+
+        @if (mode === 'login') {
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
           
           <!-- Campo 1: Correo Electrónico -->
@@ -103,15 +125,27 @@
             <span class="demo-label">Acceso de prueba rápido:</span>
             <div class="demo-chips-grid">
               <button type="button" class="demo-chip" (click)="fillDemoAccount('admin')" title="Autocompletar como Noelia (Admin)">
-                <span class="chip-dot dot-admin"></span>
+                @if (getDemoAvatar('noeliacantador@itutor.es'); as avatar) {
+                  <img [src]="avatar" alt="Noelia" style="width:18px; height:18px; border-radius:50%; object-fit:cover;" />
+                } @else {
+                  <span class="chip-dot dot-admin"></span>
+                }
                 <strong>Admin</strong> (Noelia)
               </button>
-              <button type="button" class="demo-chip" (click)="fillDemoAccount('profesora')" title="Autocompletar como Dra. Elena (Docente)">
-                <span class="chip-dot dot-prof"></span>
-                <strong>Profesora</strong> (Dra. Elena)
+              <button type="button" class="demo-chip" (click)="fillDemoAccount('profesora')" title="Autocompletar como Elena (Docente)">
+                @if (getDemoAvatar('elenaramos@itutor.es'); as avatar) {
+                  <img [src]="avatar" alt="Elena" style="width:18px; height:18px; border-radius:50%; object-fit:cover;" />
+                } @else {
+                  <span class="chip-dot dot-prof"></span>
+                }
+                <strong>Profesora</strong> (Elena)
               </button>
               <button type="button" class="demo-chip" (click)="fillDemoAccount('alumna')" title="Autocompletar como Paula (Alumna)">
-                <span class="chip-dot dot-student"></span>
+                @if (getDemoAvatar('paulagarcia@itutor.es'); as avatar) {
+                  <img [src]="avatar" alt="Paula" style="width:18px; height:18px; border-radius:50%; object-fit:cover;" />
+                } @else {
+                  <span class="chip-dot dot-student"></span>
+                }
                 <strong>Alumna</strong> (Paula)
               </button>
             </div>
@@ -129,6 +163,187 @@
           </ion-button>
 
         </form>
+        } @else {
+        <!-- FORMULARIO DE REGISTRO DE ROL PROFESOR Y ALUMNA -->
+        <form [formGroup]="registerForm" (ngSubmit)="onRegister()" novalidate>
+
+          <!-- Selector de Rol: Profesor/a vs Alumna/o -->
+          <div class="form-group">
+            <label class="field-label">Selecciona tu Rol para crear tu cuenta</label>
+            <div class="role-cards-grid">
+              <button
+                type="button"
+                class="role-card-btn"
+                [class.selected]="registerForm.get('role')?.value === 'Teacher'"
+                (click)="selectRegisterRole('Teacher')"
+              >
+                <ion-icon name="school-outline"></ion-icon>
+                <strong>Profesor / Profesora</strong>
+                <span>Portal Docente</span>
+              </button>
+              <button
+                type="button"
+                class="role-card-btn"
+                [class.selected]="registerForm.get('role')?.value === 'Standard'"
+                (click)="selectRegisterRole('Standard')"
+              >
+                <ion-icon name="person-outline"></ion-icon>
+                <strong>Alumno / Alumna</strong>
+                <span>Portal de Estudiante</span>
+              </button>
+            </div>
+
+            <!-- Explicación de qué incluye cada rol -->
+            @if (registerForm.get('role')?.value === 'Teacher') {
+              <div class="role-benefits-box prof-benefits">
+                <strong>¿Qué tienes si eres Profesor/a?</strong>
+                <ul>
+                  <li>Acceso a tu <strong>Portal Docente</strong> con tus alumnos asignados y honorarios.</li>
+                  <li>Botón para <strong>agendar clases confirmadas</strong> con calendario y hora.</li>
+                  <li>Subida de <strong>apuntes y PDFs</strong> desde tu ordenador y chat con tus alumnos.</li>
+                </ul>
+              </div>
+            } @else {
+              <div class="role-benefits-box student-benefits">
+                <strong>¿Qué tienes si eres Alumno/a?</strong>
+                <ul>
+                  <li>Asignación automática de <strong>profesores especialistas</strong> según tus asignaturas.</li>
+                  <li>Acceso a tu <strong>Calendario de Tutorías</strong> y panel de facturación.</li>
+                  <li>Descarga de los <strong>PDFs de apuntes</strong> que suban tus profesores y chat en directo.</li>
+                </ul>
+              </div>
+            }
+          </div>
+
+          <!-- Nombre Completo -->
+          <div class="form-group">
+            <label class="field-label" for="reg-name-input">Nombre y Apellidos</label>
+            <ion-item lines="none" class="custom-input-item">
+              <ion-icon name="person-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-input
+                id="reg-name-input"
+                type="text"
+                placeholder="Ej. Elena Ramos o Paula García"
+                formControlName="name"
+              ></ion-input>
+            </ion-item>
+          </div>
+
+          <!-- Fecha de Nacimiento -->
+          <div class="form-group">
+            <label class="field-label" for="reg-birth-input">Fecha de Nacimiento (No modificable tras el alta)</label>
+            <ion-item lines="none" class="custom-input-item">
+              <ion-icon name="shield-checkmark-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-input
+                id="reg-birth-input"
+                type="date"
+                formControlName="birthDate"
+              ></ion-input>
+            </ion-item>
+          </div>
+
+          <!-- Correo Electrónico -->
+          <div class="form-group">
+            <label class="field-label" for="reg-email-input">Correo Electrónico</label>
+            <ion-item lines="none" class="custom-input-item">
+              <ion-icon name="mail-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-input
+                id="reg-email-input"
+                type="email"
+                placeholder="nuevo@itutor.es"
+                formControlName="email"
+              ></ion-input>
+            </ion-item>
+          </div>
+
+          <!-- Lista de Asignaturas según el Rol (Profesor: máx. 3 | Alumno: asigna profesores) -->
+          <div class="form-group">
+            <div class="subjects-label-row">
+              <label class="field-label" style="margin:0;">
+                {{ registerForm.get('role')?.value === 'Teacher'
+                  ? 'Asignaturas que vas a impartir (máximo 3)'
+                  : '¿En qué asignaturas quieres recibir clases?' }}
+              </label>
+              @if (registerForm.get('role')?.value === 'Teacher') {
+                <span class="subjects-counter-badge">
+                  {{ selectedSubjects.length }} / 3 seleccionadas
+                </span>
+              }
+            </div>
+
+            <div class="subjects-checklist-grid">
+              @for (item of availableSubjects; track item.name) {
+                <button
+                  type="button"
+                  class="subject-check-btn"
+                  [class.checked]="isSubjectSelected(item.name)"
+                  (click)="toggleSubjectSelection(item.name)"
+                >
+                  <span class="check-indicator">{{ isSubjectSelected(item.name) ? '✓' : '+' }}</span>
+                  <div class="subject-check-text">
+                    <strong>{{ item.name }}</strong>
+                    @if (registerForm.get('role')?.value === 'Standard') {
+                      <small>Docente: {{ item.teacherName }}</small>
+                    }
+                  </div>
+                </button>
+              }
+            </div>
+
+            @if (subjectLimitMsg) {
+              <p class="subject-limit-warning">{{ subjectLimitMsg }}</p>
+            }
+
+            <!-- Resumen de Profesores Asignados cuando el rol es Alumno/a -->
+            @if (registerForm.get('role')?.value === 'Standard' && assignedTeachersForStudent.length > 0) {
+              <div class="assigned-teachers-preview">
+                <span class="preview-title">Profesores que se te asignarán:</span>
+                @for (t of assignedTeachersForStudent; track t.teacherEmail) {
+                  <div class="assigned-teacher-row">
+                    <strong>{{ t.teacherName }}</strong>
+                    <span>→ {{ t.subjects.join(', ') }}</span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Contraseña -->
+          <div class="form-group">
+            <label class="field-label" for="reg-password-input">Contraseña (mín. 5 caracteres)</label>
+            <ion-item lines="none" class="custom-input-item">
+              <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-input
+                id="reg-password-input"
+                type="password"
+                placeholder="Crea tu contraseña"
+                formControlName="password"
+              ></ion-input>
+            </ion-item>
+          </div>
+
+          @if (registerError) {
+            <div class="validation-feedback">
+              <ion-text color="danger">
+                <p class="feedback-msg"><ion-icon name="alert-circle-outline"></ion-icon> {{ registerError }}</p>
+              </ion-text>
+            </div>
+          }
+
+          <ion-button
+            expand="block"
+            type="submit"
+            [disabled]="!registerForm.valid || selectedSubjects.length === 0"
+            class="submit-btn"
+          >
+            <span>
+              {{ registerForm.get('role')?.value === 'Teacher' ? 'Crear Cuenta e ir a Página de Profe' : 'Crear Cuenta e ir a Página de Alumna' }}
+            </span>
+            <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+          </ion-button>
+
+        </form>
+        }
 
       </ion-card-content>
 

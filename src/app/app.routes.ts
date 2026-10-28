@@ -33,7 +33,7 @@ export const routes: Routes = [
     path: 'mis-apuntes',
     loadComponent: () => import('./features/mis-clases/mis-clases.page').then(m => m.MisClasesPage),
     canActivate: [authGuard],
-    data: { role: 'Standard', section: 'apuntes' }
+    data: { role: ['Standard', 'Teacher', 'Admin'], section: 'apuntes' }
   },
   {
     path: 'mensajes-profesores',

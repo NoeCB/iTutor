@@ -28,8 +28,12 @@
         @if (currentUser$ | async; as user) {
           <div class="profile-card">
             <div class="avatar-wrapper">
-              <div class="user-avatar" [attr.aria-label]="'Avatar de ' + user.email">
-                {{ getUserInitials(user.email) }}
+              <div class="user-avatar" [attr.aria-label]="'Avatar de ' + user.email" style="overflow:hidden;">
+                @if (getUserAvatar(user.email); as avatar) {
+                  <img [src]="avatar" alt="Foto de perfil" style="width:100%; height:100%; object-fit:cover; border-radius:50%;" />
+                } @else {
+                  {{ getUserInitials(user.email) }}
+                }
               </div>
               <span class="status-indicator online" title="En línea" aria-label="Usuario en línea"></span>
             </div>

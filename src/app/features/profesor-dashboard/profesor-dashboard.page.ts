@@ -37,7 +37,10 @@ import {
   checkmarkDoneOutline,
   chatbubblesOutline,
   cardOutline,
-  menuOutline
+  menuOutline,
+  calendarOutline,
+  addCircleOutline,
+  closeOutline
 } from 'ionicons/icons';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -48,6 +51,7 @@ import {
   SqlStudentRate, 
   MongoClassSession 
 } from '../../core/services/data.service';
+import { ScheduleService } from '../../core/services/schedule.service';
 import { AuthService } from '../../core/services/auth.service';
 import { SidebarService } from '../../core/services/sidebar.service';
 import { StatCardComponent } from '../../shared/components/stat-card/stat-card.component';
@@ -80,6 +84,7 @@ import { DataTableComponent, TableColumn } from '../../shared/components/data-ta
 })
 export class ProfesorDashboardPage implements OnInit {
   private dataService = inject(DataService);
+  private scheduleService = inject(ScheduleService);
   private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
   public sidebarService = inject(SidebarService);
@@ -107,6 +112,20 @@ export class ProfesorDashboardPage implements OnInit {
   totalMoneyEarned = 0;
   totalHoursTaught = 0;
   activeStudentsCount = 0;
+
+  /** Estado de la ventana emergente para agendar clase */
+  showScheduleModal = false;
+  scheduleSuccessMsg = '';
+  scheduleErrorMsg = '';
+  scheduleForm = {
+    studentEmail: '',
+    subject: '',
+    topic: '',
+    date: '2026-10-28',
+    time: '17:00',
+    durationMin: 90
+  };
+  availableHours = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
 
   /** Columnas de la tabla agnóstica de sesiones del profesor */
   sessionColumns: TableColumn[] = [
@@ -147,7 +166,10 @@ export class ProfesorDashboardPage implements OnInit {
       cardOutline,
       checkmarkDoneOutline,
       chatbubblesOutline,
-      menuOutline
+      menuOutline,
+      calendarOutline,
+      addCircleOutline,
+      closeOutline
     });
   }
 
@@ -225,6 +247,73 @@ export class ProfesorDashboardPage implements OnInit {
       return (parts[0][0] + parts[1][0]).toUpperCase();
     }
     return clean.substring(0, 2).toUpperCase();
+  }
+
+  /** Abre la ventana emergente para agendar una nueva clase con un alumno asignado */
+  openScheduleModal(): void {
+    this.scheduleErrorMsg = '';
+    this.scheduleSuccessMsg = '';
+    const firstStudent = this.assignedStudents[0];
+    this.scheduleForm = {
+      studentEmail: firstStudent ? firstStudent.email : '',
+      subject: firstStudent ? firstStudent.asignaturaPrincipal : (this.currentTeacher?.especialidad || ''),
+      topic: 'Tutoría personalizada y resolución de problemas',
+      date: '2026-10-28',
+      time: '17:00',
+      durationMin: 90
+    };
+    this.showScheduleModal = true;
+    this.cdr.markForCheck();
+  }
+
+  closeScheduleModal(): void {
+    this.showScheduleModal = false;
+    this.scheduleErrorMsg = '';
+    this.cdr.markForCheck();
+  }
+
+  onScheduleStudentChange(): void {
+    const st = this.assignedStudents.find(s => s.email === this.scheduleForm.studentEmail);
+    if (st) {
+      this.scheduleForm.subject = st.asignaturaPrincipal;
+    }
+    this.cdr.markForCheck();
+  }
+
+  confirmScheduleClass(): void {
+    if (!this.currentTeacher) return;
+    const student = this.assignedStudents.find(s => s.email === this.scheduleForm.studentEmail);
+    if (!student) {
+      this.scheduleErrorMsg = 'Selecciona uno de tus alumnos asignados.';
+      this.cdr.markForCheck();
+      return;
+    }
+    if (!this.scheduleForm.date || !this.scheduleForm.time) {
+      this.scheduleErrorMsg = 'Selecciona una fecha y una hora en el calendario.';
+      this.cdr.markForCheck();
+      return;
+    }
+
+    const startIso = `${this.scheduleForm.date}T${this.scheduleForm.time}`;
+    const durationMin = Number(this.scheduleForm.durationMin) || 90;
+    const price = Math.round((this.currentTeacher.tarifaHora * durationMin) / 60);
+
+    this.scheduleService.schedule({
+      teacherEmail: this.currentTeacher.email,
+      teacherName: this.currentTeacher.nombre,
+      studentEmail: student.email,
+      studentName: student.nombre,
+      subject: this.scheduleForm.subject || student.asignaturaPrincipal,
+      topic: this.scheduleForm.topic || 'Sesión de tutoría',
+      start: startIso,
+      durationMin,
+      price,
+      notes: this.scheduleForm.topic || 'Clase agendada por el profesor'
+    });
+
+    this.showScheduleModal = false;
+    this.scheduleSuccessMsg = `¡Clase confirmada con ${student.nombre} para el ${this.scheduleForm.date} a las ${this.scheduleForm.time}!`;
+    this.selectTeacher(this.selectedTeacherId);
   }
 
   /** Genera e imprime en PDF el informe oficial de honorarios ganados */
@@ -327,5 +416,9 @@ export class ProfesorDashboardPage implements OnInit {
 
     const timestamp = new Date().toISOString().slice(0, 10);
     doc.save(`iTUTOR_Honorarios_${this.currentTeacher.nombre.replace(/\s+/g, '_')}_${timestamp}.pdf`);
+  }
+
+  getTeacherAvatar(email: string): string | null {
+    return this.authService.getUserAvatar(email);
   }
 }

@@ -36,11 +36,22 @@ import {
   shieldCheckmarkOutline,
   folderOpenOutline,
   receiptOutline,
-  menuOutline
+  menuOutline,
+  addCircleOutline,
+  closeOutline,
+  swapHorizontalOutline,
+  cloudUploadOutline,
+  eyeOutline,
+  cameraOutline,
+  trashOutline,
+  lockClosedOutline
 } from 'ionicons/icons';
 import jsPDF from 'jspdf';
 import { SidebarService } from '../../core/services/sidebar.service';
 import { AuthService, User } from '../../core/services/auth.service';
+import { ChatService } from '../../core/services/chat.service';
+import { ScheduleService } from '../../core/services/schedule.service';
+import { DataService, SqlStudentRate } from '../../core/services/data.service';
 
 export interface TutoriaSession {
   day: number;
@@ -69,10 +80,13 @@ export interface StudentNoteItem {
   size: string;
   pages: number;
   summary: string;
+  fileName?: string;
+  fileDataUrl?: string;
 }
 
 export interface TeacherConversation {
   id: string;
+  peerEmail?: string;
   teacherName: string;
   subject: string;
   initials: string;
@@ -129,6 +143,9 @@ export class MisClasesPage implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   public sidebarService = inject(SidebarService);
   private authService = inject(AuthService);
+  private chatService = inject(ChatService);
+  private scheduleService = inject(ScheduleService);
+  private dataService = inject(DataService);
 
   get currentUser(): User | null {
     return this.authService.currentUserValue;
@@ -137,6 +154,11 @@ export class MisClasesPage implements OnInit {
   get isCoordinator(): boolean {
     const user = this.currentUser;
     return user?.role === 'Admin' || (user?.email?.toLowerCase().includes('noelia') ?? false);
+  }
+
+  get isTeacher(): boolean {
+    const user = this.currentUser;
+    return user?.role === 'Teacher';
   }
 
   toggleMenu(): void {
@@ -159,7 +181,7 @@ export class MisClasesPage implements OnInit {
       dateLabel: 'Sábado, 3 de Octubre de 2026',
       subject: 'Ecuaciones Diferenciales',
       topic: 'EDOs de Primer Orden y Variables Separables',
-      teacher: 'Dra. Elena Ramos',
+      teacher: 'Elena Ramos',
       teacherRole: 'Catedrática de Matemáticas Aplicadas',
       teacherInitials: 'ER',
       teacherEmail: 'elenaramos@itutor.es',
@@ -193,7 +215,7 @@ export class MisClasesPage implements OnInit {
       dateLabel: 'Sábado, 10 de Octubre de 2026',
       subject: 'Ecuaciones Diferenciales',
       topic: 'Transformada de Laplace y Sistemas de EDOs de 2º Orden',
-      teacher: 'Dra. Elena Ramos',
+      teacher: 'Elena Ramos',
       teacherRole: 'Profesora Titular de Ecuaciones Diferenciales',
       teacherInitials: 'ER',
       teacherEmail: 'elenaramos@itutor.es',
@@ -227,7 +249,7 @@ export class MisClasesPage implements OnInit {
       dateLabel: 'Martes, 20 de Octubre de 2026',
       subject: 'Ecuaciones Diferenciales',
       topic: 'Series de Potencias y Método de Frobenius',
-      teacher: 'Dra. Elena Ramos',
+      teacher: 'Elena Ramos',
       teacherRole: 'Profesora Titular de Ecuaciones Diferenciales',
       teacherInitials: 'ER',
       teacherEmail: 'elenaramos@itutor.es',
@@ -244,7 +266,7 @@ export class MisClasesPage implements OnInit {
       dateLabel: 'Sábado, 24 de Octubre de 2026',
       subject: 'Ecuaciones Diferenciales',
       topic: 'Simulacro de Examen Parcial Resuelto',
-      teacher: 'Dra. Elena Ramos',
+      teacher: 'Elena Ramos',
       teacherRole: 'Profesora Titular de Ecuaciones Diferenciales',
       teacherInitials: 'ER',
       teacherEmail: 'elenaramos@itutor.es',
@@ -279,13 +301,25 @@ export class MisClasesPage implements OnInit {
   calendarCells: CalendarCell[] = [];
 
   /** Apuntes y Recursos de Paula García */
+  private static readonly UPLOADED_NOTES_KEY = 'itutor_uploaded_notes';
   selectedNotesFilter = 'Todos';
-  notesList: StudentNoteItem[] = [
+  showUploadNoteModal = false;
+  uploadNoteError = '';
+  uploadNoteSuccess = '';
+  uploadNoteForm = {
+    title: '',
+    subject: 'Ecuaciones Diferenciales',
+    summary: '',
+    fileName: '',
+    fileSize: '',
+    fileDataUrl: ''
+  };
+  baseNotesList: StudentNoteItem[] = [
     {
       id: 'AP-01',
       title: 'Tema 4: Transformada de Laplace y EDOs de 2º Orden',
       subject: 'Ecuaciones Diferenciales',
-      teacher: 'Dra. Elena Ramos',
+      teacher: 'Elena Ramos',
       date: '10 Oct 2026',
       size: '2.4 MB',
       pages: 18,
@@ -295,7 +329,7 @@ export class MisClasesPage implements OnInit {
       id: 'AP-02',
       title: 'Boletín Resuelto: EDOs Exactas y Factor Integrante',
       subject: 'Ecuaciones Diferenciales',
-      teacher: 'Dra. Elena Ramos',
+      teacher: 'Elena Ramos',
       date: '03 Oct 2026',
       size: '1.9 MB',
       pages: 14,
@@ -325,7 +359,7 @@ export class MisClasesPage implements OnInit {
       id: 'AP-05',
       title: 'Recopilatorio de Exámenes Finales Resueltos (2023-2025)',
       subject: 'Ecuaciones Diferenciales',
-      teacher: 'Dra. Elena Ramos',
+      teacher: 'Elena Ramos',
       date: '20 Sep 2026',
       size: '4.6 MB',
       pages: 34,
@@ -351,7 +385,7 @@ export class MisClasesPage implements OnInit {
   coordinatorConversations: TeacherConversation[] = [
     {
       id: 'elena',
-      teacherName: 'Dra. Elena Ramos',
+      teacherName: 'Elena Ramos',
       subject: 'Física Teórica & Mecánica Clásica',
       initials: 'ER',
       online: true,
@@ -359,7 +393,7 @@ export class MisClasesPage implements OnInit {
       messages: [
         {
           sender: 'coordinator',
-          text: 'Estimada Dra. Elena Ramos, ¿cómo avanza el seguimiento de las tutorías de Física y Mecánica este mes?',
+          text: 'Estimada Elena Ramos, ¿cómo avanza el seguimiento de las tutorías de Física y Mecánica este mes?',
           time: '09:30'
         },
         {
@@ -406,7 +440,7 @@ export class MisClasesPage implements OnInit {
     },
     {
       id: 'miguel',
-      teacherName: 'Dr. Miguel Ángel Santos',
+      teacherName: 'Miguel Ángel Santos',
       subject: 'Termodinámica & Mecánica de Fluidos',
       initials: 'MS',
       online: true,
@@ -435,7 +469,7 @@ export class MisClasesPage implements OnInit {
   studentConversations: TeacherConversation[] = [
     {
       id: 'elena',
-      teacherName: 'Dra. Elena Ramos',
+      teacherName: 'Elena Ramos',
       subject: 'Profesora de Ecuaciones Diferenciales',
       initials: 'ER',
       online: true,
@@ -495,9 +529,79 @@ export class MisClasesPage implements OnInit {
     }
   ];
 
-  /** Devuelve las conversaciones correspondientes al rol en sesión (Jefa Coordinadora vs Alumna) */
+  /** Conversaciones de la Profesora (Elena Ramos) con sus alumnos asignados */
+  teacherConversations: TeacherConversation[] = [
+    {
+      id: 'paula',
+      peerEmail: 'paulagarcia@itutor.es',
+      teacherName: 'Paula García',
+      subject: 'Alumna • Ecuaciones Diferenciales',
+      initials: 'PG',
+      online: true,
+      unread: 0,
+      messages: []
+    },
+    {
+      id: 'marcos',
+      peerEmail: 'marcosvega@itutor.es',
+      teacherName: 'Marcos Vega Ortiz',
+      subject: 'Alumno • Física Clásica & Mecánica',
+      initials: 'MV',
+      online: true,
+      unread: 0,
+      messages: [
+        {
+          sender: 'student',
+          text: 'Hola Elena, ya he subido la hoja de problemas de dinámica de rotación.',
+          time: 'Ayer'
+        },
+        {
+          sender: 'teacher',
+          text: '¡Estupendo Marcos! La reviso esta tarde y comentamos los ejercicios en la próxima sesión.',
+          time: 'Ayer'
+        }
+      ]
+    },
+    {
+      id: 'noelia',
+      peerEmail: 'noeliacantador@itutor.es',
+      teacherName: 'Noelia Cantador',
+      subject: 'Coordinadora Académica iTUTOR',
+      initials: 'NC',
+      online: true,
+      unread: 0,
+      messages: []
+    }
+  ];
+
+  /** Devuelve las conversaciones correspondientes al rol en sesión (Coordinadora, Profesora o Alumna) */
   get conversations(): TeacherConversation[] {
-    return this.isCoordinator ? this.coordinatorConversations : this.studentConversations;
+    if (this.isCoordinator) {
+      return this.coordinatorConversations;
+    }
+    if (this.isTeacher) {
+      return this.teacherConversations;
+    }
+    return this.studentConversations;
+  }
+
+  /** Estado de la ventana emergente para agendar clase desde la vista del profesor */
+  showScheduleModal = false;
+  scheduleSuccessMsg = '';
+  scheduleErrorMsg = '';
+  scheduleForm = {
+    studentEmail: '',
+    subject: '',
+    topic: '',
+    date: '2026-10-28',
+    time: '17:00',
+    durationMin: 90
+  };
+  availableHours = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
+
+  get teacherAssignedStudents(): SqlStudentRate[] {
+    const email = this.currentUser?.email || 'elenaramos@itutor.es';
+    return this.dataService.getStudentsForTeacher(email);
   }
 
   /** Dashboard de Facturación & Pagos de Paula García */
@@ -512,7 +616,7 @@ export class MisClasesPage implements OnInit {
   };
 
   subjectSpending = [
-    { subject: 'Ecuaciones Diferenciales (Dra. Elena Ramos)', amount: 210, sessions: 6, percentage: 55, color: '#2563eb' },
+    { subject: 'Ecuaciones Diferenciales (Elena Ramos)', amount: 210, sessions: 6, percentage: 55, color: '#2563eb' },
     { subject: 'Cálculo Multivariable (Prof. Carlos Méndez)', amount: 105, sessions: 3, percentage: 27, color: '#10b981' },
     { subject: 'Álgebra Lineal (Prof. Carlos Méndez)', amount: 70, sessions: 2, percentage: 18, color: '#6366f1' }
   ];
@@ -523,7 +627,7 @@ export class MisClasesPage implements OnInit {
       date: '10 Oct 2026',
       concept: 'Tutoría Ecuaciones Diferenciales (90 min)',
       subject: 'Ecuaciones Diferenciales',
-      teacher: 'Dra. Elena Ramos',
+      teacher: 'Elena Ramos',
       method: 'Visa •••• 4821',
       amount: 35,
       status: 'Pagado'
@@ -543,7 +647,7 @@ export class MisClasesPage implements OnInit {
       date: '03 Oct 2026',
       concept: 'Tutoría Ecuaciones Diferenciales (90 min)',
       subject: 'Ecuaciones Diferenciales',
-      teacher: 'Dra. Elena Ramos',
+      teacher: 'Elena Ramos',
       method: 'Visa •••• 4821',
       amount: 35,
       status: 'Pagado'
@@ -553,7 +657,7 @@ export class MisClasesPage implements OnInit {
       date: '26 Sep 2026',
       concept: 'Bono Mensual Septiembre (8 Sesiones Intensivas)',
       subject: 'Ecuaciones Diferenciales & Cálculo',
-      teacher: 'Dra. Elena Ramos / Prof. Carlos Méndez',
+      teacher: 'Elena Ramos / Prof. Carlos Méndez',
       method: 'Visa •••• 4821',
       amount: 280,
       status: 'Pagado'
@@ -583,18 +687,105 @@ export class MisClasesPage implements OnInit {
       shieldCheckmarkOutline,
       folderOpenOutline,
       receiptOutline,
-      menuOutline
+      menuOutline,
+      addCircleOutline,
+      closeOutline,
+      swapHorizontalOutline,
+      cloudUploadOutline,
+      eyeOutline,
+      cameraOutline,
+      trashOutline,
+      lockClosedOutline
     });
+    this.syncChatThreads();
     this.buildOctoberCalendar();
   }
 
   ngOnInit(): void {
+    if (this.isTeacher) {
+      this.selectedTeacherId = 'paula';
+    }
     this.route.data.subscribe(data => {
       if (data && data['section']) {
         this.activeSection = data['section'];
+        if (this.isTeacher && this.selectedTeacherId === 'elena') {
+          this.selectedTeacherId = 'paula';
+        }
+        this.syncChatThreads();
         this.cdr.markForCheck();
       }
     });
+    this.chatService.messages$.subscribe(() => {
+      this.syncChatThreads();
+      this.cdr.markForCheck();
+    });
+    this.scheduleService.classes$.subscribe(() => {
+      this.syncScheduledClassesIntoCalendar();
+      this.cdr.markForCheck();
+    });
+  }
+
+  /** Sincroniza los mensajes en tiempo real entre Elena (Profesora), Paula (Alumna) y Noelia (Coordinadora) */
+  private syncChatThreads(): void {
+    const elenaPaulaThread = this.chatService.getThread('elenaramos@itutor.es', 'paulagarcia@itutor.es').map(m => ({
+      sender: (m.from === 'elenaramos@itutor.es' ? 'teacher' : 'student') as 'teacher' | 'student',
+      text: m.text,
+      time: this.chatService.formatTime(m.ts)
+    }));
+
+    const studentElenaConv = this.studentConversations.find(c => c.id === 'elena');
+    if (studentElenaConv && elenaPaulaThread.length > 0) {
+      studentElenaConv.messages = elenaPaulaThread;
+    }
+
+    const teacherPaulaConv = this.teacherConversations.find(c => c.id === 'paula');
+    if (teacherPaulaConv) {
+      teacherPaulaConv.messages = elenaPaulaThread;
+    }
+
+    const elenaNoeliaThread = this.chatService.getThread('elenaramos@itutor.es', 'noeliacantador@itutor.es').map(m => ({
+      sender: (m.from === 'noeliacantador@itutor.es' ? 'coordinator' : 'teacher') as 'coordinator' | 'teacher',
+      text: m.text,
+      time: this.chatService.formatTime(m.ts)
+    }));
+
+    const teacherNoeliaConv = this.teacherConversations.find(c => c.id === 'noelia');
+    if (teacherNoeliaConv) {
+      teacherNoeliaConv.messages = elenaNoeliaThread;
+    }
+    const coordElenaConv = this.coordinatorConversations.find(c => c.id === 'elena');
+    if (coordElenaConv && elenaNoeliaThread.length > 0) {
+      coordElenaConv.messages = elenaNoeliaThread;
+    }
+  }
+
+  /** Incorpora las clases agendadas por el profesor en el calendario de Octubre 2026 */
+  private syncScheduledClassesIntoCalendar(): void {
+    for (const c of this.scheduleService.classes) {
+      const [datePart, timePart = '17:00'] = c.start.split('T');
+      const [year, month, dayStr] = datePart.split('-');
+      const dayNum = Number(dayStr);
+      if (year === '2026' && month === '10' && dayNum >= 1 && dayNum <= 31) {
+        this.sessionsMap[dayNum] = {
+          day: dayNum,
+          dateLabel: `${dayNum} de Octubre de 2026`,
+          subject: c.subject,
+          topic: c.topic,
+          teacher: c.teacherName,
+          teacherRole: `Alumno/a: ${c.studentName}`,
+          teacherInitials: 'ER',
+          teacherEmail: c.teacherEmail,
+          time: `${timePart.slice(0, 5)} (${c.durationMin} min)`,
+          duration: `${c.durationMin} min`,
+          room: 'Aula Virtual iTUTOR • Sala Interactiva #04',
+          status: 'Confirmada',
+          price: c.price,
+          notes: c.notes,
+          color: '#2563eb'
+        };
+      }
+    }
+    this.buildOctoberCalendar();
   }
 
   /** Construye la cuadrícula del mes de Octubre de 2026 */
@@ -669,12 +860,116 @@ export class MisClasesPage implements OnInit {
     this.switchSection('mensajes');
   }
 
+  /** Lista completa de apuntes: los subidos por la profesora + los del repositorio base */
+  get notesList(): StudentNoteItem[] {
+    try {
+      const raw = localStorage.getItem(MisClasesPage.UPLOADED_NOTES_KEY);
+      const uploaded = raw ? (JSON.parse(raw) as StudentNoteItem[]) : [];
+      return [...(Array.isArray(uploaded) ? uploaded : []), ...this.baseNotesList];
+    } catch {
+      return this.baseNotesList;
+    }
+  }
+
   /** Apuntes filtrados por asignatura */
   get filteredNotes(): StudentNoteItem[] {
     if (this.selectedNotesFilter === 'Todos') {
       return this.notesList;
     }
     return this.notesList.filter(n => n.subject === this.selectedNotesFilter);
+  }
+
+  /** Abre la ventana emergente para que la profesora suba cualquier PDF o archivo */
+  openUploadNoteModal(): void {
+    this.uploadNoteError = '';
+    this.uploadNoteSuccess = '';
+    this.uploadNoteForm = {
+      title: '',
+      subject: 'Ecuaciones Diferenciales',
+      summary: '',
+      fileName: '',
+      fileSize: '',
+      fileDataUrl: ''
+    };
+    this.showUploadNoteModal = true;
+    this.cdr.markForCheck();
+  }
+
+  closeUploadNoteModal(): void {
+    this.showUploadNoteModal = false;
+    this.uploadNoteError = '';
+    this.cdr.markForCheck();
+  }
+
+  onNoteFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    this.uploadNoteForm.fileName = file.name;
+    const sizeKb = file.size / 1024;
+    this.uploadNoteForm.fileSize = sizeKb >= 1024
+      ? `${(sizeKb / 1024).toFixed(1)} MB`
+      : `${Math.max(1, Math.round(sizeKb))} KB`;
+
+    if (!this.uploadNoteForm.title) {
+      this.uploadNoteForm.title = file.name.replace(/\.[^/.]+$/, '');
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.uploadNoteForm.fileDataUrl = String(reader.result || '');
+      this.cdr.markForCheck();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  confirmUploadNote(): void {
+    if (!this.uploadNoteForm.fileDataUrl) {
+      this.uploadNoteError = 'Por favor, selecciona un archivo PDF o documento de tu equipo.';
+      this.cdr.markForCheck();
+      return;
+    }
+
+    const newNote: StudentNoteItem = {
+      id: `AP-UP-${Date.now().toString(36).toUpperCase()}`,
+      title: this.uploadNoteForm.title.trim() || this.uploadNoteForm.fileName,
+      subject: this.uploadNoteForm.subject || 'Ecuaciones Diferenciales',
+      teacher: this.currentUser?.name || 'Elena Ramos',
+      date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }),
+      size: this.uploadNoteForm.fileSize || '1.0 MB',
+      pages: 1,
+      summary: this.uploadNoteForm.summary.trim() || `Archivo subido por ${this.currentUser?.name || 'Elena Ramos'}: ${this.uploadNoteForm.fileName}`,
+      fileName: this.uploadNoteForm.fileName,
+      fileDataUrl: this.uploadNoteForm.fileDataUrl
+    };
+
+    try {
+      const raw = localStorage.getItem(MisClasesPage.UPLOADED_NOTES_KEY);
+      const uploaded = raw ? (JSON.parse(raw) as StudentNoteItem[]) : [];
+      const next = [newNote, ...(Array.isArray(uploaded) ? uploaded : [])];
+      localStorage.setItem(MisClasesPage.UPLOADED_NOTES_KEY, JSON.stringify(next));
+    } catch {
+      this.baseNotesList.unshift(newNote);
+    }
+
+    this.showUploadNoteModal = false;
+    this.uploadNoteSuccess = `¡Archivo "${newNote.fileName}" subido! Ya está disponible para que Paula lo vea y descargue.`;
+    this.cdr.markForCheck();
+  }
+
+  /** Abre en una nueva pestaña el archivo real subido por la profesora */
+  viewUploadedNote(note: StudentNoteItem): void {
+    if (!note.fileDataUrl) {
+      this.downloadNotePdf(note);
+      return;
+    }
+    const win = window.open();
+    if (win) {
+      win.document.write(
+        `<iframe src="${note.fileDataUrl}" style="border:0; top:0; left:0; bottom:0; right:0; width:100%; height:100%;" allowfullscreen></iframe>`
+      );
+    }
   }
 
   /** Conversación activa seleccionada */
@@ -696,25 +991,139 @@ export class MisClasesPage implements OnInit {
     if (this.isCoordinator) {
       return msg.sender === 'coordinator';
     }
+    if (this.isTeacher) {
+      return msg.sender === 'teacher';
+    }
     return msg.sender === 'student';
   }
 
-  /** Envía un mensaje en tiempo real al profesor seleccionado */
+  /** Envía un mensaje en tiempo real y lo persiste para que Elena y Paula puedan chatear entre sí */
   sendMessage(): void {
     const text = this.newMessageText.trim();
     if (!text) return;
 
-    this.activeConversation.messages.push({
-      sender: this.isCoordinator ? 'coordinator' : 'student',
-      text,
-      time: 'Ahora'
-    });
+    const conv = this.activeConversation;
+    if (this.isTeacher && conv.id === 'paula') {
+      this.chatService.send('elenaramos@itutor.es', 'paulagarcia@itutor.es', text);
+    } else if (!this.isTeacher && !this.isCoordinator && conv.id === 'elena') {
+      this.chatService.send('paulagarcia@itutor.es', 'elenaramos@itutor.es', text);
+    } else if (this.isTeacher && conv.id === 'noelia') {
+      this.chatService.send('elenaramos@itutor.es', 'noeliacantador@itutor.es', text);
+    } else if (this.isCoordinator && conv.id === 'elena') {
+      this.chatService.send('noeliacantador@itutor.es', 'elenaramos@itutor.es', text);
+    } else {
+      conv.messages.push({
+        sender: this.isCoordinator ? 'coordinator' : (this.isTeacher ? 'teacher' : 'student'),
+        text,
+        time: 'Ahora'
+      });
+    }
+
     this.newMessageText = '';
+    this.syncChatThreads();
     this.cdr.markForCheck();
   }
 
-  /** Descarga en PDF un apunte o recibo usando jsPDF */
+  /** Conmuta rápidamente entre el rol de Elena (Profesora) y Paula (Alumna) para probar el chat en vivo */
+  switchChatRole(target: 'elena' | 'paula'): void {
+    if (target === 'elena') {
+      this.authService.login('elenaramos@itutor.es', 'Teacher', 'Elena Ramos');
+      this.selectedTeacherId = 'paula';
+    } else {
+      this.authService.login('paulagarcia@itutor.es', 'Standard', 'Paula García');
+      this.selectedTeacherId = 'elena';
+    }
+    this.syncChatThreads();
+    this.cdr.markForCheck();
+  }
+
+  /** Abre la ventana emergente para agendar clase a un alumno asignado */
+  openScheduleModal(): void {
+    this.scheduleErrorMsg = '';
+    this.scheduleSuccessMsg = '';
+    const students = this.teacherAssignedStudents;
+    const first = students[0];
+    this.scheduleForm = {
+      studentEmail: first ? first.email : '',
+      subject: first ? first.asignaturaPrincipal : 'Ecuaciones Diferenciales',
+      topic: 'Tutoría personalizada y resolución de problemas',
+      date: '2026-10-28',
+      time: '17:00',
+      durationMin: 90
+    };
+    this.showScheduleModal = true;
+    this.cdr.markForCheck();
+  }
+
+  closeScheduleModal(): void {
+    this.showScheduleModal = false;
+    this.scheduleErrorMsg = '';
+    this.cdr.markForCheck();
+  }
+
+  onScheduleStudentChange(): void {
+    const st = this.teacherAssignedStudents.find(s => s.email === this.scheduleForm.studentEmail);
+    if (st) {
+      this.scheduleForm.subject = st.asignaturaPrincipal;
+    }
+    this.cdr.markForCheck();
+  }
+
+  confirmScheduleClass(): void {
+    const students = this.teacherAssignedStudents;
+    const student = students.find(s => s.email === this.scheduleForm.studentEmail);
+    if (!student) {
+      this.scheduleErrorMsg = 'Selecciona uno de tus alumnos asignados.';
+      this.cdr.markForCheck();
+      return;
+    }
+    if (!this.scheduleForm.date || !this.scheduleForm.time) {
+      this.scheduleErrorMsg = 'Selecciona fecha y hora en el calendario.';
+      this.cdr.markForCheck();
+      return;
+    }
+
+    const teacherEmail = this.currentUser?.email || 'elenaramos@itutor.es';
+    const teacher = this.dataService.findTeacherByEmail(teacherEmail);
+    const tarifa = teacher?.tarifaHora || 35;
+    const durationMin = Number(this.scheduleForm.durationMin) || 90;
+    const price = Math.round((tarifa * durationMin) / 60);
+
+    this.scheduleService.schedule({
+      teacherEmail,
+      teacherName: teacher?.nombre || 'Elena Ramos',
+      studentEmail: student.email,
+      studentName: student.nombre,
+      subject: this.scheduleForm.subject || student.asignaturaPrincipal,
+      topic: this.scheduleForm.topic || 'Sesión de tutoría',
+      start: `${this.scheduleForm.date}T${this.scheduleForm.time}`,
+      durationMin,
+      price,
+      notes: this.scheduleForm.topic || 'Clase agendada por el profesor'
+    });
+
+    this.showScheduleModal = false;
+    this.scheduleSuccessMsg = `¡Clase agendada con ${student.nombre} el ${this.scheduleForm.date} a las ${this.scheduleForm.time}!`;
+    this.syncScheduledClassesIntoCalendar();
+    const dayNum = Number(this.scheduleForm.date.split('-')[2]);
+    if (dayNum >= 1 && dayNum <= 31) {
+      this.selectedDay = dayNum;
+    }
+    this.cdr.markForCheck();
+  }
+
+  /** Descarga el archivo original subido por la profesora o genera el PDF con jsPDF */
   downloadNotePdf(note: StudentNoteItem): void {
+    if (note.fileDataUrl) {
+      const a = document.createElement('a');
+      a.href = note.fileDataUrl;
+      a.download = note.fileName || `${note.title}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      return;
+    }
+
     const doc = new jsPDF();
     doc.setFillColor(37, 99, 235);
     doc.rect(0, 0, 210, 26, 'F');
@@ -769,5 +1178,116 @@ export class MisClasesPage implements OnInit {
     doc.text(`IMPORTE TOTAL PAGADO: ${payment.amount},00 € (${payment.status.toUpperCase()})`, 14, 112);
 
     doc.save(`Recibo_iTUTOR_${payment.id}.pdf`);
+  }
+
+  /** =======================================================================
+   *  AJUSTES DE CUENTA: FOTO SUBIDA POR EL USUARIO, DATOS NO MODIFICABLES Y ELIMINAR CUENTA
+   *  ======================================================================= */
+  settingsPhone = '+34 611 000 111';
+  settingsSavedMsg = '';
+  showDeleteAccountModal = false;
+
+  get currentUserEmail(): string {
+    return this.currentUser?.email || 'paulagarcia@itutor.es';
+  }
+
+  /** Foto de perfil que haya subido el propio usuario (null si no ha subido ninguna) */
+  get userUploadedAvatar(): string | null {
+    return this.authService.getUserAvatar(this.currentUserEmail);
+  }
+
+  get userInitialsForSettings(): string {
+    const email = this.currentUserEmail.toLowerCase();
+    if (email.includes('noelia')) return 'NC';
+    if (email.includes('elena') || email.includes('profesor')) return 'ER';
+    if (email.includes('paula')) return 'PG';
+    const name = this.currentUser?.name || email;
+    return name.substring(0, 2).toUpperCase();
+  }
+
+  /** Datos personales bloqueados (Nombre, Apellidos y Fecha de Nacimiento no modificables) */
+  get lockedProfileData(): { firstName: string; lastName: string; birthDate: string; email: string; roleLabel: string } {
+    const email = this.currentUserEmail.toLowerCase();
+    if (email.includes('elena') || email.includes('profesor')) {
+      return {
+        firstName: 'Elena',
+        lastName: 'Ramos',
+        birthDate: '22/08/1985',
+        email: this.currentUserEmail,
+        roleLabel: 'Profesora Docente'
+      };
+    }
+    if (email.includes('noelia')) {
+      return {
+        firstName: 'Noelia',
+        lastName: 'Cantador',
+        birthDate: '10/03/1990',
+        email: this.currentUserEmail,
+        roleLabel: 'Jefa Coordinadora (Admin)'
+      };
+    }
+    if (email.includes('paula')) {
+      return {
+        firstName: 'Paula',
+        lastName: 'García Serrano',
+        birthDate: '14/05/2004',
+        email: this.currentUserEmail,
+        roleLabel: 'Alumna'
+      };
+    }
+    const fullName = (this.currentUser?.name || 'Usuario iTUTOR').trim();
+    const parts = fullName.split(' ');
+    return {
+      firstName: parts[0] || fullName,
+      lastName: parts.slice(1).join(' ') || 'Sin especificar',
+      birthDate: this.currentUser?.birthDate || '14/05/2002',
+      email: this.currentUserEmail,
+      roleLabel: this.isTeacher ? 'Profesor/a Docente' : 'Alumno/a'
+    };
+  }
+
+  /** Permite al usuario subir su propia foto de perfil desde su dispositivo */
+  onUserPhotoSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = String(reader.result || '');
+      if (dataUrl) {
+        this.authService.setUserAvatar(this.currentUserEmail, dataUrl);
+        this.settingsSavedMsg = '¡Has subido tu foto de perfil correctamente!';
+        this.cdr.markForCheck();
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  removeUserPhoto(): void {
+    this.authService.setUserAvatar(this.currentUserEmail, null);
+    this.settingsSavedMsg = 'Se ha eliminado tu foto de perfil.';
+    this.cdr.markForCheck();
+  }
+
+  saveContactPreferences(): void {
+    this.settingsSavedMsg = 'Preferencias de contacto guardadas. Recuerda que el nombre, los apellidos y la fecha de nacimiento son datos oficiales verificados y no se pueden modificar.';
+    this.cdr.markForCheck();
+  }
+
+  openDeleteAccountModal(): void {
+    this.showDeleteAccountModal = true;
+    this.cdr.markForCheck();
+  }
+
+  closeDeleteAccountModal(): void {
+    this.showDeleteAccountModal = false;
+    this.cdr.markForCheck();
+  }
+
+  confirmDeleteAccount(): void {
+    this.showDeleteAccountModal = false;
+    this.authService.deleteAccount(this.currentUserEmail);
+    this.router.navigate(['/login']);
   }
 }
