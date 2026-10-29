@@ -1,5 +1,7 @@
 import { Injectable, NgZone, OnDestroy, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 /** Mensaje de chat entre dos usuarios de iTUTOR (identificados por email) */
 export interface ChatMessage {
@@ -26,6 +28,9 @@ export class ChatService implements OnDestroy {
   private static readonly MESSAGES_KEY = 'itutor_chat_messages';
   private static readonly READS_KEY = 'itutor_chat_reads';
   private zone = inject(NgZone);
+  private http = inject(HttpClient, { optional: true });
+  private readonly apiUrl = environment.apiUrl || 'http://88.26.12.64:3000/api';
+  private pollTimer: ReturnType<typeof setInterval> | null = null;
 
   private messagesSubject = new BehaviorSubject<ChatMessage[]>([]);
   public messages$ = this.messagesSubject.asObservable();
@@ -41,10 +46,45 @@ export class ChatService implements OnDestroy {
     this.seedIfEmpty();
     this.reload();
     window.addEventListener('storage', this.onStorage);
+    this.syncFromApi();
+    if (this.http) {
+      this.pollTimer = setInterval(() => this.syncFromApi(), 4000);
+    }
   }
 
   ngOnDestroy(): void {
     window.removeEventListener('storage', this.onStorage);
+    if (this.pollTimer) {
+      clearInterval(this.pollTimer);
+    }
+  }
+
+  /** Sincroniza los mensajes con la base de datos SQLite en la Banana Pi */
+  private syncFromApi(): void {
+    if (!this.http) return;
+    this.http.get<ChatMessage[]>(`${this.apiUrl}/messages`).subscribe({
+      next: remoteMsgs => {
+        if (!Array.isArray(remoteMsgs) || remoteMsgs.length === 0) return;
+        const local = this.readJson<ChatMessage[]>(ChatService.MESSAGES_KEY, []);
+        const byId = new Map<string, ChatMessage>();
+        for (const m of local) byId.set(m.id, m);
+        let added = false;
+        for (const rm of remoteMsgs) {
+          if (!byId.has(rm.id)) {
+            byId.set(rm.id, rm);
+            added = true;
+          }
+        }
+        if (added) {
+          const merged = [...byId.values()].sort((a, b) => a.ts - b.ts);
+          localStorage.setItem(ChatService.MESSAGES_KEY, JSON.stringify(merged));
+          this.messagesSubject.next(merged);
+        }
+      },
+      error: () => {
+        // Fallback silencioso a localStorage si la Banana Pi no está accesible
+      }
+    });
   }
 
   private reload(): void {
@@ -129,6 +169,9 @@ export class ChatService implements OnDestroy {
     const next = [...this.readJson<ChatMessage[]>(ChatService.MESSAGES_KEY, []), msg];
     localStorage.setItem(ChatService.MESSAGES_KEY, JSON.stringify(next));
     this.messagesSubject.next(next);
+    if (this.http) {
+      this.http.post(`${this.apiUrl}/messages`, msg).subscribe({ error: () => {} });
+    }
     return msg;
   }
 

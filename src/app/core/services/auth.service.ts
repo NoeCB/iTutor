@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 export interface User {
   email: string;
@@ -96,6 +98,8 @@ export class AuthService {
    */
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
+  private http = inject(HttpClient, { optional: true });
+  private readonly apiUrl = environment.apiUrl || 'http://88.26.12.64:3000/api';
 
   constructor() {
     this.restoreSession();
@@ -236,6 +240,12 @@ export class AuthService {
     }
 
     this.login(account.email, account.role, account.name);
+    if (this.http) {
+      this.http.post(`${this.apiUrl}/auth/login`, {
+        email: account.email,
+        passwordHash: account.passwordHash
+      }).subscribe({ error: () => {} });
+    }
     return this.currentUserValue;
   }
 
@@ -286,6 +296,15 @@ export class AuthService {
     localStorage.setItem(AuthService.REGISTERED_KEY, JSON.stringify(registered));
 
     this.login(account.email, account.role, account.name);
+    if (this.http) {
+      this.http.post(`${this.apiUrl}/auth/register`, {
+        email: account.email,
+        name: account.name,
+        role: account.role,
+        salt: account.salt,
+        passwordHash: account.passwordHash
+      }).subscribe({ error: () => {} });
+    }
     return this.currentUserValue as User;
   }
 
