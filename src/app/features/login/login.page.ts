@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, AsyncValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -52,7 +52,7 @@ import {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   // Inyección mediante la función inject() (patrón recomendado en Angular
   // moderno). Se declara ANTES de loginForm para que las dependencias estén
   // resueltas cuando el constructor construya el formulario reactivo.
@@ -126,6 +126,21 @@ export class LoginPage {
         this.cdr.markForCheck();
       }
     });
+  }
+
+  /**
+   * Al entrar en la pantalla de Login se cierra cualquier sesión previa activa.
+   * Así se garantiza que desde /login sea imposible escribir una ruta protegida
+   * (/mis-clases, /portal-profesor, /admin-dashboard, etc.) en la barra de
+   * direcciones sin haberse autenticado antes: el authGuard bloqueará el acceso
+   * y devolverá siempre al usuario a /login.
+   */
+  ngOnInit(): void {
+    this.authService.logout();
+  }
+
+  ionViewWillEnter(): void {
+    this.authService.logout();
   }
 
   switchMode(newMode: 'login' | 'register'): void {
