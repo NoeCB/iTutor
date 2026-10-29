@@ -145,8 +145,13 @@ export class AuthService {
    * inmediato de la sesión en lugar de conceder acceso por defecto.
    */
   private restoreSession(): void {
-    const savedUser = this.sessionStore.getItem('user') || localStorage.getItem('user');
-    const savedToken = this.sessionStore.getItem('token') || localStorage.getItem('token');
+    // Eliminamos cualquier sesión residual antigua en localStorage para evitar
+    // que persista entre cierres de navegador o permita entrar sin loguearse.
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+
+    const savedUser = this.sessionStore.getItem('user');
+    const savedToken = this.sessionStore.getItem('token');
 
     if (!savedUser || !savedToken) {
       this.clearSession();
@@ -351,8 +356,6 @@ export class AuthService {
     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.iTUTOR.signature';
     this.sessionStore.setItem('user', serialized);
     this.sessionStore.setItem('token', token);
-    localStorage.setItem('user', serialized);
-    localStorage.setItem('token', token);
   }
 
   logout(): void {
