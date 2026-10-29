@@ -1,7 +1,9 @@
 import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { ScheduleService, ScheduledClass } from './schedule.service';
 import { Observable, forkJoin, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { catchError, delay, map, timeout } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 /** Interfaz representativa de entidad en base de datos relacional (SQL / PostgreSQL) */
 export interface SqlStudentRate {
@@ -693,6 +695,8 @@ export class DataService {
   ];
 
   private scheduleService = inject(ScheduleService);
+  private http = inject(HttpClient, { optional: true });
+  private readonly apiUrl = environment.apiUrl || 'http://88.26.12.64:3000/api';
 
   /** Claves de `localStorage` para las altas realizadas desde el formulario de registro */
   private static readonly REGISTERED_TEACHERS_KEY = 'itutor_registered_teachers';
@@ -836,30 +840,49 @@ export class DataService {
   }
 
   /**
-   * Simula consulta a API Backend conectada a SQL (PostgreSQL/MySQL).
-   * Recupera catálogo maestro de los 10 alumnos, tarifas horarias y profesores asignados.
+   * Consulta a API Backend en Banana Pi M2 Berry (tras NAT en puerto 3000) conectada a SQL.
+   * Recupera catálogo maestro de alumnos, tarifas horarias y profesores asignados.
    */
   getSqlStudentsCatalog(): Observable<SqlStudentRate[]> {
+    if (this.http) {
+      return this.http.get<SqlStudentRate[]>(`${this.apiUrl}/students`).pipe(
+        timeout(2000),
+        catchError(() => of(this.allStudents).pipe(delay(350)))
+      );
+    }
     return of(this.allStudents).pipe(delay(350));
   }
 
   /**
-   * Simula consulta a API Backend conectada a SQL.
-   * Recupera catálogo maestro de los 10 profesores de iTUTOR con balance y horas.
+   * Consulta a API Backend en Banana Pi M2 Berry conectada a SQL.
+   * Recupera catálogo maestro de los profesores de iTUTOR con balance y horas.
    */
   getTeachersCatalog(): Observable<TeacherRecord[]> {
+    if (this.http) {
+      return this.http.get<TeacherRecord[]>(`${this.apiUrl}/teachers`).pipe(
+        timeout(2000),
+        catchError(() => of(this.allTeachers).pipe(delay(350)))
+      );
+    }
     return of(this.allTeachers).pipe(delay(350));
   }
 
   /**
-   * Simula consulta a API Backend conectada a NoSQL (MongoDB Atlas).
-   * Recupera histórico y sesiones de tutoría en tiempo real con metadatos no estructurados.
+   * Consulta a API Backend en Banana Pi M2 Berry.
+   * Recupera histórico y sesiones de tutoría en tiempo real.
    */
   getMongoSessionsStream(): Observable<MongoClassSession[]> {
     const extra = this.scheduleService.classes.map(c => {
       const t = this.findTeacherByEmail(c.teacherEmail) || this.TEACHERS_CATALOG[0];
       return this.scheduledToSession(c, t);
     });
+    if (this.http) {
+      return this.http.get<MongoClassSession[]>(`${this.apiUrl}/sessions`).pipe(
+        timeout(2000),
+        map(remoteSessions => [...extra, ...remoteSessions]),
+        catchError(() => of([...extra, ...this.SESSIONS_COLLECTION]).pipe(delay(400)))
+      );
+    }
     return of([...extra, ...this.SESSIONS_COLLECTION]).pipe(delay(400));
   }
 

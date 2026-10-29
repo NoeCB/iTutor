@@ -1,6 +1,8 @@
 import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent } from '@ionic/angular/ion-content';
 import { IonHeader } from '@ionic/angular/ion-header';
@@ -143,6 +145,8 @@ export class MisClasesPage implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   public sidebarService = inject(SidebarService);
   private authService = inject(AuthService);
+  private http = inject(HttpClient, { optional: true });
+  private readonly apiUrl = environment.apiUrl || 'http://88.26.12.64:3000/api';
   private chatService = inject(ChatService);
   private scheduleService = inject(ScheduleService);
   private dataService = inject(DataService);
@@ -723,6 +727,22 @@ export class MisClasesPage implements OnInit {
       this.syncScheduledClassesIntoCalendar();
       this.cdr.markForCheck();
     });
+    if (this.http) {
+      this.http.get<StudentNoteItem[]>(`${this.apiUrl}/apuntes`).subscribe({
+        next: remoteNotes => {
+          if (Array.isArray(remoteNotes) && remoteNotes.length > 0) {
+            const existingIds = new Set(this.baseNotesList.map(n => n.id));
+            for (const rn of remoteNotes) {
+              if (!existingIds.has(rn.id)) {
+                this.baseNotesList.unshift(rn);
+              }
+            }
+            this.cdr.markForCheck();
+          }
+        },
+        error: () => {}
+      });
+    }
   }
 
   /** Sincroniza los mensajes en tiempo real entre Elena (Profesora), Paula (Alumna) y Noelia (Coordinadora) */
@@ -951,6 +971,9 @@ export class MisClasesPage implements OnInit {
       localStorage.setItem(MisClasesPage.UPLOADED_NOTES_KEY, JSON.stringify(next));
     } catch {
       this.baseNotesList.unshift(newNote);
+    }
+    if (this.http) {
+      this.http.post(`${this.apiUrl}/apuntes`, newNote).subscribe({ error: () => {} });
     }
 
     this.showUploadNoteModal = false;
