@@ -51,6 +51,10 @@ export const routes: Routes = [
     path: 'ajustes',
     loadComponent: () => import('./features/mis-clases/mis-clases.page').then(m => m.MisClasesPage),
     canActivate: [authGuard],
-    data: { section: 'ajustes' }
+    data: { role: ['Standard', 'Teacher', 'Admin'], section: 'ajustes' }
+  },
+  {
+    path: '**',
+    redirectTo: 'login'
   }
 ];
