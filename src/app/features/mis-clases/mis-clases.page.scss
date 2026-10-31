@@ -554,3 +554,26 @@
     }
   }
 }
+
+.month-nav-btn {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 6px;
+  color: inherit;
+}
+
+.month-nav-btn:hover,
+.month-nav-btn:focus-visible {
+  background: rgba(37, 99, 235, 0.12);
+}
+
+.chat-empty-text {
+  color: #64748b;
+  font-size: 0.85rem;
+  padding: 12px;
+  text-align: center;
+}

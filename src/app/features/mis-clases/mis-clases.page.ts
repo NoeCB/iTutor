@@ -51,7 +51,7 @@ import jsPDF from 'jspdf';
 import { SidebarService } from '../../core/services/sidebar.service';
 import { AuthService, User } from '../../core/services/auth.service';
 import { ChatService } from '../../core/services/chat.service';
-import { ScheduleService } from '../../core/services/schedule.service';
+import { ScheduleService, ScheduledClass } from '../../core/services/schedule.service';
 import { DataService, SqlStudentRate } from '../../core/services/data.service';
 import { ApuntesService, ApunteItem } from '../../core/services/apuntes.service';
 
@@ -84,7 +84,8 @@ export interface TeacherConversation {
   online: boolean;
   unread: number;
   messages: {
-    sender: 'teacher' | 'student' | 'coordinator';
+    /** 'peer' = escrito por la otra persona de la conversación */
+    sender: 'teacher' | 'student' | 'coordinator' | 'peer';
     text: string;
     time: string;
   }[];
@@ -98,7 +99,8 @@ export interface StudentPaymentRecord {
   teacher: string;
   method: string;
   amount: number;
-  status: 'Pagado';
+  /** 'Pendiente' = clase agendada aún sin abonar (no hay pasarela de pago real) */
+  status: 'Pagado' | 'Pendiente';
 }
 
 export interface CalendarCell {
@@ -160,14 +162,42 @@ export class MisClasesPage implements OnInit, OnDestroy {
   /** Sección activa: 'tutorias' | 'apuntes' | 'mensajes' | 'pagos' | 'ajustes' */
   activeSection: 'tutorias' | 'apuntes' | 'mensajes' | 'pagos' | 'ajustes' = 'tutorias';
 
-  /** Día seleccionado en el calendario de Octubre 2026 (Por defecto el día 10 de octubre) */
-  selectedDay = 10;
+  /**
+   * Cuentas demo (alumna Paula, profesora Elena y coordinadora Noelia): conservan el
+   * contenido de ejemplo. Cualquier otra cuenta solo ve sus propios datos reales.
+   */
+  private static readonly DEMO_VIEW = new Set([
+    'paulagarcia@itutor.es',
+    'elenaramos@itutor.es',
+    'noeliacantador@itutor.es'
+  ]);
+  private static readonly COORDINATOR_EMAIL = 'noeliacantador@itutor.es';
+  private static readonly PALETTE = ['#2563eb', '#10b981', '#6366f1', '#f59e0b', '#ec4899'];
 
+  private get isDemoView(): boolean {
+    return MisClasesPage.DEMO_VIEW.has(this.myEmail);
+  }
+
+  private get myEmail(): string {
+    return (this.currentUser?.email || '').toLowerCase();
+  }
+
+  /** Sesiones del mes visible (se rehacen en ebuildCalendar()) */
+  sessionsMap: Record<number, TutoriaSession> = {};
+  private subs: Subscription[] = [];
+
+  /** Mes que se está viendo en el calendario (month: 0 = enero) */
+  viewYear = new Date().getFullYear();
+  viewMonth = new Date().getMonth();
+  /** Día seleccionado del mes visible */
+  selectedDay = 1;
+  /** `true` cuando el usuario ya ha cambiado de mes a mano (no se vuelve a saltar solo) */
+  private monthTouched = false;
   /** Días de la semana (Lunes a Domingo) */
   weekDays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
-  /** Sesiones programadas de Paula García en Octubre 2026 */
-  sessionsMap: Record<number, TutoriaSession> = {
+  /** Sesiones de ejemplo de la alumna demo en Octubre 2026 (solo cuentas demo) */
+  private readonly demoSessions: Record<number, TutoriaSession> = {
     3: {
       day: 3,
       dateLabel: 'Sábado, 3 de Octubre de 2026',
@@ -294,7 +324,6 @@ export class MisClasesPage implements OnInit, OnDestroy {
 
   /** Apuntes y Recursos del alumno / profesor en sesión */
   private uploadingNote = false;
-  private notesSub?: Subscription;
   /** Lista que se pinta: apuntes del servidor + pendientes de este dispositivo + los de ejemplo. */
   notes: StudentNoteItem[] = [];
   /** `true` si el servidor no ha respondido y se muestra la última copia guardada. */
@@ -384,214 +413,21 @@ export class MisClasesPage implements OnInit, OnDestroy {
     }
   ];
 
-  /** Conversaciones con los Profesores */
-  selectedTeacherId = 'elena';
+  /** Conversación seleccionada (su id es el email del contacto) */
+  selectedTeacherId = '';
   newMessageText = '';
+  /** Conversaciones del usuario en sesión, construidas con sus contactos y mensajes reales. */
+  conversations: TeacherConversation[] = [];
+  private extraPeers = new Set<string>();
 
-  /** Conversaciones de coordinación entre la Jefa Coordinadora (Noelia) y los Profesores */
-  coordinatorConversations: TeacherConversation[] = [
-    {
-      id: 'elena',
-      teacherName: 'Elena Ramos',
-      subject: 'Física Teórica & Mecánica Clásica',
-      initials: 'ER',
-      online: true,
-      unread: 1,
-      messages: [
-        {
-          sender: 'coordinator',
-          text: 'Estimada Elena Ramos, ¿cómo avanza el seguimiento de las tutorías de Física y Mecánica este mes?',
-          time: '09:30'
-        },
-        {
-          sender: 'teacher',
-          text: 'Buenos días Noelia. Todo marcha según el plan docente. Marcos y Paula están completando las hojas de problemas y las actas de sesiones ya están cargadas en la plataforma.',
-          time: '10:05'
-        },
-        {
-          sender: 'coordinator',
-          text: 'Perfecto Elena, reviso las horas impartidas para validar los honorarios docentes de este ciclo. ¡Muchas gracias por el informe!',
-          time: '10:15'
-        },
-        {
-          sender: 'teacher',
-          text: 'A ti, Noelia. Quedo a tu disposición para cualquier ajuste o nueva asignación en el calendario.',
-          time: '10:20'
-        }
-      ]
-    },
-    {
-      id: 'carlos',
-      teacherName: 'Prof. Carlos Méndez',
-      subject: 'Cálculo Multivariable & Álgebra Lineal',
-      initials: 'CM',
-      online: true,
-      unread: 1,
-      messages: [
-        {
-          sender: 'coordinator',
-          text: 'Hola Carlos, confírmame por favor si has recibido la asignación de los nuevos alumnos para Cálculo y Álgebra.',
-          time: 'Ayer'
-        },
-        {
-          sender: 'teacher',
-          text: 'Hola Noelia, sí, todo recibido y verificado. Ya he fijado los horarios de tutorías en el calendario para el próximo mes.',
-          time: 'Ayer'
-        },
-        {
-          sender: 'coordinator',
-          text: 'Excelente gestión. Avisamos a los estudiantes asignados para que confirmen sus reservas.',
-          time: 'Ayer'
-        }
-      ]
-    },
-    {
-      id: 'miguel',
-      teacherName: 'Miguel Ángel Santos',
-      subject: 'Termodinámica & Mecánica de Fluidos',
-      initials: 'MS',
-      online: true,
-      unread: 1,
-      messages: [
-        {
-          sender: 'coordinator',
-          text: 'Hola Miguel Ángel, ¿se ha completado la sesión de Termodinámica de Alejandro Gómez sin incidencias?',
-          time: '08 Oct'
-        },
-        {
-          sender: 'teacher',
-          text: 'Buenas tardes Noelia, sí, sesión completada y asistencia registrada. Muy buen aprovechamiento del contenido por parte del alumno.',
-          time: '08 Oct'
-        },
-        {
-          sender: 'coordinator',
-          text: 'Magnífico. Queda validada en el registro oficial de sesiones.',
-          time: '08 Oct'
-        }
-      ]
-    }
-  ];
-
-  /** Conversaciones de la Alumna (Paula García) */
-  studentConversations: TeacherConversation[] = [
-    {
-      id: 'elena',
-      teacherName: 'Elena Ramos',
-      subject: 'Profesora de Ecuaciones Diferenciales',
-      initials: 'ER',
-      online: true,
-      unread: 1,
-      messages: [
-        {
-          sender: 'teacher',
-          text: '¡Hola Paula! Te he dejado subidos en "Mis Apuntes" el PDF con los ejercicios de la clase del sábado 10 de octubre sobre Transformada de Laplace.',
-          time: '10:15'
-        },
-        {
-          sender: 'student',
-          text: '¡Muchas gracias Elena! Los estoy revisando ahora mismo. ¿En la clase del día 10 veremos también sistemas de ecuaciones diferenciales?',
-          time: '10:18'
-        },
-        {
-          sender: 'teacher',
-          text: '¡Sí! En los últimos 30 minutos de la sesión del 10 de octubre resolveremos un sistema acoplado de 2º orden tipo examen. ¡Nos vemos en la Sala #04!',
-          time: '10:21'
-        }
-      ]
-    },
-    {
-      id: 'carlos',
-      teacherName: 'Prof. Carlos Méndez',
-      subject: 'Profesor de Cálculo y Álgebra Lineal',
-      initials: 'CM',
-      online: true,
-      unread: 1,
-      messages: [
-        {
-          sender: 'teacher',
-          text: 'Buenas tardes Paula, recuerda repasar el cálculo del Jacobiano para las integrales dobles en polares.',
-          time: 'Ayer'
-        },
-        {
-          sender: 'student',
-          text: 'Perfecto Carlos, ya he terminado los 4 primeros ejercicios del boletín.',
-          time: 'Ayer'
-        }
-      ]
-    },
-    {
-      id: 'noelia',
-      teacherName: 'Noelia Cantador',
-      subject: 'Coordinadora Académica iTUTOR',
-      initials: 'NC',
-      online: true,
-      unread: 0,
-      messages: [
-        {
-          sender: 'teacher',
-          text: '¡Bienvenida a iTUTOR, Paula! Tu bono de tutorías de Octubre ya está confirmado y todas tus clases aparecen en tu calendario.',
-          time: '01 Oct'
-        }
-      ]
-    }
-  ];
-
-  /** Conversaciones de la Profesora (Elena Ramos) con sus alumnos asignados */
-  teacherConversations: TeacherConversation[] = [
-    {
-      id: 'paula',
-      peerEmail: 'paulagarcia@itutor.es',
-      teacherName: 'Paula García',
-      subject: 'Alumna • Ecuaciones Diferenciales',
-      initials: 'PG',
-      online: true,
-      unread: 0,
-      messages: []
-    },
-    {
-      id: 'marcos',
-      peerEmail: 'marcosvega@itutor.es',
-      teacherName: 'Marcos Vega Ortiz',
-      subject: 'Alumno • Física Clásica & Mecánica',
-      initials: 'MV',
-      online: true,
-      unread: 0,
-      messages: [
-        {
-          sender: 'student',
-          text: 'Hola Elena, ya he subido la hoja de problemas de dinámica de rotación.',
-          time: 'Ayer'
-        },
-        {
-          sender: 'teacher',
-          text: '¡Estupendo Marcos! La reviso esta tarde y comentamos los ejercicios en la próxima sesión.',
-          time: 'Ayer'
-        }
-      ]
-    },
-    {
-      id: 'noelia',
-      peerEmail: 'noeliacantador@itutor.es',
-      teacherName: 'Noelia Cantador',
-      subject: 'Coordinadora Académica iTUTOR',
-      initials: 'NC',
-      online: true,
-      unread: 0,
-      messages: []
-    }
-  ];
-
-  /** Devuelve las conversaciones correspondientes al rol en sesión (Coordinadora, Profesora o Alumna) */
-  get conversations(): TeacherConversation[] {
-    if (this.isCoordinator) {
-      return this.coordinatorConversations;
-    }
-    if (this.isTeacher) {
-      return this.teacherConversations;
-    }
-    return this.studentConversations;
+  /** Rol del usuario en el chat (para marcar sus mensajes) */
+  private get mySender(): 'coordinator' | 'teacher' | 'student' {
+    return this.isCoordinator ? 'coordinator' : this.isTeacher ? 'teacher' : 'student';
   }
 
+  get roleLabel(): string {
+    return this.isCoordinator ? 'Coordinación' : this.isTeacher ? 'Profesor/a' : 'Alumno/a';
+  }
   /** Estado de la ventana emergente para agendar clase desde la vista del profesor */
   showScheduleModal = false;
   scheduleSuccessMsg = '';
@@ -600,19 +436,18 @@ export class MisClasesPage implements OnInit, OnDestroy {
     studentEmail: '',
     subject: '',
     topic: '',
-    date: '2026-10-28',
+    date: new Date(Date.now() + 86_400_000).toISOString().slice(0, 10),
     time: '17:00',
     durationMin: 90
   };
   availableHours = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
 
   get teacherAssignedStudents(): SqlStudentRate[] {
-    const email = this.currentUser?.email || 'elenaramos@itutor.es';
-    return this.dataService.getStudentsForTeacher(email);
+    return this.dataService.getStudentsForTeacher(this.myEmail);
   }
 
-  /** Dashboard de Facturación & Pagos de Paula García */
-  paymentKpis = {
+  /** Facturación de ejemplo de la alumna demo (solo cuentas demo) */
+  private readonly demoPaymentKpis = {
     totalPagado: '385,00 €',
     clasesAbonadas: '11 sesiones',
     horasTotales: '16,5 horas',
@@ -622,13 +457,13 @@ export class MisClasesPage implements OnInit, OnDestroy {
     metodoPago: 'Visa •••• 4821'
   };
 
-  subjectSpending = [
+  private readonly demoSubjectSpending = [
     { subject: 'Ecuaciones Diferenciales (Elena Ramos)', amount: 210, sessions: 6, percentage: 55, color: '#2563eb' },
     { subject: 'Cálculo Multivariable (Prof. Carlos Méndez)', amount: 105, sessions: 3, percentage: 27, color: '#10b981' },
     { subject: 'Álgebra Lineal (Prof. Carlos Méndez)', amount: 70, sessions: 2, percentage: 18, color: '#6366f1' }
   ];
 
-  paymentsHistory: StudentPaymentRecord[] = [
+  private readonly demoPaymentsHistory: StudentPaymentRecord[] = [
     {
       id: 'FAC-2026-1010',
       date: '10 Oct 2026',
@@ -671,6 +506,10 @@ export class MisClasesPage implements OnInit, OnDestroy {
     }
   ];
 
+  /** Facturación mostrada: la de ejemplo (demo) o la calculada con las clases agendadas del usuario. */
+  paymentKpis = { ...this.demoPaymentKpis };
+  subjectSpending: { subject: string; amount: number; sessions: number; percentage: number; color: string }[] = [];
+  paymentsHistory: StudentPaymentRecord[] = [];
   constructor() {
     addIcons({
       calendarOutline,
@@ -704,35 +543,47 @@ export class MisClasesPage implements OnInit, OnDestroy {
       trashOutline,
       lockClosedOutline
     });
+    if (this.isDemoView) {
+      this.viewYear = 2026;
+      this.viewMonth = 9;
+      this.selectedDay = 10;
+    }
     this.syncChatThreads();
-    this.buildOctoberCalendar();
+    this.rebuildCalendar();
+    this.rebuildPayments();
   }
 
   ngOnInit(): void {
-    if (this.isTeacher) {
-      this.selectedTeacherId = 'paula';
-    }
-    this.route.data.subscribe(data => {
-      if (data && data['section']) {
-        this.activeSection = data['section'];
-        if (this.isTeacher && this.selectedTeacherId === 'elena') {
-          this.selectedTeacherId = 'paula';
+    this.subs.push(
+      this.route.data.subscribe(data => {
+        if (data && data['section']) {
+          this.activeSection = data['section'];
+          this.syncChatThreads();
+          this.cdr.markForCheck();
         }
+      }),
+      this.chatService.messages$.subscribe(() => {
         this.syncChatThreads();
         this.cdr.markForCheck();
-      }
-    });
-    this.chatService.messages$.subscribe(() => {
-      this.syncChatThreads();
-      this.cdr.markForCheck();
-    });
-    this.scheduleService.classes$.subscribe(() => {
-      this.syncScheduledClassesIntoCalendar();
-      this.cdr.markForCheck();
-    });
+      }),
+      this.scheduleService.classes$.subscribe(() => {
+        this.rebuildCalendar();
+        this.rebuildPayments();
+        this.cdr.markForCheck();
+      }),
+      // Llega el directorio de AWS (mis profesores / mis alumnos): se rehacen contactos y calendario.
+      this.dataService.directoryChanged$.subscribe(() => {
+        this.syncChatThreads();
+        this.rebuildCalendar();
+        this.cdr.markForCheck();
+      })
+    );
+    void this.dataService.refreshDirectory();
+    void this.scheduleService.refresh();
+
     // Apuntes: se cargan del servidor y se refrescan cuando un envío pendiente termina.
-    this.notes = [...this.baseNotesList];
-    this.notesSub = this.apuntes.changed$.subscribe(() => void this.loadNotes());
+    this.notes = this.isDemoView ? [...this.baseNotesList] : [];
+    this.subs.push(this.apuntes.changed$.subscribe(() => void this.loadNotes()));
     void this.loadNotes();
     const me = this.currentUser;
     if (this.isTeacher && me?.email) {
@@ -740,89 +591,230 @@ export class MisClasesPage implements OnInit, OnDestroy {
     }
   }
 
-  /** Sincroniza los mensajes en tiempo real entre Elena (Profesora), Paula (Alumna) y Noelia (Coordinadora) */
-  private syncChatThreads(): void {
-    const elenaPaulaThread = this.chatService.getThread('elenaramos@itutor.es', 'paulagarcia@itutor.es').map(m => ({
-      sender: (m.from === 'elenaramos@itutor.es' ? 'teacher' : 'student') as 'teacher' | 'student',
-      text: m.text,
-      time: this.chatService.formatTime(m.ts)
-    }));
-
-    const studentElenaConv = this.studentConversations.find(c => c.id === 'elena');
-    if (studentElenaConv && elenaPaulaThread.length > 0) {
-      studentElenaConv.messages = elenaPaulaThread;
+  /** Clases agendadas que le corresponden al usuario: las suyas (alumno/profesor) o todas (administración). */
+  private myScheduledClasses(): ScheduledClass[] {
+    if (this.isCoordinator) {
+      return this.scheduleService.classes;
     }
-
-    const teacherPaulaConv = this.teacherConversations.find(c => c.id === 'paula');
-    if (teacherPaulaConv) {
-      teacherPaulaConv.messages = elenaPaulaThread;
-    }
-
-    const elenaNoeliaThread = this.chatService.getThread('elenaramos@itutor.es', 'noeliacantador@itutor.es').map(m => ({
-      sender: (m.from === 'noeliacantador@itutor.es' ? 'coordinator' : 'teacher') as 'coordinator' | 'teacher',
-      text: m.text,
-      time: this.chatService.formatTime(m.ts)
-    }));
-
-    const teacherNoeliaConv = this.teacherConversations.find(c => c.id === 'noelia');
-    if (teacherNoeliaConv) {
-      teacherNoeliaConv.messages = elenaNoeliaThread;
-    }
-    const coordElenaConv = this.coordinatorConversations.find(c => c.id === 'elena');
-    if (coordElenaConv && elenaNoeliaThread.length > 0) {
-      coordElenaConv.messages = elenaNoeliaThread;
-    }
+    return this.isTeacher
+      ? this.scheduleService.getForTeacher(this.myEmail)
+      : this.scheduleService.getForStudent(this.myEmail);
   }
 
-  /** Incorpora las clases agendadas por el profesor en el calendario de Octubre 2026 */
-  private syncScheduledClassesIntoCalendar(): void {
-    for (const c of this.scheduleService.classes) {
-      const [datePart, timePart = '17:00'] = c.start.split('T');
-      const [year, month, dayStr] = datePart.split('-');
-      const dayNum = Number(dayStr);
-      if (year === '2026' && month === '10' && dayNum >= 1 && dayNum <= 31) {
-        this.sessionsMap[dayNum] = {
-          day: dayNum,
-          dateLabel: `${dayNum} de Octubre de 2026`,
-          subject: c.subject,
-          topic: c.topic,
-          teacher: c.teacherName,
-          teacherRole: `Alumno/a: ${c.studentName}`,
-          teacherInitials: 'ER',
-          teacherEmail: c.teacherEmail,
-          time: `${timePart.slice(0, 5)} (${c.durationMin} min)`,
-          duration: `${c.durationMin} min`,
-          room: 'Aula Virtual iTUTOR • Sala Interactiva #04',
-          status: 'Confirmada',
-          price: c.price,
-          notes: c.notes,
-          color: '#2563eb'
-        };
+  private initialsOf(name: string): string {
+    const parts = name.replace(/\b(Dra?\.|Prof\.)/g, '').trim().split(/\s+/).filter(Boolean);
+    return ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? parts[0]?.[1] ?? '')).toUpperCase() || '??';
+  }
+
+  private nameForEmail(email: string): string {
+    return (
+      this.dataService.findTeacherByEmail(email)?.nombre ||
+      this.dataService.findStudentByEmail(email)?.nombre ||
+      this.authService.getPublicAccount(email)?.name ||
+      email.split('@')[0]
+    );
+  }
+
+  /** Construye la lista de conversaciones: contactos del usuario + cualquiera con quien ya haya hablado. */
+  private syncChatThreads(): void {
+    const me = this.myEmail;
+    if (!me) {
+      this.conversations = [];
+      return;
+    }
+    const peers = new Map<string, string>(); // email -> asignatura / descripción
+
+    if (this.isCoordinator) {
+      for (const t of this.dataService.allTeachers) {
+        peers.set(t.email.toLowerCase(), t.especialidad);
+      }
+    } else if (this.isTeacher) {
+      for (const s of this.dataService.getStudentsForTeacher(me)) {
+        peers.set(s.email.toLowerCase(), s.asignaturaPrincipal);
+      }
+      peers.set(MisClasesPage.COORDINATOR_EMAIL, 'Coordinadora Académica iTUTOR');
+    } else {
+      for (const t of this.dataService.getTeachersForStudent(me)) {
+        peers.set(t.email.toLowerCase(), t.especialidad);
+      }
+      peers.set(MisClasesPage.COORDINATOR_EMAIL, 'Coordinadora Académica iTUTOR');
+    }
+    for (const e of [...this.chatService.getContactsOf(me), ...this.extraPeers]) {
+      if (!peers.has(e)) {
+        peers.set(e, this.dataService.findTeacherByEmail(e)?.especialidad || this.dataService.findStudentByEmail(e)?.asignaturaPrincipal || '');
       }
     }
-    this.buildOctoberCalendar();
+    peers.delete(me);
+
+    const convs: TeacherConversation[] = [...peers.entries()].map(([email, subject]) => {
+      const name = this.nameForEmail(email);
+      return {
+        id: email,
+        peerEmail: email,
+        teacherName: name,
+        subject: subject || (email === MisClasesPage.COORDINATOR_EMAIL ? 'Coordinadora Académica iTUTOR' : ''),
+        initials: this.initialsOf(name),
+        online: false,
+        unread: this.chatService.unreadFrom(me, email),
+        messages: this.chatService.getThread(me, email).map(m => ({
+          sender: (m.from === me ? this.mySender : 'peer') as 'coordinator' | 'teacher' | 'student' | 'peer',
+          text: m.text,
+          time: this.chatService.formatTime(m.ts)
+        }))
+      };
+    });
+    // Primero los que tienen actividad reciente; después, por nombre.
+    convs.sort(
+      (a, b) =>
+        this.chatService.lastActivity(me, b.peerEmail || '') - this.chatService.lastActivity(me, a.peerEmail || '') ||
+        a.teacherName.localeCompare(b.teacherName)
+    );
+    this.conversations = convs;
+    if (!convs.some(c => c.id === this.selectedTeacherId)) {
+      this.selectedTeacherId = convs[0]?.id ?? '';
+    }
+    // La conversación que se está leyendo no acumula "no leídos".
+    const open = convs.find(c => c.id === this.selectedTeacherId);
+    if (open && open.unread > 0 && this.activeSection === 'mensajes' && open.peerEmail) {
+      this.chatService.markRead(me, open.peerEmail);
+    }
   }
 
-  /** Construye la cuadrícula del mes de Octubre de 2026 */
-  private buildOctoberCalendar(): void {
-    // 1 de Octubre de 2026 es Jueves (3 celdas vacías antes: Lun, Mar, Mié)
-    const emptyPrefixDays = 3;
-    const totalDaysInOctober = 31;
-    const cells: CalendarCell[] = [];
+  /** Reconstruye el calendario del mes visible con las clases reales (más las de ejemplo en cuentas demo). */
+  private rebuildCalendar(): void {
+    const map: Record<number, TutoriaSession> = {};
+    if (this.isDemoView && this.viewYear === 2026 && this.viewMonth === 9) {
+      Object.assign(map, structuredClone(this.demoSessions));
+    }
+    const shown = this.myScheduledClasses()
+      .filter(c => {
+        const [y, m] = c.start.split('T')[0].split('-').map(Number);
+        return y === this.viewYear && m - 1 === this.viewMonth;
+      })
+      .sort((a, b) => a.start.localeCompare(b.start));
+    for (const c of shown) {
+      const [datePart, timePart = '17:00'] = c.start.split('T');
+      const day = Number(datePart.split('-')[2]);
+      const other = this.isTeacher ? c.studentName : c.teacherName;
+      const label = new Date(`${datePart}T12:00`).toLocaleDateString('es-ES', {
+        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+      });
+      map[day] = {
+        day,
+        dateLabel: label.charAt(0).toUpperCase() + label.slice(1),
+        subject: c.subject,
+        topic: c.topic,
+        teacher: other,
+        teacherRole: this.isTeacher ? 'Alumno/a' : 'Profesor/a',
+        teacherInitials: this.initialsOf(other),
+        teacherEmail: this.isTeacher ? c.studentEmail : c.teacherEmail,
+        time: `${timePart.slice(0, 5)} (${c.durationMin} min)`,
+        duration: `${c.durationMin} min`,
+        room: 'Aula Virtual iTUTOR',
+        status: new Date(c.start).getTime() < Date.now() ? 'Completada' : 'Confirmada',
+        price: c.price,
+        notes: c.notes || c.topic,
+        color: MisClasesPage.PALETTE[c.subject.length % MisClasesPage.PALETTE.length]
+      };
+    }
+    this.sessionsMap = map;
 
-    for (let i = 0; i < emptyPrefixDays; i++) {
+    // Primera vez: si no hay nada este mes, se salta al mes de la próxima clase.
+    if (!this.monthTouched && Object.keys(map).length === 0) {
+      const next = this.myScheduledClasses()
+        .filter(c => new Date(c.start).getTime() >= Date.now() - 86_400_000)
+        .sort((a, b) => a.start.localeCompare(b.start))[0];
+      if (next) {
+        const [y, m] = next.start.split('T')[0].split('-').map(Number);
+        if (y !== this.viewYear || m - 1 !== this.viewMonth) {
+          this.viewYear = y;
+          this.viewMonth = m - 1;
+          this.rebuildCalendar();
+          return;
+        }
+      }
+    }
+    if (!map[this.selectedDay]) {
+      const first = Object.keys(map).map(Number).sort((a, b) => a - b)[0];
+      this.selectedDay = first ?? 1;
+    }
+    this.buildCalendar();
+  }
+
+  /** Construye la cuadrícula del mes visible (semana de lunes a domingo). */
+  private buildCalendar(): void {
+    const firstWeekday = (new Date(this.viewYear, this.viewMonth, 1).getDay() + 6) % 7;
+    const daysInMonth = new Date(this.viewYear, this.viewMonth + 1, 0).getDate();
+    const cells: CalendarCell[] = [];
+    for (let i = 0; i < firstWeekday; i++) {
       cells.push({ day: null, isCurrentMonth: false });
     }
-
-    for (let day = 1; day <= totalDaysInOctober; day++) {
-      cells.push({
-        day,
-        isCurrentMonth: true,
-        session: this.sessionsMap[day]
-      });
+    for (let day = 1; day <= daysInMonth; day++) {
+      cells.push({ day, isCurrentMonth: true, session: this.sessionsMap[day] });
     }
-
     this.calendarCells = cells;
+  }
+
+  get monthLabel(): string {
+    const label = new Date(this.viewYear, this.viewMonth, 1).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+    return label.charAt(0).toUpperCase() + label.slice(1);
+  }
+
+  changeMonth(delta: number): void {
+    const d = new Date(this.viewYear, this.viewMonth + delta, 1);
+    this.viewYear = d.getFullYear();
+    this.viewMonth = d.getMonth();
+    this.monthTouched = true;
+    this.selectedDay = 1;
+    this.rebuildCalendar();
+    this.cdr.markForCheck();
+  }
+
+  /** Facturación: ejemplo en cuentas demo; para el resto, las clases agendadas del usuario. */
+  private rebuildPayments(): void {
+    if (this.isDemoView) {
+      this.paymentKpis = { ...this.demoPaymentKpis };
+      this.subjectSpending = [...this.demoSubjectSpending];
+      this.paymentsHistory = [...this.demoPaymentsHistory];
+      return;
+    }
+    const classes = [...this.myScheduledClasses()].sort((a, b) => b.start.localeCompare(a.start));
+    const eur = (n: number) => `${n.toFixed(2).replace('.', ',')} €`;
+    const total = classes.reduce((s, c) => s + c.price, 0);
+    const minutes = classes.reduce((s, c) => s + c.durationMin, 0);
+    this.paymentKpis = {
+      totalPagado: eur(0),
+      clasesAbonadas: '0 sesiones',
+      horasTotales: `${(minutes / 60).toFixed(1).replace('.', ',')} horas`,
+      ultimoPago: '—',
+      ultimoPagoDetalle: 'Todavía no hay pagos registrados',
+      saldoPendiente: eur(total),
+      metodoPago: 'Sin método de pago'
+    };
+    const bySubject = new Map<string, { amount: number; sessions: number }>();
+    for (const c of classes) {
+      const acc = bySubject.get(c.subject) ?? { amount: 0, sessions: 0 };
+      acc.amount += c.price;
+      acc.sessions += 1;
+      bySubject.set(c.subject, acc);
+    }
+    this.subjectSpending = [...bySubject.entries()].map(([subject, v], idx) => ({
+      subject,
+      amount: v.amount,
+      sessions: v.sessions,
+      percentage: total > 0 ? Math.round((v.amount / total) * 100) : 0,
+      color: MisClasesPage.PALETTE[idx % MisClasesPage.PALETTE.length]
+    }));
+    this.paymentsHistory = classes.map(c => ({
+      id: c.id.toUpperCase(),
+      date: new Date(c.start).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }),
+      concept: `Tutoría ${c.subject} (${c.durationMin} min)`,
+      subject: c.subject,
+      teacher: c.teacherName,
+      method: '—',
+      amount: c.price,
+      status: 'Pendiente' as const
+    }));
   }
 
   /** Selecciona un día del calendario cuando el alumno pincha en el número */
@@ -841,7 +833,6 @@ export class MisClasesPage implements OnInit, OnDestroy {
   get allMonthSessions(): TutoriaSession[] {
     return Object.values(this.sessionsMap).sort((a, b) => a.day - b.day);
   }
-
   /** Cambia de sección y sincroniza la ruta */
   switchSection(section: 'tutorias' | 'apuntes' | 'mensajes' | 'pagos' | 'ajustes'): void {
     this.activeSection = section;
@@ -861,17 +852,14 @@ export class MisClasesPage implements OnInit, OnDestroy {
     this.switchSection('apuntes');
   }
 
-  /** Ir directamente al chat con la profesora desde el recuadro de la clase */
-  openChatWithTeacher(teacherName: string): void {
-    if (teacherName.toLowerCase().includes('elena')) {
-      this.selectedTeacherId = 'elena';
-    } else if (teacherName.toLowerCase().includes('carlos')) {
-      this.selectedTeacherId = 'carlos';
-    } else if (teacherName.toLowerCase().includes('miguel') || teacherName.toLowerCase().includes('santos')) {
-      this.selectedTeacherId = 'miguel';
-    } else {
-      this.selectedTeacherId = this.isCoordinator ? 'elena' : 'noelia';
+  /** Ir directamente al chat con la otra persona de la clase (por su email) */
+  openChatWithTeacher(peerEmail: string): void {
+    const e = (peerEmail || '').toLowerCase();
+    if (e) {
+      this.extraPeers.add(e);
+      this.selectedTeacherId = e;
     }
+    this.syncChatThreads();
     this.switchSection('mensajes');
   }
 
@@ -888,7 +876,8 @@ export class MisClasesPage implements OnInit, OnDestroy {
   async loadNotes(): Promise<void> {
     const { items, offline } = await this.apuntes.list(this.currentUser?.email ?? null);
     const baseIds = new Set(this.baseNotesList.map(n => n.id));
-    this.notes = [...items.filter(n => !baseIds.has(n.id)), ...this.baseNotesList];
+    // Los apuntes de ejemplo (AP-01..06) pertenecen a las cuentas demo; el resto solo ve los suyos.
+    this.notes = [...items.filter(n => !baseIds.has(n.id)), ...(this.isDemoView ? this.baseNotesList : [])];
     this.notesOffline = offline;
     this.cdr.markForCheck();
   }
@@ -1002,7 +991,7 @@ export class MisClasesPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.notesSub?.unsubscribe();
+    this.subs.forEach(s => s.unsubscribe());
   }
 
   /** Abre el PDF en una pestaña nueva (descargándolo del servidor si hace falta). */
@@ -1037,7 +1026,7 @@ export class MisClasesPage implements OnInit, OnDestroy {
     document.body.removeChild(a);
   }
   /** Conversación activa seleccionada */
-  get activeConversation(): TeacherConversation {
+  get activeConversation(): TeacherConversation | undefined {
     return this.conversations.find(c => c.id === this.selectedTeacherId) || this.conversations[0];
   }
 
@@ -1046,59 +1035,30 @@ export class MisClasesPage implements OnInit, OnDestroy {
     const conv = this.conversations.find(c => c.id === id);
     if (conv) {
       conv.unread = 0;
+      if (conv.peerEmail) {
+        this.chatService.markRead(this.myEmail, conv.peerEmail);
+      }
     }
     this.cdr.markForCheck();
   }
 
   /** Determina si el mensaje fue enviado por el usuario actual */
   isMyMessage(msg: { sender: string }): boolean {
-    if (this.isCoordinator) {
-      return msg.sender === 'coordinator';
-    }
-    if (this.isTeacher) {
-      return msg.sender === 'teacher';
-    }
-    return msg.sender === 'student';
+    return msg.sender !== 'peer';
   }
 
-  /** Envía un mensaje en tiempo real y lo persiste para que Elena y Paula puedan chatear entre sí */
+  /**
+   * Envía un mensaje con la identidad REAL del usuario en sesión, al contacto de la
+   * conversación abierta. (Antes salía siempre como Paula o Elena.)
+   */
   sendMessage(): void {
     const text = this.newMessageText.trim();
-    if (!text) return;
-
     const conv = this.activeConversation;
-    if (this.isTeacher && conv.id === 'paula') {
-      this.chatService.send('elenaramos@itutor.es', 'paulagarcia@itutor.es', text);
-    } else if (!this.isTeacher && !this.isCoordinator && conv.id === 'elena') {
-      this.chatService.send('paulagarcia@itutor.es', 'elenaramos@itutor.es', text);
-    } else if (this.isTeacher && conv.id === 'noelia') {
-      this.chatService.send('elenaramos@itutor.es', 'noeliacantador@itutor.es', text);
-    } else if (this.isCoordinator && conv.id === 'elena') {
-      this.chatService.send('noeliacantador@itutor.es', 'elenaramos@itutor.es', text);
-    } else {
-      conv.messages.push({
-        sender: this.isCoordinator ? 'coordinator' : (this.isTeacher ? 'teacher' : 'student'),
-        text,
-        time: 'Ahora'
-      });
-    }
+    if (!text || !conv?.peerEmail || !this.myEmail) return;
 
+    this.chatService.send(this.myEmail, conv.peerEmail, text);
     this.newMessageText = '';
     this.syncChatThreads();
-    this.cdr.markForCheck();
-  }
-
-  /** Conmuta rápidamente entre el rol de Elena (Profesora) y Paula (Alumna) para probar el chat en vivo */
-  switchChatRole(target: 'elena' | 'paula'): void {
-    if (target === 'elena') {
-      this.authService.login('elenaramos@itutor.es', 'Teacher', 'Elena Ramos');
-      this.selectedTeacherId = 'paula';
-    } else {
-      this.authService.login('paulagarcia@itutor.es', 'Standard', 'Paula García');
-      this.selectedTeacherId = 'elena';
-    }
-    this.syncChatThreads();
-    void this.loadNotes();
     this.cdr.markForCheck();
   }
 
@@ -1112,7 +1072,7 @@ export class MisClasesPage implements OnInit, OnDestroy {
       studentEmail: first ? first.email : '',
       subject: first ? first.asignaturaPrincipal : 'Ecuaciones Diferenciales',
       topic: 'Tutoría personalizada y resolución de problemas',
-      date: '2026-10-28',
+      date: new Date(Date.now() + 86_400_000).toISOString().slice(0, 10),
       time: '17:00',
       durationMin: 90
     };
@@ -1148,15 +1108,15 @@ export class MisClasesPage implements OnInit, OnDestroy {
       return;
     }
 
-    const teacherEmail = this.currentUser?.email || 'elenaramos@itutor.es';
+    const teacherEmail = this.myEmail;
     const teacher = this.dataService.findTeacherByEmail(teacherEmail);
-    const tarifa = teacher?.tarifaHora || 35;
+    const tarifa = teacher?.tarifaHora || 30;
     const durationMin = Number(this.scheduleForm.durationMin) || 90;
     const price = Math.round((tarifa * durationMin) / 60);
 
     this.scheduleService.schedule({
       teacherEmail,
-      teacherName: teacher?.nombre || 'Elena Ramos',
+      teacherName: teacher?.nombre || this.currentUser?.name || teacherEmail,
       studentEmail: student.email,
       studentName: student.nombre,
       subject: this.scheduleForm.subject || student.asignaturaPrincipal,
@@ -1164,12 +1124,17 @@ export class MisClasesPage implements OnInit, OnDestroy {
       start: `${this.scheduleForm.date}T${this.scheduleForm.time}`,
       durationMin,
       price,
-      notes: this.scheduleForm.topic || 'Clase agendada por el profesor'
+      notes: this.scheduleForm.topic || 'Clase agendada por el profesor',
+      branch: teacher?.departamento
     });
 
     this.showScheduleModal = false;
     this.scheduleSuccessMsg = `¡Clase agendada con ${student.nombre} el ${this.scheduleForm.date} a las ${this.scheduleForm.time}!`;
-    this.syncScheduledClassesIntoCalendar();
+    // El calendario salta al mes de la clase recién agendada.
+    const [yy, mm] = this.scheduleForm.date.split('-').map(Number);
+    this.viewYear = yy;
+    this.viewMonth = mm - 1;
+    this.rebuildCalendar();
     const dayNum = Number(this.scheduleForm.date.split('-')[2]);
     if (dayNum >= 1 && dayNum <= 31) {
       this.selectedDay = dayNum;
@@ -1235,7 +1200,7 @@ export class MisClasesPage implements OnInit, OnDestroy {
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(11);
-    doc.text(`Alumna: Paula García (paulagarcia@itutor.es)`, 14, 54);
+    doc.text(`Alumno/a: ${this.currentUser?.name || this.myEmail} (${this.myEmail})`, 14, 54);
     doc.text(`Concepto: ${payment.concept}`, 14, 62);
     doc.text(`Asignatura: ${payment.subject}`, 14, 70);
     doc.text(`Profesor/a: ${payment.teacher}`, 14, 78);
@@ -1244,8 +1209,8 @@ export class MisClasesPage implements OnInit, OnDestroy {
 
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(14);
-    doc.setTextColor(16, 185, 129);
-    doc.text(`IMPORTE TOTAL PAGADO: ${payment.amount},00 € (${payment.status.toUpperCase()})`, 14, 112);
+    doc.setTextColor(payment.status === 'Pagado' ? 16 : 217, payment.status === 'Pagado' ? 185 : 119, payment.status === 'Pagado' ? 129 : 6);
+    doc.text(`IMPORTE ${payment.status === 'Pagado' ? 'TOTAL PAGADO' : 'PENDIENTE DE PAGO'}: ${payment.amount},00 € (${payment.status.toUpperCase()})`, 14, 112);
 
     doc.save(`Recibo_iTUTOR_${payment.id}.pdf`);
   }
@@ -1253,12 +1218,12 @@ export class MisClasesPage implements OnInit, OnDestroy {
   /** =======================================================================
    *  AJUSTES DE CUENTA: FOTO SUBIDA POR EL USUARIO, DATOS NO MODIFICABLES Y ELIMINAR CUENTA
    *  ======================================================================= */
-  settingsPhone = '+34 611 000 111';
+  settingsPhone = '';
   settingsSavedMsg = '';
   showDeleteAccountModal = false;
 
   get currentUserEmail(): string {
-    return this.currentUser?.email || 'paulagarcia@itutor.es';
+    return this.currentUser?.email || '';
   }
 
   /** Foto de perfil que haya subido el propio usuario (null si no ha subido ninguna) */
@@ -1267,55 +1232,39 @@ export class MisClasesPage implements OnInit, OnDestroy {
   }
 
   get userInitialsForSettings(): string {
-    const email = this.currentUserEmail.toLowerCase();
-    if (email.includes('noelia')) return 'NC';
-    if (email.includes('elena') || email.includes('profesor')) return 'ER';
-    if (email.includes('paula')) return 'PG';
-    const name = this.currentUser?.name || email;
-    return name.substring(0, 2).toUpperCase();
+    return this.initialsOf(this.currentUser?.name || this.currentUserEmail);
   }
+
+  /** Fecha ISO (YYYY-MM-DD) -> dd/mm/aaaa */
+  private formatBirthDate(value?: string): string {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '');
+    return m ? `${m[3]}/${m[2]}/${m[1]}` : value || 'No indicada';
+  }
+
+  /** Datos de ejemplo de las tres cuentas demo (coincidencia exacta de email, no por trozos del correo). */
+  private static readonly DEMO_PROFILES: Record<string, { firstName: string; lastName: string; birthDate: string; roleLabel: string }> = {
+    'elenaramos@itutor.es': { firstName: 'Elena', lastName: 'Ramos', birthDate: '22/08/1985', roleLabel: 'Profesora Docente' },
+    'noeliacantador@itutor.es': { firstName: 'Noelia', lastName: 'Cantador', birthDate: '10/03/1990', roleLabel: 'Jefa Coordinadora (Admin)' },
+    'paulagarcia@itutor.es': { firstName: 'Paula', lastName: 'García Serrano', birthDate: '14/05/2004', roleLabel: 'Alumna' }
+  };
 
   /** Datos personales bloqueados (Nombre, Apellidos y Fecha de Nacimiento no modificables) */
   get lockedProfileData(): { firstName: string; lastName: string; birthDate: string; email: string; roleLabel: string } {
-    const email = this.currentUserEmail.toLowerCase();
-    if (email.includes('elena') || email.includes('profesor')) {
-      return {
-        firstName: 'Elena',
-        lastName: 'Ramos',
-        birthDate: '22/08/1985',
-        email: this.currentUserEmail,
-        roleLabel: 'Profesora Docente'
-      };
-    }
-    if (email.includes('noelia')) {
-      return {
-        firstName: 'Noelia',
-        lastName: 'Cantador',
-        birthDate: '10/03/1990',
-        email: this.currentUserEmail,
-        roleLabel: 'Jefa Coordinadora (Admin)'
-      };
-    }
-    if (email.includes('paula')) {
-      return {
-        firstName: 'Paula',
-        lastName: 'García Serrano',
-        birthDate: '14/05/2004',
-        email: this.currentUserEmail,
-        roleLabel: 'Alumna'
-      };
+    const email = this.currentUserEmail;
+    const demo = MisClasesPage.DEMO_PROFILES[email.toLowerCase()];
+    if (demo) {
+      return { ...demo, email };
     }
     const fullName = (this.currentUser?.name || 'Usuario iTUTOR').trim();
-    const parts = fullName.split(' ');
+    const parts = fullName.split(/\s+/);
     return {
       firstName: parts[0] || fullName,
       lastName: parts.slice(1).join(' ') || 'Sin especificar',
-      birthDate: this.currentUser?.birthDate || '14/05/2002',
-      email: this.currentUserEmail,
-      roleLabel: this.isTeacher ? 'Profesor/a Docente' : 'Alumno/a'
+      birthDate: this.formatBirthDate(this.currentUser?.birthDate),
+      email,
+      roleLabel: this.isCoordinator ? 'Coordinación (Admin)' : this.isTeacher ? 'Profesor/a Docente' : 'Alumno/a'
     };
   }
-
   /** Permite al usuario subir su propia foto de perfil desde su dispositivo */
   onUserPhotoSelected(event: Event): void {
     const input = event.target as HTMLInputElement;

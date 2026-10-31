@@ -139,6 +139,8 @@ export class LoginPage implements OnInit {
    */
   ngOnInit(): void {
     this.authService.logout();
+    // Directorio de AWS: así un alumno nuevo ve a los profesores registrados desde otros dispositivos.
+    void this.dataService.refreshDirectory();
   }
 
   ionViewWillEnter(): void {
@@ -190,11 +192,28 @@ export class LoginPage implements OnInit {
     this.cdr.markForCheck();
   }
 
+  /**
+   * Profesor que imparte una asignatura. Si algún profesor REGISTRADO la imparte
+   * (la eligió al darse de alta) se asigna el que tenga menos alumnos; si no, el
+   * profesor titular del catálogo. Así los profesores nuevos también reciben alumnos.
+   */
+  private teacherForSubject(subjectName: string): { name: string; teacherName: string; teacherEmail: string } | undefined {
+    const fixed = this.availableSubjects.find(s => s.name === subjectName);
+    const registered = this.dataService.allTeachers
+      .filter(t => t.especialidad.split('•').map(x => x.trim()).includes(subjectName))
+      .map(t => ({ t, load: this.dataService.getStudentsForTeacher(t.email).length }))
+      .sort((a, b) => a.load - b.load || a.t.nombre.localeCompare(b.t.nombre))[0];
+    if (registered) {
+      return { name: subjectName, teacherName: registered.t.nombre, teacherEmail: registered.t.email.toLowerCase() };
+    }
+    return fixed;
+  }
+
   /** Profesores que se le asignan al alumno según las asignaturas seleccionadas */
   get assignedTeachersForStudent(): { teacherName: string; teacherEmail: string; subjects: string[] }[] {
     const map = new Map<string, { teacherName: string; teacherEmail: string; subjects: string[] }>();
     for (const subName of this.selectedSubjects) {
-      const found = this.availableSubjects.find(s => s.name === subName);
+      const found = this.teacherForSubject(subName);
       if (found) {
         const existing = map.get(found.teacherEmail);
         if (existing) {

@@ -27,6 +27,16 @@
 <ion-content class="teacher-content" [fullscreen]="true" role="main">
   <div class="teacher-container">
 
+    <!-- FICHA NO ENCONTRADA: nunca se muestra la de otro profesor -->
+    @if (!isLoading && !currentTeacher) {
+      <div class="loading-container" role="alert">
+        <p class="loading-text">
+          No se ha encontrado tu ficha de profesor/a en el servidor. Si acabas de registrarte, espera unos segundos:
+          se vuelve a intentar automáticamente.
+        </p>
+      </div>
+    }
+
     <!-- ESTADO DE CARGA -->
     @if (isLoading) {
       <div class="loading-container" role="status" aria-live="polite">

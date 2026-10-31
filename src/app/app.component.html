@@ -77,13 +77,13 @@
                   <ion-label class="nav-label">
                     {{ page.title }}
                   </ion-label>
-                  @if (page.badge) {
+                  @if (badgeFor(page, currentUser); as count) {
                     <ion-badge 
                       slot="end" 
                       color="light" 
                       class="nav-counter"
                     >
-                      {{ page.badge }}
+                      {{ count }}
                     </ion-badge>
                   }
                 </ion-item>

@@ -1,10 +1,12 @@
 import { 
   Component, 
   OnInit, 
+  OnDestroy, 
   ChangeDetectionStrategy, 
   ChangeDetectorRef, 
   inject 
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent } from '@ionic/angular/ion-content';
@@ -82,7 +84,8 @@ import { DataTableComponent, TableColumn } from '../../shared/components/data-ta
   ],
   providers: [CurrencyPipe, DatePipe]
 })
-export class ProfesorDashboardPage implements OnInit {
+export class ProfesorDashboardPage implements OnInit, OnDestroy {
+  private directorySub?: Subscription;
   private dataService = inject(DataService);
   private scheduleService = inject(ScheduleService);
   private authService = inject(AuthService);
@@ -175,6 +178,17 @@ export class ProfesorDashboardPage implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    // Cuando llega el directorio de AWS (alumnos asignados, profesores nuevos) se recalcula el panel.
+    this.directorySub = this.dataService.directoryChanged$.subscribe(() => {
+      if (this.currentTeacher || !this.isLoading) {
+        this.loadData();
+      }
+    });
+    void this.dataService.refreshDirectory();
+  }
+
+  ngOnDestroy(): void {
+    this.directorySub?.unsubscribe();
   }
 
   loadData(): void {
@@ -185,13 +199,24 @@ export class ProfesorDashboardPage implements OnInit {
       next: (teachers) => {
         this.allTeachers = teachers;
 
-        // Comprobar si el usuario en sesión es un profesor específico
+        // Un profesor ve SIEMPRE su propia ficha. Si todavía no aparece en el
+        // directorio (alta recién hecha que aún no ha llegado al servidor), no se
+        // muestra la de otro: se avisa y se reintenta al llegar el directorio.
         const user = this.authService.currentUserValue;
         if (user && user.role === 'Teacher') {
           const match = teachers.find(t => t.email.toLowerCase() === user.email.toLowerCase());
-          if (match) {
-            this.selectedTeacherId = match.id;
+          if (!match) {
+            this.currentTeacher = null;
+            this.assignedStudents = [];
+            this.teacherSessions = [];
+            this.totalMoneyEarned = 0;
+            this.totalHoursTaught = 0;
+            this.activeStudentsCount = 0;
+            this.isLoading = false;
+            this.cdr.markForCheck();
+            return;
           }
+          this.selectedTeacherId = match.id;
         }
 
         this.selectTeacher(this.selectedTeacherId);
@@ -211,7 +236,7 @@ export class ProfesorDashboardPage implements OnInit {
   }
 
   selectTeacher(teacherId: number): void {
-    const teacher = this.allTeachers.find(t => t.id === teacherId) || this.allTeachers[0];
+    const teacher = this.allTeachers.find(t => t.id === teacherId);
     if (!teacher) {
       this.isLoading = false;
       this.cdr.markForCheck();
@@ -308,7 +333,8 @@ export class ProfesorDashboardPage implements OnInit {
       start: startIso,
       durationMin,
       price,
-      notes: this.scheduleForm.topic || 'Clase agendada por el profesor'
+      notes: this.scheduleForm.topic || 'Clase agendada por el profesor',
+      branch: this.currentTeacher.departamento
     });
 
     this.showScheduleModal = false;

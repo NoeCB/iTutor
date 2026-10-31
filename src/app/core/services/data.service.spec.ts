@@ -76,7 +76,7 @@ describe('DataService', () => {
         service.getTeacherPortalData('elenaramos@itutor.es')
       );
 
-      expect(portal.teacher.nombre).toContain('Elena Ramos');
+      expect(portal.teacher?.nombre).toContain('Elena Ramos');
     });
 
     it('debe excluir las sesiones canceladas del total facturado', async () => {
@@ -101,12 +101,21 @@ describe('DataService', () => {
       expect(portal.hoursCount).toBe(Math.round(minutos / 60));
     });
 
-    it('debe recurrir a un profesor por defecto si la búsqueda no coincide', async () => {
+    it('NO debe mostrar los datos de otro profesor si la búsqueda no coincide', async () => {
       const portal = await firstValueFrom(
         service.getTeacherPortalData('no-existe@itutor.es')
       );
 
-      expect(portal.teacher).toBeTruthy();
+      expect(portal.teacher).toBeNull();
+      expect(portal.students).toEqual([]);
+      expect(portal.sessions).toEqual([]);
+      expect(portal.totalEarned).toBe(0);
+    });
+
+    it('un email parcial no debe coincidir con el nombre de otro profesor', async () => {
+      const portal = await firstValueFrom(service.getTeacherPortalData('elena@otro.es'));
+
+      expect(portal.teacher).toBeNull();
     });
   });
 });
