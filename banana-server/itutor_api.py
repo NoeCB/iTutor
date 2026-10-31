@@ -6,19 +6,35 @@ Diseñado para ejecutarse en Banana Pi M2 Berry (ARM Linux) tras NAT en puerto 3
 No requiere dependencias externas (usa la librería estándar de Python 3 + SQLite3).
 """
 
+import base64
+import binascii
 import csv
 import hashlib
+import html as html_lib
 import io
 import json
 import os
+import re
+import secrets
 import socket
 import sqlite3
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, quote, unquote, urlparse
 
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "itutor.db")
 PORT = 3000
+
+# Límites de tamaño. El PDF viaja en binario (sin la inflación del 33 % de base64).
+MAX_PDF_BYTES = 8 * 1024 * 1024          # PDF máximo aceptado por el servidor
+MAX_JSON_BYTES = 256 * 1024              # cuerpo JSON normal
+MAX_LEGACY_JSON_BYTES = 12 * 1024 * 1024  # POST /api/apuntes con fileDataUrl (clientes antiguos)
+MAX_DRAIN_BYTES = 32 * 1024 * 1024       # cuerpos mayores se cortan sin leerlos
+
+# Los apuntes del seed no se pueden sobrescribir desde la API.
+SEED_APUNTE_IDS = {"AP-01", "AP-02", "AP-03", "AP-04", "AP-05", "AP-06"}
+APUNTE_ID_RE = re.compile(r"^AP-UP-[A-Z0-9]{4,32}$")
+APUNTE_FILE_RE = re.compile(r"^/api/apuntes/([A-Za-z0-9_-]{1,64})/file$")
 
 # Cuentas de demostración (seed): no se pueden borrar desde la API pública.
 PROTECTED_ACCOUNTS = {
@@ -35,8 +51,38 @@ def compute_salted_hash(password: str, salt: str) -> str:
     return f"$2b$12${salt}${digest}"
 
 
+def connect():
+    """Conexión SQLite con espera ante bloqueos (varias peticiones escriben a la vez)."""
+    conn = sqlite3.connect(DB_PATH, timeout=30)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def decode_data_url(url: str):
+    """Devuelve (mime, bytes) de un data URL base64, o None si no es válido."""
+    m = re.match(r"^data:([\w.+/-]*)((?:;[^,;]*)*),(.*)$", url or "", re.S)
+    if not m or ";base64" not in m.group(2):
+        return None
+    try:
+        return (m.group(1) or "application/octet-stream"), base64.b64decode(m.group(3), validate=False)
+    except (binascii.Error, ValueError):
+        return None
+
+
+def save_apunte_file(c, apunte_id: str, mime: str, data: bytes):
+    """Guarda (o reemplaza) el PDF de un apunte. Idempotente: reintentar no duplica."""
+    digest = hashlib.sha256(data).hexdigest()
+    c.execute(
+        "INSERT OR REPLACE INTO apunte_files (id, mime, size, sha256, data, uploadedAt) VALUES (?,?,?,?,?,?)",
+        (apunte_id, mime, len(data), digest, sqlite3.Binary(data), datetime.now().isoformat()),
+    )
+    return digest
+
+
 def init_db():
-    conn = sqlite3.connect(DB_PATH)
+    conn = connect()
+    # WAL: las lecturas no bloquean mientras se escribe un PDF.
+    conn.execute("PRAGMA journal_mode=WAL")
     c = conn.cursor()
 
     c.execute("""
@@ -214,13 +260,39 @@ def init_db():
     if "profesorEmail" not in [row[1] for row in c.fetchall()]:
         c.execute("ALTER TABLE students ADD COLUMN profesorEmail TEXT")
 
+    # Migración apuntes: email del profesor que lo sube (decide qué alumnos lo ven).
+    # Vacío = apunte compartido del seed (lo ven todos, como hasta ahora).
+    c.execute("PRAGMA table_info(apuntes)")
+    if "teacherEmail" not in [row[1] for row in c.fetchall()]:
+        c.execute("ALTER TABLE apuntes ADD COLUMN teacherEmail TEXT DEFAULT ''")
+
+    # Los PDFs viven en su propia tabla (BLOB): el listado de apuntes no arrastra
+    # megabytes de base64 y el archivo se descarga aparte, en binario.
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS apunte_files (
+            id TEXT PRIMARY KEY,
+            mime TEXT,
+            size INTEGER,
+            sha256 TEXT,
+            data BLOB,
+            uploadedAt TEXT
+        )
+    """)
+
+    # Migración: PDFs guardados antes como data URL dentro de apuntes.fileDataUrl.
+    c.execute("SELECT id, fileDataUrl FROM apuntes WHERE fileDataUrl IS NOT NULL AND fileDataUrl != ''")
+    for legacy in c.fetchall():
+        decoded = decode_data_url(legacy[1])
+        if decoded and decoded[1]:
+            save_apunte_file(c, legacy[0], decoded[0] if decoded[0] != "application/octet-stream" else "application/pdf", decoded[1])
+        c.execute("UPDATE apuntes SET fileDataUrl='' WHERE id=?", (legacy[0],))
+
     conn.commit()
     conn.close()
 
 
 def query_all(table_name):
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
+    conn = connect()
     c = conn.cursor()
     c.execute(f"SELECT * FROM {table_name}")
     rows = [dict(r) for r in c.fetchall()]
@@ -239,16 +311,232 @@ def query_all(table_name):
     return rows
 
 
+def clean_text(value, max_len: int, default: str = "") -> str:
+    text = str(value).strip() if value is not None else ""
+    return (text or default)[:max_len]
+
+
+def clean_pages(value) -> int:
+    try:
+        return max(1, min(5000, int(value)))
+    except (TypeError, ValueError):
+        return 1
+
+
+def human_size(num_bytes: int) -> str:
+    return f"{num_bytes / (1024 * 1024):.1f} MB" if num_bytes >= 1024 * 1024 else f"{max(1, round(num_bytes / 1024))} KB"
+
+
+def store_apunte(c, meta: dict, data):
+    """
+    Alta/actualización de un apunte y, si llega, de su PDF. Devuelve (status, json).
+    Es idempotente por id: el cliente puede reintentar sin crear duplicados.
+    El que ya existe solo lo puede actualizar su propietario; los del seed son intocables.
+    """
+    apunte_id = clean_text(meta.get("id"), 64) or f"AP-UP-{secrets.token_hex(5).upper()}"
+    if apunte_id in SEED_APUNTE_IDS:
+        return 409, {"ok": False, "error": "PROTECTED_APUNTE"}
+    if not APUNTE_ID_RE.match(apunte_id):
+        return 400, {"ok": False, "error": "INVALID_ID"}
+
+    if data is not None:
+        if len(data) == 0:
+            return 400, {"ok": False, "error": "EMPTY_FILE"}
+        if len(data) > MAX_PDF_BYTES:
+            return 413, {"ok": False, "error": "PAYLOAD_TOO_LARGE", "maxBytes": MAX_PDF_BYTES}
+        # Solo PDFs reales: se comprueba la firma, no el nombre ni el tipo declarado.
+        if not data.startswith(b"%PDF-"):
+            return 415, {"ok": False, "error": "NOT_A_PDF"}
+
+    owner = clean_text(meta.get("teacherEmail"), 120).lower()
+    c.execute("SELECT teacherEmail FROM apuntes WHERE id = ?", (apunte_id,))
+    existing = c.fetchone()
+    if existing and (existing["teacherEmail"] or "") != owner:
+        return 409, {"ok": False, "error": "NOT_OWNER"}
+
+    file_name = os.path.basename(clean_text(meta.get("fileName"), 200, "apunte.pdf").replace("\\", "/")) or "apunte.pdf"
+    size_label = human_size(len(data)) if data is not None else clean_text(meta.get("size"), 30, "-")
+    c.execute(
+        """
+        INSERT INTO apuntes (id, title, subject, teacher, teacherEmail, date, size, pages, summary, fileName, fileDataUrl)
+        VALUES (?,?,?,?,?,?,?,?,?,?,'')
+        ON CONFLICT(id) DO UPDATE SET
+            title=excluded.title, subject=excluded.subject, teacher=excluded.teacher,
+            date=excluded.date, size=excluded.size, pages=excluded.pages,
+            summary=excluded.summary, fileName=excluded.fileName
+        """,
+        (
+            apunte_id,
+            clean_text(meta.get("title"), 200, "Nuevo apunte"),
+            clean_text(meta.get("subject"), 100, "Ecuaciones Diferenciales"),
+            clean_text(meta.get("teacher"), 100, "Profesor/a"),
+            owner,
+            clean_text(meta.get("date"), 40) or datetime.now().strftime("%d %b %Y"),
+            size_label,
+            clean_pages(meta.get("pages")),
+            clean_text(meta.get("summary"), 1000, f"Archivo subido: {file_name}"),
+            file_name,
+        ),
+    )
+    payload = {"ok": True, "id": apunte_id, "created": existing is None}
+    if data is not None:
+        payload["sha256"] = save_apunte_file(c, apunte_id, "application/pdf", data)
+        payload["fileBytes"] = len(data)
+    return (201 if existing is None else 200), payload
+
+
+def apunte_visible_emails(c, viewer: str):
+    """
+    Emails de profesor cuyos apuntes puede ver `viewer`.
+    Devuelve None si lo ve todo (administrador).
+    Un alumno ve los apuntes de su profesor asignado; un profesor, los suyos.
+    """
+    c.execute("SELECT role FROM users WHERE email = ?", (viewer,))
+    u = c.fetchone()
+    if u and u["role"] == "Admin":
+        return None
+    emails = {viewer}
+    c.execute("SELECT nombre, profesorEmail, profesorAsignado FROM students WHERE lower(email) = ?", (viewer,))
+    st = c.fetchone()
+    if st:
+        if st["profesorEmail"]:
+            emails.add(st["profesorEmail"].strip().lower())
+        c.execute("SELECT nombre, email, alumnosAsignados FROM teachers")
+        for t in c.fetchall():
+            try:
+                assigned = json.loads(t["alumnosAsignados"] or "[]")
+            except Exception:  # noqa: BLE001
+                assigned = []
+            if t["nombre"] == st["profesorAsignado"] or st["nombre"] in assigned:
+                emails.add((t["email"] or "").strip().lower())
+    return emails
+
+
+def list_apuntes(materia=None, viewer=None):
+    """Metadatos de apuntes (sin el contenido del PDF), opcionalmente filtrados."""
+    conn = connect()
+    c = conn.cursor()
+    visible = apunte_visible_emails(c, viewer) if viewer else None
+    c.execute("""
+        SELECT a.id, a.title, a.subject, a.teacher, a.teacherEmail, a.date, a.size, a.pages,
+               a.summary, a.fileName, f.size AS fileBytes, f.sha256 AS sha256
+        FROM apuntes a LEFT JOIN apunte_files f ON f.id = a.id
+        ORDER BY a.rowid
+    """)
+    rows = c.fetchall()
+    conn.close()
+    out = []
+    for r in rows:
+        owner = (r["teacherEmail"] or "").strip().lower()
+        # Sin dueño = apunte compartido del seed: lo ven todos.
+        if visible is not None and owner and owner not in visible:
+            continue
+        if materia and materia != "Todos" and (r["subject"] or "").lower() != materia.lower():
+            continue
+        has_file = r["fileBytes"] is not None
+        out.append({
+            "id": r["id"],
+            "title": r["title"],
+            "subject": r["subject"],
+            "teacher": r["teacher"],
+            "teacherEmail": owner,
+            "date": r["date"],
+            "size": r["size"],
+            "pages": r["pages"],
+            "summary": r["summary"],
+            "fileName": r["fileName"],
+            "hasFile": has_file,
+            "fileBytes": r["fileBytes"] if has_file else 0,
+            "sha256": r["sha256"] or "",
+            "fileUrl": f"/api/apuntes/{r['id']}/file" if has_file else "",
+        })
+    return out
+
+
 class ITutorAPIHandler(BaseHTTPRequestHandler):
+    # Un cliente lento o colgado no puede bloquear un hilo indefinidamente.
+    timeout = 60
+
     def _set_cors(self):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-App-Client")
+        self.send_header(
+            "Access-Control-Allow-Headers",
+            "Content-Type, Authorization, X-App-Client, X-Apunte-Meta, If-None-Match",
+        )
+        self.send_header("Access-Control-Expose-Headers", "Content-Disposition, ETag")
 
     def do_OPTIONS(self):
         self.send_response(200)
         self._set_cors()
         self.end_headers()
+
+    def _read_body(self, limit: int):
+        """
+        Lee el cuerpo respetando `limit`. Si lo supera responde 413 (tras vaciar el
+        cuerpo para que el navegador reciba el 413 y no un corte de conexión).
+        Devuelve bytes, o None si ya se ha respondido con un error.
+        """
+        try:
+            length = int(self.headers.get("Content-Length", "0") or 0)
+        except ValueError:
+            self._send_json({"ok": False, "error": "BAD_CONTENT_LENGTH"}, 400)
+            return None
+        if length < 0:
+            self._send_json({"ok": False, "error": "BAD_CONTENT_LENGTH"}, 400)
+            return None
+        if length > limit:
+            if length <= MAX_DRAIN_BYTES:
+                remaining = length
+                while remaining > 0:
+                    chunk = self.rfile.read(min(65536, remaining))
+                    if not chunk:
+                        break
+                    remaining -= len(chunk)
+            self.close_connection = True
+            self._send_json({"ok": False, "error": "PAYLOAD_TOO_LARGE", "maxBytes": limit}, 413)
+            return None
+        data = self.rfile.read(length) if length > 0 else b""
+        if len(data) != length:
+            self._send_json({"ok": False, "error": "INCOMPLETE_BODY"}, 400)
+            return None
+        return data
+
+    def _send_apunte_file(self, apunte_id: str, as_attachment: bool):
+        conn = connect()
+        c = conn.cursor()
+        c.execute(
+            "SELECT f.mime, f.size, f.sha256, f.data, a.fileName, a.title "
+            "FROM apunte_files f LEFT JOIN apuntes a ON a.id = f.id WHERE f.id = ?",
+            (apunte_id,),
+        )
+        row = c.fetchone()
+        conn.close()
+        if not row:
+            self._send_json({"ok": False, "error": "FILE_NOT_FOUND"}, 404)
+            return
+        etag = f'"{row["sha256"]}"'
+        if self.headers.get("If-None-Match") == etag:
+            self.send_response(304)
+            self._set_cors()
+            self.send_header("ETag", etag)
+            self.end_headers()
+            return
+        data = bytes(row["data"])
+        name = row["fileName"] or f"{row['title'] or apunte_id}.pdf"
+        # Nombre seguro en cabecera: ASCII de respaldo + filename* (RFC 5987) con tildes.
+        ascii_name = re.sub(r"[^A-Za-z0-9._-]", "_", name.encode("ascii", "ignore").decode() or "apunte.pdf")
+        disposition = "attachment" if as_attachment else "inline"
+        self.send_response(200)
+        self._set_cors()
+        self.send_header("Content-Type", row["mime"] or "application/pdf")
+        self.send_header("Content-Length", str(len(data)))
+        self.send_header("Content-Disposition", f"{disposition}; filename=\"{ascii_name}\"; filename*=UTF-8''{quote(name)}")
+        self.send_header("ETag", etag)
+        self.send_header("Cache-Control", "private, max-age=3600")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.end_headers()
+        self.wfile.write(data)
 
     def _send_json(self, data, status=200):
         payload = json.dumps(data, ensure_ascii=False).encode("utf-8")
@@ -307,11 +595,15 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
             return
 
         if path == "/api/apuntes":
-            apuntes = query_all("apuntes")
-            materia = qs.get("materia", [None])[0]
-            if materia and materia != "Todos":
-                apuntes = [a for a in apuntes if a["subject"].lower() == materia.lower()]
-            self._send_json(apuntes)
+            # Solo metadatos (el PDF se pide aparte). `viewer` limita a los apuntes
+            # del profesor asignado a ese alumno (o los propios si es profesor).
+            viewer = (qs.get("viewer", [""])[0] or "").strip().lower() or None
+            self._send_json(list_apuntes(qs.get("materia", [None])[0], viewer))
+            return
+
+        file_match = APUNTE_FILE_RE.match(path)
+        if file_match:
+            self._send_apunte_file(file_match.group(1), qs.get("download", ["0"])[0] == "1")
             return
 
         if path == "/api/export/csv":
@@ -359,16 +651,18 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
         users = query_all("users")
         messages = query_all("messages")
 
+        # Todo lo que viene de usuarios se escapa: un título con <script> no debe ejecutarse.
+        e = lambda v: html_lib.escape(str(v if v is not None else ""))  # noqa: E731
         apuntes_rows = "".join(
-            f"<tr><td><code>{a['id']}</code></td><td><b>{a['title']}</b></td><td>{a['subject']}</td><td>{a['teacher']}</td><td>{a['date']}</td><td>{a['size']}</td></tr>"
+            f"<tr><td><code>{e(a['id'])}</code></td><td><b>{e(a['title'])}</b></td><td>{e(a['subject'])}</td><td>{e(a['teacher'])}</td><td>{e(a['date'])}</td><td>{e(a['size'])}</td></tr>"
             for a in apuntes
         )
         sessions_rows = "".join(
-            f"<tr><td>{s['estudianteNombre']}</td><td>{s['materia']}</td><td>{s['tutor']}</td><td>{s['fecha']}</td><td>{s['importe']} €</td><td><span class='badge'>{s['estado']}</span></td></tr>"
+            f"<tr><td>{e(s['estudianteNombre'])}</td><td>{e(s['materia'])}</td><td>{e(s['tutor'])}</td><td>{e(s['fecha'])}</td><td>{e(s['importe'])} €</td><td><span class='badge'>{e(s['estado'])}</span></td></tr>"
             for s in sessions
         )
         messages_rows = "".join(
-            f"<tr><td><code>{m['from']}</code></td><td><code>{m['to']}</code></td><td>{m['text']}</td></tr>"
+            f"<tr><td><code>{e(m['from'])}</code></td><td><code>{e(m['to'])}</code></td><td>{e(m['text'])}</td></tr>"
             for m in messages[-8:]
         )
 
@@ -450,6 +744,47 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(payload)
 
+    def do_PUT(self):
+        try:
+            self._handle_put()
+        except Exception as exc:  # noqa: BLE001
+            print(f"[ERROR] PUT {self.path}: {exc!r}")
+            try:
+                self._send_json({"ok": False, "error": "SERVER_ERROR", "detail": str(exc)}, 500)
+            except Exception:  # noqa: BLE001
+                pass
+
+    def _handle_put(self):
+        """PUT /api/apuntes/<id>/file: PDF en binario + metadatos en X-Apunte-Meta (JSON con encodeURIComponent)."""
+        path = urlparse(self.path).path
+        match = APUNTE_FILE_RE.match(path)
+        if not match:
+            self._send_json({"error": "Endpoint no encontrado"}, 404)
+            return
+        try:
+            meta = json.loads(unquote(self.headers.get("X-Apunte-Meta", "") or "{}"))
+        except Exception:  # noqa: BLE001
+            meta = None
+        if not isinstance(meta, dict):
+            self._send_json({"ok": False, "error": "INVALID_META"}, 400)
+            return
+        meta["id"] = match.group(1)  # el id manda la URL, no la cabecera
+
+        data = self._read_body(MAX_PDF_BYTES)
+        if data is None:
+            return
+        # Todo en una transacción: o quedan apunte + PDF, o no queda nada.
+        conn = connect()
+        try:
+            status, payload = store_apunte(conn.cursor(), meta, data)
+            if payload.get("ok"):
+                conn.commit()
+            else:
+                conn.rollback()
+        finally:
+            conn.close()
+        self._send_json(payload, status)
+
     def do_POST(self):
         # Cualquier error inesperado se devuelve como JSON 500 (antes el cliente
         # recibía una conexión cortada y no podía saber que el guardado falló).
@@ -465,15 +800,17 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
     def _handle_post(self):
         parsed = urlparse(self.path)
         path = parsed.path
-        length = int(self.headers.get("Content-Length", 0))
-        raw_body = self.rfile.read(length).decode("utf-8") if length > 0 else "{}"
+        raw = self._read_body(MAX_LEGACY_JSON_BYTES if path == "/api/apuntes" else MAX_JSON_BYTES)
+        if raw is None:
+            return
         try:
-            body = json.loads(raw_body)
-        except Exception:
+            body = json.loads(raw.decode("utf-8")) if raw else {}
+        except Exception:  # noqa: BLE001
+            body = {}
+        if not isinstance(body, dict):
             body = {}
 
-        conn = sqlite3.connect(DB_PATH)
-        conn.row_factory = sqlite3.Row
+        conn = connect()
         c = conn.cursor()
 
         if path == "/api/auth/salt":
@@ -574,24 +911,22 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
             return
 
         if path == "/api/apuntes":
-            new_id = body.get("id") or f"AP-{int(datetime.now().timestamp()) % 10000}"
-            title = body.get("title", "Nuevo Apunte")
-            subject = body.get("subject", "Ecuaciones Diferenciales")
-            teacher = body.get("teacher", "Elena Ramos")
-            date_str = body.get("date") or datetime.now().strftime("%d %b %Y")
-            size = body.get("size", "1.5 MB")
-            pages = int(body.get("pages", 10))
-            summary = body.get("summary", "Apuntes sincronizados desde el servidor Banana Pi.")
-            fileName = body.get("fileName", "apunte.pdf")
-            fileDataUrl = body.get("fileDataUrl", "")
-
-            c.execute(
-                "INSERT OR REPLACE INTO apuntes VALUES (?,?,?,?,?,?,?,?,?,?)",
-                (new_id, title, subject, teacher, date_str, size, pages, summary, fileName, fileDataUrl)
-            )
-            conn.commit()
+            # Compatibilidad: alta de apunte en JSON, con el PDF opcional como data URL.
+            # El cliente actual sube el PDF en binario con PUT /api/apuntes/<id>/file.
+            data = None
+            data_url = body.get("fileDataUrl") or ""
+            if data_url:
+                decoded = decode_data_url(data_url)
+                if not decoded or not decoded[1]:
+                    conn.close()
+                    self._send_json({"ok": False, "error": "INVALID_FILE"}, 400)
+                    return
+                data = decoded[1]
+            status, payload = store_apunte(c, body, data)
+            if payload.get("ok"):
+                conn.commit()
             conn.close()
-            self._send_json({"ok": True, "id": new_id}, 201)
+            self._send_json(payload, status)
             return
 
         if path == "/api/sessions":

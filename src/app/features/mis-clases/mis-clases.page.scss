@@ -274,6 +274,17 @@
   margin-bottom: 10px;
 }
 
+.schedule-inline-error {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
