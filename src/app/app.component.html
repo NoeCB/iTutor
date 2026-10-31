@@ -7,9 +7,10 @@
       menuId="main-menu" 
       type="overlay"
       [disabled]="isLoginPage()"
+      [hidden]="isLoginPage()"
       aria-label="Menú principal de navegación"
     >
-      <!-- HEADER DEL MENÚ: LOGO "iTUTOR" (Sin TutorFlow, sin SAAS y sin Matemáticas & Física) -->
+      <!-- HEADER DEL MENÚ: LOGO "iTUTOR" -->
       <ion-header class="ion-no-border menu-header">
         <ion-toolbar class="header-toolbar">
           <div class="brand-container">
@@ -45,20 +46,6 @@
                 <ion-badge [color]="user.role === 'Admin' ? 'primary' : (user.role === 'Teacher' ? 'success' : 'tertiary')">
                   {{ user.role === 'Admin' ? 'Administrador' : (user.role === 'Teacher' ? 'Profesor Docente' : 'Alumno') }}
                 </ion-badge>
-              </div>
-            </div>
-          </div>
-        } @else {
-          <div class="profile-card">
-            <div class="avatar-wrapper">
-              <div class="user-avatar">NC</div>
-              <span class="status-indicator online"></span>
-            </div>
-            <div class="user-info">
-              <h3 class="user-name">Noelia Cantador</h3>
-              <p class="user-email">noeliacantador&#64;itutor.es</p>
-              <div class="user-role-badge">
-                <ion-badge color="primary">Administrador</ion-badge>
               </div>
             </div>
           </div>

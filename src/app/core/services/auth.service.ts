@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { BehaviorSubject, Observable, firstValueFrom, from, of, timer } from 'rxjs';
+import { delay, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { ApiSyncService } from './api-sync.service';
 
 export interface User {
   email: string;
@@ -99,7 +100,8 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
   private http = inject(HttpClient, { optional: true });
-  private readonly apiUrl = environment.apiUrl || 'http://88.26.12.64:3000/api';
+  private sync = inject(ApiSyncService);
+  private readonly apiUrl = environment.apiUrl || 'http://54.237.3.26:3000/api';
 
   constructor() {
     this.restoreSession();
@@ -240,13 +242,99 @@ export class AuthService {
     }
 
     this.login(account.email, account.role, account.name);
-    if (this.http) {
-      this.http.post(`${this.apiUrl}/auth/login`, {
-        email: account.email,
-        passwordHash: account.passwordHash
-      }).subscribe({ error: () => {} });
-    }
+    // Auto-reparación: si esta cuenta existe solo en este navegador (p. ej. su
+    // alta no llegó al servidor), se envía ahora. El servidor responde 409 si ya
+    // existe y nunca sobrescribe, así que es seguro hacerlo en cada login.
+    void this.sync.send('/auth/register', {
+      email: account.email,
+      name: account.name,
+      role: account.role,
+      salt: account.salt,
+      passwordHash: account.passwordHash
+    });
     return this.currentUserValue;
+  }
+
+  /** `true` si la cuenta fue eliminada en este navegador. */
+  private isLocallyDeleted(email: string): boolean {
+    try {
+      const raw = localStorage.getItem(AuthService.DELETED_KEY);
+      const list: unknown = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) && list.includes((email || '').trim().toLowerCase());
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Pregunta al servidor (AWS) por el salt de una cuenta. Devuelve `null` si no
+   * existe o no hay conexión. Permite iniciar sesión con una cuenta creada en
+   * OTRO dispositivo y comprobar si un correo ya está registrado.
+   */
+  private async fetchRemoteSalt(email: string): Promise<string | null> {
+    if (!this.http || !email) {
+      return null;
+    }
+    try {
+      const res = await firstValueFrom(
+        this.http.post<{ ok: boolean; salt?: string }>(`${this.apiUrl}/auth/salt`, {
+          email: email.trim().toLowerCase()
+        })
+      );
+      return res?.ok && res.salt ? res.salt : null;
+    } catch {
+      return null;
+    }
+  }
+
+  /** ¿Existe ese correo en el servidor? (para impedir altas duplicadas desde otro dispositivo) */
+  async emailExistsRemote(email: string): Promise<boolean> {
+    return (await this.fetchRemoteSalt(email)) !== null;
+  }
+
+  /**
+   * Inicio de sesión contra el servidor para cuentas que no están en este
+   * navegador. La contraseña nunca viaja: se calcula el hash con el salt
+   * remoto y el servidor solo compara hashes. Si es correcto, la cuenta se
+   * guarda en local para que los siguientes accesos funcionen también sin red.
+   */
+  async authenticateRemote(email: string, password: string): Promise<User | null> {
+    const normalizedEmail = (email || '').trim().toLowerCase();
+    if (!this.http || this.isLocallyDeleted(normalizedEmail)) {
+      return null;
+    }
+    const salt = await this.fetchRemoteSalt(normalizedEmail);
+    if (!salt) {
+      return null;
+    }
+    const passwordHash = this.computeSaltedHash(password, salt);
+    try {
+      const res = await firstValueFrom(
+        this.http.post<{ ok: boolean; user?: { email: string; name: string; role: User['role'] } }>(
+          `${this.apiUrl}/auth/login`,
+          { email: normalizedEmail, passwordHash }
+        )
+      );
+      if (!res?.ok || !res.user) {
+        return null;
+      }
+      const remote = res.user;
+      if (!this.findAccount(normalizedEmail)) {
+        const registered = this.loadRegisteredAccounts();
+        registered.push({
+          email: normalizedEmail,
+          name: remote.name,
+          role: remote.role,
+          salt,
+          passwordHash
+        });
+        localStorage.setItem(AuthService.REGISTERED_KEY, JSON.stringify(registered));
+      }
+      this.login(normalizedEmail, remote.role, remote.name);
+      return this.currentUserValue;
+    } catch {
+      return null;
+    }
   }
 
   /**
@@ -296,15 +384,14 @@ export class AuthService {
     localStorage.setItem(AuthService.REGISTERED_KEY, JSON.stringify(registered));
 
     this.login(account.email, account.role, account.name);
-    if (this.http) {
-      this.http.post(`${this.apiUrl}/auth/register`, {
-        email: account.email,
-        name: account.name,
-        role: account.role,
-        salt: account.salt,
-        passwordHash: account.passwordHash
-      }).subscribe({ error: () => {} });
-    }
+    // Se guarda en el servidor; si falla queda en cola y se reintenta solo.
+    void this.sync.send('/auth/register', {
+      email: account.email,
+      name: account.name,
+      role: account.role,
+      salt: account.salt,
+      passwordHash: account.passwordHash
+    });
     return this.currentUserValue as User;
   }
 
@@ -343,6 +430,12 @@ export class AuthService {
   /** Elimina la cuenta del usuario actual y cierra su sesión */
   deleteAccount(email: string): void {
     const normalized = email.trim().toLowerCase();
+    // Hay que avisar al servidor ANTES de marcarla como borrada en local
+    // (después ya no se encontraría el hash con el que se autoriza el borrado).
+    const account = this.findAccount(normalized);
+    if (account) {
+      void this.sync.send('/auth/delete', { email: normalized, passwordHash: account.passwordHash });
+    }
     try {
       const registered = this.loadRegisteredAccounts().filter(a => a.email !== normalized);
       localStorage.setItem(AuthService.REGISTERED_KEY, JSON.stringify(registered));
@@ -390,10 +483,16 @@ export class AuthService {
   }
 
   /**
-   * Simulación de petición asíncrona a API para verificar si el correo está registrado en iTUTOR
+   * Comprueba si el correo está registrado: primero en este navegador y, si no
+   * aparece, en el servidor (cuentas creadas desde otro dispositivo).
    */
   checkEmailExists(email: string): Observable<boolean> {
     const exists = !!this.findAccount(email);
-    return of(exists).pipe(delay(500));
+    if (exists || !this.http || this.isLocallyDeleted(email)) {
+      return of(exists).pipe(delay(500));
+    }
+    // Debounce: Angular cancela la suscripción anterior al teclear, así que solo
+    // se consulta al servidor cuando el usuario deja de escribir.
+    return timer(400).pipe(switchMap(() => from(this.emailExistsRemote(email))));
   }
 }

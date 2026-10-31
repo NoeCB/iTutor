@@ -136,24 +136,37 @@ export class AppComponent {
 
   /** Devuelve los enlaces del menú según el rol del usuario conectado */
   getMenuPages(user?: User | null): MenuItem[] {
-    if (user?.role === 'Teacher') {
+    // Sin sesión no se muestra ningún enlace (antes se caía por defecto en
+    // el menú de administración de Noelia).
+    if (!user) {
+      return [];
+    }
+    if (user.role === 'Teacher') {
       return this.teacherPages;
     }
-    if (user?.role === 'Standard') {
+    if (user.role === 'Standard') {
       return this.studentPages;
     }
     return this.adminPages;
   }
 
-  /** Determina si nos encontramos en la pantalla de login para colapsar el menú */
+  /**
+   * Indica si el menú lateral debe ocultarse: en la pantalla de login (con
+   * cualquier query string o fragmento, p. ej. `/login?returnUrl=...`), en la
+   * raíz, o SIEMPRE que no haya una sesión activa, sea cual sea la ruta
+   * escrita en la barra de direcciones.
+   */
   isLoginPage(): boolean {
-    const currentUrl = this.router.url;
-    return currentUrl === '/login' || currentUrl === '/' || currentUrl === '';
+    if (!this.authService.isAuthenticated) {
+      return true;
+    }
+    const cleanPath = (this.router.url || '').split(/[?#;]/)[0].replace(/\/+$/, '');
+    return cleanPath === '' || cleanPath === '/login' || cleanPath.startsWith('/login/');
   }
 
   /** Obtiene las iniciales del usuario para el avatar */
   getUserInitials(email?: string | null): string {
-    if (!email) return 'NC';
+    if (!email) return '';
     if (email.toLowerCase().includes('noelia')) return 'NC';
     if (email.toLowerCase().includes('paula')) return 'PG';
     if (email.toLowerCase().includes('elena') || email.toLowerCase().includes('profesor')) return 'ER';
@@ -164,7 +177,7 @@ export class AppComponent {
 
   /** Nombre formateado para el perfil */
   getUserDisplayName(email?: string | null): string {
-    if (!email) return 'Noelia Cantador';
+    if (!email) return '';
     if (email.toLowerCase().includes('noelia')) return 'Noelia Cantador';
     if (email.toLowerCase().includes('paula')) return 'Paula García';
     if (email.toLowerCase().includes('elena') || email.toLowerCase().includes('profesor')) return 'Elena Ramos';

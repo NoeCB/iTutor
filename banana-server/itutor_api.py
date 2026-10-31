@@ -14,11 +14,20 @@ import os
 import socket
 import sqlite3
 from datetime import datetime
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "itutor.db")
 PORT = 3000
+
+# Cuentas de demostración (seed): no se pueden borrar desde la API pública.
+PROTECTED_ACCOUNTS = {
+    "noeliacantador@itutor.es",
+    "paulagarcia@itutor.es",
+    "elenaramos@itutor.es",
+    "carlosmendez@itutor.es",
+    "profesor@itutor.es",
+}
 
 
 def compute_salted_hash(password: str, salt: str) -> str:
@@ -198,6 +207,13 @@ def init_db():
         ]
         c.executemany("INSERT INTO messages VALUES (?,?,?,?,?)", messages_seed)
 
+    # Migración: columna con el email del profesor asignado (los alumnos registrados
+    # desde la app la envían). Se añade DESPUÉS del seed porque este usa INSERT sin
+    # lista de columnas.
+    c.execute("PRAGMA table_info(students)")
+    if "profesorEmail" not in [row[1] for row in c.fetchall()]:
+        c.execute("ALTER TABLE students ADD COLUMN profesorEmail TEXT")
+
     conn.commit()
     conn.close()
 
@@ -267,7 +283,11 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
             return
 
         if path == "/api/users":
-            self._send_json(query_all("users"))
+            # Nunca se exponen salt ni passwordHash por la API pública.
+            self._send_json([
+                {"email": u["email"], "name": u["name"], "role": u["role"]}
+                for u in query_all("users")
+            ])
             return
 
         if path == "/api/students":
@@ -431,6 +451,18 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
         self.wfile.write(payload)
 
     def do_POST(self):
+        # Cualquier error inesperado se devuelve como JSON 500 (antes el cliente
+        # recibía una conexión cortada y no podía saber que el guardado falló).
+        try:
+            self._handle_post()
+        except Exception as exc:  # noqa: BLE001
+            print(f"[ERROR] POST {self.path}: {exc!r}")
+            try:
+                self._send_json({"ok": False, "error": "SERVER_ERROR", "detail": str(exc)}, 500)
+            except Exception:  # noqa: BLE001
+                pass
+
+    def _handle_post(self):
         parsed = urlparse(self.path)
         path = parsed.path
         length = int(self.headers.get("Content-Length", 0))
@@ -444,19 +476,31 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
         conn.row_factory = sqlite3.Row
         c = conn.cursor()
 
+        if path == "/api/auth/salt":
+            # Permite al cliente saber si una cuenta existe y con qué salt calcular
+            # el hash (la contraseña nunca viaja). Sirve para iniciar sesión en un
+            # dispositivo distinto del que se usó para registrarse.
+            email = (body.get("email") or "").strip().lower()
+            c.execute("SELECT salt FROM users WHERE email = ?", (email,))
+            row = c.fetchone()
+            conn.close()
+            if not row:
+                self._send_json({"ok": False, "error": "NOT_FOUND"}, 404)
+                return
+            self._send_json({"ok": True, "salt": row["salt"]}, 200)
+            return
+
         if path == "/api/auth/login":
             email = (body.get("email") or "").strip().lower()
             passwordHash = body.get("passwordHash")
             c.execute("SELECT * FROM users WHERE email = ?", (email,))
             row = c.fetchone()
             conn.close()
-            if not row:
+            # El hash es OBLIGATORIO: antes, omitirlo permitía entrar sin contraseña.
+            if not row or not passwordHash or row["passwordHash"] != passwordHash:
                 self._send_json({"ok": False, "error": "INVALID_CREDENTIALS"}, 401)
                 return
             user = dict(row)
-            if passwordHash and user["passwordHash"] != passwordHash:
-                self._send_json({"ok": False, "error": "INVALID_CREDENTIALS"}, 401)
-                return
             self._send_json({
                 "ok": True,
                 "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.iTUTOR_BANANAPI.signature",
@@ -466,11 +510,27 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
 
         if path == "/api/auth/register":
             email = (body.get("email") or "").strip().lower()
-            name = body.get("name", "Nuevo Usuario")
+            name = body.get("name") or "Nuevo Usuario"
             role = body.get("role", "Standard")
-            salt = body.get("salt", "salt_2026")
-            passwordHash = body.get("passwordHash") or compute_salted_hash("1234", salt)
-            c.execute("INSERT OR REPLACE INTO users VALUES (?,?,?,?,?)", (email, name, role, salt, passwordHash))
+            salt = body.get("salt")
+            passwordHash = body.get("passwordHash")
+            if "@" not in email or not salt or not passwordHash:
+                conn.close()
+                self._send_json({"ok": False, "error": "INVALID_DATA"}, 400)
+                return
+            # El rol Admin solo existe por seed: no se puede crear desde la API pública.
+            if role not in ("Standard", "Teacher"):
+                conn.close()
+                self._send_json({"ok": False, "error": "INVALID_ROLE"}, 400)
+                return
+            c.execute("SELECT 1 FROM users WHERE email = ?", (email,))
+            if c.fetchone():
+                # No se sobrescribe jamás una cuenta existente (antes INSERT OR REPLACE
+                # permitía pisar la contraseña de otro usuario).
+                conn.close()
+                self._send_json({"ok": False, "error": "EMAIL_ALREADY_EXISTS"}, 409)
+                return
+            c.execute("INSERT INTO users VALUES (?,?,?,?,?)", (email, name, role, salt, passwordHash))
             conn.commit()
             conn.close()
             self._send_json({
@@ -478,6 +538,27 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
                 "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.iTUTOR_BANANAPI.signature",
                 "user": {"email": email, "name": name, "role": role}
             }, 201)
+            return
+
+        if path == "/api/auth/delete":
+            email = (body.get("email") or "").strip().lower()
+            passwordHash = body.get("passwordHash")
+            if email in PROTECTED_ACCOUNTS:
+                conn.close()
+                self._send_json({"ok": False, "error": "PROTECTED_ACCOUNT"}, 403)
+                return
+            c.execute("SELECT passwordHash FROM users WHERE email = ?", (email,))
+            row = c.fetchone()
+            if not row or not passwordHash or row["passwordHash"] != passwordHash:
+                conn.close()
+                self._send_json({"ok": False, "error": "INVALID_CREDENTIALS"}, 401)
+                return
+            c.execute("DELETE FROM users WHERE email = ?", (email,))
+            c.execute("DELETE FROM students WHERE lower(email) = ?", (email,))
+            c.execute("DELETE FROM teachers WHERE lower(email) = ?", (email,))
+            conn.commit()
+            conn.close()
+            self._send_json({"ok": True}, 200)
             return
 
         if path == "/api/messages":
@@ -538,17 +619,51 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
             return
 
         if path == "/api/students":
+            # Alta/actualización idempotente por email: el cliente puede reintentar
+            # el envío sin crear alumnos duplicados.
             nombre = body.get("nombre", "Nuevo Alumno")
-            email = body.get("email", "alumno@itutor.es")
+            email = (body.get("email") or "alumno@itutor.es").strip().lower()
             matricula = body.get("matricula") or f"MAT-2026-{int(datetime.now().timestamp()) % 1000}"
             tarifa = float(body.get("tarifaHora", 30))
             plan = body.get("plan", "Básico")
             asignatura = body.get("asignaturaPrincipal", "Física Clásica")
             profesor = body.get("profesorAsignado", "Elena Ramos")
-            c.execute(
-                "INSERT INTO students (nombre,email,matricula,tarifaHora,plan,asignaturaPrincipal,profesorAsignado,saldoPendiente,horasTotales,telefono,estado) VALUES (?,?,?,?,?,?,?,0,0,'-','Activo')",
-                (nombre, email, matricula, tarifa, plan, asignatura, profesor)
-            )
+            profesor_email = (body.get("profesorEmail") or "").strip().lower() or None
+            c.execute("SELECT id FROM students WHERE lower(email) = ?", (email,))
+            existing = c.fetchone()
+            if existing:
+                c.execute(
+                    "UPDATE students SET nombre=?, matricula=?, tarifaHora=?, plan=?, asignaturaPrincipal=?, profesorAsignado=?, profesorEmail=? WHERE id=?",
+                    (nombre, matricula, tarifa, plan, asignatura, profesor, profesor_email, existing["id"])
+                )
+            else:
+                c.execute(
+                    "INSERT INTO students (nombre,email,matricula,tarifaHora,plan,asignaturaPrincipal,profesorAsignado,saldoPendiente,horasTotales,telefono,estado,profesorEmail) VALUES (?,?,?,?,?,?,?,0,0,'-','Activo',?)",
+                    (nombre, email, matricula, tarifa, plan, asignatura, profesor, profesor_email)
+                )
+            conn.commit()
+            conn.close()
+            self._send_json({"ok": True}, 201)
+            return
+
+        if path == "/api/teachers":
+            nombre = body.get("nombre", "Nuevo Profesor")
+            email = (body.get("email") or "profesor@itutor.es").strip().lower()
+            especialidad = body.get("especialidad", "")
+            departamento = body.get("departamento", "Matemáticas")
+            tarifa = float(body.get("tarifaHora", 30))
+            c.execute("SELECT id FROM teachers WHERE lower(email) = ?", (email,))
+            existing = c.fetchone()
+            if existing:
+                c.execute(
+                    "UPDATE teachers SET nombre=?, especialidad=?, departamento=?, tarifaHora=? WHERE id=?",
+                    (nombre, especialidad, departamento, tarifa, existing["id"])
+                )
+            else:
+                c.execute(
+                    "INSERT INTO teachers (nombre,email,especialidad,departamento,tarifaHora,alumnosAsignados,alumnosCount,horasImpartidas,totalGanado,calificacion,telefono,estado) VALUES (?,?,?,?,?,?,0,0,0,5,'-','Disponible')",
+                    (nombre, email, especialidad, departamento, tarifa, json.dumps(body.get("alumnosAsignados") or []))
+                )
             conn.commit()
             conn.close()
             self._send_json({"ok": True}, 201)
@@ -560,7 +675,7 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     init_db()
-    server = HTTPServer(("0.0.0.0", PORT), ITutorAPIHandler)
+    server = ThreadingHTTPServer(("0.0.0.0", PORT), ITutorAPIHandler)
     print(f"============================================================")
     print(f" 🍓 Servidor API REST + SQLite iTUTOR activo en puerto {PORT}")
     print(f" 🌐 Local:   http://192.168.1.47:{PORT}")

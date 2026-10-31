@@ -22,10 +22,15 @@ import { AuthService } from '../services/auth.service';
  * Las rutas sin `data.role` quedan accesibles para cualquier usuario
  * autenticado (por ejemplo, `/ajustes`).
  *
- * Al redirigir se conserva la URL solicitada en `returnUrl`, de modo que el
- * login pueda devolver al usuario a su destino original.
+ * Las redirecciones se devuelven como `UrlTree` (en lugar de llamar a
+ * `router.navigate()` y devolver `false`) para que Angular sustituya la
+ * navegación en curso de forma atómica. Al redirigir al login se usa siempre
+ * la URL limpia `/login` (sin `?returnUrl=...`): así la barra de direcciones
+ * no muestra parámetros extraños y el layout nunca confunde la pantalla de
+ * login con una vista interna (lo que provocaba que apareciera el menú
+ * lateral del administrador sin haber iniciado sesión).
  */
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = (route) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -33,8 +38,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   // --- Nivel 1: ¿hay sesión activa? ---
   if (!user) {
-    router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-    return false;
+    return router.createUrlTree(['/login']);
   }
 
   // --- Nivel 2: ¿el rol está autorizado para esta ruta? ---
@@ -55,8 +59,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (!allowedRoles.includes(user.role)) {
     // Acceso denegado: se devuelve al usuario a la vista inicial de su rol
     // en lugar de dejarlo en una pantalla sin permisos.
-    router.navigate([getHomeRouteForRole(user.role)]);
-    return false;
+    return router.createUrlTree([getHomeRouteForRole(user.role)]);
   }
 
   return true;
