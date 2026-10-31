@@ -33,6 +33,9 @@ MAX_DRAIN_BYTES = 32 * 1024 * 1024       # cuerpos mayores se cortan sin leerlos
 
 # Los apuntes del seed no se pueden sobrescribir desde la API.
 SEED_APUNTE_IDS = {"AP-01", "AP-02", "AP-03", "AP-04", "AP-05", "AP-06"}
+# Los alumnos/profesores del seed (ids 101-110 / 201-210) no se pueden sobrescribir desde la API.
+SEED_STUDENT_MAX_ID = 110
+SEED_TEACHER_MAX_ID = 210
 APUNTE_ID_RE = re.compile(r"^AP-UP-[A-Z0-9]{4,32}$")
 APUNTE_FILE_RE = re.compile(r"^/api/apuntes/([A-Za-z0-9_-]{1,64})/file$")
 
@@ -260,6 +263,14 @@ def init_db():
     if "profesorEmail" not in [row[1] for row in c.fetchall()]:
         c.execute("ALTER TABLE students ADD COLUMN profesorEmail TEXT")
 
+    # Migración sesiones: las clases agendadas por un profesor se identifican por email
+    # (así cada alumno y cada profesor ve solo las suyas, desde cualquier dispositivo).
+    c.execute("PRAGMA table_info(sessions)")
+    session_cols = [row[1] for row in c.fetchall()]
+    for col in ("studentEmail", "teacherEmail", "topic", "startAt"):
+        if col not in session_cols:
+            c.execute(f"ALTER TABLE sessions ADD COLUMN {col} TEXT DEFAULT ''")
+
     # Migración apuntes: email del profesor que lo sube (decide qué alumnos lo ven).
     # Vacío = apunte compartido del seed (lo ven todos, como hasta ahora).
     c.execute("PRAGMA table_info(apuntes)")
@@ -309,6 +320,45 @@ def query_all(table_name):
     elif table_name == "messages":
         return [{"id": r["id"], "from": r["sender"], "to": r["recipient"], "text": r["text"], "ts": r["ts"]} for r in rows]
     return rows
+
+
+def is_email(value: str) -> bool:
+    return bool(re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", value or ""))
+
+
+def _assigned_names(teacher: dict) -> list:
+    raw = teacher.get("alumnosAsignados")
+    if isinstance(raw, list):
+        return raw
+    try:
+        return json.loads(raw or "[]")
+    except Exception:  # noqa: BLE001
+        return []
+
+
+def students_of_teacher(students: list, teachers: list, teacher_email: str) -> list:
+    """Alumnos asignados a un profesor: por email de profesor, por nombre (seed) o por su lista."""
+    t = next((x for x in teachers if (x["email"] or "").lower() == teacher_email), None)
+    names = set(_assigned_names(t)) if t else set()
+    return [
+        s for s in students
+        if (s.get("profesorEmail") or "").lower() == teacher_email
+        or (t is not None and s.get("profesorAsignado") == t["nombre"])
+        or s["nombre"] in names
+    ]
+
+
+def teachers_of_student(students: list, teachers: list, student_email: str) -> list:
+    """Profesores asignados a un alumno (misma regla que students_of_teacher, vista desde el alumno)."""
+    st = next((x for x in students if (x["email"] or "").lower() == student_email), None)
+    if st is None:
+        return []
+    return [
+        t for t in teachers
+        if (st.get("profesorEmail") or "").lower() == (t["email"] or "").lower()
+        or st.get("profesorAsignado") == t["nombre"]
+        or st["nombre"] in _assigned_names(t)
+    ]
 
 
 def clean_text(value, max_len: int, default: str = "") -> str:
@@ -428,7 +478,11 @@ def list_apuntes(materia=None, viewer=None):
     out = []
     for r in rows:
         owner = (r["teacherEmail"] or "").strip().lower()
-        # Sin dueño = apunte compartido del seed: lo ven todos.
+        # Los apuntes de ejemplo (AP-01..06) pertenecen a las cuentas demo: un alumno
+        # recién registrado no debe ver, por ejemplo, la «Planificación de Paula».
+        if viewer and r["id"] in SEED_APUNTE_IDS and viewer not in PROTECTED_ACCOUNTS and visible is not None:
+            continue
+        # Un apunte sin dueño subido por la coordinación lo ven todos.
         if visible is not None and owner and owner not in visible:
             continue
         if materia and materia != "Todos" and (r["subject"] or "").lower() != materia.lower():
@@ -578,20 +632,47 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
             ])
             return
 
+        def q(name):
+            return (qs.get(name, [""])[0] or "").strip().lower()
+
         if path == "/api/students":
-            self._send_json(query_all("students"))
+            # Sin filtros devuelve todos (panel de administración). Con ?email= o
+            # ?teacher= solo los de ese alumno / los alumnos asignados a ese profesor.
+            rows = query_all("students")
+            if q("email"):
+                rows = [r for r in rows if (r["email"] or "").lower() == q("email")]
+            elif q("teacher"):
+                rows = students_of_teacher(rows, query_all("teachers"), q("teacher"))
+            self._send_json(rows)
             return
 
         if path == "/api/teachers":
-            self._send_json(query_all("teachers"))
+            # ?email= un profesor concreto; ?student= los profesores asignados a ese alumno.
+            rows = query_all("teachers")
+            if q("email"):
+                rows = [r for r in rows if (r["email"] or "").lower() == q("email")]
+            elif q("student"):
+                rows = teachers_of_student(query_all("students"), rows, q("student"))
+            self._send_json(rows)
             return
 
         if path == "/api/sessions":
-            self._send_json(query_all("sessions"))
+            # ?email= solo las clases en las que participa (como alumno o como profesor).
+            rows = query_all("sessions")
+            if q("email"):
+                rows = [
+                    r for r in rows
+                    if q("email") in ((r.get("studentEmail") or "").lower(), (r.get("teacherEmail") or "").lower())
+                ]
+            self._send_json(rows)
             return
 
         if path == "/api/messages":
-            self._send_json(query_all("messages"))
+            # ?user= solo los mensajes que ese usuario ha enviado o recibido.
+            rows = query_all("messages")
+            if q("user"):
+                rows = [r for r in rows if q("user") in (r["from"], r["to"])]
+            self._send_json(rows)
             return
 
         if path == "/api/apuntes":
@@ -899,12 +980,21 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
             return
 
         if path == "/api/messages":
-            msg_id = body.get("id") or f"MSG-{int(datetime.now().timestamp() * 1000)}"
-            sender = (body.get("from") or "elenaramos@itutor.es").strip().lower()
-            recipient = (body.get("to") or "paulagarcia@itutor.es").strip().lower()
-            text = body.get("text", "")
-            ts = int(body.get("ts") or int(datetime.now().timestamp() * 1000))
-            c.execute("INSERT OR REPLACE INTO messages VALUES (?,?,?,?,?)", (msg_id, sender, recipient, text, ts))
+            # Antes, si faltaba remitente/destinatario se rellenaba con Elena y Paula.
+            sender = (body.get("from") or "").strip().lower()
+            recipient = (body.get("to") or "").strip().lower()
+            text = clean_text(body.get("text"), 2000)
+            if not is_email(sender) or not is_email(recipient) or not text:
+                conn.close()
+                self._send_json({"ok": False, "error": "INVALID_DATA"}, 400)
+                return
+            msg_id = clean_text(body.get("id"), 64) or f"MSG-{int(datetime.now().timestamp() * 1000)}"
+            try:
+                ts = int(body.get("ts") or 0) or int(datetime.now().timestamp() * 1000)
+            except (TypeError, ValueError):
+                ts = int(datetime.now().timestamp() * 1000)
+            # INSERT OR IGNORE: reenviar el mismo id (reintento) nunca duplica ni reescribe.
+            c.execute("INSERT OR IGNORE INTO messages VALUES (?,?,?,?,?)", (msg_id, sender, recipient, text, ts))
             conn.commit()
             conn.close()
             self._send_json({"ok": True, "id": msg_id}, 201)
@@ -930,23 +1020,52 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
             return
 
         if path == "/api/sessions":
-            new_id = body.get("_id") or f"ses_{int(datetime.now().timestamp())}"
-            est_id = int(body.get("estudianteId", 110))
-            est_nombre = body.get("estudianteNombre", "Paula García Serrano")
-            materia = body.get("materia", "Física Clásica")
-            rama = body.get("rama", "Física")
-            tutor = body.get("tutor", "Elena Ramos")
-            fecha = body.get("fecha") or datetime.now().strftime("%Y-%m-%d %H:%M")
-            mes = body.get("mes", "octubre")
-            duracion = int(body.get("duracionMin", 90))
-            importe = float(body.get("importe", 45))
-            estado = body.get("estado", "Confirmada")
-            asistencia = 1 if body.get("asistencia", True) else 0
-            notas = body.get("notasSeguimiento", "Sesión registrada en servidor Banana Pi.")
-
+            # Clase agendada por un profesor para un alumno. Upsert por _id: el cliente
+            # puede reintentar sin duplicar. Ya no se rellena con Paula/Elena por defecto.
+            student_email = clean_text(body.get("studentEmail"), 120).lower()
+            teacher_email = clean_text(body.get("teacherEmail"), 120).lower()
+            if not is_email(student_email) or not is_email(teacher_email):
+                conn.close()
+                self._send_json({"ok": False, "error": "INVALID_DATA"}, 400)
+                return
+            new_id = clean_text(body.get("_id"), 64) or f"CLS-{secrets.token_hex(5)}"
+            c.execute("SELECT teacherEmail FROM sessions WHERE _id = ?", (new_id,))
+            prev = c.fetchone()
+            if prev and (prev["teacherEmail"] or "") != teacher_email:
+                conn.close()
+                self._send_json({"ok": False, "error": "NOT_OWNER"}, 409)
+                return
+            try:
+                est_id = int(body.get("estudianteId") or 0)
+                duracion = max(15, min(480, int(body.get("duracionMin") or 90)))
+                importe = max(0.0, float(body.get("importe") or 0))
+            except (TypeError, ValueError):
+                conn.close()
+                self._send_json({"ok": False, "error": "INVALID_DATA"}, 400)
+                return
+            start_at = clean_text(body.get("startAt"), 16)
+            fecha = clean_text(body.get("fecha"), 20) or start_at.replace("T", " ")
             c.execute(
-                "INSERT OR REPLACE INTO sessions VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                (new_id, est_id, est_nombre, materia, rama, tutor, fecha, mes, duracion, importe, estado, asistencia, notas)
+                """
+                INSERT OR REPLACE INTO sessions
+                  (_id, estudianteId, estudianteNombre, materia, rama, tutor, fecha, mes, duracionMin, importe,
+                   estado, asistencia, notasSeguimiento, studentEmail, teacherEmail, topic, startAt)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                """,
+                (
+                    new_id, est_id,
+                    clean_text(body.get("estudianteNombre"), 120, student_email),
+                    clean_text(body.get("materia"), 120, "Tutoría"),
+                    clean_text(body.get("rama"), 40, "Matemáticas"),
+                    clean_text(body.get("tutor"), 120, teacher_email),
+                    fecha, clean_text(body.get("mes"), 20),
+                    duracion, importe,
+                    clean_text(body.get("estado"), 20, "Confirmada"),
+                    1 if body.get("asistencia") else 0,
+                    clean_text(body.get("notasSeguimiento"), 500),
+                    student_email, teacher_email,
+                    clean_text(body.get("topic"), 200), start_at,
+                ),
             )
             conn.commit()
             conn.close()
@@ -954,18 +1073,34 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
             return
 
         if path == "/api/students":
-            # Alta/actualización idempotente por email: el cliente puede reintentar
-            # el envío sin crear alumnos duplicados.
-            nombre = body.get("nombre", "Nuevo Alumno")
-            email = (body.get("email") or "alumno@itutor.es").strip().lower()
-            matricula = body.get("matricula") or f"MAT-2026-{int(datetime.now().timestamp()) % 1000}"
-            tarifa = float(body.get("tarifaHora", 30))
-            plan = body.get("plan", "Básico")
-            asignatura = body.get("asignaturaPrincipal", "Física Clásica")
-            profesor = body.get("profesorAsignado", "Elena Ramos")
-            profesor_email = (body.get("profesorEmail") or "").strip().lower() or None
+            # Alta/actualización idempotente por email: el cliente puede reintentar el
+            # envío sin crear alumnos duplicados. Ya no se asigna a Elena por defecto.
+            email = clean_text(body.get("email"), 120).lower()
+            if not is_email(email):
+                conn.close()
+                self._send_json({"ok": False, "error": "INVALID_DATA"}, 400)
+                return
+            nombre = clean_text(body.get("nombre"), 120, email.split("@")[0])
+            matricula = clean_text(body.get("matricula"), 40) or f"MAT-2026-{secrets.randbelow(900) + 100}"
+            try:
+                tarifa = max(0.0, float(body.get("tarifaHora") or 30))
+            except (TypeError, ValueError):
+                tarifa = 30.0
+            plan = clean_text(body.get("plan"), 20, "Básico")
+            asignatura = clean_text(body.get("asignaturaPrincipal"), 200, "Sin asignar")
+            profesor_email = clean_text(body.get("profesorEmail"), 120).lower() or None
+            profesor = clean_text(body.get("profesorAsignado"), 120, "Sin asignar")
+            if profesor_email:
+                c.execute("SELECT nombre FROM teachers WHERE lower(email) = ?", (profesor_email,))
+                t_row = c.fetchone()
+                if t_row:
+                    profesor = t_row["nombre"]
             c.execute("SELECT id FROM students WHERE lower(email) = ?", (email,))
             existing = c.fetchone()
+            if existing and existing["id"] <= SEED_STUDENT_MAX_ID:
+                conn.close()
+                self._send_json({"ok": False, "error": "PROTECTED_STUDENT"}, 409)
+                return
             if existing:
                 c.execute(
                     "UPDATE students SET nombre=?, matricula=?, tarifaHora=?, plan=?, asignaturaPrincipal=?, profesorAsignado=?, profesorEmail=? WHERE id=?",
@@ -976,34 +1111,60 @@ class ITutorAPIHandler(BaseHTTPRequestHandler):
                     "INSERT INTO students (nombre,email,matricula,tarifaHora,plan,asignaturaPrincipal,profesorAsignado,saldoPendiente,horasTotales,telefono,estado,profesorEmail) VALUES (?,?,?,?,?,?,?,0,0,'-','Activo',?)",
                     (nombre, email, matricula, tarifa, plan, asignatura, profesor, profesor_email)
                 )
+            # El profesor ve a su nuevo alumno (y el panel de administración cuenta bien).
+            if profesor_email:
+                c.execute("SELECT id, alumnosAsignados FROM teachers WHERE lower(email) = ?", (profesor_email,))
+                t_row = c.fetchone()
+                if t_row:
+                    try:
+                        assigned = json.loads(t_row["alumnosAsignados"] or "[]")
+                    except Exception:  # noqa: BLE001
+                        assigned = []
+                    if nombre not in assigned:
+                        assigned.append(nombre)
+                    c.execute(
+                        "UPDATE teachers SET alumnosAsignados=?, alumnosCount=? WHERE id=?",
+                        (json.dumps(assigned, ensure_ascii=False), len(assigned), t_row["id"])
+                    )
             conn.commit()
             conn.close()
             self._send_json({"ok": True}, 201)
             return
 
         if path == "/api/teachers":
-            nombre = body.get("nombre", "Nuevo Profesor")
-            email = (body.get("email") or "profesor@itutor.es").strip().lower()
-            especialidad = body.get("especialidad", "")
-            departamento = body.get("departamento", "Matemáticas")
-            tarifa = float(body.get("tarifaHora", 30))
+            email = clean_text(body.get("email"), 120).lower()
+            if not is_email(email):
+                conn.close()
+                self._send_json({"ok": False, "error": "INVALID_DATA"}, 400)
+                return
+            nombre = clean_text(body.get("nombre"), 120, email.split("@")[0])
+            especialidad = clean_text(body.get("especialidad"), 200)
+            departamento = clean_text(body.get("departamento"), 40, "Matemáticas")
+            try:
+                tarifa = max(0.0, float(body.get("tarifaHora") or 30))
+            except (TypeError, ValueError):
+                tarifa = 30.0
             c.execute("SELECT id FROM teachers WHERE lower(email) = ?", (email,))
             existing = c.fetchone()
+            if existing and existing["id"] <= SEED_TEACHER_MAX_ID:
+                conn.close()
+                self._send_json({"ok": False, "error": "PROTECTED_TEACHER"}, 409)
+                return
             if existing:
+                # Solo datos del perfil: la lista de alumnos la mantiene el servidor.
                 c.execute(
                     "UPDATE teachers SET nombre=?, especialidad=?, departamento=?, tarifaHora=? WHERE id=?",
                     (nombre, especialidad, departamento, tarifa, existing["id"])
                 )
             else:
                 c.execute(
-                    "INSERT INTO teachers (nombre,email,especialidad,departamento,tarifaHora,alumnosAsignados,alumnosCount,horasImpartidas,totalGanado,calificacion,telefono,estado) VALUES (?,?,?,?,?,?,0,0,0,5,'-','Disponible')",
-                    (nombre, email, especialidad, departamento, tarifa, json.dumps(body.get("alumnosAsignados") or []))
+                    "INSERT INTO teachers (nombre,email,especialidad,departamento,tarifaHora,alumnosAsignados,alumnosCount,horasImpartidas,totalGanado,calificacion,telefono,estado) VALUES (?,?,?,?,?,'[]',0,0,0,5,'-','Disponible')",
+                    (nombre, email, especialidad, departamento, tarifa)
                 )
             conn.commit()
             conn.close()
             self._send_json({"ok": True}, 201)
             return
-
         conn.close()
         self._send_json({"error": "Endpoint no encontrado"}, 404)
 

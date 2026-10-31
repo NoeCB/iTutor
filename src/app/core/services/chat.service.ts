@@ -1,6 +1,7 @@
 import { Injectable, NgZone, OnDestroy, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApiSyncService } from './api-sync.service';
+import { AuthService } from './auth.service';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -31,6 +32,7 @@ export class ChatService implements OnDestroy {
   private zone = inject(NgZone);
   private http = inject(HttpClient, { optional: true });
   private sync = inject(ApiSyncService);
+  private auth = inject(AuthService);
   private readonly apiUrl = environment.apiUrl || 'http://18.192.203.101:3000/api';
   private pollTimer: ReturnType<typeof setInterval> | null = null;
 
@@ -50,6 +52,8 @@ export class ChatService implements OnDestroy {
     window.addEventListener('storage', this.onStorage);
     this.syncFromApi();
     if (this.http) {
+      // Al iniciar sesión se descargan al momento los mensajes de ese usuario.
+      this.auth.currentUser$.subscribe(user => user && this.syncFromApi());
       this.pollTimer = setInterval(() => this.syncFromApi(), 4000);
     }
   }
@@ -63,8 +67,11 @@ export class ChatService implements OnDestroy {
 
   /** Sincroniza los mensajes con la base de datos SQLite en la Banana Pi */
   private syncFromApi(): void {
-    if (!this.http) return;
-    this.http.get<ChatMessage[]>(`${this.apiUrl}/messages`).subscribe({
+    const me = this.auth.currentUserValue?.email?.toLowerCase();
+    // Sin sesión no se descarga nada; con sesión, solo los mensajes de ese usuario
+    // (antes se bajaban las conversaciones de todos al navegador).
+    if (!this.http || !me) return;
+    this.http.get<ChatMessage[]>(`${this.apiUrl}/messages`, { params: { user: me } }).subscribe({
       next: remoteMsgs => {
         if (!Array.isArray(remoteMsgs) || remoteMsgs.length === 0) return;
         const local = this.readJson<ChatMessage[]>(ChatService.MESSAGES_KEY, []);

@@ -17,7 +17,7 @@
         }
       </ion-title>
       <span class="student-pill" [class.coordinator-pill]="isCoordinator">
-        {{ isCoordinator ? 'Jefa Coordinadora: Noelia Cantador' : (isTeacher ? 'Profesora: ' + (currentUser?.name || 'Elena Ramos') : 'Alumna: ' + (currentUser?.name || 'Paula García')) }}
+        {{ roleLabel }}: {{ currentUser?.name || currentUser?.email }}
       </span>
     </div>
 
@@ -33,12 +33,18 @@
     @if (activeSection === 'tutorias') {
       <div class="section-banner">
         <div>
-          <h1 class="main-heading">{{ isCoordinator ? 'Calendario General de Tutorías' : 'Calendario de Clases de Paula' }}</h1>
-          <p class="sub-heading">{{ isCoordinator ? 'Supervisión de sesiones lectivas y seguimiento de tutorías programadas en iTUTOR.' : 'Haz clic sobre cualquier día marcado del calendario (por ejemplo, el 10 de octubre) para abrir el recuadro de la tutoría y tu profesora.' }}</p>
+          <h1 class="main-heading">{{ isCoordinator ? 'Calendario General de Tutorías' : (isTeacher ? 'Mi Calendario de Clases' : 'Mi Calendario de Clases') }}</h1>
+          <p class="sub-heading">{{ isCoordinator ? 'Supervisión de sesiones lectivas y seguimiento de tutorías programadas en iTUTOR.' : (isTeacher ? 'Tus clases agendadas con tus alumnos asignados. Pulsa un día marcado para ver el detalle.' : 'Tus tutorías agendadas por tus profesores. Pulsa un día marcado para ver el detalle de la clase.') }}</p>
         </div>
         <div class="month-selector">
+          <button type="button" class="month-nav-btn" (click)="changeMonth(-1)" aria-label="Mes anterior">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+          </button>
           <ion-icon name="calendar-outline"></ion-icon>
-          <span>Octubre 2026</span>
+          <span>{{ monthLabel }}</span>
+          <button type="button" class="month-nav-btn" (click)="changeMonth(1)" aria-label="Mes siguiente">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </button>
         </div>
       </div>
 
@@ -48,12 +54,8 @@
           <ion-card-content>
             <div class="calendar-top-bar">
               <div class="month-title">
-                <h2>Octubre 2026</h2>
-                <span class="classes-count">7 tutorías programadas</span>
-              </div>
-              <div class="legend">
-                <span class="legend-item"><i class="dot blue"></i> Ecuaciones Diferenciales</span>
-                <span class="legend-item"><i class="dot green"></i> Cálculo / Álgebra</span>
+                <h2>{{ monthLabel }}</h2>
+                <span class="classes-count">{{ allMonthSessions.length }} {{ allMonthSessions.length === 1 ? 'tutoría programada' : 'tutorías programadas' }}</span>
               </div>
             </div>
 
@@ -117,7 +119,7 @@
                     {{ sesion.teacherInitials }}
                   </div>
                   <div class="teacher-meta">
-                    <span class="teacher-label">PROFESORA ASIGNADA</span>
+                    <span class="teacher-label">{{ isTeacher ? 'ALUMNO/A' : 'PROFESOR/A ASIGNADO/A' }}</span>
                     <h3 class="teacher-name">{{ sesion.teacher }}</h3>
                     <p class="teacher-role">{{ sesion.teacherRole }}</p>
                   </div>
@@ -143,13 +145,13 @@
 
                 <!-- Notas de la sesión -->
                 <div class="notes-callout">
-                  <span class="callout-title">Plan de la sesión con la profesora:</span>
+                  <span class="callout-title">Plan de la sesión:</span>
                   <p>{{ sesion.notes }}</p>
                 </div>
 
                 <!-- Botones de acción rápida -->
                 <div class="detail-actions">
-                  <ion-button expand="block" class="primary-action-btn" (click)="openChatWithTeacher(sesion.teacher)">
+                  <ion-button expand="block" class="primary-action-btn" (click)="openChatWithTeacher(sesion.teacherEmail)">
                     <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>
                     Escribir a {{ sesion.teacher }}
                   </ion-button>
@@ -166,12 +168,13 @@
                 <div class="empty-day-icon">
                   <ion-icon name="calendar-outline"></ion-icon>
                 </div>
-                <h3>Día {{ selectedDay }} de Octubre sin tutorías</h3>
-                <p>No tienes ninguna clase programada este día. Haz clic en el <strong>10 de octubre</strong> (o en los días 3, 6, 15, 20, 24, 29) para ver el detalle de tus clases.</p>
-                <ion-button size="small" (click)="selectCalendarDay(10)">
-                  Ver clase del 10 de Octubre (Ecuaciones Diferenciales)
-                </ion-button>
-              </ion-card-content>
+                @if (allMonthSessions.length === 0) {
+                  <h3>Sin tutorías en {{ monthLabel }}</h3>
+                  <p>{{ isTeacher ? 'Aún no has agendado clases este mes. Usa «Agendar Clase» para crear una con uno de tus alumnos asignados.' : 'Tus profesores todavía no han agendado clases este mes. Cuando lo hagan, aparecerán aquí desde cualquier dispositivo.' }}</p>
+                } @else {
+                  <h3>Día {{ selectedDay }} sin tutorías</h3>
+                  <p>No hay ninguna clase este día. Pulsa uno de los días marcados del calendario para ver su detalle.</p>
+                }              </ion-card-content>
             </ion-card>
           }
 
@@ -179,7 +182,7 @@
           <ion-card class="upcoming-mini-card">
             <ion-card-content>
               <div class="mini-header-row">
-                <h4 class="mini-heading">{{ isTeacher ? 'Zona de Clases Confirmadas (Octubre)' : 'Clases Confirmadas de Paula en Octubre' }}</h4>
+                <h4 class="mini-heading">{{ isTeacher ? 'Clases confirmadas de ' + monthLabel : 'Mis clases de ' + monthLabel }}</h4>
                 @if (isTeacher) {
                   <ion-button size="small" class="schedule-inline-btn" (click)="openScheduleModal()">
                     <ion-icon name="add-circle-outline" slot="start"></ion-icon>
@@ -198,7 +201,7 @@
                     [class.active-row]="s.day === selectedDay"
                     (click)="selectCalendarDay(s.day)"
                   >
-                    <span class="mini-day-badge" [style.background]="s.color">{{ s.day }} Oct</span>
+                    <span class="mini-day-badge" [style.background]="s.color">{{ s.day }}</span>
                     <div class="mini-info">
                       <strong>{{ s.subject }}</strong>
                       <span>{{ s.teacher }} • {{ s.time }}</span>
@@ -279,28 +282,6 @@
         </div>
 
         <div class="notes-header-actions">
-          @if (!isCoordinator) {
-            <div class="chat-role-switcher">
-              <span class="switcher-label">Modo:</span>
-              <button
-                type="button"
-                class="role-switch-btn"
-                [class.active]="isTeacher"
-                (click)="switchChatRole('elena')"
-              >
-                Profesora Elena
-              </button>
-              <button
-                type="button"
-                class="role-switch-btn"
-                [class.active]="!isTeacher"
-                (click)="switchChatRole('paula')"
-              >
-                Alumna Paula
-              </button>
-            </div>
-          }
-
           @if (isTeacher || isCoordinator) {
             <ion-button class="upload-pdf-btn" (click)="openUploadNoteModal()">
               <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
@@ -479,40 +460,19 @@
       <div class="section-banner">
         <div>
           <h1 class="main-heading">
-            {{ isCoordinator ? 'Mensajes con el Claustro de Profesores' : (isTeacher ? 'Mensajes de la Profesora Elena con sus Alumnos' : 'Mensajes de Paula con sus Profesores') }}
+            {{ isCoordinator ? 'Mensajes con el Claustro de Profesores' : (isTeacher ? 'Mensajes con mis Alumnos' : 'Mensajes con mis Profesores') }}
           </h1>
           <p class="sub-heading">
-            {{ isCoordinator ? 'Canal oficial de coordinación académica entre la Jefa Coordinadora (Noelia Cantador) y los profesores de iTUTOR.' : (isTeacher ? 'Estás en el perfil de profesora de Elena Ramos. Escribe a tu alumna Paula García o a tus alumnos asignados en tiempo real.' : 'Estás en el perfil de alumna de Paula García. Chatea en directo con tu profesora Elena Ramos.') }}
+            {{ isCoordinator ? 'Canal oficial de coordinación académica con los profesores de iTUTOR.' : (isTeacher ? 'Escribe en tiempo real a tus alumnos asignados y a la coordinación.' : 'Chatea en directo con los profesores que tienes asignados y con la coordinación.') }}
           </p>
         </div>
-        @if (!isCoordinator) {
-          <div class="chat-role-switcher">
-            <span class="switcher-label">Probar chat como:</span>
-            <button
-              type="button"
-              class="role-switch-btn"
-              [class.active]="isTeacher"
-              (click)="switchChatRole('elena')"
-            >
-              Profesora Elena
-            </button>
-            <button
-              type="button"
-              class="role-switch-btn"
-              [class.active]="!isTeacher"
-              (click)="switchChatRole('paula')"
-            >
-              Alumna Paula
-            </button>
-          </div>
-        }
       </div>
 
       <div class="chat-layout">
         <!-- Lista de contactos según el rol -->
         <ion-card class="teachers-list-card">
           <ion-card-content>
-            <h3 class="chat-side-title">{{ isCoordinator ? 'Claustro de Profesores' : (isTeacher ? 'Mis Alumnos Asignados' : 'Tus Profesores') }}</h3>
+            <h3 class="chat-side-title">{{ isCoordinator ? 'Claustro de Profesores' : (isTeacher ? 'Mis Alumnos Asignados' : 'Mis Profesores') }}</h3>
             @for (conv of conversations; track conv.id) {
               <button
                 type="button"
@@ -520,12 +480,7 @@
                 [class.active]="conv.id === selectedTeacherId"
                 (click)="selectConversation(conv.id)"
               >
-                <div class="chat-avatar">
-                  {{ conv.initials }}
-                  @if (conv.online) {
-                    <span class="online-dot"></span>
-                  }
-                </div>
+                <div class="chat-avatar">{{ conv.initials }}</div>
                 <div class="chat-item-info">
                   <h4>{{ conv.teacherName }}</h4>
                   <p>{{ conv.subject }}</p>
@@ -534,72 +489,61 @@
                   <ion-badge color="primary">{{ conv.unread }}</ion-badge>
                 }
               </button>
+            } @empty {
+              <p class="chat-empty-text">
+                {{ isTeacher ? 'Todavía no tienes alumnos asignados.' : 'Todavía no tienes profesores asignados.' }}
+              </p>
             }
           </ion-card-content>
         </ion-card>
 
         <!-- Ventana de conversación -->
-        <ion-card class="chat-window-card">
-          <div class="chat-window-header">
-            <div class="chat-avatar">{{ activeConversation.initials }}</div>
-            <div class="chat-header-info">
-              <h3>{{ activeConversation.teacherName }}</h3>
-              <span>{{ activeConversation.subject }} • En línea</span>
+        @if (activeConversation; as conv) {
+          <ion-card class="chat-window-card">
+            <div class="chat-window-header">
+              <div class="chat-avatar">{{ conv.initials }}</div>
+              <div class="chat-header-info">
+                <h3>{{ conv.teacherName }}</h3>
+                <span>{{ conv.subject }}</span>
+              </div>
+              <div class="coordinator-badge-tag" [class.teacher-tag]="isTeacher" [class.student-tag]="!isTeacher && !isCoordinator">
+                <ion-icon [name]="isCoordinator ? 'shield-checkmark-outline' : (isTeacher ? 'school-outline' : 'person-outline')"></ion-icon>
+                <span>Conectado/a como: {{ currentUser?.name || currentUser?.email }}</span>
+              </div>
             </div>
-            @if (isCoordinator) {
-              <div class="coordinator-badge-tag">
-                <ion-icon name="shield-checkmark-outline"></ion-icon>
-                <span>Jefa Coordinadora: Noelia Cantador</span>
-              </div>
-            } @else if (isTeacher) {
-              <div class="coordinator-badge-tag teacher-tag">
-                <ion-icon name="school-outline"></ion-icon>
-                <span>Conectada como: Elena Ramos (Profesora)</span>
-              </div>
-            } @else {
-              <div class="coordinator-badge-tag student-tag">
-                <ion-icon name="person-outline"></ion-icon>
-                <span>Conectada como: Paula García (Alumna)</span>
-              </div>
-            }
-          </div>
 
-          <div class="chat-messages-body">
-            @for (msg of activeConversation.messages; track $index) {
-              <div class="message-bubble-wrap" [class.mine]="isMyMessage(msg)">
-                <div class="message-bubble">
-                  <span class="sender-name-label">
-                    @if (isCoordinator) {
-                      {{ isMyMessage(msg) ? 'Noelia Cantador (Jefa Coordinadora)' : activeConversation.teacherName }}
-                    } @else if (isTeacher) {
-                      {{ isMyMessage(msg) ? 'Elena Ramos (Profesora - Tú)' : activeConversation.teacherName + ' (Alumna)' }}
-                    } @else {
-                      {{ isMyMessage(msg) ? 'Paula García (Alumna - Tú)' : activeConversation.teacherName + ' (Profesora)' }}
-                    }
-                  </span>
-                  <p>{{ msg.text }}</p>
-                  <span class="msg-time">{{ msg.time }}</span>
+            <div class="chat-messages-body">
+              @for (msg of conv.messages; track $index) {
+                <div class="message-bubble-wrap" [class.mine]="isMyMessage(msg)">
+                  <div class="message-bubble">
+                    <span class="sender-name-label">
+                      {{ isMyMessage(msg) ? (currentUser?.name || 'Tú') + ' (Tú)' : conv.teacherName }}
+                    </span>
+                    <p>{{ msg.text }}</p>
+                    <span class="msg-time">{{ msg.time }}</span>
+                  </div>
                 </div>
-              </div>
-            }
-          </div>
+              } @empty {
+                <p class="chat-empty-text">Aún no hay mensajes. Escribe el primero.</p>
+              }
+            </div>
 
-          <div class="chat-input-bar">
-            <input
-              type="text"
-              [placeholder]="isCoordinator ? 'Escribe un mensaje como Noelia a ' + activeConversation.teacherName + '...' : (isTeacher ? 'Escribe como Elena (Profesora) a ' + activeConversation.teacherName + '...' : 'Escribe como Paula (Alumna) a ' + activeConversation.teacherName + '...')"
-              [(ngModel)]="newMessageText"
-              (keyup.enter)="sendMessage()"
-            />
-            <ion-button (click)="sendMessage()" class="send-btn">
-              <ion-icon name="send-outline" slot="start"></ion-icon>
-              Enviar
-            </ion-button>
-          </div>
-        </ion-card>
+            <div class="chat-input-bar">
+              <input
+                type="text"
+                [placeholder]="'Escribe un mensaje a ' + conv.teacherName + '...'"
+                [(ngModel)]="newMessageText"
+                (keyup.enter)="sendMessage()"
+              />
+              <ion-button (click)="sendMessage()" class="send-btn">
+                <ion-icon name="send-outline" slot="start"></ion-icon>
+                Enviar
+              </ion-button>
+            </div>
+          </ion-card>
+        }
       </div>
     }
-
     <!-- =======================================================================
          SECCIÓN 4: FACTURACIÓN & PAGOS (DASHBOARD DE TODO LO QUE HA PAGADO PAULA)
          ======================================================================= -->
@@ -607,7 +551,7 @@
       <div class="section-banner">
         <div>
           <h1 class="main-heading">Dashboard de Facturación & Pagos</h1>
-          <p class="sub-heading">Resumen financiero de todo lo abonado por Paula García, desglose por asignatura y descarga de recibos oficiales.</p>
+          <p class="sub-heading">{{ isCoordinator ? 'Resumen económico de todas las clases agendadas en iTUTOR.' : 'Resumen económico de tus clases agendadas, desglose por asignatura y descarga de recibos.' }}</p>
         </div>
       </div>
 
@@ -622,7 +566,7 @@
             <div class="kpi-value">{{ paymentKpis.totalPagado }}</div>
             <div class="kpi-foot success-text">
               <ion-icon name="checkmark-circle-outline"></ion-icon>
-              <span>100% de tus tutorías al corriente de pago</span>
+              <span>{{ paymentsHistory.length === 0 ? 'Aún no tienes clases agendadas' : (paymentKpis.saldoPendiente === '0,00 €' ? '100% de tus tutorías al corriente de pago' : 'Tienes clases pendientes de pago') }}</span>
             </div>
           </ion-card-content>
         </ion-card>
@@ -634,7 +578,7 @@
               <div class="kpi-icon indigo"><ion-icon name="school-outline"></ion-icon></div>
             </div>
             <div class="kpi-value">{{ paymentKpis.clasesAbonadas }}</div>
-            <div class="kpi-foot">{{ paymentKpis.horasTotales }} de clase impartidas</div>
+            <div class="kpi-foot">{{ paymentKpis.horasTotales }} de clase</div>
           </ion-card-content>
         </ion-card>
 
@@ -708,7 +652,7 @@
                     <td>{{ pay.teacher }}</td>
                     <td>{{ pay.method }}</td>
                     <td class="amount-cell">{{ pay.amount }},00 €</td>
-                    <td><ion-badge color="success">{{ pay.status }}</ion-badge></td>
+                    <td><ion-badge [color]="pay.status === 'Pagado' ? 'success' : 'warning'">{{ pay.status }}</ion-badge></td>
                     <td>
                       <ion-button size="small" fill="outline" (click)="downloadPaymentReceipt(pay)">
                         <ion-icon name="download-outline" slot="start"></ion-icon>
@@ -735,27 +679,6 @@
             Sube tu propia foto de perfil, consulta tus datos personales verificados (no modificables) o gestiona la baja de tu cuenta.
           </p>
         </div>
-        @if (!isCoordinator) {
-          <div class="chat-role-switcher">
-            <span class="switcher-label">Ver ajustes de:</span>
-            <button
-              type="button"
-              class="role-switch-btn"
-              [class.active]="isTeacher"
-              (click)="switchChatRole('elena')"
-            >
-              Profesora Elena
-            </button>
-            <button
-              type="button"
-              class="role-switch-btn"
-              [class.active]="!isTeacher"
-              (click)="switchChatRole('paula')"
-            >
-              Alumna Paula
-            </button>
-          </div>
-        }
       </div>
 
       @if (settingsSavedMsg) {

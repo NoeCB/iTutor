@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApiSyncService } from './api-sync.service';
 import { ScheduleService, ScheduledClass } from './schedule.service';
-import { Observable, forkJoin, of } from 'rxjs';
+import { Observable, Subject, firstValueFrom, forkJoin, of } from 'rxjs';
 import { catchError, delay, map, timeout } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
@@ -704,7 +704,56 @@ export class DataService {
   private static readonly REGISTERED_TEACHERS_KEY = 'itutor_registered_teachers';
   private static readonly REGISTERED_STUDENTS_KEY = 'itutor_registered_students';
 
+  /** Emite cuando el directorio de alumnos/profesores se ha actualizado desde el servidor. */
+  readonly directoryChanged$ = new Subject<void>();
+
   constructor() {}
+
+  /**
+   * Descarga de AWS los alumnos y profesores y los guarda junto a los de este
+   * navegador. Sin esto, una cuenta registrada en otro dispositivo no tendría su
+   * profesor ni sus alumnos aquí (solo existían en el `localStorage` del que la creó).
+   * El servidor manda (asignaciones, alumnosAsignados); lo que aún no ha llegado al
+   * servidor se conserva.
+   */
+  async refreshDirectory(): Promise<void> {
+    if (!this.http) {
+      return;
+    }
+    try {
+      const [students, teachers] = await Promise.all([
+        firstValueFrom(this.http.get<SqlStudentRate[]>(`${this.apiUrl}/students`).pipe(timeout(8000))),
+        firstValueFrom(this.http.get<TeacherRecord[]>(`${this.apiUrl}/teachers`).pipe(timeout(8000)))
+      ]);
+      const builtInStudents = new Set(this.STUDENTS_CATALOG.map(s => s.email.toLowerCase()));
+      const builtInTeachers = new Set(this.TEACHERS_CATALOG.map(t => t.email.toLowerCase()));
+      const merge = <T extends { email: string }>(key: string, remote: T[], builtIn: Set<string>): boolean => {
+        const byEmail = new Map<string, T>();
+        for (const item of this.readList<T>(key)) {
+          byEmail.set(item.email.toLowerCase(), item);
+        }
+        for (const item of Array.isArray(remote) ? remote : []) {
+          const e = (item.email || '').toLowerCase();
+          if (e && !builtIn.has(e)) {
+            byEmail.set(e, item);
+          }
+        }
+        const next = JSON.stringify([...byEmail.values()]);
+        if (next === (localStorage.getItem(key) ?? '[]')) {
+          return false;
+        }
+        localStorage.setItem(key, next);
+        return true;
+      };
+      const changedS = merge(DataService.REGISTERED_STUDENTS_KEY, students, builtInStudents);
+      const changedT = merge(DataService.REGISTERED_TEACHERS_KEY, teachers, builtInTeachers);
+      if (changedS || changedT) {
+        this.directoryChanged$.next();
+      }
+    } catch {
+      // sin conexión: se usa el directorio que ya hay en este dispositivo
+    }
+  }
 
   private readList<T>(key: string): T[] {
     try {
@@ -823,7 +872,7 @@ export class DataService {
   }
 
   /** Convierte una clase agendada en un documento de sesión compatible con el histórico */
-  private scheduledToSession(c: ScheduledClass, teacher: TeacherRecord): MongoClassSession {
+  private scheduledToSession(c: ScheduledClass, teacher?: TeacherRecord): MongoClassSession {
     const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto',
       'septiembre', 'octubre', 'noviembre', 'diciembre'];
     const [datePart, timePart = '00:00'] = c.start.split('T');
@@ -833,8 +882,8 @@ export class DataService {
       estudianteId: this.findStudentByEmail(c.studentEmail)?.id ?? 0,
       estudianteNombre: c.studentName,
       materia: c.subject,
-      rama: teacher.departamento,
-      tutor: teacher.nombre,
+      rama: (c.branch as MongoClassSession['rama']) || teacher?.departamento || 'Matemáticas',
+      tutor: teacher?.nombre ?? c.teacherName,
       fecha: `${datePart} ${timePart.slice(0, 5)}`,
       mes: months[monthIdx] as MongoClassSession['mes'],
       duracionMin: c.durationMin,
@@ -878,14 +927,20 @@ export class DataService {
    * Recupera histórico y sesiones de tutoría en tiempo real.
    */
   getMongoSessionsStream(): Observable<MongoClassSession[]> {
-    const extra = this.scheduleService.classes.map(c => {
-      const t = this.findTeacherByEmail(c.teacherEmail) || this.TEACHERS_CATALOG[0];
-      return this.scheduledToSession(c, t);
-    });
+    const extra = this.scheduleService.classes.map(c =>
+      this.scheduledToSession(c, this.findTeacherByEmail(c.teacherEmail))
+    );
     if (this.http) {
       return this.http.get<MongoClassSession[]>(`${this.apiUrl}/sessions`).pipe(
         timeout(2000),
-        map(remoteSessions => [...extra, ...remoteSessions]),
+        // Las clases agendadas ya están en el servidor: se une por _id para no contarlas dos veces.
+        map(remoteSessions => {
+          const byId = new Map<string, MongoClassSession>();
+          for (const s of [...extra, ...remoteSessions]) {
+            byId.set(s._id, s);
+          }
+          return [...byId.values()];
+        }),
         catchError(() => of([...extra, ...this.SESSIONS_COLLECTION]).pipe(delay(400)))
       );
     }
@@ -897,7 +952,8 @@ export class DataService {
    * sus alumnos asignados, sesiones impartidas y cálculo exacto del dinero ganado.
    */
   getTeacherPortalData(teacherEmailOrName: string): Observable<{
-    teacher: TeacherRecord;
+    /** `null` si no existe ningún profesor con ese email (ya no se muestra otro en su lugar). */
+    teacher: TeacherRecord | null;
     students: SqlStudentRate[];
     sessions: MongoClassSession[];
     totalEarned: number;
@@ -905,30 +961,29 @@ export class DataService {
   }> {
     const query = (teacherEmailOrName || '').toLowerCase().trim();
     
-    // Búsqueda por email o por nombre parcial
-    let teacher = this.allTeachers.find(t => 
-      t.email.toLowerCase() === query || 
-      t.nombre.toLowerCase().includes(query)
+    // Por email exacto; si se pasa un nombre (sin «@»), por coincidencia del nombre.
+    const teacher = this.allTeachers.find(t =>
+      t.email.toLowerCase() === query ||
+      (!query.includes('@') && query.length > 0 && t.nombre.toLowerCase().includes(query))
     );
 
-    // Fallback al profesor titular principal (Elena Ramos) si no coincide
     if (!teacher) {
-      teacher = this.TEACHERS_CATALOG[0];
+      return of({ teacher: null, students: [], sessions: [], totalEarned: 0, hoursCount: 0 }).pipe(delay(300));
     }
 
     // Filtrar sesiones del profesor (incluyendo las agendadas en tiempo real)
     const scheduledSessions = this.scheduleService
       .getForTeacher(teacher.email)
-      .map(c => this.scheduledToSession(c, teacher!));
+      .map(c => this.scheduledToSession(c, teacher));
 
-    const baseSessions = this.SESSIONS_COLLECTION.filter(s => 
-      s.tutor.toLowerCase().includes(teacher!.nombre.toLowerCase()) || 
-      teacher!.nombre.toLowerCase().includes(s.tutor.toLowerCase())
+    // Histórico de ejemplo: solo las sesiones cuyo tutor es exactamente este profesor.
+    const baseSessions = this.SESSIONS_COLLECTION.filter(
+      s => s.tutor.trim().toLowerCase() === teacher.nombre.trim().toLowerCase()
     );
     const sessions = [...scheduledSessions, ...baseSessions];
 
     // Filtrar alumnos que tiene asignados
-    const students = this.allStudents.filter(st => this.isAssigned(teacher!, st));
+    const students = this.allStudents.filter(st => this.isAssigned(teacher, st));
 
     // Calcular dinero total ganado en sesiones confirmadas / en curso
     const totalEarned = sessions

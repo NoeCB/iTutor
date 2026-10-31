@@ -38,13 +38,17 @@ import {
 import { AuthService, User } from './core/services/auth.service';
 import { SidebarService } from './core/services/sidebar.service';
 import { ApuntesService } from './core/services/apuntes.service';
+import { ChatService } from './core/services/chat.service';
+import { DataService } from './core/services/data.service';
+import { ScheduleService } from './core/services/schedule.service';
 
 export interface MenuItem {
   title: string;
   url: string;
   queryParams?: Record<string, string>;
   icon: string;
-  badge?: string;
+  /** Contador dinámico que se muestra junto al enlace (nada si es 0). */
+  badge?: 'messages' | 'teachers' | 'students';
 }
 
 @Component({
@@ -78,6 +82,9 @@ export class AppComponent {
   public sidebarService = inject(SidebarService);
   /** Se instancia al arrancar: así los PDFs pendientes de enviar se reintentan desde cualquier pantalla. */
   private readonly apuntes = inject(ApuntesService);
+  private readonly chat = inject(ChatService);
+  private readonly data = inject(DataService);
+  private readonly schedule = inject(ScheduleService);
 
   /** Flujo reactivo del usuario en sesión */
   currentUser$ = this.authService.currentUser$;
@@ -88,10 +95,10 @@ export class AppComponent {
    */
   adminPages: MenuItem[] = [
     { title: 'Dashboard General', url: '/admin-dashboard', queryParams: { vista: 'metricas' }, icon: 'grid-outline' },
-    { title: 'Listado de Profesores', url: '/admin-dashboard', queryParams: { vista: 'profesores' }, icon: 'school-outline', badge: '10' },
-    { title: 'Listado de Alumnos', url: '/admin-dashboard', queryParams: { vista: 'alumnos' }, icon: 'people-outline', badge: '10' },
+    { title: 'Listado de Profesores', url: '/admin-dashboard', queryParams: { vista: 'profesores' }, icon: 'school-outline', badge: 'teachers' },
+    { title: 'Listado de Alumnos', url: '/admin-dashboard', queryParams: { vista: 'alumnos' }, icon: 'people-outline', badge: 'students' },
     { title: 'Calendario Tutorías', url: '/mis-clases', icon: 'calendar-outline' },
-    { title: 'Mensajes Profesores', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: '3' },
+    { title: 'Mensajes Profesores', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: 'messages' },
     { title: 'Facturación & Pagos', url: '/mis-pagos', icon: 'wallet-outline' },
     { title: 'Ajustes de Cuenta', url: '/ajustes', icon: 'settings-outline' }
   ];
@@ -102,20 +109,28 @@ export class AppComponent {
     { title: 'Mis Alumnos & Honorarios', url: '/portal-profesor', icon: 'wallet-outline' },
     { title: 'Calendario de Clases', url: '/mis-clases', icon: 'calendar-outline' },
     { title: 'Subir Apuntes & PDFs', url: '/mis-apuntes', icon: 'document-text-outline' },
-    { title: 'Mensajes con Alumnos', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: '2' },
+    { title: 'Mensajes con Alumnos', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: 'messages' },
     { title: 'Ajustes de Cuenta', url: '/ajustes', icon: 'settings-outline' }
   ];
 
-  /** Menú específico para Alumno (Paula García) */
+  /** Menú específico para Alumno */
   studentPages: MenuItem[] = [
     { title: 'Mis Tutorías', url: '/mis-clases', icon: 'calendar-outline' },
-    { title: 'Mis Apuntes', url: '/mis-apuntes', icon: 'document-text-outline', badge: '6' },
-    { title: 'Mensajes con Profesores', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: '2' },
+    { title: 'Mis Apuntes', url: '/mis-apuntes', icon: 'document-text-outline' },
+    { title: 'Mensajes con Profesores', url: '/mensajes-profesores', icon: 'chatbubbles-outline', badge: 'messages' },
     { title: 'Facturación & Pagos', url: '/mis-pagos', icon: 'wallet-outline' },
     { title: 'Ajustes de Cuenta', url: '/ajustes', icon: 'settings-outline' }
   ];
 
   constructor() {
+    // Al iniciar sesión (en cualquier dispositivo) se descargan de AWS los datos de ese usuario:
+    // directorio de alumnos/profesores y sus clases. Así cada cuenta ve lo suyo.
+    this.authService.currentUser$.subscribe(user => {
+      if (user) {
+        void this.data.refreshDirectory();
+        void this.schedule.refresh();
+      }
+    });
     addIcons({
       gridOutline,
       calendarOutline,
@@ -167,27 +182,41 @@ export class AppComponent {
     return cleanPath === '' || cleanPath === '/login' || cleanPath.startsWith('/login/');
   }
 
-  /** Obtiene las iniciales del usuario para el avatar */
+  /** Contador del menú: mensajes sin leer o número de alumnos/profesores. Vacío si es 0. */
+  badgeFor(page: MenuItem, user: User): number | null {
+    let count = 0;
+    if (page.badge === 'messages') {
+      count = this.chat.totalUnread(user.email);
+    } else if (page.badge === 'teachers') {
+      count = this.data.allTeachers.length;
+    } else if (page.badge === 'students') {
+      count = this.data.allStudents.length;
+    }
+    return count > 0 ? count : null;
+  }
+
+  /** Obtiene las iniciales del usuario para el avatar (a partir de su nombre real) */
   getUserInitials(email?: string | null): string {
     if (!email) return '';
-    if (email.toLowerCase().includes('noelia')) return 'NC';
-    if (email.toLowerCase().includes('paula')) return 'PG';
-    if (email.toLowerCase().includes('elena') || email.toLowerCase().includes('profesor')) return 'ER';
-    if (email.toLowerCase().includes('carlos')) return 'CM';
-    const namePart = email.split('@')[0];
-    return namePart.substring(0, 2).toUpperCase();
+    const name = this.getUserDisplayName(email)
+      .replace(/\b(Dra?\.|Prof\.)/g, '')
+      .trim();
+    const parts = name.split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return (parts[0] ?? email).substring(0, 2).toUpperCase();
   }
 
-  /** Nombre formateado para el perfil */
+  /** Nombre formateado para el perfil: el que la persona dio al registrarse */
   getUserDisplayName(email?: string | null): string {
     if (!email) return '';
-    if (email.toLowerCase().includes('noelia')) return 'Noelia Cantador';
-    if (email.toLowerCase().includes('paula')) return 'Paula García';
-    if (email.toLowerCase().includes('elena') || email.toLowerCase().includes('profesor')) return 'Elena Ramos';
-    if (email.toLowerCase().includes('carlos')) return 'Prof. Carlos Méndez';
-    return this.authService.currentUserValue?.name || email.split('@')[0];
+    const current = this.authService.currentUserValue;
+    if (current && current.email.toLowerCase() === email.toLowerCase() && current.name) {
+      return current.name;
+    }
+    return this.authService.getPublicAccount(email)?.name || email.split('@')[0];
   }
-
   /** Foto de perfil subida por el usuario (null si no ha subido ninguna) */
   getUserAvatar(email?: string | null): string | null {
     return this.authService.getUserAvatar(email);
