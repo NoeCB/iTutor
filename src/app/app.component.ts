@@ -37,6 +37,7 @@ import {
 } from 'ionicons/icons';
 import { AuthService, User } from './core/services/auth.service';
 import { SidebarService } from './core/services/sidebar.service';
+import { ApuntesService } from './core/services/apuntes.service';
 
 export interface MenuItem {
   title: string;
@@ -75,6 +76,8 @@ export class AppComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   public sidebarService = inject(SidebarService);
+  /** Se instancia al arrancar: así los PDFs pendientes de enviar se reintentan desde cualquier pantalla. */
+  private readonly apuntes = inject(ApuntesService);
 
   /** Flujo reactivo del usuario en sesión */
   currentUser$ = this.authService.currentUser$;

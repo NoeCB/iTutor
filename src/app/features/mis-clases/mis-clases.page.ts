@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { environment } from '../../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent } from '@ionic/angular/ion-content';
 import { IonHeader } from '@ionic/angular/ion-header';
@@ -54,7 +53,7 @@ import { AuthService, User } from '../../core/services/auth.service';
 import { ChatService } from '../../core/services/chat.service';
 import { ScheduleService } from '../../core/services/schedule.service';
 import { DataService, SqlStudentRate } from '../../core/services/data.service';
-import { ApiSyncService } from '../../core/services/api-sync.service';
+import { ApuntesService, ApunteItem } from '../../core/services/apuntes.service';
 
 export interface TutoriaSession {
   day: number;
@@ -74,18 +73,7 @@ export interface TutoriaSession {
   color: string;
 }
 
-export interface StudentNoteItem {
-  id: string;
-  title: string;
-  subject: string;
-  teacher: string;
-  date: string;
-  size: string;
-  pages: number;
-  summary: string;
-  fileName?: string;
-  fileDataUrl?: string;
-}
+export type StudentNoteItem = ApunteItem;
 
 export interface TeacherConversation {
   id: string;
@@ -141,14 +129,12 @@ export interface CalendarCell {
   ]
 })
 export class MisClasesPage implements OnInit, OnDestroy {
-  private apiSync = inject(ApiSyncService);
+  private apuntes = inject(ApuntesService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   public sidebarService = inject(SidebarService);
   private authService = inject(AuthService);
-  private http = inject(HttpClient, { optional: true });
-  private readonly apiUrl = environment.apiUrl || 'http://88.26.12.64:3000/api';
   private chatService = inject(ChatService);
   private scheduleService = inject(ScheduleService);
   private dataService = inject(DataService);
@@ -306,23 +292,34 @@ export class MisClasesPage implements OnInit, OnDestroy {
   /** Celdas del calendario de Octubre 2026 (Octubre 2026 empieza en Jueves -> 3 huecos L, M, X) */
   calendarCells: CalendarCell[] = [];
 
-  /** Apuntes y Recursos de Paula García */
-  private static readonly UPLOADED_NOTES_KEY = 'itutor_uploaded_notes';
-  /** Ids de apuntes subidos que aún no han llegado al servidor (cuerpo en UPLOADED_NOTES_KEY). */
-  private static readonly PENDING_NOTES_KEY = 'itutor_pending_note_ids';
+  /** Apuntes y Recursos del alumno / profesor en sesión */
   private uploadingNote = false;
-  private readonly onOnline = () => void this.retryPendingNotes();
+  private notesSub?: Subscription;
+  /** Lista que se pinta: apuntes del servidor + pendientes de este dispositivo + los de ejemplo. */
+  notes: StudentNoteItem[] = [];
+  /** `true` si el servidor no ha respondido y se muestra la última copia guardada. */
+  notesOffline = false;
+  /** Error al ver o descargar un archivo (se muestra en la página, no solo dentro del modal). */
+  noteActionError = '';
+  /** Cuántos apuntes siguen sin confirmar en el servidor (para avisar al usuario). */
+  get pendingNotesCount(): number {
+    return this.notes.filter(n => n.pending).length;
+  }
   selectedNotesFilter = 'Todos';
   showUploadNoteModal = false;
   uploadNoteError = '';
   uploadNoteSuccess = '';
+  /** `true` mientras se valida/sube el PDF (desactiva el botón y evita dobles envíos). */
+  uploadBusy = false;
+  /** Archivo elegido: se sube como binario, ya no se convierte a base64 en memoria. */
+  private uploadNoteFile: File | null = null;
+  readonly maxPdfMb = ApuntesService.MAX_PDF_BYTES / 1024 / 1024;
   uploadNoteForm = {
     title: '',
     subject: 'Ecuaciones Diferenciales',
     summary: '',
     fileName: '',
-    fileSize: '',
-    fileDataUrl: ''
+    fileSize: ''
   };
   baseNotesList: StudentNoteItem[] = [
     {
@@ -712,8 +709,6 @@ export class MisClasesPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    window.addEventListener('online', this.onOnline);
-    void this.retryPendingNotes();
     if (this.isTeacher) {
       this.selectedTeacherId = 'paula';
     }
@@ -735,21 +730,13 @@ export class MisClasesPage implements OnInit, OnDestroy {
       this.syncScheduledClassesIntoCalendar();
       this.cdr.markForCheck();
     });
-    if (this.http) {
-      this.http.get<StudentNoteItem[]>(`${this.apiUrl}/apuntes`).subscribe({
-        next: remoteNotes => {
-          if (Array.isArray(remoteNotes) && remoteNotes.length > 0) {
-            const existingIds = new Set(this.baseNotesList.map(n => n.id));
-            for (const rn of remoteNotes) {
-              if (!existingIds.has(rn.id)) {
-                this.baseNotesList.unshift(rn);
-              }
-            }
-            this.cdr.markForCheck();
-          }
-        },
-        error: () => {}
-      });
+    // Apuntes: se cargan del servidor y se refrescan cuando un envío pendiente termina.
+    this.notes = [...this.baseNotesList];
+    this.notesSub = this.apuntes.changed$.subscribe(() => void this.loadNotes());
+    void this.loadNotes();
+    const me = this.currentUser;
+    if (this.isTeacher && me?.email) {
+      void this.apuntes.migrateLegacyLocalNotes({ email: me.email, name: me.name || '' });
     }
   }
 
@@ -888,25 +875,22 @@ export class MisClasesPage implements OnInit, OnDestroy {
     this.switchSection('mensajes');
   }
 
-  /** Lista completa de apuntes: los subidos por la profesora + los del repositorio base (sin duplicados por id) */
+  /** Lista completa de apuntes (ya fusionada y sin repetidos por id). */
   get notesList(): StudentNoteItem[] {
-    let uploaded: StudentNoteItem[] = [];
-    try {
-      const raw = localStorage.getItem(MisClasesPage.UPLOADED_NOTES_KEY);
-      const parsed = raw ? (JSON.parse(raw) as StudentNoteItem[]) : [];
-      uploaded = Array.isArray(parsed) ? parsed : [];
-    } catch {
-      uploaded = [];
-    }
-    // Un apunte subido ya está en el servidor y vuelve en el GET: sin esto salía repetido.
-    const seen = new Set<string>();
-    return [...uploaded, ...this.baseNotesList].filter(n => {
-      if (seen.has(n.id)) {
-        return false;
-      }
-      seen.add(n.id);
-      return true;
-    });
+    return this.notes;
+  }
+
+  /**
+   * Carga los apuntes del servidor visibles para el usuario en sesión (alumno:
+   * los de su profesor asignado) y los fusiona con los pendientes de este
+   * dispositivo y los de ejemplo. Un mismo id nunca aparece dos veces.
+   */
+  async loadNotes(): Promise<void> {
+    const { items, offline } = await this.apuntes.list(this.currentUser?.email ?? null);
+    const baseIds = new Set(this.baseNotesList.map(n => n.id));
+    this.notes = [...items.filter(n => !baseIds.has(n.id)), ...this.baseNotesList];
+    this.notesOffline = offline;
+    this.cdr.markForCheck();
   }
 
   /** Apuntes filtrados por asignatura */
@@ -921,13 +905,13 @@ export class MisClasesPage implements OnInit, OnDestroy {
   openUploadNoteModal(): void {
     this.uploadNoteError = '';
     this.uploadNoteSuccess = '';
+    this.uploadNoteFile = null;
     this.uploadNoteForm = {
       title: '',
       subject: 'Ecuaciones Diferenciales',
       summary: '',
       fileName: '',
-      fileSize: '',
-      fileDataUrl: ''
+      fileSize: ''
     };
     this.showUploadNoteModal = true;
     this.cdr.markForCheck();
@@ -939,164 +923,119 @@ export class MisClasesPage implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  onNoteFileSelected(event: Event): void {
+  /** Valida el PDF en cuanto se elige (tamaño, tipo y firma) para avisar antes de pulsar «Subir». */
+  async onNoteFileSelected(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
-    if (!file) return;
+    if (!file) {
+      return;
+    }
+    this.uploadNoteError = '';
+    this.uploadNoteFile = null;
+    this.uploadNoteForm.fileName = '';
+    this.uploadNoteForm.fileSize = '';
 
+    const problem = await this.apuntes.validateFile(file);
+    if (problem) {
+      input.value = ''; // permite volver a elegir el mismo archivo tras corregirlo
+      this.uploadNoteError = problem;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    this.uploadNoteFile = file;
     this.uploadNoteForm.fileName = file.name;
     const sizeKb = file.size / 1024;
     this.uploadNoteForm.fileSize = sizeKb >= 1024
       ? `${(sizeKb / 1024).toFixed(1)} MB`
       : `${Math.max(1, Math.round(sizeKb))} KB`;
-
     if (!this.uploadNoteForm.title) {
       this.uploadNoteForm.title = file.name.replace(/\.[^/.]+$/, '');
     }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.uploadNoteForm.fileDataUrl = String(reader.result || '');
-      this.cdr.markForCheck();
-    };
-    reader.readAsDataURL(file);
+    this.cdr.markForCheck();
   }
 
   async confirmUploadNote(): Promise<void> {
-    if (this.uploadingNote) {
+    if (this.uploadBusy) {
       return;
     }
-    if (!this.uploadNoteForm.fileDataUrl) {
-      this.uploadNoteError = 'Por favor, selecciona un archivo PDF o documento de tu equipo.';
+    const file = this.uploadNoteFile;
+    if (!file) {
+      this.uploadNoteError = 'Por favor, selecciona un archivo PDF de tu equipo.';
       this.cdr.markForCheck();
       return;
     }
 
-    const newNote: StudentNoteItem = {
-      id: `AP-UP-${Date.now().toString(36).toUpperCase()}`,
-      title: this.uploadNoteForm.title.trim() || this.uploadNoteForm.fileName,
-      subject: this.uploadNoteForm.subject || 'Ecuaciones Diferenciales',
-      teacher: this.currentUser?.name || 'Elena Ramos',
-      date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }),
-      size: this.uploadNoteForm.fileSize || '1.0 MB',
-      pages: 1,
-      summary: this.uploadNoteForm.summary.trim() || `Archivo subido por ${this.currentUser?.name || 'Elena Ramos'}: ${this.uploadNoteForm.fileName}`,
-      fileName: this.uploadNoteForm.fileName,
-      fileDataUrl: this.uploadNoteForm.fileDataUrl
-    };
-
-    this.uploadingNote = true;
+    this.uploadBusy = true;
     this.uploadNoteError = '';
     this.cdr.markForCheck();
 
-    // 1) Primero al servidor. El PDF no se mete en la cola genérica (duplicaría el
-    //    peso en localStorage): si falla, se reintenta desde la copia local.
-    const result = await this.apiSync.send('/apuntes', newNote, false);
-    this.uploadingNote = false;
+    const teacherName = this.currentUser?.name || 'Profesor/a';
+    // Un apunte de coordinación (Admin) no pertenece a ningún profesor: lo ven todos.
+    const ownerEmail = this.isCoordinator ? '' : (this.currentUser?.email || '').toLowerCase();
+    const outcome = await this.apuntes.upload(file, {
+      title: this.uploadNoteForm.title.trim() || file.name,
+      subject: this.uploadNoteForm.subject || 'Ecuaciones Diferenciales',
+      teacher: teacherName,
+      teacherEmail: ownerEmail,
+      summary: this.uploadNoteForm.summary.trim() || `Archivo subido por ${teacherName}: ${file.name}`
+    });
+    this.uploadBusy = false;
 
-    if (result === 'rejected') {
-      this.uploadNoteError =
-        'El servidor no ha aceptado el archivo (puede ser demasiado grande). Prueba con un PDF más pequeño.';
+    if (outcome.status === 'rejected') {
+      // El modal sigue abierto con el motivo: nada falla en silencio.
+      this.uploadNoteError = outcome.reason;
       this.cdr.markForCheck();
       return;
     }
 
-    // 2) Copia local para verlo al instante y sin conexión.
-    try {
-      const raw = localStorage.getItem(MisClasesPage.UPLOADED_NOTES_KEY);
-      const uploaded = raw ? (JSON.parse(raw) as StudentNoteItem[]) : [];
-      const next = [newNote, ...(Array.isArray(uploaded) ? uploaded : [])];
-      localStorage.setItem(MisClasesPage.UPLOADED_NOTES_KEY, JSON.stringify(next));
-    } catch {
-      // Sin espacio en localStorage (PDF grande): se mantiene en memoria esta sesión.
-      this.baseNotesList.unshift(newNote);
-    }
-
     this.showUploadNoteModal = false;
-    if (result === 'queued') {
-      this.addPendingNote(newNote.id);
-      this.uploadNoteSuccess =
-        `Archivo "${newNote.fileName}" guardado en este equipo. No se ha podido enviar al servidor todavía: se reintentará automáticamente cuando haya conexión.`;
+    this.uploadNoteFile = null;
+    if (outcome.status === 'queued') {
+      this.uploadNoteSuccess = outcome.durable
+        ? `"${file.name}" está guardado en este dispositivo pero aún no ha llegado al servidor. Se reintentará solo en cuanto haya conexión; mientras tanto aparece con el aviso "Pendiente de enviar".`
+        : `"${file.name}" NO se ha podido enviar y este navegador no permite guardarlo. Mantén esta pestaña abierta: se reintentará solo, y si la cierras tendrás que subirlo de nuevo.`;
     } else {
-      this.uploadNoteSuccess = `¡Archivo "${newNote.fileName}" subido y guardado! Ya está disponible para que Paula lo vea y descargue.`;
+      this.uploadNoteSuccess = `Archivo "${file.name}" subido y guardado en el servidor. Tus alumnos asignados ya pueden verlo y descargarlo.`;
     }
-    this.cdr.markForCheck();
+    await this.loadNotes();
   }
 
   ngOnDestroy(): void {
-    window.removeEventListener('online', this.onOnline);
+    this.notesSub?.unsubscribe();
   }
 
-  private readPendingNotes(): string[] {
-    try {
-      const raw = localStorage.getItem(MisClasesPage.PENDING_NOTES_KEY);
-      const parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  }
-
-  private writePendingNotes(ids: string[]): void {
-    try {
-      if (ids.length === 0) {
-        localStorage.removeItem(MisClasesPage.PENDING_NOTES_KEY);
-      } else {
-        localStorage.setItem(MisClasesPage.PENDING_NOTES_KEY, JSON.stringify(ids));
-      }
-    } catch {
-      // ignore
-    }
-  }
-
-  private addPendingNote(id: string): void {
-    const ids = this.readPendingNotes();
-    if (!ids.includes(id)) {
-      this.writePendingNotes([...ids, id]);
-    }
-  }
-
-  /** Reintenta enviar al servidor los apuntes que se subieron sin conexión. */
-  private async retryPendingNotes(): Promise<void> {
-    const ids = this.readPendingNotes();
-    if (ids.length === 0) {
-      return;
-    }
-    let uploaded: StudentNoteItem[] = [];
-    try {
-      const raw = localStorage.getItem(MisClasesPage.UPLOADED_NOTES_KEY);
-      uploaded = raw ? (JSON.parse(raw) as StudentNoteItem[]) : [];
-    } catch {
-      uploaded = [];
-    }
-    const stillPending: string[] = [];
-    for (const id of ids) {
-      const note = Array.isArray(uploaded) ? uploaded.find(n => n.id === id) : undefined;
-      if (!note) {
-        continue; // la copia local ya no existe: nada que reenviar
-      }
-      const result = await this.apiSync.send('/apuntes', note, false);
-      if (result === 'queued') {
-        stillPending.push(id);
-      }
-    }
-    this.writePendingNotes(stillPending);
-  }
-
-  /** Abre en una nueva pestaña el archivo real subido por la profesora */
-  viewUploadedNote(note: StudentNoteItem): void {
-    if (!note.fileDataUrl) {
+  /** Abre el PDF en una pestaña nueva (descargándolo del servidor si hace falta). */
+  async viewUploadedNote(note: StudentNoteItem): Promise<void> {
+    if (!note.hasFile) {
       this.downloadNotePdf(note);
       return;
     }
-    const win = window.open();
-    if (win) {
-      win.document.write(
-        `<iframe src="${note.fileDataUrl}" style="border:0; top:0; left:0; bottom:0; right:0; width:100%; height:100%;" allowfullscreen></iframe>`
-      );
+    // La pestaña se abre ANTES del await: los móviles bloquean window.open fuera del gesto del usuario.
+    const win = window.open('', '_blank');
+    try {
+      const url = URL.createObjectURL(await this.apuntes.getBlob(note));
+      if (win) {
+        win.location.href = url;
+      } else {
+        this.saveBlobAs(url, note);
+      }
+      setTimeout(() => URL.revokeObjectURL(url), 5 * 60_000);
+    } catch {
+      win?.close();
+      this.noteActionError = 'No se ha podido abrir el archivo. Comprueba tu conexión e inténtalo de nuevo.';
+      this.cdr.markForCheck();
     }
   }
 
+  private saveBlobAs(url: string, note: StudentNoteItem): void {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = note.fileName || `${note.title}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
   /** Conversación activa seleccionada */
   get activeConversation(): TeacherConversation {
     return this.conversations.find(c => c.id === this.selectedTeacherId) || this.conversations[0];
@@ -1159,6 +1098,7 @@ export class MisClasesPage implements OnInit, OnDestroy {
       this.selectedTeacherId = 'elena';
     }
     this.syncChatThreads();
+    void this.loadNotes();
     this.cdr.markForCheck();
   }
 
@@ -1239,13 +1179,18 @@ export class MisClasesPage implements OnInit, OnDestroy {
 
   /** Descarga el archivo original subido por la profesora o genera el PDF con jsPDF */
   downloadNotePdf(note: StudentNoteItem): void {
-    if (note.fileDataUrl) {
-      const a = document.createElement('a');
-      a.href = note.fileDataUrl;
-      a.download = note.fileName || `${note.title}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+    if (note.hasFile) {
+      void this.apuntes
+        .getBlob(note)
+        .then(blob => {
+          const url = URL.createObjectURL(blob);
+          this.saveBlobAs(url, note);
+          setTimeout(() => URL.revokeObjectURL(url), 60_000);
+        })
+        .catch(() => {
+          this.noteActionError = 'No se ha podido descargar el archivo. Comprueba tu conexión e inténtalo de nuevo.';
+          this.cdr.markForCheck();
+        });
       return;
     }
 

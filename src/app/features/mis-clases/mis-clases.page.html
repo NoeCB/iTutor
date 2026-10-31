@@ -274,7 +274,7 @@
             {{ isTeacher ? 'Gestión de Apuntes y Archivos de la Profesora' : 'Mis Apuntes & Material de Clase' }}
           </h1>
           <p class="sub-heading">
-            {{ isTeacher ? 'Sube cualquier PDF o documento desde tu ordenador para compartirlo al instante con tu alumna Paula García.' : 'Repositorio personal de Paula García con apuntes, PDFs y documentos subidos por tu profesora Elena Ramos.' }}
+            {{ isTeacher ? 'Sube un PDF (máx. ' + maxPdfMb + ' MB) desde tu ordenador: se guarda en el servidor y lo verán al instante tus alumnos asignados.' : 'Apuntes, PDFs y documentos que suben tus profesores asignados. Disponibles desde cualquier dispositivo.' }}
           </p>
         </div>
 
@@ -316,6 +316,25 @@
         </div>
       }
 
+      @if (noteActionError) {
+        <div class="schedule-inline-error" role="alert">
+          {{ noteActionError }}
+        </div>
+      }
+
+      @if (pendingNotesCount > 0) {
+        <div class="schedule-inline-error" role="status">
+          {{ pendingNotesCount }} {{ pendingNotesCount === 1 ? 'apunte pendiente de enviar' : 'apuntes pendientes de enviar' }} al servidor.
+          Se reintenta automáticamente; hasta entonces solo se ven en este dispositivo.
+        </div>
+      }
+
+      @if (notesOffline) {
+        <div class="schedule-inline-error" role="status">
+          No se ha podido contactar con el servidor. Se muestran los últimos apuntes guardados en este dispositivo.
+        </div>
+      }
+
       <!-- Filtros por asignatura -->
       <div class="filter-chips">
         @for (subj of ['Todos', 'Ecuaciones Diferenciales', 'Cálculo Multivariable', 'Álgebra Lineal']; track subj) {
@@ -339,7 +358,9 @@
                   <ion-icon name="document-text-outline"></ion-icon>
                 </div>
                 <div class="note-badges">
-                  @if (note.fileDataUrl) {
+                  @if (note.pending) {
+                    <ion-badge color="warning">Pendiente de enviar</ion-badge>
+                  } @else if (note.hasFile) {
                     <ion-badge color="success">Archivo subido</ion-badge>
                   }
                   <ion-badge color="primary">{{ note.subject }}</ion-badge>
@@ -351,7 +372,7 @@
                 <span><ion-icon name="person-outline"></ion-icon> {{ note.teacher }}</span>
                 <span>{{ note.date }} • {{ note.fileName ? note.fileName + ' (' + note.size + ')' : note.pages + ' págs (' + note.size + ')' }}</span>
               </div>
-              @if (note.fileDataUrl) {
+              @if (note.hasFile) {
                 <div class="note-actions-row">
                   <ion-button expand="block" class="download-note-btn" (click)="viewUploadedNote(note)">
                     <ion-icon name="eye-outline" slot="start"></ion-icon>
@@ -380,7 +401,7 @@
             <div class="modal-header">
               <div>
                 <h3>Subir PDF o Archivo para Alumnos</h3>
-                <p>Profesora: <strong>{{ currentUser?.name || 'Elena Ramos' }}</strong> • Visible al instante para Paula</p>
+                <p>{{ currentUser?.name || 'Profesor/a' }} • Visible para tus alumnos asignados</p>
               </div>
               <button type="button" class="modal-close-btn" (click)="closeUploadNoteModal()">
                 <ion-icon name="close-outline"></ion-icon>
@@ -389,10 +410,10 @@
 
             <div class="modal-body">
               <div class="modal-field">
-                <label>Selecciona cualquier archivo PDF o documento de tu ordenador</label>
+                <label>Selecciona un archivo PDF de tu ordenador (máx. {{ maxPdfMb }} MB)</label>
                 <input
                   type="file"
-                  accept=".pdf,application/pdf,*/*"
+                  accept=".pdf,application/pdf"
                   class="modal-input"
                   (change)="onNoteFileSelected($event)"
                 />
@@ -423,7 +444,7 @@
               </div>
 
               <div class="modal-field">
-                <label>Descripción o comentario para Paula</label>
+                <label>Descripción o comentario para tus alumnos</label>
                 <input
                   type="text"
                   class="modal-input"
@@ -441,9 +462,9 @@
               <ion-button fill="outline" color="medium" (click)="closeUploadNoteModal()">
                 Cancelar
               </ion-button>
-              <ion-button color="primary" (click)="confirmUploadNote()">
+              <ion-button color="primary" [disabled]="uploadBusy || !uploadNoteForm.fileName" (click)="confirmUploadNote()">
                 <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
-                Subir y Compartir con Paula
+                {{ uploadBusy ? 'Subiendo…' : 'Subir y compartir con mis alumnos' }}
               </ion-button>
             </div>
           </div>

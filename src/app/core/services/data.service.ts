@@ -698,7 +698,7 @@ export class DataService {
   private scheduleService = inject(ScheduleService);
   private http = inject(HttpClient, { optional: true });
   private sync = inject(ApiSyncService);
-  private readonly apiUrl = environment.apiUrl || 'http://88.26.12.64:3000/api';
+  private readonly apiUrl = environment.apiUrl || 'http://18.192.203.101:3000/api';
 
   /** Claves de `localStorage` para las altas realizadas desde el formulario de registro */
   private static readonly REGISTERED_TEACHERS_KEY = 'itutor_registered_teachers';
