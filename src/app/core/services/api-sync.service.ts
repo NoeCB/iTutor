@@ -38,7 +38,7 @@ export class ApiSyncService {
   private static readonly RETRY_MS = 30_000;
 
   private http = inject(HttpClient, { optional: true });
-  private readonly apiUrl = environment.apiUrl || 'http://54.237.3.26:3000/api';
+  private readonly apiUrl = environment.apiUrl || 'http://18.192.203.101:3000/api';
   private flushing = false;
 
   constructor() {

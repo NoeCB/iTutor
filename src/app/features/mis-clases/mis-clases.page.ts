@@ -148,7 +148,7 @@ export class MisClasesPage implements OnInit, OnDestroy {
   public sidebarService = inject(SidebarService);
   private authService = inject(AuthService);
   private http = inject(HttpClient, { optional: true });
-  private readonly apiUrl = environment.apiUrl || 'http://88.26.12.64:3000/api';
+  private readonly apiUrl = environment.apiUrl || 'http://18.192.203.101:3000/api';
   private chatService = inject(ChatService);
   private scheduleService = inject(ScheduleService);
   private dataService = inject(DataService);

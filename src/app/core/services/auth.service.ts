@@ -101,7 +101,7 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
   private http = inject(HttpClient, { optional: true });
   private sync = inject(ApiSyncService);
-  private readonly apiUrl = environment.apiUrl || 'http://54.237.3.26:3000/api';
+  private readonly apiUrl = environment.apiUrl || 'http://18.192.203.101:3000/api';
 
   constructor() {
     this.restoreSession();

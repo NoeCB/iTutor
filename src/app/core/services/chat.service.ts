@@ -31,7 +31,7 @@ export class ChatService implements OnDestroy {
   private zone = inject(NgZone);
   private http = inject(HttpClient, { optional: true });
   private sync = inject(ApiSyncService);
-  private readonly apiUrl = environment.apiUrl || 'http://88.26.12.64:3000/api';
+  private readonly apiUrl = environment.apiUrl || 'http://18.192.203.101:3000/api';
   private pollTimer: ReturnType<typeof setInterval> | null = null;
 
   private messagesSubject = new BehaviorSubject<ChatMessage[]>([]);
