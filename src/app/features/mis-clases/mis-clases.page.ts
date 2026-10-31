@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -54,6 +54,7 @@ import { AuthService, User } from '../../core/services/auth.service';
 import { ChatService } from '../../core/services/chat.service';
 import { ScheduleService } from '../../core/services/schedule.service';
 import { DataService, SqlStudentRate } from '../../core/services/data.service';
+import { ApiSyncService } from '../../core/services/api-sync.service';
 
 export interface TutoriaSession {
   day: number;
@@ -139,7 +140,8 @@ export interface CalendarCell {
     IonCardContent
   ]
 })
-export class MisClasesPage implements OnInit {
+export class MisClasesPage implements OnInit, OnDestroy {
+  private apiSync = inject(ApiSyncService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
@@ -306,6 +308,10 @@ export class MisClasesPage implements OnInit {
 
   /** Apuntes y Recursos de Paula García */
   private static readonly UPLOADED_NOTES_KEY = 'itutor_uploaded_notes';
+  /** Ids de apuntes subidos que aún no han llegado al servidor (cuerpo en UPLOADED_NOTES_KEY). */
+  private static readonly PENDING_NOTES_KEY = 'itutor_pending_note_ids';
+  private uploadingNote = false;
+  private readonly onOnline = () => void this.retryPendingNotes();
   selectedNotesFilter = 'Todos';
   showUploadNoteModal = false;
   uploadNoteError = '';
@@ -706,6 +712,8 @@ export class MisClasesPage implements OnInit {
   }
 
   ngOnInit(): void {
+    window.addEventListener('online', this.onOnline);
+    void this.retryPendingNotes();
     if (this.isTeacher) {
       this.selectedTeacherId = 'paula';
     }
@@ -880,15 +888,25 @@ export class MisClasesPage implements OnInit {
     this.switchSection('mensajes');
   }
 
-  /** Lista completa de apuntes: los subidos por la profesora + los del repositorio base */
+  /** Lista completa de apuntes: los subidos por la profesora + los del repositorio base (sin duplicados por id) */
   get notesList(): StudentNoteItem[] {
+    let uploaded: StudentNoteItem[] = [];
     try {
       const raw = localStorage.getItem(MisClasesPage.UPLOADED_NOTES_KEY);
-      const uploaded = raw ? (JSON.parse(raw) as StudentNoteItem[]) : [];
-      return [...(Array.isArray(uploaded) ? uploaded : []), ...this.baseNotesList];
+      const parsed = raw ? (JSON.parse(raw) as StudentNoteItem[]) : [];
+      uploaded = Array.isArray(parsed) ? parsed : [];
     } catch {
-      return this.baseNotesList;
+      uploaded = [];
     }
+    // Un apunte subido ya está en el servidor y vuelve en el GET: sin esto salía repetido.
+    const seen = new Set<string>();
+    return [...uploaded, ...this.baseNotesList].filter(n => {
+      if (seen.has(n.id)) {
+        return false;
+      }
+      seen.add(n.id);
+      return true;
+    });
   }
 
   /** Apuntes filtrados por asignatura */
@@ -944,7 +962,10 @@ export class MisClasesPage implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  confirmUploadNote(): void {
+  async confirmUploadNote(): Promise<void> {
+    if (this.uploadingNote) {
+      return;
+    }
     if (!this.uploadNoteForm.fileDataUrl) {
       this.uploadNoteError = 'Por favor, selecciona un archivo PDF o documento de tu equipo.';
       this.cdr.markForCheck();
@@ -964,21 +985,102 @@ export class MisClasesPage implements OnInit {
       fileDataUrl: this.uploadNoteForm.fileDataUrl
     };
 
+    this.uploadingNote = true;
+    this.uploadNoteError = '';
+    this.cdr.markForCheck();
+
+    // 1) Primero al servidor. El PDF no se mete en la cola genérica (duplicaría el
+    //    peso en localStorage): si falla, se reintenta desde la copia local.
+    const result = await this.apiSync.send('/apuntes', newNote, false);
+    this.uploadingNote = false;
+
+    if (result === 'rejected') {
+      this.uploadNoteError =
+        'El servidor no ha aceptado el archivo (puede ser demasiado grande). Prueba con un PDF más pequeño.';
+      this.cdr.markForCheck();
+      return;
+    }
+
+    // 2) Copia local para verlo al instante y sin conexión.
     try {
       const raw = localStorage.getItem(MisClasesPage.UPLOADED_NOTES_KEY);
       const uploaded = raw ? (JSON.parse(raw) as StudentNoteItem[]) : [];
       const next = [newNote, ...(Array.isArray(uploaded) ? uploaded : [])];
       localStorage.setItem(MisClasesPage.UPLOADED_NOTES_KEY, JSON.stringify(next));
     } catch {
+      // Sin espacio en localStorage (PDF grande): se mantiene en memoria esta sesión.
       this.baseNotesList.unshift(newNote);
-    }
-    if (this.http) {
-      this.http.post(`${this.apiUrl}/apuntes`, newNote).subscribe({ error: () => {} });
     }
 
     this.showUploadNoteModal = false;
-    this.uploadNoteSuccess = `¡Archivo "${newNote.fileName}" subido! Ya está disponible para que Paula lo vea y descargue.`;
+    if (result === 'queued') {
+      this.addPendingNote(newNote.id);
+      this.uploadNoteSuccess =
+        `Archivo "${newNote.fileName}" guardado en este equipo. No se ha podido enviar al servidor todavía: se reintentará automáticamente cuando haya conexión.`;
+    } else {
+      this.uploadNoteSuccess = `¡Archivo "${newNote.fileName}" subido y guardado! Ya está disponible para que Paula lo vea y descargue.`;
+    }
     this.cdr.markForCheck();
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('online', this.onOnline);
+  }
+
+  private readPendingNotes(): string[] {
+    try {
+      const raw = localStorage.getItem(MisClasesPage.PENDING_NOTES_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  private writePendingNotes(ids: string[]): void {
+    try {
+      if (ids.length === 0) {
+        localStorage.removeItem(MisClasesPage.PENDING_NOTES_KEY);
+      } else {
+        localStorage.setItem(MisClasesPage.PENDING_NOTES_KEY, JSON.stringify(ids));
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  private addPendingNote(id: string): void {
+    const ids = this.readPendingNotes();
+    if (!ids.includes(id)) {
+      this.writePendingNotes([...ids, id]);
+    }
+  }
+
+  /** Reintenta enviar al servidor los apuntes que se subieron sin conexión. */
+  private async retryPendingNotes(): Promise<void> {
+    const ids = this.readPendingNotes();
+    if (ids.length === 0) {
+      return;
+    }
+    let uploaded: StudentNoteItem[] = [];
+    try {
+      const raw = localStorage.getItem(MisClasesPage.UPLOADED_NOTES_KEY);
+      uploaded = raw ? (JSON.parse(raw) as StudentNoteItem[]) : [];
+    } catch {
+      uploaded = [];
+    }
+    const stillPending: string[] = [];
+    for (const id of ids) {
+      const note = Array.isArray(uploaded) ? uploaded.find(n => n.id === id) : undefined;
+      if (!note) {
+        continue; // la copia local ya no existe: nada que reenviar
+      }
+      const result = await this.apiSync.send('/apuntes', note, false);
+      if (result === 'queued') {
+        stillPending.push(id);
+      }
+    }
+    this.writePendingNotes(stillPending);
   }
 
   /** Abre en una nueva pestaña el archivo real subido por la profesora */

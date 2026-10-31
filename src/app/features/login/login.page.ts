@@ -68,6 +68,8 @@ export class LoginPage implements OnInit {
   authError: string | null = null;
   registerError: string | null = null;
   subjectLimitMsg: string | null = null;
+  /** `true` mientras se consulta al servidor (evita dobles envíos) */
+  submitting = false;
 
   /** Catálogo oficial de asignaturas de iTUTOR y profesor titular que la imparte */
   readonly availableSubjects = [
@@ -209,7 +211,7 @@ export class LoginPage implements OnInit {
     return [...map.values()];
   }
 
-  onRegister(): void {
+  async onRegister(): Promise<void> {
     if (this.registerForm.invalid || this.selectedSubjects.length === 0) {
       this.registerForm.markAllAsTouched();
       if (this.selectedSubjects.length === 0) {
@@ -218,8 +220,23 @@ export class LoginPage implements OnInit {
       this.cdr.markForCheck();
       return;
     }
+    if (this.submitting) {
+      return;
+    }
 
     const { name, birthDate, email, password, role } = this.registerForm.value;
+
+    // El correo puede existir ya en el servidor aunque este navegador no lo sepa
+    // (cuenta creada desde otro dispositivo): se comprueba antes de crear nada.
+    this.submitting = true;
+    const existsRemote = await this.authService.emailExistsRemote(email);
+    this.submitting = false;
+    if (existsRemote) {
+      this.registerError = 'Este correo electrónico ya está registrado en iTUTOR.';
+      this.cdr.markForCheck();
+      return;
+    }
+
     const subjects = this.selectedSubjects;
     try {
       const user = this.authService.register(name, email, password, role, { birthDate, subjects });
@@ -266,24 +283,32 @@ export class LoginPage implements OnInit {
     };
   }
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      const loggedUser = this.authService.authenticate(email, password);
+  async onSubmit(): Promise<void> {
+    if (!this.loginForm.valid || this.submitting) {
+      return;
+    }
+    this.submitting = true;
+    const { email, password } = this.loginForm.value;
 
-      if (!loggedUser) {
-        this.authError = 'Contraseña incorrecta. Verifica tus credenciales.';
-        this.cdr.markForCheck();
-        return;
-      }
+    // 1) Cuenta conocida en este navegador (rápido y funciona sin red).
+    // 2) Si no, cuenta creada en otro dispositivo: se valida contra el servidor.
+    const loggedUser =
+      this.authService.authenticate(email, password) ??
+      (await this.authService.authenticateRemote(email, password));
+    this.submitting = false;
 
-      if (loggedUser.role === 'Admin') {
-        this.router.navigate(['/admin-dashboard']);
-      } else if (loggedUser.role === 'Teacher') {
-        this.router.navigate(['/portal-profesor']);
-      } else {
-        this.router.navigate(['/mis-clases']);
-      }
+    if (!loggedUser) {
+      this.authError = 'Contraseña incorrecta. Verifica tus credenciales.';
+      this.cdr.markForCheck();
+      return;
+    }
+
+    if (loggedUser.role === 'Admin') {
+      this.router.navigate(['/admin-dashboard']);
+    } else if (loggedUser.role === 'Teacher') {
+      this.router.navigate(['/portal-profesor']);
+    } else {
+      this.router.navigate(['/mis-clases']);
     }
   }
 

@@ -15,15 +15,22 @@ import { AuthService, User } from '../services/auth.service';
  * autorización por rol.
  */
 describe('authGuard', () => {
-  /** Doble de prueba del router: registra las navegaciones solicitadas. */
+  /** Representación mínima de un `UrlTree` devuelto por el doble del router. */
+  interface UrlTreeDoble {
+    comandos: unknown[];
+    extras?: unknown;
+  }
+
+  /** Doble de prueba del router: registra los `UrlTree` de redirección creados. */
   class RouterDoble {
-    navegaciones: { comandos: unknown[]; extras?: unknown }[] = [];
-    navigate(comandos: unknown[], extras?: unknown): Promise<boolean> {
-      this.navegaciones.push({ comandos, extras });
-      return Promise.resolve(true);
+    redirecciones: UrlTreeDoble[] = [];
+    createUrlTree(comandos: unknown[], extras?: unknown): UrlTreeDoble {
+      const arbol = { comandos, extras };
+      this.redirecciones.push(arbol);
+      return arbol;
     }
     get ultimaRuta(): string {
-      const ultima = this.navegaciones[this.navegaciones.length - 1];
+      const ultima = this.redirecciones[this.redirecciones.length - 1];
       return ultima ? String((ultima.comandos as string[])[0]) : '';
     }
   }
@@ -49,32 +56,39 @@ describe('authGuard', () => {
   });
 
   /** Ejecuta el guard con la configuración de ruta y URL indicadas. */
-  function ejecutarGuard(data: Record<string, unknown>, url = '/ruta-protegida'): boolean {
+  function ejecutarGuard(data: Record<string, unknown>, url = '/ruta-protegida'): unknown {
     const route = { data } as unknown as ActivatedRouteSnapshot;
     const state = { url } as RouterStateSnapshot;
-    return TestBed.runInInjectionContext(
-      () => authGuard(route, state) as boolean
-    );
+    return TestBed.runInInjectionContext(() => authGuard(route, state));
   }
 
   describe('Capa 1: autenticación', () => {
     it('debe denegar el acceso si no hay sesión activa', () => {
       auth.currentUserValue = null;
 
-      const permitido = ejecutarGuard({ role: 'Admin' });
+      const resultado = ejecutarGuard({ role: 'Admin' });
 
-      expect(permitido).toBe(false);
+      expect(resultado).not.toBe(true);
     });
 
-    it('debe redirigir al login conservando la URL solicitada', () => {
+    it('debe redirigir a /login con la URL limpia (sin returnUrl)', () => {
       auth.currentUserValue = null;
 
-      ejecutarGuard({ role: 'Admin' }, '/admin-dashboard');
+      const resultado = ejecutarGuard({ role: 'Admin' }, '/admin-dashboard');
 
+      expect(resultado).toBe(router.redirecciones[0]);
       expect(router.ultimaRuta).toBe('/login');
-      expect(router.navegaciones[0].extras).toEqual({
-        queryParams: { returnUrl: '/admin-dashboard' }
-      });
+      expect(router.redirecciones[0].extras).toBeUndefined();
+    });
+
+    it('debe redirigir a /login desde cualquier ruta protegida', () => {
+      auth.currentUserValue = null;
+
+      for (const url of ['/mis-clases', '/mis-apuntes', '/mensajes-profesores', '/mis-pagos', '/ajustes', '/portal-profesor']) {
+        ejecutarGuard({ role: ['Standard', 'Teacher', 'Admin'] }, url);
+        expect(router.ultimaRuta).toBe('/login');
+      }
+      expect(router.redirecciones.every(r => r.extras === undefined)).toBe(true);
     });
   });
 
@@ -94,9 +108,9 @@ describe('authGuard', () => {
     it('debe denegar el acceso de una alumna a una ruta exclusiva de profesor', () => {
       auth.currentUserValue = { email: 'paulagarcia@itutor.es', role: 'Standard' };
 
-      const permitido = ejecutarGuard({ role: 'Teacher' });
+      const resultado = ejecutarGuard({ role: 'Teacher' });
 
-      expect(permitido).toBe(false);
+      expect(resultado).not.toBe(true);
     });
 
     it('debe redirigir al usuario denegado a la vista inicial de su rol', () => {

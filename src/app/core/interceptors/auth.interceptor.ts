@@ -23,7 +23,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401 || error.status === 403) {
+      // Las propias llamadas de autenticación (/auth/login, /auth/register…) pueden
+      // devolver 401/403 de forma legítima (credenciales erróneas, cuenta protegida):
+      // no deben cerrar la sesión que acaba de iniciarse.
+      const isAuthCall = req.url.includes('/auth/');
+      if (!isAuthCall && (error.status === 401 || error.status === 403)) {
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('user');
         router.navigate(['/login']);

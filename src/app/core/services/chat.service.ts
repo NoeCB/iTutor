@@ -1,5 +1,6 @@
 import { Injectable, NgZone, OnDestroy, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ApiSyncService } from './api-sync.service';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -29,6 +30,7 @@ export class ChatService implements OnDestroy {
   private static readonly READS_KEY = 'itutor_chat_reads';
   private zone = inject(NgZone);
   private http = inject(HttpClient, { optional: true });
+  private sync = inject(ApiSyncService);
   private readonly apiUrl = environment.apiUrl || 'http://88.26.12.64:3000/api';
   private pollTimer: ReturnType<typeof setInterval> | null = null;
 
@@ -169,9 +171,8 @@ export class ChatService implements OnDestroy {
     const next = [...this.readJson<ChatMessage[]>(ChatService.MESSAGES_KEY, []), msg];
     localStorage.setItem(ChatService.MESSAGES_KEY, JSON.stringify(next));
     this.messagesSubject.next(next);
-    if (this.http) {
-      this.http.post(`${this.apiUrl}/messages`, msg).subscribe({ error: () => {} });
-    }
+    // Se guarda en el servidor; si falla queda en cola y se reintenta solo.
+    void this.sync.send('/messages', msg);
     return msg;
   }
 
